@@ -9,9 +9,10 @@ tags: [ruby, vim]
 
 I am trying to get used to the new Ruby 1.9 hash syntax ([read more](http://breakthebit.org/post/8453341914/ruby-1-9-and-the-new-hash-syntax)). Here's a quick VIM replace command to convert all the 1.8 syntax to the new 1.9 syntax.
 
-```
-%s/\v\:([^\:][a-zA-Z0-9_]*)\s+\=\>/\1:/g
-```
+
+<script src="https://gist.github.com/3600802.js?file=gistfile1.vim">
+</script>
+
 
 I am quickly becoming a fan of this new style simply because it's less characters to type and it looks more like JSON. 
 
