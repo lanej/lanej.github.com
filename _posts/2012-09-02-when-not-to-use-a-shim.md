@@ -12,4 +12,6 @@ tags: ['software design']
   * [Shim](http://en.wikipedia.org/wiki/Shim_(computing))
   * when to use and when you are gutting people down the road
 * Appropriate uses for shims
+  * mr_merge (merb v rails)
 * Inappropriate uses for shims
+  * capybara vs webrat
