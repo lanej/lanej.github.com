@@ -3,8 +3,7 @@ layout: page
 title: ""
 tagline: ""
 ---
-#{% include JB/setup %}
-
+{% include JB/setup %}
 
 </br>
 
