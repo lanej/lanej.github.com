@@ -7,7 +7,7 @@ tags: [vim]
 ---
 {% include JB/setup %}
 
-I have a tendency to keep my right pinky down on the shift key when typing ```:``` to enter vim command mode.  This causes my command to allows start with a capital letter, which is rarely useful.  Besides focusing more on lifting it up more quickly I have configured vim to figure out what my intentions really are.
+I have a tendency to keep my right pinky down on the shift key when typing ```:``` to enter vim command mode.  This causes my command to start with a capital letter, which is rarely useful.  Besides focusing more on lifting it up more quickly I have configured vim to figure out what my intentions really are.
 
 My most commonly misspelled commands are:
 
