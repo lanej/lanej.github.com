@@ -11,16 +11,8 @@ relative_permalinks: true
 
 # Setup
 paginate:         10
-#baseurl:          /
+baseurl:          /
 
-# Custom vars
-#version:          1.0.0
-#github:
-  #repo:           https://github.com/poole/poole
-
-# Themes are encouraged to use these universal variables 
-# so be sure to set them if your theme uses them.
-#
 title : "Josh Lane"
 tagline: "Code that I felt like sharing"
 author :
@@ -29,12 +21,9 @@ author :
   github : lanej
   twitter : lanejoshlane
 
-# The production_url is only used when full-domain names are needed
-# such as sitemap.txt 
-# Most places will/should use BASE_PATH to make the urls
-#
-# If you have set a CNAME (pages.github.com) set your custom domain here.
-# Else if you are pushing to username.github.com, replace with your username.
-# Finally if you are pushing to a GitHub project page, include the project name at the end.
-#
 url: "http://lanej.com"
+
+# Custom vars
+version:          1.0.0
+github:
+  repo:           https://github.com/lanej/lanej.github.com
