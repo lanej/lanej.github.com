@@ -11,7 +11,7 @@ relative_permalinks: true
 
 # Setup
 paginate:         10
-baseurl:          /
+#baseurl:          /
 
 # Custom vars
 #version:          1.0.0
@@ -22,7 +22,7 @@ baseurl:          /
 # so be sure to set them if your theme uses them.
 #
 title : "Josh Lane"
-#tagline: "Joshua Lane"
+tagline: "Code that I felt like sharing"
 author :
   name : Joshua Lane
   email : me@joshualane.com
