@@ -11,8 +11,8 @@ relative_permalinks: true
 
 # Setup
 paginate:         10
-baseurl:          http://joshualane.com/
-url:              http://joshualane.com/
+baseurl:          http://lanej.io/
+url:              http://lanej.io/
 
 title : "Josh Lane"
 tagline: "Code that I felt like sharing"
