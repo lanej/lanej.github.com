@@ -11,8 +11,8 @@ relative_permalinks: true
 
 # Setup
 paginate:         10
-baseurl:          http://lanej.com
-url:              http://lanej.com
+baseurl:          /
+url:              http://localhost:4000
 
 title : "Josh Lane"
 tagline: "Code that I felt like sharing"
