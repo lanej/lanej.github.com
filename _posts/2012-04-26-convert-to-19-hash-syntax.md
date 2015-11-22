@@ -9,10 +9,10 @@ tags: [ruby, vim]
 I am trying to get used to the new Ruby 1.9 hash syntax ([read more](http://breakthebit.org/post/8453341914/ruby-1-9-and-the-new-hash-syntax)). Here's a quick VIM replace command to convert all the 1.8 syntax to the new 1.9 syntax.
 
 
-<script src="https://gist.github.com/3600802.js?file=gistfile1.vim">
+<script src="https://gist.github.com/3600802.js">
 </script>
 
 
-I am quickly becoming a fan of this new style simply because it's less characters to type and it looks more like JSON. 
+I am quickly becoming a fan of this new style simply because it's less characters to type and it looks more like JSON.
 
 A similiar regex could be used in conjunction with [sed](http://www.gnu.org/software/sed/manual/sed.html) to convert a whole project in one go.
