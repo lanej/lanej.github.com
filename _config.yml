@@ -1,13 +1,14 @@
-# This is the default format. 
+# This is the default format.
 # For more see: https://github.com/mojombo/jekyll/wiki/Permalinks
-#permalink: /:categories/:year/:month/:day/:title 
+#permalink: /:categories/:year/:month/:day/:title
 
 exclude: [".ruby-version", ".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
 highlighter: "pygments"
+gems:
+  - jekyll-paginate
 
 # Permalinks
 permalink:        pretty
-relative_permalinks: true
 
 # Setup
 paginate:         10
