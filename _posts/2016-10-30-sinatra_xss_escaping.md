@@ -73,7 +73,7 @@ This produces the desired result of:
 </tr>
 ```
 
-While this solution is very simple, if a developer forgets to escape a value the site becomes vulernable.
+While this solution is very simple, if a developer forgets to escape a value the site becomes vulnerable.
 
 ## Defensive solution
 
