@@ -6,7 +6,7 @@ category: programming
 tags: [ruby, sinatra]
 ---
 
-While [Rails XSS escaping by default](https://www.owasp.org/index.php/Ruby_on_Rails_Cheatsheet#Cross-site_Scripting_.28XSS.29), Sinatra requires some handholding to produce a similar protection.  The following describes two simple solutions.
+While [Rails escapes HTML by default](https://www.owasp.org/index.php/Ruby_on_Rails_Cheatsheet#Cross-site_Scripting_.28XSS.29), Sinatra requires some handholding to produce a similar protection.  The following describes two simple solutions.
 
 ## Setup
 
