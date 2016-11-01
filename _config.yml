@@ -3,7 +3,7 @@
 #permalink: /:categories/:year/:month/:day/:title
 
 exclude: [".ruby-version", ".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
-highlighter: "pygments"
+highlighter: "rouge"
 gems:
   - jekyll-paginate
 
