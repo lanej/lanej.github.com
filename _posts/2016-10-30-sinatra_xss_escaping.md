@@ -6,7 +6,9 @@ category: programming
 tags: [ruby, sinatra]
 ---
 
-## Problem
+While [Rails XSS escaping by default](https://www.owasp.org/index.php/Ruby_on_Rails_Cheatsheet#Cross-site_Scripting_.28XSS.29), Sinatra requires some handholding to produce a similar protection.  The following describes two simple solutions.
+
+## Setup
 
 Given a basic Sinatra application
 
@@ -33,9 +35,7 @@ and a corresponding ERB template
 <% end %>
 ```
 
-any user-defined input will show the unescaped value.
-
-This solution is immediately vulnerable to persistent [XSS attacks](https://en.wikipedia.org/wiki/Cross-site_scripting).  For instance, a `User` with a `name` like `<script src=http://www.example.com/malicious-code.js></script>` will appear as:
+any user-defined input will show the unescaped value. This setup is immediately vulnerable to persistent [XSS attacks](https://en.wikipedia.org/wiki/Cross-site_scripting).  For instance, a `User` with a `name` like `<script src=http://www.example.com/malicious-code.js></script>` will appear as:
 
 ```html
 <tr>
@@ -46,7 +46,7 @@ This solution is immediately vulnerable to persistent [XSS attacks](https://en.w
 
 ## Offensive solution
 
-Use [`ERB::Util#h`](http://ruby-doc.org/stdlib-2.1.2/libdoc/erb/rdoc/ERB/Util.html#method-i-h) for specific inputs that should be escaped.
+Use [`ERB::Util#h`](http://ruby-doc.org/stdlib-2.1.2/libdoc/erb/rdoc/ERB/Util.html#method-i-h) on the specific inputs that should be escaped.
 
 * include `ERB::Util`
 
@@ -60,7 +60,7 @@ end
 * Explicitly escape desired inputs
 
 ```patch
--    <td><%= user.name %></td>
+-    <td><%= user.id %></td>
 +    <td><%= h user.name %></td>
 ```
 
@@ -73,9 +73,11 @@ This produces the desired result of:
 </tr>
 ```
 
+While this solution is very simple, if a developer forgets to escape a value the site becomes vulernable.
+
 ## Defensive solution
 
-Let's assume developer are faliable and opt for inputs to be escaped by default
+Assume all inputs are possible sources of attack and escape by default.
 
 * Add `erubis` to your Gemfile
 
@@ -102,6 +104,21 @@ This produces the desired result of:
 
 without alterations to the ERB file.
 
-In order to get raw inputs into ERB, you now have to add `==` before.
+**Note:** There are a few cases when you absolutely do not want to render inputs as escaped. In order to get raw inputs use `==`.
 
-**Note:** This is immediately necessary for any `yield` references in layouts or partial templates (`erb :'user/show'`)
+* With a `yield` in a layout
+
+```erb
+# lib/views/layouts/application.erb
+<body>
+  <%== yield %>
+</body>
+```
+
+* Partial templates
+
+```erb
+<% users.each do |user| %>
+  <%== erb ':user/show', user: user %>
+<% end %>
+```
