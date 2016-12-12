@@ -7,3 +7,8 @@ gem 'rake', '~> 12.0'
 gem 'rack', '~> 2.0.1'
 gem 'rack-contrib'
 gem 'foreman', '~> 0.82'
+gem 'puma'
+
+group :deploy do
+  gem 'capistrano', '~> 3.6'
+end
