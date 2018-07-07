@@ -12,8 +12,8 @@ permalink:        pretty
 
 # Setup
 paginate:         10
-baseurl:          http://lanej.io/
-url:              http://lanej.io/
+baseurl:          https://lanej.io/
+url:              https://lanej.io/
 
 title : "Josh Lane"
 tagline: "Code that I felt like sharing"
