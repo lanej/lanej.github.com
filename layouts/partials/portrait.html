@@ -5,5 +5,5 @@
 {{ $fallback := $original.Resize "800x jpg q90" }}
 <picture>
 <source type="image/webp" srcset="{{ $small.RelPermalink }} 480w, {{ $medium.RelPermalink }} 800w, {{ $large.RelPermalink }} 1200w" sizes="(max-width: 700px) calc(100vw - 40px), 380px">
-<img src="{{ $fallback.RelPermalink }}" alt="Josh Lane, photographed against a muted green background" width="800" height="800" decoding="async" fetchpriority="high">
+<img src="{{ $fallback.RelPermalink }}" alt="Josh Lane, photographed against a muted green background" width="800" height="800" decoding="async" fetchpriority="high" data-portrait>
 </picture>

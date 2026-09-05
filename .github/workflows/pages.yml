@@ -28,6 +28,8 @@ jobs:
         run: bash scripts/install-hugo.sh
       - name: Build and validate
         run: bash scripts/build.sh
+      - name: Verify the writing lifecycle and article layouts
+        run: HUGO_BIN=.tools/hugo python3 scripts/test-writing.py --engines chromium,webkit
       - name: Verify desktop and mobile browsers
         run: |
           python3 -m http.server 8765 --directory public >/tmp/site-server.log 2>&1 &

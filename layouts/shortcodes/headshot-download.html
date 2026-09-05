@@ -1,0 +1,2 @@
+{{ $photo := (resources.Get "images/josh-lane.webp").Resize "1200x jpg q90" }}
+<p><a class="photo-download" href="{{ $photo.RelPermalink }}" download="josh-lane-headshot.jpg">Download headshot (JPEG)</a></p>

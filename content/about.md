@@ -1,7 +1,6 @@
 ---
 title: About
-description: Josh Lane’s path from cloud infrastructure and APIs to technology leadership at EasyPost. Biography, open-source support, and professional contact.
-portrait: true
+description: Josh Lane’s path from cloud infrastructure and APIs to technology leadership at EasyPost. Biography, open-source work, and professional contact.
 ---
 I’m a technology executive with an engineering background. At **EasyPost**, I lead the company’s technology organization and strategy across platform, product, and experience.
 
@@ -17,6 +16,8 @@ Background: [EasyPost biography](https://www.easypost.com/about/) · [profession
 
 ## Open source {#open-source}
 
+My open-source work includes [ogen](/record/#ogen), the Go OpenAPI code generator, and earlier contributions to [Sinatra and Ruby tooling](/record/#ruby-open-source).
+
 I use [Neovim](https://neovim.io/) for coding and personal knowledge management, and have supported the project through recurring donations for years. [Supporting Neovim](https://neovim.io/sponsors/) is one way I contribute to the tools I rely on.
 
 My contributions to [fog-aws](https://github.com/fog/fog-aws) are part of my earlier open-source work, not an active focus today.
@@ -28,3 +29,5 @@ For professional conversations and speaking inquiries, [contact me on LinkedIn](
 ## Short biography {#biography}
 
 Josh Lane is Chief Technology Officer at EasyPost, where he leads technology strategy across platform, product, and experience. Previously, he held engineering and leadership roles at EasyPost, Fastly, and Engine Yard. His work spans cloud infrastructure, financial systems, and the design of engineering organizations. He holds a B.S. in Electrical and Computer Engineering from Worcester Polytechnic Institute and is based in Oakland, California.
+
+{{< headshot-download >}}

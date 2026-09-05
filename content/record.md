@@ -1,6 +1,6 @@
 ---
 title: Selected work
-description: Selected work and speaking by Josh Lane in financial infrastructure, cloud APIs, and deployment automation.
+description: Selected work, open-source contributions, and speaking by Josh Lane in financial infrastructure, cloud APIs, and deployment automation.
 ---
 My work has moved from building infrastructure to leading the organizations that build and operate it. These examples cover both.
 
@@ -13,6 +13,16 @@ My work has moved from building infrastructure to leading the organizations that
 Today, as CTO, I lead EasyPost’s technology organization and strategy across platform, product, and experience.
 
 Career account: [professional profile](https://www.linkedin.com/in/lanejoshlane/). Current role: [EasyPost leadership biography](https://www.easypost.com/about/).
+
+## OpenAPI code generation in ogen {#ogen}
+
+**Open-source contributions · 2025**
+
+I contributed to [ogen](https://github.com/ogen-go/ogen), which generates Go clients and servers from OpenAPI descriptions. The work expanded the API specifications the generator could handle, including more flexible parameter types and JSON media types.
+
+Merged examples include [support for sum types in parameters](https://github.com/ogen-go/ogen/pull/1581) and [recognition of media types with a `+json` suffix](https://github.com/ogen-go/ogen/pull/1598). Other submissions covered schema discrimination, validation, and compatibility with real-world API specifications.
+
+[Contribution history](https://github.com/ogen-go/ogen/pulls?q=is%3Apr+author%3Alanej+is%3Amerged)
 
 ## Engine Yard’s cloud API {#engine-yard}
 
@@ -35,3 +45,9 @@ I presented Engine Yard’s approach to connecting automated testing, continuous
 The talk is an early public example of my interest in engineering leverage: reducing the friction between completing a change and putting it into production.
 
 [Conference program and abstract](https://sapporo.rubykaigi.org/2012/en/schedule/details/37.html) · [Event report (Japanese)](https://gihyo.jp/news/report/01/sapporo-rubykaigi2012/0001)
+
+## Earlier Ruby open-source work {#ruby-open-source}
+
+**Sinatra · 2011.** I contributed a [change to default parameter escaping](https://github.com/sinatra/sinatra/pull/361) and its [regression test](https://github.com/sinatra/sinatra/pull/362). Both were merged upstream.
+
+**critic · 2017.** In my `critic` library, I worked on [ActiveRecord 5 compatibility and CI fixes](https://github.com/lanej/critic/pull/4).

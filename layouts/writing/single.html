@@ -1,0 +1,19 @@
+{{ define "main" }}
+{{ if not .Draft }}
+  {{ if not .Title }}{{ errorf "Writing %s needs a title" .File.Path }}{{ end }}
+  {{ if not .Description }}{{ errorf "Writing %s needs a description before publication" .File.Path }}{{ end }}
+  {{ if lt .WordCount 1 }}{{ errorf "Writing %s is empty" .File.Path }}{{ end }}
+  {{ if .Date.IsZero }}{{ errorf "Writing %s needs a publication date" .File.Path }}{{ end }}
+{{ end }}
+<article class="page shell essay">
+<header class="page-header article-header">
+<p class="eyebrow"><a href="{{ "/writing/" | relURL }}">Writing</a>{{ if .Draft }} · Draft preview{{ end }}</p>
+<h1>{{ .Title }}</h1>
+{{ with .Description }}<p class="article-deck">{{ . }}</p>{{ end }}
+<p class="article-meta">Josh Lane · <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time> · {{ .ReadingTime }} min read{{ if .Lastmod.After .Date }}<br>Updated <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "January 2, 2006" }}</time>{{ end }}</p>
+</header>
+{{ if .Params.toc }}{{ if gt (len .Fragments.Headings) 0 }}<details class="article-toc"><summary>On this page</summary>{{ .TableOfContents }}</details>{{ end }}{{ end }}
+<div class="prose article-prose">{{ .Content }}</div>
+<footer class="article-footer"><a href="{{ "/writing/" | relURL }}">All writing</a> · <a href="{{ "/writing/index.xml" | relURL }}">RSS feed</a></footer>
+</article>
+{{ end }}

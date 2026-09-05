@@ -1,12 +1,12 @@
 - id: financial-infrastructure
   organization: EasyPost
-  title: Connecting platform engineering to financial operations
-  summary: Financial data pipeline redesign and automation to shorten revenue recognition time.
-- id: engine-yard
-  organization: Engine Yard
-  title: Building an API for operating cloud infrastructure
-  summary: API architecture and development, supported by a Ruby client and command-line tools.
+  title: Financial infrastructure as platform engineering
+  summary: Connecting financial data quality and automation to a shorter revenue recognition cycle.
+- id: ogen
+  organization: Open source · 2025
+  title: Expanding OpenAPI support in ogen
+  summary: Merged Go code-generation contributions for parameter types, JSON media types, and real-world API specifications.
 - id: sapporo-rubykaigi-2012
-  organization: Speaking · Sapporo RubyKaigi 2012
+  organization: Sapporo RubyKaigi · 2012
   title: Release Early and Release Often
-  summary: Sapporo, Japan · September 14, 2012. A talk on deployment automation and continuous integration at Engine Yard.
+  summary: A conference talk in Japan on reducing deployment friction while retaining rigorous testing.
