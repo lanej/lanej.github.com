@@ -68,9 +68,11 @@ func example() string { return "a-long-code-line-that-must-scroll-within-the-cod
         assert prepared.exists() and not path.exists()
         future=root/'content/writing/future-sentinel'; future.mkdir(parents=True)
         future.joinpath('index.md').write_text('+++\ntitle="Future sentinel"\ndescription="Not published"\ndate="2099-01-01T00:00:00Z"\ndraft=false\n+++\nFUTURE_SENTINEL_NOT_FOR_PRODUCTION\n')
+        # Keep a second published entry in the fixture: tests must continue to
+        # work after real essays exist, and RSS must not be limited to one item.
+        existing=root/'content/writing/existing-writing-fixture'; existing.mkdir(parents=True)
+        existing.joinpath('index.md').write_text('+++\ntitle="Existing article fixture"\ndescription="A second published entry for feed tests."\ndate="2020-01-01T00:00:00Z"\ndraft=false\n+++\nAn isolated fixture for feed and chronology checks.\n')
         public=root/'public'
-        # Reserve the local origin before building so absolute image/RSS URLs
-        # resolve to this disposable fixture, never to the production website.
         server=ThreadingHTTPServer(('127.0.0.1',0),partial(SimpleHTTPRequestHandler,directory=str(public)))
         origin=f'http://127.0.0.1:{server.server_port}/'
         thread=Thread(target=server.serve_forever,daemon=True); thread.start()
@@ -90,13 +92,17 @@ func example() string { return "a-long-code-line-that-must-scroll-within-the-cod
             assert 'BlogPosting' in article and 'article:published_time' in article and 'min read' in article
             assert 'On this page' in article and 'width="900" height="450"' in article
             feed=ET.parse(public/'index.xml').getroot()
-            assert len(feed.findall('channel/item'))==1
-            assert feed.findtext('channel/item/title')=='Article layout verification'
-            assert 'A section heading' in feed.findtext('channel/item/{http://purl.org/rss/1.0/modules/content/}encoded')
+            items=feed.findall('channel/item')
+            matching=[item for item in items if item.findtext('link')==origin+'writing/preview-check/']
+            assert len(matching)==1 and len(items)>=2
+            assert matching[0].findtext('title')=='Article layout verification'
+            assert 'A section heading' in matching[0].findtext('{http://purl.org/rss/1.0/modules/content/}encoded')
+            ordered=[item.findtext('link') for item in items]
+            assert ordered.index(origin+'writing/preview-check/') < ordered.index(origin+'writing/existing-writing-fixture/')
             subprocess.run([sys.executable,str(ROOT/'scripts/verify.py'),'--url',origin,'--root',str(public),'--output',str(out),'--engines','chromium,webkit'],check=True)
         finally:
             server.shutdown(); server.server_close(); thread.join()
-        (out/'authoring.json').write_text(json.dumps({'status':'passed','checks':['invalid slug rejected','duplicate draft rejected','empty draft rejected','local preview includes drafts and noindex','promotion preserves assets','production excludes local drafts and future posts','RSS contains only published essays with full text','article metadata, footnotes, tables, code and non-square images rendered'],'fixture_published_to_live_site':False},indent=2))
+        (out/'authoring.json').write_text(json.dumps({'status':'passed','checks':['invalid slug rejected','duplicate draft rejected','empty draft rejected','local preview includes drafts and noindex','promotion preserves assets','production excludes local drafts and future posts','RSS contains only published essays with full text','multiple articles and chronology supported','article metadata, footnotes, tables, code and non-square images rendered'],'fixture_published_to_live_site':False},indent=2))
     print('Writing workflow verified in a disposable directory; no sample content published.')
 
 if __name__=='__main__':main()
