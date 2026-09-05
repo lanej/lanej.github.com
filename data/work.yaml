@@ -6,7 +6,7 @@
   organization: Engine Yard
   title: Building an API for operating cloud infrastructure
   summary: API architecture and development, supported by a Ruby client and command-line tools.
-- id: fog-aws
-  organization: Open source
-  title: Making AWS support independently usable in Fog
-  summary: Co-author of fog-aws, a standalone AWS provider for Ruby applications and the Fog cloud library.
+- id: sapporo-rubykaigi-2012
+  organization: Speaking · Sapporo RubyKaigi 2012
+  title: Release Early and Release Often
+  summary: Sapporo, Japan · September 14, 2012. A talk on deployment automation and continuous integration at Engine Yard.
