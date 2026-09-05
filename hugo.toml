@@ -3,6 +3,9 @@ locale = 'en-US'
 title = 'Josh Lane'
 disableKinds = ['taxonomy', 'term']
 enableRobotsTXT = true
+buildDrafts = false
+buildFuture = false
+buildExpired = false
 [params]
   description = 'Josh Lane, Chief Technology Officer at EasyPost. Selected work in technology leadership, financial infrastructure, and cloud software.'
   role = 'Chief Technology Officer at EasyPost'
@@ -10,9 +13,17 @@ enableRobotsTXT = true
   github = 'https://github.com/lanej'
   revision = 'local'
 [outputs]
-  home = ['HTML']
+  home = ['HTML', 'RSS']
   section = ['HTML', 'RSS']
+[pagination]
+  pagerSize = 10
 [markup.goldmark.renderer]
   unsafe = false
+[markup.highlight]
+  style = 'evergarden'
+  guessSyntax = false
+[markup.tableOfContents]
+  startLevel = 2
+  endLevel = 3
 [caches.images]
   dir = ':cacheDir/images'

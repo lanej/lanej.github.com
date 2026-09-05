@@ -1,127 +1,108 @@
-"""Exercise publishing in a temporary copy. Never commit or deploy test articles."""
-import argparse
-import functools
-import http.server
+"""Exercise authoring and article rendering in a disposable site, never production."""
 import json
 import os
 import shutil
 import subprocess
 import sys
 import tempfile
-import threading
 import xml.etree.ElementTree as ET
+from functools import partial
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from threading import Thread
 from PIL import Image
-
-SOURCE = Path(__file__).resolve().parents[1]
+from writing import ROOT, create_draft, prepare_post, hugo_binary
 
 
 def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--engines', default='')
-    parser.add_argument('--chromium-path', default='')
-    args = parser.parse_args()
-    binary = Path(os.environ.get('HUGO_BIN', '.tools/hugo'))
-    if not binary.is_absolute():
-        located = shutil.which(str(binary))
-        binary = Path(located) if located else SOURCE / binary
-    binary = binary.resolve()
-    out = SOURCE / 'artifacts/local/writing-fixture'
-    out.mkdir(parents=True, exist_ok=True)
-    checks = []
-    with tempfile.TemporaryDirectory(prefix='lanej-writing-') as directory:
-        repo = Path(directory) / 'repo'
-        shutil.copytree(SOURCE, repo, ignore=shutil.ignore_patterns('.git', '.tools', '.venv', 'public', 'resources', 'artifacts', '__pycache__', '.hugo_build.lock'))
-        # Synthetic coverage is independent of any real writing in the repository.
-        shutil.rmtree(repo / 'content/writing', ignore_errors=True)
-        writing = repo / 'content/writing'
-        env = {**os.environ, 'HUGO_BIN': str(binary), 'GITHUB_SHA': 'writing-fixture', 'HUGO_PARAMS_REVISION': 'writing-fixture'}
+    binary=hugo_binary(ROOT)
+    out=ROOT/'artifacts/writing'; out.mkdir(parents=True,exist_ok=True)
+    with tempfile.TemporaryDirectory(prefix='lanej-writing-') as tmp:
+        root=Path(tmp)
+        for folder in ('assets','content','layouts','data','static','archetypes','scripts'):
+            shutil.copytree(ROOT/folder, root/folder)
+        for name in ('hugo.toml','hugo.preview.toml','CNAME'):
+            shutil.copy2(ROOT/name, root/name)
+        path=create_draft(root,'preview-check','Article layout verification')
+        try:
+            create_draft(root,'preview-check','Must not overwrite')
+            raise AssertionError('Duplicate draft was accepted')
+        except FileExistsError: pass
+        try:
+            create_draft(root,'../escape','Must not traverse')
+            raise AssertionError('Unsafe slug was accepted')
+        except ValueError: pass
+        try:
+            prepare_post(root,'preview-check')
+            raise AssertionError('Empty draft was accepted')
+        except ValueError: pass
+        body='''
+An isolated layout fixture, not an essay or a statement by Josh.
 
-        def build(ok=True):
-            result = subprocess.run(['bash', 'scripts/build.sh'], cwd=repo, env=env, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-            if ok and result.returncode:
-                raise AssertionError(result.stdout)
-            if not ok:
-                assert result.returncode, 'Incomplete article unexpectedly published'
-            return result
+## A section heading
 
-        def post(slug, date, draft, title):
-            folder = writing / slug
-            folder.mkdir(parents=True, exist_ok=True)
-            path = folder / 'index.md'
-            path.write_text(f'---\ntitle: {title}\ndate: "{date}"\ndescription: A verification article, never production content.\ndraft: {str(draft).lower()}\ntoc: true\n---\n\nA useful introduction.\n\n## The decision\n\nA paragraph with a [local link](/about/), **emphasis**, and a footnote.[^1]\n\n```go\n// '+('long-line-' * 30)+'\nfunc main() {}\n```\n\n> A block quotation.\n\n| Choice | Result |\n| --- | --- |\n| Simple | Testable |\n\n[^1]: A source note.\n')
-            return path
+Body copy with **emphasis**, a [link](/about/), and a footnote.[^check]
 
-        draft = post('hidden-draft', '2020-01-01T00:00:00Z', True, 'UNPUBLISHED_DRAFT_SENTINEL')
-        future = post('future-article', '2099-01-01T00:00:00Z', False, 'UNPUBLISHED_FUTURE_SENTINEL')
-        build()
-        assert not (repo / 'public/writing/index.html').exists()
-        checks.append('Draft-only and future-only content does not create a public archive')
+> A block quotation with enough text to wrap across a narrow screen.
 
-        subprocess.run([str(binary), 'new', 'content', '--kind', 'writing', 'writing/new-essay/index.md'], cwd=repo, check=True, capture_output=True)
-        new = writing / 'new-essay/index.md'
-        assert 'draft: true' in new.read_text()
-        checks.append('New-article archetype defaults to draft')
-        new.unlink()
+```go
+func example() string { return "a-long-code-line-that-must-scroll-within-the-code-block-not-the-document-01234567890123456789012345678901234567890123456789" }
+```
 
-        published = post('sample-essay', '2020-01-02T00:00:00Z', False, 'Writing verification sample')
-        with published.open('a') as file:
-            file.write('\n![A rectangular image used only in tests](diagram.png)\n')
-        Image.new('RGB', (600, 180), '#acc8b7').save(published.parent / 'diagram.png')
-        build()
-        public = repo / 'public'
-        html = (public / 'writing/sample-essay/index.html').read_text()
-        archive = (public / 'writing/index.html').read_text()
-        home = (public / 'index.html').read_text()
-        assert 'Writing verification sample' in archive and '/writing/sample-essay/' in home
-        assert 'BlogPosting' in html and 'article:published_time' in html
-        assert 'id=the-decision' in html or 'id="the-decision"' in html
-        assert 'header-portrait' in html and 'article-toc' in html
-        rss = ET.parse(public / 'writing/index.xml')
-        items = rss.findall('./channel/item')
-        assert len(items) == 1 and items[0].findtext('title') == 'Writing verification sample'
-        assert '<p>' in items[0].findtext('description') and 'A useful introduction.' in items[0].findtext('description')
-        for page in public.rglob('*'):
-            if page.is_file() and page.suffix in {'.html', '.xml', '.json'}:
-                text = page.read_text()
-                assert 'UNPUBLISHED_DRAFT_SENTINEL' not in text and 'UNPUBLISHED_FUTURE_SENTINEL' not in text
-        assert not (public / 'writing/hidden-draft').exists()
-        assert not (public / 'writing/future-article').exists()
-        checks.append('Published page, archive, homepage discovery, full-content RSS, metadata, anchors, and media')
-        checks.append('Draft and future text absent from pages, sitemap, RSS, and manifest')
+| First column | Second column | Third column | Fourth column |
+| --- | --- | --- | --- |
+| Test | A wide table | Scrolls locally | Without page overflow |
 
-        original = published.read_text()
-        published.write_text(original.replace('description: A verification article, never production content.', "description: ''"))
-        assert 'needs a description' in build(ok=False).stdout
-        published.write_text(original.split('---', 2)[0] + '---' + original.split('---', 2)[1] + '---\n')
-        assert 'is empty' in build(ok=False).stdout
-        checks.append('Missing descriptions and empty published articles fail the build')
+![Non-square diagram fixture](diagram.png)
 
-        published.write_text(original.replace('draft: false', 'draft: true'))
-        build()
-        assert not (public / 'writing/index.html').exists() and not (public / 'writing/sample-essay/index.html').exists()
-        checks.append('Withdrawing the last article removes stale pages, archive, and feed')
-        published.write_text(original)
-        build()
+[^check]: Footnotes should remain readable and link back correctly.
+'''
+        path.write_text(path.read_text().replace('description = ""','description = "An isolated reading-layout test."').replace('toc = false','toc = true')+body)
+        Image.new('RGB',(900,450),(40,60,50)).save(path.parent/'diagram.png')
+        hidden=create_draft(root,'private-sentinel','Private sentinel')
+        hidden.write_text(hidden.read_text()+'PRIVATE_DRAFT_SENTINEL_NOT_FOR_PRODUCTION')
+        subprocess.run([binary,'--source',str(root),'--config','hugo.toml,hugo.preview.toml','--buildDrafts','--buildFuture'],check=True)
+        preview=(root/'.preview/writing/preview-check/index.html').read_text()
+        assert 'Draft — local preview only' in preview and 'noindex' in preview
+        prepared=prepare_post(root,'preview-check')
+        assert prepared.exists() and not path.exists()
+        future=root/'content/writing/future-sentinel'; future.mkdir(parents=True)
+        future.joinpath('index.md').write_text('+++\ntitle="Future sentinel"\ndescription="Not published"\ndate="2099-01-01T00:00:00Z"\ndraft=false\n+++\nFUTURE_SENTINEL_NOT_FOR_PRODUCTION\n')
+        # Keep a second published entry in the fixture: tests must continue to
+        # work after real essays exist, and RSS must not be limited to one item.
+        existing=root/'content/writing/existing-writing-fixture'; existing.mkdir(parents=True)
+        existing.joinpath('index.md').write_text('+++\ntitle="Existing article fixture"\ndescription="A second published entry for feed tests."\ndate="2020-01-01T00:00:00Z"\ndraft=false\n+++\nAn isolated fixture for feed and chronology checks.\n')
+        public=root/'public'
+        server=ThreadingHTTPServer(('127.0.0.1',0),partial(SimpleHTTPRequestHandler,directory=str(public)))
+        origin=f'http://127.0.0.1:{server.server_port}/'
+        thread=Thread(target=server.serve_forever,daemon=True); thread.start()
+        try:
+            env={**os.environ,'HUGO_PARAMS_REVISION':'writing-fixture'}
+            subprocess.run([binary,'--source',str(root),'--destination',str(public),'--baseURL',origin,'--panicOnWarning'],check=True,env=env)
+            subprocess.run([sys.executable,str(root/'scripts/check.py'),str(public)],cwd=root,check=True,env=env)
+            assert not (public/'writing/private-sentinel').exists()
+            assert not (public/'writing/future-sentinel').exists()
+            assert not (public/'drafts').exists()
+            for file in public.rglob('*'):
+                if file.is_file() and file.suffix in ('.html','.xml','.json'):
+                    text=file.read_text()
+                    assert 'PRIVATE_DRAFT_SENTINEL_NOT_FOR_PRODUCTION' not in text
+                    assert 'FUTURE_SENTINEL_NOT_FOR_PRODUCTION' not in text
+            article=(public/'writing/preview-check/index.html').read_text()
+            assert 'BlogPosting' in article and 'article:published_time' in article and 'min read' in article
+            assert 'On this page' in article and 'width="900" height="450"' in article
+            feed=ET.parse(public/'index.xml').getroot()
+            items=feed.findall('channel/item')
+            matching=[item for item in items if item.findtext('link')==origin+'writing/preview-check/']
+            assert len(matching)==1 and len(items)>=2
+            assert matching[0].findtext('title')=='Article layout verification'
+            assert 'A section heading' in matching[0].findtext('{http://purl.org/rss/1.0/modules/content/}encoded')
+            ordered=[item.findtext('link') for item in items]
+            assert ordered.index(origin+'writing/preview-check/') < ordered.index(origin+'writing/existing-writing-fixture/')
+            subprocess.run([sys.executable,str(ROOT/'scripts/verify.py'),'--url',origin,'--root',str(public),'--output',str(out),'--engines','chromium,webkit'],check=True)
+        finally:
+            server.shutdown(); server.server_close(); thread.join()
+        (out/'authoring.json').write_text(json.dumps({'status':'passed','checks':['invalid slug rejected','duplicate draft rejected','empty draft rejected','local preview includes drafts and noindex','promotion preserves assets','production excludes local drafts and future posts','RSS contains only published essays with full text','multiple articles and chronology supported','article metadata, footnotes, tables, code and non-square images rendered'],'fixture_published_to_live_site':False},indent=2))
+    print('Writing workflow verified in a disposable directory; no sample content published.')
 
-        if args.engines:
-            class QuietHandler(http.server.SimpleHTTPRequestHandler):
-                def log_message(self, *args):
-                    pass
-            handler = functools.partial(QuietHandler, directory=str(public))
-            server = http.server.ThreadingHTTPServer(('127.0.0.1', 0), handler)
-            thread = threading.Thread(target=server.serve_forever, daemon=True)
-            thread.start()
-            command = [sys.executable, str(SOURCE / 'scripts/verify.py'), '--root', str(public), '--url', f'http://127.0.0.1:{server.server_port}/', '--output', str(out), '--engines', args.engines]
-            if args.chromium_path:
-                command.extend(['--chromium-path', args.chromium_path])
-            try:
-                subprocess.run(command, cwd=repo, env=env, check=True)
-            finally:
-                server.shutdown()
-                server.server_close()
-        (out / 'publishing-tests.json').write_text(json.dumps({'status': 'passed', 'checks': checks, 'fixtures_deployed': False}, indent=2))
-        print('Writing lifecycle tests passed:', len(checks))
-
-if __name__ == '__main__':
-    main()
+if __name__=='__main__':main()

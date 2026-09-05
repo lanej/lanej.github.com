@@ -1,5 +1,5 @@
 <header class="site-header"><div class="shell nav-shell">
-<a class="wordmark" href="{{ "/" | relURL }}">{{ if not .IsHome }}{{ partial "avatar.html" . }}{{ end }}<span>Josh Lane</span></a>
+<a class="wordmark" href="{{ "/" | relURL }}" aria-label="Josh Lane — home">{{ if not .IsHome }}{{ partial "avatar.html" . }}{{ end }}<span>Josh Lane</span></a>
 <nav aria-label="Primary navigation">
 <a href="{{ "/record/" | relURL }}"{{ if eq .RelPermalink "/record/" }} aria-current="page"{{ end }}>Work</a>
 <a href="{{ "/about/" | relURL }}"{{ if eq .RelPermalink "/about/" }} aria-current="page"{{ end }}>About</a>

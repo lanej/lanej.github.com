@@ -2,5 +2,7 @@
 <article class="page shell">
 <header class="page-header"><p class="eyebrow">Josh Lane</p><h1>{{ .Title }}</h1></header>
 <div class="prose">{{ .Content }}</div>
+{{ if eq .RelPermalink "/record/" }}{{ partial "contributions.html" . }}{{ end }}
+{{ if .Params.portrait }}{{ $photo := (resources.Get "images/josh-lane.webp").Resize "1200x jpg q90" }}<a class="photo-download" href="{{ $photo.RelPermalink }}" download="josh-lane-headshot.jpg">Download headshot (JPEG)</a>{{ end }}
 </article>
 {{ end }}

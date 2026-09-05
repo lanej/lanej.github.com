@@ -1,0 +1,32 @@
+# Selected merged upstream contributions; dates are merge dates, not claims of ongoing maintenance.
+- project: hotreload.nvim
+  date: '2026-02-11'
+  summary: Replaced interval polling with filesystem-event watchers and limited watching to visible buffers in this Neovim plugin.
+  url: https://github.com/diogo464/hotreload.nvim/pull/1
+  label: File-watching improvements
+- project: ogen
+  date: '2025-11-27'
+  period: November–December 2025
+  summary: Expanded the OpenAPI specifications ogen could turn into Go clients and servers. Merged contributions included type-based schema discrimination, sum types in parameters, and recognition of JSON media types with a +json suffix.
+  url: https://github.com/ogen-go/ogen/pull/1584
+  label: Type-based schema discrimination
+  related:
+    - url: https://github.com/ogen-go/ogen/pull/1581
+      label: Sum-type parameters
+    - url: https://github.com/ogen-go/ogen/pull/1598
+      label: JSON media types
+    - url: https://github.com/ogen-go/ogen/pulls?q=is%3Apr+author%3Alanej+is%3Amerged
+      label: Contribution history
+- project: jnv
+  date: '2025-02-28'
+  summary: Added configuration-file support for custom keybindings and styles, using the XDG configuration-directory conventions.
+  url: https://github.com/ynqa/jnv/pull/70
+  label: Configuration-file support
+- project: Sinatra
+  date: '2011-09-22'
+  summary: Changed default parameter escaping in the bundled rack-protection integration and added a regression test. Both changes were merged upstream.
+  url: https://github.com/sinatra/sinatra/pull/361
+  label: Parameter-escaping fix
+  related:
+    - url: https://github.com/sinatra/sinatra/pull/362
+      label: Regression test

@@ -1,8 +1,6 @@
 {{ define "main" }}
-<section class="page shell writing-index">
-<header class="page-header"><p class="eyebrow">Josh Lane</p><h1>Writing</h1><p class="article-deck">On software, organizations, and the decisions that connect them.</p>{{ with .OutputFormats.Get "RSS" }}<a class="text-link" href="{{ .RelPermalink }}">Subscribe via RSS <span aria-hidden="true">→</span></a>{{ end }}</header>
-{{ range .RegularPages.ByDate.Reverse }}
-<article class="writing-item"><p class="article-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time> · {{ .ReadingTime }} min read{{ if .Draft }} · Draft preview{{ end }}</p><h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2><p>{{ .Description }}</p></article>
-{{ end }}
-</section>
+<section class="page shell"><div class="reading-page writing-index">
+<header class="page-header"><p class="eyebrow">Josh Lane</p><h1>Writing</h1><a class="feed-link" href="{{ "index.xml" | relURL }}">Subscribe via RSS</a></header>
+{{ range .RegularPages.ByDate.Reverse }}<article class="writing-item"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time><h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2><p>{{ .Description | default (.Summary | plainify) }}</p>{{ if .Draft }}<p>Draft</p>{{ end }}</article>{{ end }}
+</div></section>
 {{ end }}

@@ -1,0 +1,10 @@
+# Local-only drafts. Production uses hugo.toml and never mounts drafts/.
+publishDir = '.preview'
+[params]
+  preview = true
+[[module.mounts]]
+  source = 'content'
+  target = 'content'
+[[module.mounts]]
+  source = 'drafts'
+  target = 'content/writing'
