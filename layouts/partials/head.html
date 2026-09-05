@@ -2,26 +2,29 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {{ $description := .Description | default site.Params.description }}
 {{ $title := cond .IsHome "Josh Lane · CTO at EasyPost" (printf "%s · Josh Lane" .Title) }}
+{{ $article := and .IsPage (eq .Section "writing") }}
 {{ $image := (resources.Get "images/josh-lane.webp").Resize "1200x jpg q90" }}
-{{ $css := resources.Get "css/site.css" | minify | fingerprint }}
+{{ $css := slice (resources.Get "css/site.css") (resources.Get "css/editorial.css") | resources.Concat "css/combined.css" | minify | fingerprint }}
 <title>{{ $title }}</title>
 <meta name="description" content="{{ $description }}">
-<meta name="theme-color" content="#0d1513">
-<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0d1513"><meta name="color-scheme" content="dark">
 <meta name="site-revision" content="{{ site.Params.revision }}">
 <link rel="canonical" href="{{ .Permalink }}">
 <link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
-{{ if eq .Kind "404" }}<meta name="robots" content="noindex">{{ end }}
-<meta property="og:type" content="website">
-<meta property="og:title" content="{{ $title }}">
-<meta property="og:description" content="{{ $description }}">
-<meta property="og:url" content="{{ .Permalink }}">
-<meta property="og:image" content="{{ $image.Permalink }}">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="1200">
+{{ if or (eq .Kind "404") site.Params.preview .Draft }}<meta name="robots" content="noindex, nofollow">{{ end }}
+<meta property="og:type" content="{{ if $article }}article{{ else }}website{{ end }}">
+<meta property="og:title" content="{{ $title }}"><meta property="og:description" content="{{ $description }}">
+<meta property="og:url" content="{{ .Permalink }}"><meta property="og:image" content="{{ $image.Permalink }}">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="1200">
 <meta property="og:image:alt" content="Josh Lane, photographed against a muted green background">
 <meta name="twitter:card" content="summary">
 {{ $person := dict "@context" "https://schema.org" "@type" "Person" "@id" ("#josh-lane" | absURL) "name" "Josh Lane" "alternateName" "Joshua Lane" "url" site.BaseURL "image" $image.Permalink "jobTitle" "Chief Technology Officer" "worksFor" (dict "@type" "Organization" "name" "EasyPost" "url" "https://www.easypost.com/") "sameAs" (slice site.Params.linkedin site.Params.github) }}
 <script type="application/ld+json">{{ $person | jsonify | safeJS }}</script>
-{{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" title="{{ site.Title }}" href="{{ .Permalink }}">{{ end }}
+{{ if $article }}
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+<meta property="article:modified_time" content="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">
+{{ $post := dict "@context" "https://schema.org" "@type" "BlogPosting" "headline" .Title "description" $description "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00") "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00") "author" (dict "@type" "Person" "name" "Josh Lane" "url" site.BaseURL "@id" ("#josh-lane" | absURL)) "mainEntityOfPage" .Permalink "image" $image.Permalink }}
+<script type="application/ld+json">{{ $post | jsonify | safeJS }}</script>
+{{ end }}
+<link rel="alternate" type="application/rss+xml" title="Josh Lane — Writing" href="{{ "index.xml" | absURL }}">

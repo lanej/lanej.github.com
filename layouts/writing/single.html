@@ -1,0 +1,14 @@
+{{ define "main" }}
+<article class="page shell"><div class="reading-page">
+<header class="page-header article-header">
+<p class="eyebrow"><a href="{{ "/writing/" | relURL }}">Writing</a></p>
+{{ if .Draft }}<p class="draft-notice">Draft — local preview only</p>{{ end }}
+<h1>{{ .Title }}</h1>
+{{ with .Description }}<p class="article-description">{{ . }}</p>{{ end }}
+<div class="article-meta"><span>Josh Lane</span><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time><span>{{ .ReadingTime }} min read</span>{{ if .Lastmod.After .Date }}<span>Updated <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "January 2, 2006" }}</time></span>{{ end }}</div>
+</header>
+{{ if and .Params.toc (gt (len .Fragments.Headings) 0) }}<details class="article-toc"><summary>On this page</summary>{{ .TableOfContents }}</details>{{ end }}
+<div class="prose article-body">{{ .Content }}</div>
+<footer class="article-footer"><a class="text-link" href="{{ "/writing/" | relURL }}">All writing <span aria-hidden="true">→</span></a><a class="feed-link" href="{{ "index.xml" | relURL }}">Subscribe via RSS</a></footer>
+</div></article>
+{{ end }}

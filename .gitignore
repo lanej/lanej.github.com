@@ -1,8 +1,11 @@
 /public/
 /resources/
 /.hugo_build.lock
-/.tools/
 /.venv/
 /artifacts/
+/.tools/
+/.bin/
 __pycache__/
 .DS_Store
+/drafts/
+/.preview/

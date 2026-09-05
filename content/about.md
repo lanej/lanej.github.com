@@ -17,9 +17,9 @@ Background: [EasyPost biography](https://www.easypost.com/about/) · [profession
 
 ## Open source {#open-source}
 
-I use [Neovim](https://neovim.io/) for coding and personal knowledge management, and have supported the project through recurring donations for years. [Supporting Neovim](https://neovim.io/sponsors/) is one way I contribute to the tools I rely on.
+I contribute changes to the tools I use. [Selected merged contributions](/record/#open-source) include work on ogen, jnv, and hotreload.nvim, with dates and links to the upstream pull requests. My work on [fog-aws](https://github.com/fog/fog-aws) belongs to an earlier period, not a current focus.
 
-My contributions to [fog-aws](https://github.com/fog/fog-aws) are part of my earlier open-source work, not an active focus today.
+I use [Neovim](https://neovim.io/) for coding and personal knowledge management, and have supported the project through recurring donations for years. [Supporting Neovim](https://neovim.io/sponsors/) is separate from my code contributions to its plugin ecosystem.
 
 ## Contact {#contact}
 

@@ -1,0 +1,9 @@
+{{ $original := resources.Get "images/josh-lane.webp" }}
+{{ $one := $original.Resize "48x webp q85" }}
+{{ $two := $original.Resize "96x webp q85" }}
+{{ $three := $original.Resize "144x webp q85" }}
+{{ $fallback := $original.Resize "144x jpg q90" }}
+<span class="header-portrait" aria-hidden="true"><picture>
+<source type="image/webp" srcset="{{ $one.RelPermalink }} 48w, {{ $two.RelPermalink }} 96w, {{ $three.RelPermalink }} 144w" sizes="44px">
+<img src="{{ $fallback.RelPermalink }}" alt="Josh Lane" width="44" height="44" decoding="async">
+</picture></span>
