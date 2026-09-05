@@ -9,7 +9,7 @@ enableRobotsTXT = true
   author = 'Josh Lane'
   github = 'https://github.com/lanej'
   easypost = 'https://www.easypost.com/'
-  socialImage = 'https://lanej.io/images/josh-lane-headshot-v3.jpg'
+  socialImage = 'https://lanej.io/images/josh-lane-headshot-v4.jpg'
 
 [markup]
   [markup.goldmark]
