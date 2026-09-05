@@ -1,6 +1,6 @@
 ---
 title: Selected work
-description: Selected work by Josh Lane in financial infrastructure, cloud APIs, and open-source software.
+description: Selected work and speaking by Josh Lane in financial infrastructure, cloud APIs, and deployment automation.
 ---
 My work has moved from building infrastructure to leading the organizations that build and operate it. These examples cover both.
 
@@ -24,12 +24,14 @@ The distinction matters: an API is not just a collection of endpoints. Its usefu
 
 Career account: [professional profile](https://www.linkedin.com/in/lanejoshlane/). Software: [Engine Yard Core API client](https://github.com/engineyard/core-client-rb).
 
-## AWS support for Fog {#fog-aws}
+## Speaking: Sapporo RubyKaigi 2012 {#sapporo-rubykaigi-2012}
 
-**My contribution.** I am a co-author of `fog-aws`, alongside Wesley Beary.
+**Release Early and Release Often: Reducing deployment friction**
 
-**The public artifact.** The library provides Amazon Web Services support for Fog, the Ruby cloud-services library. It can also be used as a standalone provider, allowing applications to use the AWS integration independently.
+Sapporo, Japan · September 14, 2012 · Engine Yard
 
-This is an earlier example of a recurring interest: separating a useful capability from the larger system around it so that other teams can adopt it on their own terms.
+I presented Engine Yard’s approach to connecting automated testing, continuous integration, and deployment. The main cloud codebase could be released at least daily while retaining a rigorous testing and release process.
 
-Attribution and scope: [package specification](https://github.com/fog/fog-aws/blob/master/fog-aws.gemspec). Published package: [fog-aws on RubyGems](https://rubygems.org/gems/fog-aws).
+The talk is an early public example of my interest in engineering leverage: reducing the friction between completing a change and putting it into production.
+
+[Conference program and abstract](https://sapporo.rubykaigi.org/2012/en/schedule/details/37.html) · [Event report (Japanese)](https://gihyo.jp/news/report/01/sapporo-rubykaigi2012/0001)
