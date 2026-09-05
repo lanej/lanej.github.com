@@ -1,7 +1,5 @@
 ---
-title: "Josh Lane"
-description: "Chief Technology Officer at EasyPost. I work on infrastructure, engineering organizations, and systems where software meets the physical world."
-eyebrow: "Chief Technology Officer · EasyPost"
-headline: "I build software and organizations for systems that have to work in the real world."
-intro: "I’m Josh Lane, CTO at EasyPost. My work is about infrastructure, reliability, engineering leverage, and the economics of moving things."
+title: Josh Lane
+description: Josh Lane is Chief Technology Officer at EasyPost. His work connects technical architecture, organizational design, and business economics.
+intro: I lead the technology organization behind EasyPost’s shipping infrastructure. My work connects technical architecture, organizational design, and business economics.
 ---

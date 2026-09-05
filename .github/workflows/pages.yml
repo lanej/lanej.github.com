@@ -1,0 +1,96 @@
+name: Build, deploy, and verify lanej.io
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: lanej-pages-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Install verification tools
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install -r scripts/requirements.txt
+          .venv/bin/python -m playwright install --with-deps chromium webkit
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+      - name: Install pinned Hugo
+        run: bash scripts/install-hugo.sh
+      - name: Build and validate
+        run: bash scripts/build.sh
+      - name: Verify desktop and mobile browsers
+        run: |
+          python3 -m http.server 8765 --directory public >/tmp/site-server.log 2>&1 &
+          server=$!
+          trap 'kill "$server"' EXIT
+          python3 scripts/verify.py --engines chromium,webkit
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: preflight-verification
+          path: artifacts/local/
+          retention-days: 14
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: site-bundle
+          path: public/
+          include-hidden-files: true
+          retention-days: 2
+          if-no-files-found: error
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+        if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+        with:
+          path: public/
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      actions: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: site-bundle
+          path: public/
+      - name: Install verification tools
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install -r scripts/requirements.txt
+          .venv/bin/python -m playwright install --with-deps chromium webkit
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+      - name: Check Pages configuration and avoid overlapping publishers
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/wait-legacy.py
+      - name: Deploy tested Hugo output
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
+      - name: Verify the actual custom domain
+        run: python3 scripts/verify.py --url https://lanej.io/ --output artifacts/live --engines chromium,webkit
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: live-domain-verification
+          path: artifacts/live/
+          retention-days: 14
+          if-no-files-found: error

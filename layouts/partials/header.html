@@ -1,1 +1,8 @@
-<header class="site-header"><div class="shell nav-shell"><a class="wordmark" href="/" aria-label="Josh Lane home">Josh Lane</a><nav class="nav" aria-label="Primary navigation"><a href="/about/"{{ if eq .RelPermalink "/about/" }} aria-current="page"{{ end }}>About</a><a href="/record/"{{ if eq .RelPermalink "/record/" }} aria-current="page"{{ end }}>Record</a><a href="/writing/"{{ if eq .Section "writing" }} aria-current="page"{{ end }}>Writing</a></nav></div></header>
+<header class="site-header"><div class="shell nav-shell">
+<a class="wordmark" href="{{ "/" | relURL }}">Josh Lane</a>
+<nav aria-label="Primary navigation">
+<a href="{{ "/record/" | relURL }}"{{ if eq .RelPermalink "/record/" }} aria-current="page"{{ end }}>Work</a>
+<a href="{{ "/about/" | relURL }}"{{ if eq .RelPermalink "/about/" }} aria-current="page"{{ end }}>About</a>
+{{ if where site.RegularPages "Section" "writing" }}<a href="{{ "/writing/" | relURL }}"{{ if eq .Section "writing" }} aria-current="page"{{ end }}>Writing</a>{{ end }}
+<a href="{{ "/about/#contact" | relURL }}">Contact</a>
+</nav></div></header>

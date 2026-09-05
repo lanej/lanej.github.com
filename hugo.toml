@@ -1,21 +1,18 @@
 baseURL = 'https://lanej.io/'
-languageCode = 'en-us'
+locale = 'en-US'
 title = 'Josh Lane'
 disableKinds = ['taxonomy', 'term']
 enableRobotsTXT = true
-
 [params]
-  description = 'Josh Lane is Chief Technology Officer at EasyPost. He writes about infrastructure, engineering organizations, and systems where software meets the physical world.'
-  author = 'Josh Lane'
+  description = 'Josh Lane, Chief Technology Officer at EasyPost. Selected work in technology leadership, financial infrastructure, and cloud software.'
+  role = 'Chief Technology Officer at EasyPost'
+  linkedin = 'https://www.linkedin.com/in/lanejoshlane/'
   github = 'https://github.com/lanej'
-  easypost = 'https://www.easypost.com/'
-  socialImage = 'https://lanej.io/images/josh-lane-headshot-v4.jpg'
-
-[markup]
-  [markup.goldmark]
-    [markup.goldmark.renderer]
-      unsafe = false
-
-[sitemap]
-  changefreq = 'monthly'
-  priority = 0.5
+  revision = 'local'
+[outputs]
+  home = ['HTML']
+  section = ['HTML', 'RSS']
+[markup.goldmark.renderer]
+  unsafe = false
+[caches.images]
+  dir = ':cacheDir/images'

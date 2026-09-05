@@ -1,17 +1,27 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {{ $description := .Description | default site.Params.description }}
-<title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
+{{ $title := cond .IsHome "Josh Lane · CTO at EasyPost" (printf "%s · Josh Lane" .Title) }}
+{{ $image := (resources.Get "images/josh-lane.webp").Resize "1200x jpg q90" }}
+{{ $css := resources.Get "css/site.css" | minify | fingerprint }}
+<title>{{ $title }}</title>
 <meta name="description" content="{{ $description }}">
-<meta name="theme-color" content="#0b1210">
+<meta name="theme-color" content="#0d1513">
+<meta name="color-scheme" content="dark">
+<meta name="site-revision" content="{{ site.Params.revision }}">
 <link rel="canonical" href="{{ .Permalink }}">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="/css/site.css">
-<link rel="stylesheet" href="/css/headshot.css">
-<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
-<meta property="og:title" content="{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}">
+<link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+{{ if eq .Kind "404" }}<meta name="robots" content="noindex">{{ end }}
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ $title }}">
 <meta property="og:description" content="{{ $description }}">
 <meta property="og:url" content="{{ .Permalink }}">
-<meta property="og:image" content="{{ site.Params.socialImage }}">
-<meta name="twitter:card" content="summary_large_image">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Josh Lane","url":"https://lanej.io/","image":"{{ site.Params.socialImage }}","jobTitle":"Chief Technology Officer","worksFor":{"@type":"Organization","name":"EasyPost","url":"https://www.easypost.com/"},"sameAs":["https://github.com/lanej"]}</script>
+<meta property="og:image" content="{{ $image.Permalink }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="1200">
+<meta property="og:image:alt" content="Josh Lane, photographed against a muted green background">
+<meta name="twitter:card" content="summary">
+{{ $person := dict "@context" "https://schema.org" "@type" "Person" "@id" ("#josh-lane" | absURL) "name" "Josh Lane" "alternateName" "Joshua Lane" "url" site.BaseURL "image" $image.Permalink "jobTitle" "Chief Technology Officer" "worksFor" (dict "@type" "Organization" "name" "EasyPost" "url" "https://www.easypost.com/") "sameAs" (slice site.Params.linkedin site.Params.github) }}
+<script type="application/ld+json">{{ $person | jsonify | safeJS }}</script>
+{{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" title="{{ site.Title }}" href="{{ .Permalink }}">{{ end }}
