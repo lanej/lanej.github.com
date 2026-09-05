@@ -17,7 +17,7 @@ Background: [EasyPost biography](https://www.easypost.com/about/) · [profession
 
 ## Open source {#open-source}
 
-I contribute changes to the tools I use. [Selected merged contributions](/record/#open-source) include work on ogen, jnv, and hotreload.nvim, with dates and links to the upstream pull requests. My work on [fog-aws](https://github.com/fog/fog-aws) belongs to an earlier period, not a current focus.
+I contribute changes to the tools I use. [Selected merged contributions](/record/#open-source) include work on ogen, jnv, and hotreload.nvim, alongside earlier Sinatra contributions, with dates and links to the upstream pull requests. My Ruby library work also includes ActiveRecord compatibility in `critic`. My work on [fog-aws](https://github.com/fog/fog-aws) belongs to an earlier period, not a current focus.
 
 I use [Neovim](https://neovim.io/) for coding and personal knowledge management, and have supported the project through recurring donations for years. [Supporting Neovim](https://neovim.io/sponsors/) is separate from my code contributions to its plugin ecosystem.
 
