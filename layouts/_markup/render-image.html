@@ -1,7 +1,7 @@
 {{- $url := .Destination -}}
 {{- $image := .Page.Resources.GetMatch .Destination -}}
 {{- if $image -}}
-<img src="{{ $image.Permalink }}" alt="{{ .PlainText }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if eq $image.ResourceType "image" }}{{ if ne $image.MediaType.SubType "svg" }} width="{{ $image.Width }}" height="{{ $image.Height }}"{{ end }}{{ end }} loading="lazy" decoding="async">
+<img src="{{ $image.Permalink }}" alt="{{ .PlainText }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if eq $image.ResourceType "image" }}{{ if ne $image.MediaType.SubType "svg+xml" }} width="{{ $image.Width }}" height="{{ $image.Height }}"{{ end }}{{ end }} loading="lazy" decoding="async">
 {{- else -}}
 <img src="{{ $url | absURL }}" alt="{{ .PlainText }}"{{ with .Title }} title="{{ . }}"{{ end }} loading="lazy" decoding="async">
 {{- end -}}

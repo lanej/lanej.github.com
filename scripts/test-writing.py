@@ -61,7 +61,6 @@ func example() string { return "a-long-code-line-that-must-scroll-within-the-cod
         Image.new('RGB',(900,450),(40,60,50)).save(path.parent/'diagram.png')
         hidden=create_draft(root,'private-sentinel','Private sentinel')
         hidden.write_text(hidden.read_text()+'PRIVATE_DRAFT_SENTINEL_NOT_FOR_PRODUCTION')
-        # Preview must include ignored local drafts and mark pages noindex.
         subprocess.run([binary,'--source',str(root),'--config','hugo.toml,hugo.preview.toml','--buildDrafts','--buildFuture'],check=True)
         preview=(root/'.preview/writing/preview-check/index.html').read_text()
         assert 'Draft — local preview only' in preview and 'noindex' in preview
@@ -70,28 +69,31 @@ func example() string { return "a-long-code-line-that-must-scroll-within-the-cod
         future=root/'content/writing/future-sentinel'; future.mkdir(parents=True)
         future.joinpath('index.md').write_text('+++\ntitle="Future sentinel"\ndescription="Not published"\ndate="2099-01-01T00:00:00Z"\ndraft=false\n+++\nFUTURE_SENTINEL_NOT_FOR_PRODUCTION\n')
         public=root/'public'
-        env={**os.environ,'HUGO_PARAMS_REVISION':'writing-fixture'}
-        subprocess.run([binary,'--source',str(root),'--destination',str(public),'--panicOnWarning'],check=True,env=env)
-        subprocess.run([sys.executable,str(root/'scripts/check.py'),str(public)],cwd=root,check=True,env=env)
-        assert not (public/'writing/private-sentinel').exists()
-        assert not (public/'writing/future-sentinel').exists()
-        assert not (public/'drafts').exists()
-        for file in public.rglob('*'):
-            if file.is_file() and file.suffix in ('.html','.xml','.json'):
-                text=file.read_text()
-                assert 'PRIVATE_DRAFT_SENTINEL_NOT_FOR_PRODUCTION' not in text
-                assert 'FUTURE_SENTINEL_NOT_FOR_PRODUCTION' not in text
-        article=(public/'writing/preview-check/index.html').read_text()
-        assert 'BlogPosting' in article and 'article:published_time' in article and 'min read' in article
-        assert 'On this page' in article and 'width="900" height="450"' in article
-        feed=ET.parse(public/'index.xml').getroot()
-        assert len(feed.findall('channel/item'))==1
-        assert feed.findtext('channel/item/title')=='Article layout verification'
-        assert 'A section heading' in feed.findtext('channel/item/{http://purl.org/rss/1.0/modules/content/}encoded')
+        # Reserve the local origin before building so absolute image/RSS URLs
+        # resolve to this disposable fixture, never to the production website.
         server=ThreadingHTTPServer(('127.0.0.1',0),partial(SimpleHTTPRequestHandler,directory=str(public)))
+        origin=f'http://127.0.0.1:{server.server_port}/'
         thread=Thread(target=server.serve_forever,daemon=True); thread.start()
         try:
-            subprocess.run([sys.executable,str(ROOT/'scripts/verify.py'),'--url',f'http://127.0.0.1:{server.server_port}/','--root',str(public),'--output',str(out),'--engines','chromium,webkit'],check=True)
+            env={**os.environ,'HUGO_PARAMS_REVISION':'writing-fixture'}
+            subprocess.run([binary,'--source',str(root),'--destination',str(public),'--baseURL',origin,'--panicOnWarning'],check=True,env=env)
+            subprocess.run([sys.executable,str(root/'scripts/check.py'),str(public)],cwd=root,check=True,env=env)
+            assert not (public/'writing/private-sentinel').exists()
+            assert not (public/'writing/future-sentinel').exists()
+            assert not (public/'drafts').exists()
+            for file in public.rglob('*'):
+                if file.is_file() and file.suffix in ('.html','.xml','.json'):
+                    text=file.read_text()
+                    assert 'PRIVATE_DRAFT_SENTINEL_NOT_FOR_PRODUCTION' not in text
+                    assert 'FUTURE_SENTINEL_NOT_FOR_PRODUCTION' not in text
+            article=(public/'writing/preview-check/index.html').read_text()
+            assert 'BlogPosting' in article and 'article:published_time' in article and 'min read' in article
+            assert 'On this page' in article and 'width="900" height="450"' in article
+            feed=ET.parse(public/'index.xml').getroot()
+            assert len(feed.findall('channel/item'))==1
+            assert feed.findtext('channel/item/title')=='Article layout verification'
+            assert 'A section heading' in feed.findtext('channel/item/{http://purl.org/rss/1.0/modules/content/}encoded')
+            subprocess.run([sys.executable,str(ROOT/'scripts/verify.py'),'--url',origin,'--root',str(public),'--output',str(out),'--engines','chromium,webkit'],check=True)
         finally:
             server.shutdown(); server.server_close(); thread.join()
         (out/'authoring.json').write_text(json.dumps({'status':'passed','checks':['invalid slug rejected','duplicate draft rejected','empty draft rejected','local preview includes drafts and noindex','promotion preserves assets','production excludes local drafts and future posts','RSS contains only published essays with full text','article metadata, footnotes, tables, code and non-square images rendered'],'fixture_published_to_live_site':False},indent=2))
