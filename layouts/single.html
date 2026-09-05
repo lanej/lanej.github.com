@@ -1,9 +1,8 @@
 {{ define "main" }}
 <article class="page shell">
 <header class="page-header"><p class="eyebrow">Josh Lane</p><h1>{{ .Title }}</h1></header>
-<div class="page-grid{{ if not .Params.portrait }} text-only{{ end }}">
 <div class="prose">{{ .Content }}</div>
-{{ if .Params.portrait }}<aside class="portrait-aside"><figure>{{ partial "portrait.html" . }}</figure>{{ $photo := (resources.Get "images/josh-lane.webp").Resize "1200x jpg q90" }}<a class="photo-download" href="{{ $photo.RelPermalink }}" download="josh-lane-headshot.jpg">Download headshot (JPEG)</a></aside>{{ end }}
-</div>
+{{ if eq .RelPermalink "/record/" }}{{ partial "contributions.html" . }}{{ end }}
+{{ if .Params.portrait }}{{ $photo := (resources.Get "images/josh-lane.webp").Resize "1200x jpg q90" }}<a class="photo-download" href="{{ $photo.RelPermalink }}" download="josh-lane-headshot.jpg">Download headshot (JPEG)</a>{{ end }}
 </article>
 {{ end }}

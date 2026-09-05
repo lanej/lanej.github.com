@@ -1,0 +1,16 @@
+# Selected merged upstream contributions; dates are merge dates, not claims of ongoing maintenance.
+- project: hotreload.nvim
+  date: '2026-02-11'
+  summary: Replaced interval polling with filesystem-event watchers and limited watching to visible buffers in this Neovim plugin.
+  url: https://github.com/diogo464/hotreload.nvim/pull/1
+  label: File-watching improvements
+- project: ogen
+  date: '2025-11-27'
+  summary: Added type-based discrimination for OpenAPI oneOf and anyOf schemas, allowing generated Go code to distinguish variants that share field names but use different types.
+  url: https://github.com/ogen-go/ogen/pull/1584
+  label: Type-based schema discrimination
+- project: jnv
+  date: '2025-02-28'
+  summary: Added configuration-file support for custom keybindings and styles, using the XDG configuration-directory conventions.
+  url: https://github.com/ynqa/jnv/pull/70
+  label: Configuration-file support
