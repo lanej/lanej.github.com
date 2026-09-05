@@ -1,0 +1,8 @@
+/public/
+/resources/
+/.hugo_build.lock
+/.tools/
+/.venv/
+/artifacts/
+__pycache__/
+.DS_Store

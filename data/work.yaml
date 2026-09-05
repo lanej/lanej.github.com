@@ -1,0 +1,12 @@
+- id: financial-infrastructure
+  organization: EasyPost
+  title: Connecting platform engineering to financial operations
+  summary: Financial data pipeline redesign and automation to shorten revenue recognition time.
+- id: engine-yard
+  organization: Engine Yard
+  title: Building an API for operating cloud infrastructure
+  summary: API architecture and development, supported by a Ruby client and command-line tools.
+- id: fog-aws
+  organization: Open source
+  title: Making AWS support independently usable in Fog
+  summary: Co-author of fog-aws, a standalone AWS provider for Ruby applications and the Fog cloud library.
