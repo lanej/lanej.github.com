@@ -4,6 +4,6 @@
 {{ $large := $original.Resize "1200x webp q85" }}
 {{ $fallback := $original.Resize "800x jpg q90" }}
 <picture>
-<source type="image/webp" srcset="{{ $small.RelPermalink }} 480w, {{ $medium.RelPermalink }} 800w, {{ $large.RelPermalink }} 1200w" sizes="(max-width: 700px) calc(100vw - 40px), 380px">
+<source type="image/webp" srcset="{{ $small.RelPermalink }} 480w, {{ $medium.RelPermalink }} 800w, {{ $large.RelPermalink }} 1200w" sizes="(max-width: 360px) 88px, (max-width: 700px) 108px, (max-width: 1000px) 330px, 380px">
 <img src="{{ $fallback.RelPermalink }}" alt="Josh Lane, photographed against a muted green background" width="800" height="800" decoding="async" fetchpriority="high">
 </picture>

@@ -9,6 +9,44 @@ from urllib.parse import urljoin, urlparse
 from PIL import Image
 from playwright.sync_api import sync_playwright
 
+# Phone heights represent usable content space with browser chrome, not full
+# device screenshots. The 320x480 case guards the smallest first viewport.
+PHONE_VIEWPORTS = [(320, 480), (375, 600), (390, 664), (430, 740)]
+
+
+def verify_home_opening(page, width, height):
+    """A complete identity and portrait must be visible before the first scroll."""
+    opening = page.evaluate('''() => {
+        const rect = selector => {
+            const r = document.querySelector(selector).getBoundingClientRect();
+            return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,width:r.width,height:r.height};
+        };
+        return {
+            nameCount: ((document.querySelector('.site-header').innerText + '\\n' +
+                document.querySelector('.hero').innerText).match(/Josh Lane/g) || []).length,
+            identity: rect('.hero-identity'), portrait: rect('.hero-portrait'),
+            intro: rect('.hero .intro'), link: rect('.hero .text-link'),
+            work: rect('.work-section')
+        };
+    }''')
+    assert opening['nameCount'] == 1, 'Homepage repeats the name in its opening'
+    assert page.locator('.site-header .wordmark').count() == 0, 'Duplicate homepage wordmark'
+    if width <= 700:
+        portrait = opening['portrait']
+        identity = opening['identity']
+        assert 80 <= portrait['width'] <= 120, 'Mobile portrait is not compact'
+        assert portrait['top'] >= 0 and portrait['bottom'] <= height, 'Portrait cut off in first viewport'
+        assert portrait['left'] >= 0 and portrait['right'] <= width, 'Portrait horizontally clipped'
+        assert portrait['left'] >= identity['right'] + 8, 'Portrait should sit beside the identity'
+        assert abs((portrait['top'] + portrait['bottom']) / 2 -
+                   (identity['top'] + identity['bottom']) / 2) <= 2, 'Identity and portrait are misaligned'
+        assert opening['intro']['top'] >= max(portrait['bottom'], identity['bottom']) + 12, 'Intro crowds identity'
+        assert opening['link']['bottom'] <= height - 16, 'Primary link below first viewport'
+        assert opening['work']['top'] <= 480, 'Mobile hero delays the actual work'
+    else:
+        assert opening['work']['top'] < 740, 'Desktop hero pushes work too far down'
+    return opening
+
 
 def main():
     parser=argparse.ArgumentParser()
@@ -50,17 +88,22 @@ def main():
         for engine in args.engines.split(','):
             launch={'executable_path':args.chromium_path,'args':['--no-sandbox']} if engine=='chromium' and args.chromium_path else {}
             browser=getattr(pw,engine).launch(**launch)
-            widths=[320,390,768,1024,1440] if engine=='chromium' else [390,1440]
-            for width in widths:
-                context=browser.new_context(viewport={'width':width,'height':900 if width>700 else 844},device_scale_factor=3 if width<700 else 1,has_touch=width<700,is_mobile=width<700,color_scheme='dark')
+            viewports = PHONE_VIEWPORTS + ([(700,700),(701,900),(768,900),(1024,900),(1440,900)] if engine=='chromium' else [(768,900),(1440,900)])
+            for width,height in viewports:
+                mobile=width<=700
+                context=browser.new_context(viewport={'width':width,'height':height},device_scale_factor=3 if mobile else 1,has_touch=mobile,is_mobile=mobile,color_scheme='dark')
                 page=context.new_page(); errors=[]
                 page.on('pageerror',lambda error:errors.append(str(error)))
                 for route,label in routes:
                     response=page.goto(urljoin(args.url,route),wait_until='networkidle')
                     assert response and (response.ok or (route=='/404.html' and response.status==404)), f'{engine} {route}: navigation failed'
                     page.locator('img').evaluate_all('(imgs)=>{for(const i of imgs)i.loading="eager";return Promise.all(imgs.map(i=>i.decode()))}')
+                    # Capture before assertions and before keyboard navigation changes
+                    # the scroll position. Full-page captures alone hid this regression.
+                    if route=='/': page.screenshot(path=str(out/f'{engine}-{width}-{label}-viewport.png'),full_page=False)
+                    if width in (390,1440): page.screenshot(path=str(out/f'{engine}-{width}-{label}.png'),full_page=True)
                     assert page.locator('meta[name="site-revision"]').get_attribute('content')==manifest['revision'], f'{route}: wrong revision'
-                    metrics=page.evaluate('''()=>({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,
+                    metrics=page.evaluate('''()=>({width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth,
                     nav:[...document.querySelectorAll('.site-header nav a')].map(a=>({text:a.textContent,height:a.getBoundingClientRect().height})),
                     images:[...document.images].map(i=>{const frame=i.closest('.hero-portrait,.header-portrait');return {src:i.currentSrc,width:i.getBoundingClientRect().width,height:i.getBoundingClientRect().height,portrait:!!frame,radius:frame?getComputedStyle(frame).borderRadius:null}}),
                     workTop:document.querySelector('.work-section')?.getBoundingClientRect().top})''')
@@ -73,19 +116,17 @@ def main():
                         assert image['radius']=='50%', 'Portrait is not circular'
                         with Image.open(io.BytesIO(request.get(image['src']).body())) as actual:
                             actual.load()
-                            assert actual.width>=image['width']*(2.8 if width<700 else 1), 'Insufficient portrait resolution'
+                            assert actual.width>=image['width']*(2.8 if mobile else 1), 'Insufficient portrait resolution'
                     assert page.locator('.header-portrait').count()==(0 if route=='/' else 1), 'Interior portrait missing or duplicated'
                     assert not page.locator('.portrait-aside').count(), 'Obsolete large interior portrait'
-                    if route=='/':
-                        assert metrics['workTop']<(1000 if width<700 else 740), 'Hero pushes work too far down'
+                    if route=='/': metrics['opening']=verify_home_opening(page,width,height)
                     assert bool(page.locator('.site-header a[href="/writing/"]').count())==('/writing/index.html' in manifest['files']), 'Writing navigation state is wrong'
                     page.evaluate('document.activeElement?.blur()'); page.keyboard.press('Tab')
                     assert page.locator('.skip-link').evaluate('(a)=>a===document.activeElement'), 'Skip link not first keyboard target'
                     page.keyboard.press('Enter')
                     assert page.locator('main').evaluate('(m)=>m===document.activeElement'), 'Skip link does not focus main'
                     page.evaluate('window.scrollTo(0,0)'); page.locator('main').evaluate('(m)=>m.blur()')
-                    if width in (390,1440): page.screenshot(path=str(out/f'{engine}-{width}-{label}.png'),full_page=True)
-                    report['checks'].append({'engine':engine,'width':width,'page':route,**metrics})
+                    report['checks'].append({'engine':engine,'width':width,'height':height,'page':route,**metrics})
                 assert not errors, errors
                 context.close()
             browser.close()
