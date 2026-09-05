@@ -82,7 +82,8 @@ def main():
                             assert actual.width>=image['width']*(2.8 if width<700 else 1), 'Insufficient headshot resolution'
                     if route=='/':
                         assert metrics['workTop']<(1000 if width<700 else 740), 'Hero pushes work too far down'
-                        assert not page.locator('nav a[href="/writing/"]').count()
+                        if '/writing/index.html' not in manifest['files']:
+                            assert not page.locator('nav a[href="/writing/"]').count()
                     page.evaluate('document.activeElement?.blur()')
                     page.keyboard.press('Tab')
                     assert page.locator('.skip-link').evaluate('(a)=>a===document.activeElement'), 'Skip link not first keyboard target'

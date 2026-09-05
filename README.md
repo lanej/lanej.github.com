@@ -54,7 +54,9 @@ verification results. A successful deployment alone is not an acceptance test.
 In repository **Settings → Pages**, Source should be **GitHub Actions**. Until that
 one-time administrative setting is changed, the workflow detects legacy branch
 publishing and waits for its run before deploying Hugo. Domain and HTTPS settings
-are left unchanged. The final source tree contains no generated root HTML.
+are left unchanged. The root `CNAME` marker is retained to protect the existing
+custom domain during migration; the build checks it against `static/CNAME`.
+The final source tree contains no generated root HTML.
 
 To verify a deployed build manually, download that run’s `site-bundle` artifact
 into `public/`, then run:

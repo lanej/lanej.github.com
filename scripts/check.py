@@ -19,6 +19,9 @@ class Document(HTMLParser):
         return [a for n,a in self.tags if n == tag and all(a.get(k) == v for k,v in attrs.items())]
 
 def main(root):
+    source = Path('assets/images/josh-lane.webp')
+    assert hashlib.sha256(source.read_bytes()).hexdigest() == 'e1505b9e7535ac59efc634f4259fd37d581afaef1e187eae51442899c0313e47', 'Unexpected source photograph bytes'
+    assert Path('CNAME').read_bytes() == Path('static/CNAME').read_bytes() == b'lanej.io\n', 'Domain marker mismatch'
     expected_revision = os.getenv('HUGO_PARAMS_REVISION', 'local')
     documents = {}
     for path in root.rglob('*.html'):
