@@ -1,0 +1,17 @@
+name: Migrate Pages publishing mode
+on:
+  push:
+    branches: [site/remediate-foundation]
+    paths: ['.github/workflows/migrate-pages.yml']
+permissions:
+  pages: write
+jobs:
+  migrate:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Switch build mode without changing domain or HTTPS settings
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --method PUT repos/lanej/lanej.github.com/pages -f build_type=workflow
+          gh api repos/lanej/lanej.github.com/pages --jq '{build_type, cname, https_enforced}'
