@@ -1,29 +1,28 @@
 +++
 title = "Harmony"
-description = "Do one thing well. Keep the whole coherent."
+description = "How Socrates keeps a specification coherent as its assumptions change."
 date = "2026-09-06T18:22:16Z"
+lastmod = "2026-09-06T18:58:54Z"
 draft = false
 diagrams = true
 toc = false
 +++
 
-A system can become less coherent one reasonable change at a time.
+A specification can become incoherent one reasonable answer at a time.
 
-A retry policy becomes more forgiving. A storage policy becomes more economical. Each change makes sense to the person responsible for it. Together, they can break a guarantee neither person intended to change.
+I built **Socrates**, a Claude skill, to turn ambiguous intent into an execution-ready specification through dialogue. It investigates the problem, challenges my assumptions, tests interpretations, and makes success criteria and decision boundaries explicit. The goal is not a polished plan. It is a shared understanding that lets an agent do the intended work rather than execute the wrong task correctly.[^socrates]
 
-I like small, composable tools. I like clear boundaries, narrow responsibilities, and mechanisms I can understand without loading an entire system into my head.
+**Harmony is one of the properties Socrates evaluates:** whether the specification avoids contradicting itself or creating inconsistency elsewhere. It concerns the relationships among the problem, requirements, assumptions, constraints, success criteria, and verification strategy—not just the quality of each section on its own.[^socrates]
 
-But decomposition does not remove responsibility for what the pieces create together.
+A requirement can be clear while its acceptance test rewards the wrong behavior. A risk can appear acceptable while depending on a fallback that another decision removed. Each answer can sound reasonable in isolation. Together, they may no longer describe a viable task.
 
-In [Close the Loop](/writing/close-the-loop/), I argued that AI needs feedback from the environment, and that we should turn repeated, mechanically checkable work into software. This is the next question:
+Socrates works on alignment with intent. Harmony asks whether the pieces of that understanding still fit together as the conversation changes. Coherence is necessary, but not sufficient: a consistent specification can still represent the wrong problem.
 
-> **Do the things we have made reliable still form a coherent whole?**
+In [Close the Loop](/writing/close-the-loop/), I argued for feedback that tests the result against reality. Harmony addresses a complementary question inside the specification:
 
-I have started calling that property **Harmony**. Not agreement. Not uniformity. The compatibility of a system's requirements, assumptions, and behavior as the system changes.
+> **Do our requirements and checks still describe compatible ideas of success?**
 
-The rule is simple:
-
-> **A local change is not complete until its consequences for the whole have been reconciled.**
+This is not a new claim that systems need consistency. Modularity, interface theory, requirements engineering, and truth maintenance give us established ways to reason about different parts of the problem. Harmony is the name I use for bringing that concern into every pass of Socrates.
 
 ## What Unix already got right
 
@@ -35,7 +34,7 @@ The 1978 Unix foreword by McIlroy, Pinson, and Tague puts narrow purpose and com
 
 I am not proposing that we add integration to a philosophy built around it.
 
-I am proposing that we make one responsibility explicit: **preserving the coherence of the composition as its parts evolve**.
+What Harmony adds to my practice is a recurring obligation: **revisit the coherence of the composition as its parts evolve**. The amendment is to how I apply Unix's design discipline, not a claim that Unix's authors overlooked composition.
 
 A useful interface lets me ignore how another component works. It cannot let me ignore the promises I depend on.
 
@@ -62,6 +61,10 @@ The implementation of each local rule may be correct. The rules no longer suppor
 {{< harmony-contracts >}}
 
 The relationship that mattered was not merely the shape of the request. It was the relationship between the retry window and the lifetime of the service's memory.
+
+Interface theory gives this distinction a precise counterpart. In *Interface Automata* (2001), Luca de Alfaro and Thomas Henzinger model both a component's assumptions about incoming calls and its guarantees about outgoing calls, then check compatibility between components. Matching types alone does not establish that their interaction is valid.[^interfaces]
+
+The retry example illustrates that concern; it is not an application of their formalism or a proof of this design.
 
 For this design, the deduplication window has to cover the retry window. That is a necessary condition for the promise, not a complete proof of correctness. Losing records, changing identifiers, and concurrent requests would still need their own treatment.
 
@@ -95,15 +98,19 @@ It is no longer settled for the same reasons.
 
 This is why checking the changed paragraph is not enough. We have to revisit conclusions that depend on it, including ones that are no longer receiving attention.
 
-Harmony is partly a discipline for invalidating stale confidence.
+There is a direct connection to Jon Doyle's *A Truth Maintenance System* (1979). Doyle's system records the reasons for beliefs so a reasoning program can revise them when discoveries contradict its assumptions. The dependency between a conclusion and its justification is part of what the system maintains.[^doyle]
 
-## The rule that runs on every pass
+Socrates does not implement Doyle's dependency-maintenance algorithm. It works through dialogue and a written specification. The related obligation is to reconsider an earlier conclusion when its supporting premise changes, rather than treating an old answer as permanently settled.
 
-This is what I built into Socrates, my workflow for developing specifications through dialogue.
+That is the role of Harmony here: keeping the specification's reasoning coherent, not merely keeping its terminology consistent.
 
-Socrates is not just a reviewer that looks for defects in a finished plan. It interrogates the interpretation of the task: what problem we are solving, which assumptions we are making, what counts as success, what is excluded, and who has authority to decide unresolved questions. It is meant to sharpen my understanding as well as the agent's.[^socrates]
+## The property and the check
 
-A plausible specification is not enough. It has to represent the intended problem, rather than an adjacent problem the agent finds easier to solve.
+Harmony names the property. The recurring review is how the Socrates skill tries to preserve it.
+
+Requirements engineering offers a particularly close antecedent. In *Leveraging Inconsistency in Software Development* (2000), Bashar Nuseibeh, Steve Easterbrook, and Alessandra Russo describe how specifications, code, tests, and other descriptions evolve separately. Inconsistencies can reveal missing knowledge and guide further elicitation; forcing immediate agreement can instead create premature commitment.[^inconsistency]
+
+That is a useful distinction for Socrates. A contradiction is not something to smooth over so the plan reads well. It is something to bring back into the dialogue.
 
 Most of the workflow's checks are revisited when the conversation touches them. Harmony is different. The instructions require it on every interrogation pass, whether or not consistency is the topic under discussion.
 
@@ -115,7 +122,9 @@ That last part is the point.
 
 If we check consistency only when we already suspect a contradiction, we have made the check depend on noticing the very problem it is supposed to find.
 
-The process records the assessment on each pass, along with its rationale and remaining uncertainty. Unresolved low-confidence items are supposed to come back into the dialogue, not disappear into an assumption the agent silently adopts. The specification has an explicit freeze state and a path for reopening it when later evidence undermines its premises.[^socrates]
+In the retry example, shortening retention should reopen the retry promise, its acceptance tests, and any assumptions about migration—not just the storage paragraph. Socrates should ask whether the promise changes or another mechanism must preserve it. That decision belongs in the specification, not in an executor's silent interpretation.
+
+The process records its assessment on each pass, along with the rationale and remaining uncertainty. Low-confidence items must be surfaced rather than silently assumed. Contradictions are to be resolved, bounded, or explicitly classified. The specification has an explicit freeze state and a path for reopening it when later evidence undermines its premises.[^socrates]
 
 {{< harmony-review >}}
 
@@ -160,6 +169,8 @@ But that is a change to the system's contract. It needs to be made deliberately,
 It cannot be smuggled in as storage cleanup.
 
 The distinction is between an intentional change to an agreement and an accidental violation of it.
+
+The inconsistency-management literature also permits deliberate deferral: detecting a conflict and deciding when to resolve it are different activities.[^inconsistency] For Socrates, recording an unresolved question is more honest than inventing agreement. It still needs a stated consequence and a decision about whether execution can safely proceed.
 
 Nor does Harmony mean preserving every historical behavior. Some assumptions should be retired. Some interfaces should break. Some capabilities should disappear.
 
@@ -209,9 +220,7 @@ Decomposition should reduce unnecessary coordination. It should not make necessa
 
 ## Preserve the whole
 
-The amendment I would add to my working version of the Unix philosophy is not a rejection of small tools.
-
-It is a condition on finishing a change:
+Harmony starts as a property of the specification Socrates is developing. Its broader lesson is a condition I would add to my working version of the Unix philosophy:
 
 > **Do one thing well. Compose through clear interfaces. Preserve the coherence of the whole as the parts change.**
 
@@ -219,9 +228,9 @@ That applies to code, specifications, agent workflows, and organizations.
 
 The question is not only whether this component works. It is whether its behavior still supports the agreements around it, whether previously settled conclusions remain justified, and whether any changed promises have actually been reconciled.
 
-Close the loop so the system can detect failure.
+In Socrates, that means a new answer can reopen an old conclusion. Requirements, constraints, and acceptance criteria have to be reconciled before apparent clarity becomes execution commitment.
 
-Preserve harmony so its parts are not faithfully implementing incompatible ideas of success.
+Close the loop so the system can detect failure. Use Harmony to keep the specification from sending its parts toward incompatible ideas of success.
 
 [^unix]: M. D. McIlroy, E. N. Pinson, and B. A. Tague, *UNIX Time-Sharing System: Foreword*, Bell System Technical Journal 57(6), 1978, especially the Style section. [Original paper](https://www.tuhs.org/Archive/Documentation/Papers/BSTJ/bstj57-6-1899.pdf); [HTML transcription](https://danluu.com/mcilroy-unix/). The original explicitly discusses both narrow-purpose tools and composition.
 [^parnas]: D. L. Parnas, *On the Criteria To Be Used in Decomposing Systems into Modules*, Communications of the ACM 15(12), 1972. [Publication](https://doi.org/10.1145/361598.361623); [transcription](https://www.cs.lafayette.edu/~gexia/cs301/resources/parnas.html), especially The Criteria and Conclusion.
@@ -229,3 +238,6 @@ Preserve harmony so its parts are not faithfully implementing incompatible ideas
 [^socrates]: My [Socrates instructions](https://github.com/lanej/dotfiles/blob/74f56988ad1fa6debf3702c8b848e352e063761f/claude/commands/socrates.md), particularly the purpose, Harmony commandment, Commandment Scoring, and freeze/reopen semantics. These specify intended behavior; they do not themselves enforce every requirement.
 [^verify]: My [verification instructions](https://github.com/lanej/dotfiles/blob/74f56988ad1fa6debf3702c8b848e352e063761f/claude/commands/verify.md), Step 5: Harmony Cadence and Deferral. This is an audit procedure described in a command, not a claim of formal verification.
 [^harmony-change]: [Add Harmony and per-commandment confidence scoring](https://github.com/lanej/dotfiles/commit/6d8710ec4151ddfc67b2995c87273fc2513ff260), September 3, 2026. The diff also aligns the orchestration vocabulary and adds the missing session-pointer writes. The article describes those recorded changes, not a new execution of that historical workflow.
+[^interfaces]: Luca de Alfaro and Thomas A. Henzinger, *Interface Automata*, ESEC/FSE 2001, pp. 109–120. [Publication](https://doi.org/10.1145/503209.503226); [author-institution record and abstract](https://research-explorer.ista.ac.at/record/4622). This is a formal treatment of interaction assumptions, guarantees, and compatibility—not a claim that Socrates implements interface automata.
+[^doyle]: Jon Doyle, *A Truth Maintenance System*, Artificial Intelligence 12(3), 1979, pp. 231–272. [Publication and abstract](https://doi.org/10.1016/0004-3702(79)90008-0). The connection is the maintenance of justifications as assumptions change, not an equivalence between a language-model review and Doyle's algorithm.
+[^inconsistency]: Bashar Nuseibeh, Steve Easterbrook, and Alessandra Russo, *Leveraging Inconsistency in Software Development*, IEEE Computer 33(4), 2000, pp. 24–29. [Publication](https://doi.org/10.1109/2.839317); [author-hosted paper](https://www.cs.toronto.edu/~sme/papers/2000/IEEEComputer2000.pdf). See pp. 24–27 on evolving descriptions, useful inconsistency, and risk-based handling.
