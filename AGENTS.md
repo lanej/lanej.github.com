@@ -18,6 +18,11 @@ link must fit before scrolling, including short viewports with browser chrome.
 Preserve the small home-link portrait and name on interior pages. Run the same
 checks with Writing enabled in the disposable authoring fixture.
 
+Use one visible identity label per page: the homepage heading, or the interior
+header wordmark. Do not repeat Josh’s name as a page-title eyebrow, article byline,
+or footer label. Keep authorship in document titles, structured metadata, and RSS;
+normal biographical prose is not an identity label.
+
 Do not publish an empty Writing section or placeholder accomplishments. Distinguish
 self-reported career history from independent public evidence. No private research,
 personal contact information beyond approved public routes, confidential company
