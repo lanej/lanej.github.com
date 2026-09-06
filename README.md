@@ -1,7 +1,9 @@
 # lanej.io
 
 Josh Lane’s professional website. Hugo, Markdown, native CSS and a locally hosted
-photograph. No theme, frontend JavaScript, CMS, external fonts, or runtime packages.
+photograph. No theme, frontend framework, CMS, external fonts, or runtime packages.
+A small native JavaScript enhancement opens citation previews; all content and
+ordinary references remain usable without it.
 
 ## Writing
 
@@ -25,6 +27,15 @@ folder. Use ordinary Markdown headings, links, tables, fenced code blocks and
 footnotes. TOML front matter provides `title`, `description`, `date`, `draft`, and
 optional `toc = true`. Set `lastmod` explicitly when a published article is
 substantively revised; routine rebuilds do not change its displayed dates.
+
+### Sources and citation previews
+
+Use normal Markdown footnotes. Every article automatically gets click/tap source
+cards; no per-post setup is needed. Prefer a bold linked title, author/year when
+known, and a paragraph preserving the source's context and limitations. Older
+prose notes work too. See [the citation guide](docs/citations.md) for examples.
+Static endnotes, return links, print, and RSS remain available. Sources are never
+fetched or summarized by the visitor's browser.
 
 ### Images, captions, and sharing
 
@@ -81,6 +92,7 @@ until a build after its date; there is no scheduled publishing service.
 - `data/contributions.yaml`: dated merged upstream contributions and evidence links.
 - `layouts/`: shared pages, circular portraits, article metadata and RSS. The speaker-resources shortcode groups the reusable biography and headshot download in a native disclosure.
 - `assets/css/site.css` and `editorial.css`: compiled into one fingerprinted stylesheet. Articles with `diagrams: true` also include `diagrams.css`.
+- `assets/js/citations.js` and `assets/css/citations.css`: local, fingerprinted citation previews, loaded only by articles with footnotes.
 - `assets/images/josh-lane.webp`: approved 1254 × 1254 source photograph. Hugo makes responsive hero, header-avatar and downloadable JPEG derivatives.
 - `drafts/`: local-only work, ignored by Git and excluded from production.
 
@@ -111,8 +123,11 @@ Browser tests cover portraits, image resolution, keyboard navigation, section
 links, speaker-resource disclosure, phone navigation rows, tablet composition,
 and text reflow at 200%. At enlarged text sizes, vertical scrolling is allowed;
 we do not shrink text or hide content to pass a first-screen test. Published
-articles are discovered automatically, including their diagrams. The test tools
-are not visitor dependencies.
+articles are discovered automatically, including their diagrams and citation
+previews. Citation tests cover keyboard/touch interaction, repeated notes, complete
+source content, long-note scrolling, print, no-JavaScript and unsupported-browser
+fallbacks, plus disposable future-article fixtures. The test tools are not visitor
+dependencies.
 
 ## Deployment
 

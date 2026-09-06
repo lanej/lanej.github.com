@@ -32,3 +32,4 @@
 <script type="application/ld+json">{{ $post | jsonify | safeJS }}</script>
 {{ end }}
 <link rel="alternate" type="application/rss+xml" title="Josh Lane — Writing" href="{{ "index.xml" | absURL }}">
+{{ partial "citation-assets.html" . }}

@@ -3,6 +3,7 @@ import io
 import json
 from urllib.parse import urlsplit
 from PIL import Image
+from citation_checks import verify_citations
 
 
 def verify_polish(page, width, route, out, engine, label):
@@ -70,7 +71,7 @@ def verify_polish(page, width, route, out, engine, label):
     fetch_url = image_url
     # A production build keeps lanej.io canonical metadata during local testing.
     # Fetch its asset path from the local artifact, not an older live deployment.
-    # Live-domain checks still request the exact public image URL without rewriting.
+    # Live-domain checks still request the exact public image URLs without rewriting.
     if actual_origin.hostname in ('127.0.0.1', 'localhost', '::1'):
         fetch_url = image_parts._replace(scheme=actual_origin.scheme, netloc=actual_origin.netloc).geturl()
     else:
@@ -117,5 +118,6 @@ def verify_polish(page, width, route, out, engine, label):
             document.documentElement.style.removeProperty('font-size');
             document.querySelectorAll('details').forEach(el => el.open = false);
         }''')
+    result['citations'] = verify_citations(page, width, route, out, engine, label)
     page.evaluate('window.scrollTo(0,0)')
     return result

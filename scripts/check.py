@@ -39,7 +39,15 @@ def main(root):
         assert doc.select('link', rel='canonical')
         assert doc.select('main', id='main') and doc.select('a', href='#main'), f'{path}: missing skip link'
         assert doc.select('nav', **{'aria-label':'Primary navigation'})
-        assert all(a.get('type') == 'application/ld+json' for a in doc.select('script')), 'Unexpected executable JavaScript'
+        executable = [a for a in doc.select('script') if a.get('type') != 'application/ld+json']
+        has_notes = bool(doc.select('a', **{'class':'footnote-ref'}))
+        is_article = bool(doc.select('meta', property='article:published_time'))
+        assert len(executable) == int(has_notes and is_article), f'{path}: citation script loading mismatch'
+        for script in executable:
+            asset = urlparse(script.get('src',''))
+            assert not asset.scheme and not asset.netloc and asset.path.startswith('/js/citations.min.') and asset.path.endswith('.js'), 'Unexpected executable JavaScript'
+            assert 'defer' in script and 'data-citation-previews' in script and script.get('integrity','').startswith('sha256-'), 'Citation script must be deferred, local, and fingerprinted'
+        assert 'citation-popover' not in text, 'Interactive cards must not replace static endnotes'
         assert all(a.get('alt') for a in doc.select('img')), f'{path}: missing image description'
         for forbidden in ('New writing will appear here', 'Evidence over chronology', 'new-about-josh2.jpg', 'headshot-v4'):
             assert forbidden not in text, f'{path}: leftover placeholder or image'
@@ -75,7 +83,11 @@ def main(root):
         assert item.findtext('title') and item.findtext('pubDate')
         link=item.findtext('link')
         assert link and urlparse(link).path.startswith('/writing/')
-        assert item.findtext('{http://purl.org/rss/1.0/modules/content/}encoded'), 'RSS must include article text'
+        body=item.findtext('{http://purl.org/rss/1.0/modules/content/}encoded')
+        assert body, 'RSS must include article text'
+        assert '<script' not in body and 'citation-popover' not in body and 'citation-toggle' not in body, 'RSS must not depend on citation JavaScript'
+        article=root/urlparse(link).path.lstrip('/')/'index.html'
+        assert len(Document(body).select('a', **{'class':'footnote-ref'})) == len(documents[article].select('a', **{'class':'footnote-ref'})), 'RSS lost a footnote reference'
     hashes={'/'+str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file() and p.name not in {'build.json','CNAME','.nojekyll'}}
     (root/'build.json').write_text(json.dumps({'revision':revision,'files':hashes},sort_keys=True))
     print(f'Passed: {len(documents)} pages, {len(articles)} articles, valid RSS and {len(hashes)} hashed files.')

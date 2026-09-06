@@ -1,0 +1,18 @@
+/* Citation cards are a progressive layer over ordinary Markdown endnotes. */
+.article-body{--citation-previews:enabled}
+.citation-toggle{-webkit-tap-highlight-color:transparent;display:inline-flex;align-items:center;justify-content:center;min-width:28px;min-height:28px;margin-inline:2px;padding:2px 5px;border:1px solid #607b6c;border-radius:6px;background:#14231c;color:var(--accent);font:600 .75rem/1.2 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;vertical-align:baseline;cursor:pointer}
+.citation-toggle:active,.citation-toggle:hover,.citation-toggle[aria-expanded=true]{background:#21372b;color:var(--text)}
+.citation-toggle:focus-visible,.citation-popover :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.citation-popover{box-sizing:border-box;position:fixed;inset:auto;margin:0;padding:20px;width:min(440px,calc(100vw - 24px));max-height:65vh;overflow:auto;overscroll-behavior:contain;border:1px solid #607b6c;border-radius:12px;background:#14231c;color:var(--text);box-shadow:0 12px 42px #0008;font:1rem/1.6 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-wrap:anywhere;scrollbar-gutter:stable}
+.citation-popover::backdrop{background:transparent}
+.citation-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-6px -6px 6px 0}
+.citation-label{margin:0;color:var(--accent);font-size:.72rem;font-weight:650;letter-spacing:.1em;text-transform:uppercase}
+.citation-close{flex-shrink:0;display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:6px;background:transparent;color:var(--muted);font:1.6rem/1 sans-serif;cursor:pointer}
+.citation-close:hover{background:#21372b;color:var(--text)}
+.citation-title{margin:0 0 14px;font-size:1.15rem;line-height:1.35;letter-spacing:-.015em;font-weight:600}
+.citation-content{color:var(--muted)}.citation-content p{margin:0 0 1em}.citation-content>:last-child{margin-bottom:0}.citation-content a,.citation-footer a{color:var(--accent);text-underline-offset:.2em}.citation-content strong{color:var(--text)}.citation-content .citation-metadata{font-size:.9rem;color:var(--accent)}
+.citation-content img{max-width:100%;height:auto}.citation-content pre,.citation-content table{max-width:100%;overflow-x:auto}.citation-content pre{white-space:pre-wrap}.citation-content :is(ul,ol){padding-left:1.4em}
+.citation-footer{display:flex;flex-wrap:wrap;gap:4px 22px;margin-top:16px;padding-top:8px;border-top:1px solid var(--line);font-size:.85rem}.citation-footer a{display:inline-flex;align-items:center;min-height:44px}
+@media screen{.article-body[data-citations-ready] .citation-fallback{display:none}}
+@media(max-width:600px){.citation-popover{padding:16px;border-radius:12px}.citation-toggle{min-width:30px;min-height:30px}.citation-title{font-size:1.08rem}}
+@media print{.citation-popover,.citation-toggle{display:none!important}.article-body .citation-fallback{display:inline!important}.footnotes{display:block!important}}
