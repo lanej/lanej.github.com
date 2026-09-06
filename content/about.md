@@ -1,15 +1,19 @@
 ---
 title: About
-description: Josh Lane’s path from cloud infrastructure and APIs to technology leadership at EasyPost. Biography, open-source support, and professional contact.
+description: Josh Lane’s path from hands-on shipping and cloud infrastructure to company-wide technology leadership at EasyPost.
 portrait: true
 ---
-I’m a technology executive with an engineering background. At **EasyPost**, I lead the company’s technology organization and strategy across platform, product, and experience.
+I joined **EasyPost** in 2019 as a senior software engineer, working on warehouse logistics, inventory management, third-party order integrations, and fulfillment software. Seven years later, I became the company’s Chief Technology Officer.
 
-My earlier work was close to the systems themselves: cloud APIs at Engine Yard, then API development, internal engineering, and site reliability at Fastly. At EasyPost, my responsibilities expanded through platform engineering and financial infrastructure into company-wide technology leadership.
+That path matters because I did not arrive at technology leadership from outside the systems. I spent the intervening years building pieces of the shipping stack, leading address-verification and service-architecture work, running platform and financial infrastructure, and eventually leading a 130+ engineer organization across Core API, Enterprise, Platform, and international subsidiaries.
 
-The scope has changed, but the underlying question has remained useful: **what makes a system easier to operate, and what prevents it from producing the result it exists to deliver?** Sometimes the answer is an architectural change. Sometimes it is clearer ownership, better data, different incentives, or stopping work that no longer makes sense.
+Today I lead EasyPost’s technology organization and company-wide technology strategy across product, platform, data, and infrastructure. My focus is increasingly on **where technology creates leverage**: which systems should be consolidated, which capabilities should become shared infrastructure, where better data changes decisions, and how architecture, organizational structure, and economics reinforce or fight each other.
 
-That is how I approach technology leadership: connect the technical decisions to the organization that has to execute them and the economics that have to support them. The [selected work](/record/) page gives specific examples, including my [2012 talk at Sapporo RubyKaigi](/record/#sapporo-rubykaigi-2012) on reducing deployment friction.
+Earlier in my career I worked closer to cloud infrastructure itself. At Engine Yard, I architected and led development of the company’s cloud API and worked on deployment systems, Azure integration, and platform infrastructure. At Fastly, I worked across API development, internal engineering, data pipelines, and site reliability.
+
+The technical details have changed, but the recurring question has not: **what prevents a system from producing the result it exists to deliver?** Sometimes the answer is architecture. Sometimes it is ownership, data quality, incentives, or work that should simply stop.
+
+The [selected work](/record/) page goes deeper into that progression, including my [2012 talk at Sapporo RubyKaigi](/record/#sapporo-rubykaigi-2012) on reducing deployment friction.
 
 I’m based in Oakland, California, and hold a B.S. in Electrical and Computer Engineering from Worcester Polytechnic Institute.
 
@@ -17,7 +21,7 @@ Background: [EasyPost biography](https://www.easypost.com/about/) · [profession
 
 ## Open source {#open-source}
 
-I contribute changes to the tools I use. [Selected merged contributions](/record/#open-source) include work on ogen, jnv, and hotreload.nvim, alongside earlier Sinatra contributions, with dates and links to the upstream pull requests. My Ruby library work also includes ActiveRecord compatibility in `critic`. My work on [fog-aws](https://github.com/fog/fog-aws) belongs to an earlier period, not a current focus.
+I contribute changes to tools I use. [Selected merged contributions](/record/#open-source) include work on ogen, jnv, hotreload.nvim, and Sinatra. I also helped get [fog-aws](https://github.com/fog/fog-aws) started; that is foundational work from an earlier period rather than something I actively maintain today.
 
 I use [Neovim](https://neovim.io/) for coding and personal knowledge management, and have supported the project through recurring donations for years. [Supporting Neovim](https://neovim.io/sponsors/) is separate from my code contributions to its plugin ecosystem.
 
@@ -27,4 +31,4 @@ For professional conversations and speaking inquiries, [contact me on LinkedIn](
 
 ## Short biography {#biography}
 
-Josh Lane is Chief Technology Officer at EasyPost, where he leads technology strategy across platform, product, and experience. Previously, he held engineering and leadership roles at EasyPost, Fastly, and Engine Yard. His work spans cloud infrastructure, financial systems, and the design of engineering organizations. He holds a B.S. in Electrical and Computer Engineering from Worcester Polytechnic Institute and is based in Oakland, California.
+Josh Lane is Chief Technology Officer at EasyPost. He joined the company as a senior software engineer in 2019 and progressed through engineering management, platform leadership, and Vice President of Engineering before becoming CTO in 2026. His work spans shipping and cloud infrastructure, data and decision systems, organizational design, and technology strategy. Earlier in his career, he worked at Fastly and Engine Yard. He holds a B.S. in Electrical and Computer Engineering from Worcester Polytechnic Institute and is based in Oakland, California.
