@@ -60,6 +60,35 @@ def verify_home_opening(page, width, height):
     return opening
 
 
+def verify_diagrams(page, width, out, engine, label):
+    """Keep diagram text readable and capture each figure at native pixel density."""
+    diagrams = page.locator('[data-essay-diagram]')
+    results = []
+    for index in range(diagrams.count()):
+        diagram = diagrams.nth(index)
+        metrics = diagram.evaluate('''el => {
+            const r = el.getBoundingClientRect();
+            return {name:el.dataset.essayDiagram,left:r.left,right:r.right,
+                caption:el.querySelector('figcaption')?.textContent.trim(),
+                nodes:[...el.querySelectorAll('.flow-node')].map(n=>({
+                    text:n.textContent.trim(),fontSize:parseFloat(getComputedStyle(n).fontSize),
+                    clientWidth:n.clientWidth,scrollWidth:n.scrollWidth}))};
+        }''')
+        assert metrics['left'] >= -1 and metrics['right'] <= width + 1, 'Diagram exceeds viewport'
+        assert metrics['caption'], 'Diagram needs a caption'
+        assert metrics['nodes'], 'Diagram has no readable nodes'
+        for node in metrics['nodes']:
+            assert node['fontSize'] >= 13, f'Diagram label too small: {node}'
+            assert node['scrollWidth'] <= node['clientWidth'] + 1, f'Diagram label clipped: {node}'
+        if width in (390, 1440):
+            diagram.screenshot(path=str(out/f'{engine}-{width}-{label}-figure-{index+1}.png'))
+        results.append(metrics)
+    # Locator screenshots can scroll; preserve the independent keyboard test.
+    if results:
+        page.evaluate('window.scrollTo(0,0)')
+    return results
+
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--url', default='http://127.0.0.1:8765/')
@@ -110,10 +139,11 @@ def main():
                     response=page.goto(urljoin(args.url,route),wait_until='networkidle')
                     assert response and (response.ok or (route=='/404.html' and response.status==404)), f'{engine} {route}: navigation failed'
                     page.locator('img').evaluate_all('(imgs)=>{for(const i of imgs)i.loading="eager";return Promise.all(imgs.map(i=>i.decode()))}')
-                    # Capture before assertions and before keyboard navigation changes
-                    # the scroll position. Full-page captures alone hid this regression.
+                    # Preserve native-density first-screen captures. Long article
+                    # overviews use CSS pixels to avoid WebKit's 32767px image
+                    # limit; the browser itself still runs at phone DPR=3.
                     if route=='/' or width in (390,1440): page.screenshot(path=str(out/f'{engine}-{width}-{label}-viewport.png'),full_page=False)
-                    if width in (390,1440): page.screenshot(path=str(out/f'{engine}-{width}-{label}.png'),full_page=True)
+                    if width in (390,1440): page.screenshot(path=str(out/f'{engine}-{width}-{label}.png'),full_page=True,scale='css')
                     assert page.locator('meta[name="site-revision"]').get_attribute('content')==manifest['revision'], f'{route}: wrong revision'
                     metrics=page.evaluate('''()=>({width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth,
                     nav:[...document.querySelectorAll('.site-header nav a')].map(a=>({text:a.textContent,height:a.getBoundingClientRect().height})),
@@ -134,6 +164,9 @@ def main():
                     assert not page.locator('.portrait-aside').count(), 'Obsolete large interior portrait'
                     if route=='/': metrics['opening']=verify_home_opening(page,width,height)
                     assert bool(page.locator('.site-header a[href="/writing/"]').count())==('/writing/index.html' in manifest['files']), 'Writing navigation state is wrong'
+                    metrics['diagrams']=verify_diagrams(page,width,out,engine,label)
+                    if route=='/writing/close-the-loop/':
+                        assert len(metrics['diagrams'])==2, 'Close the Loop must contain both approved diagrams'
                     page.evaluate('document.activeElement?.blur()'); page.keyboard.press('Tab')
                     assert page.locator('.skip-link').evaluate('(a)=>a===document.activeElement'), 'Skip link not first keyboard target'
                     page.keyboard.press('Enter')
