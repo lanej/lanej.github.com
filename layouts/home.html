@@ -5,9 +5,9 @@
 <div class="hero-copy"><p class="intro">{{ .Params.intro }}</p><a class="text-link" href="{{ "/record/" | relURL }}">Selected work <span aria-hidden="true">→</span></a></div>
 </section>
 <section class="work-section shell" aria-labelledby="work-title">
-<div class="section-heading"><p class="eyebrow">Selected work</p><h2 id="work-title">From infrastructure to the organization.</h2></div>
+<div class="section-heading"><h2 id="work-title">Selected work</h2></div>
 <div class="work-list">{{ range hugo.Data.work }}<article class="work-item"><p class="eyebrow">{{ .organization }}</p><div><h3><a href="{{ printf "/record/#%s" .id | relURL }}">{{ .title }} <span aria-hidden="true">→</span></a></h3><p>{{ .summary }}</p></div></article>{{ end }}</div>
 </section>
 {{ $writing := where site.RegularPages "Section" "writing" }}
-{{ with $writing }}<section class="writing-section shell"><p class="eyebrow">Writing</p>{{ range first 3 .ByDate.Reverse }}<h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>{{ end }}</section>{{ end }}
+{{ with $writing }}<section class="writing-section shell"><p class="eyebrow">Writing</p>{{ range first 3 .ByDate.Reverse }}<article class="writing-item"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time><h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2><p>{{ .Description }}</p></article>{{ end }}</section>{{ end }}
 {{ end }}

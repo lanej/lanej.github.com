@@ -1,8 +1,10 @@
 {{ define "main" }}
-<article class="page shell">
+<article class="page shell{{ with .Params.sections }} work-page{{ end }}">
 <header class="page-header"><h1>{{ .Title }}</h1></header>
+{{ with .Params.sections }}<nav class="work-index" aria-label="Work sections"><p>On this page</p><ul>{{ range . }}<li><a href="#{{ .id }}">{{ .title }}</a></li>{{ end }}</ul></nav>{{ end }}
+<div class="work-content">
 <div class="prose">{{ .Content }}</div>
 {{ if eq .RelPermalink "/record/" }}{{ partial "contributions.html" . }}{{ end }}
-{{ if .Params.portrait }}{{ $photo := (resources.Get "images/josh-lane.webp").Resize "1200x jpg q90" }}<a class="photo-download" href="{{ $photo.RelPermalink }}" download="josh-lane-headshot.jpg">Download headshot (JPEG)</a>{{ end }}
+</div>
 </article>
 {{ end }}

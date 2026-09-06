@@ -9,6 +9,7 @@ from pathlib import Path
 from urllib.parse import urljoin, urlparse
 from PIL import Image
 from playwright.sync_api import sync_playwright
+from polish_checks import verify_polish
 
 # Phone heights represent usable content space with browser chrome, not full
 # device screenshots. The 320x480 case guards the smallest first viewport.
@@ -83,7 +84,6 @@ def verify_diagrams(page, width, out, engine, label):
         if width in (390, 1440):
             diagram.screenshot(path=str(out/f'{engine}-{width}-{label}-figure-{index+1}.png'))
         results.append(metrics)
-    # Locator screenshots can scroll; preserve the independent keyboard test.
     if results:
         page.evaluate('window.scrollTo(0,0)')
     return results
@@ -129,7 +129,7 @@ def main():
         for engine in args.engines.split(','):
             launch={'executable_path':args.chromium_path,'args':['--no-sandbox']} if engine=='chromium' and args.chromium_path else {}
             browser=getattr(pw,engine).launch(**launch)
-            viewports = PHONE_VIEWPORTS + ([(700,700),(701,900),(768,900),(1024,900),(1440,900)] if engine=='chromium' else [(768,900),(1440,900)])
+            viewports = PHONE_VIEWPORTS + ([(700,700),(701,900),(768,900),(1000,900),(1001,900),(1024,900),(1440,900)] if engine=='chromium' else [(701,900),(768,900),(1000,900),(1440,900)])
             for width,height in viewports:
                 mobile=width<=700
                 context=browser.new_context(viewport={'width':width,'height':height},device_scale_factor=3 if mobile else 1,has_touch=mobile,is_mobile=mobile,color_scheme='dark')
@@ -139,9 +139,8 @@ def main():
                     response=page.goto(urljoin(args.url,route),wait_until='networkidle')
                     assert response and (response.ok or (route=='/404.html' and response.status==404)), f'{engine} {route}: navigation failed'
                     page.locator('img').evaluate_all('(imgs)=>{for(const i of imgs)i.loading="eager";return Promise.all(imgs.map(i=>i.decode()))}')
-                    # Preserve native-density first-screen captures. Long article
-                    # overviews use CSS pixels to avoid WebKit's 32767px image
-                    # limit; the browser itself still runs at phone DPR=3.
+                    # Long article overviews use CSS pixels to stay within WebKit
+                    # image limits; phone viewports still render at native DPR=3.
                     if route=='/' or width in (390,1440): page.screenshot(path=str(out/f'{engine}-{width}-{label}-viewport.png'),full_page=False)
                     if width in (390,1440): page.screenshot(path=str(out/f'{engine}-{width}-{label}.png'),full_page=True,scale='css')
                     assert page.locator('meta[name="site-revision"]').get_attribute('content')==manifest['revision'], f'{route}: wrong revision'
@@ -172,6 +171,7 @@ def main():
                     page.keyboard.press('Enter')
                     assert page.locator('main').evaluate('(m)=>m===document.activeElement'), 'Skip link does not focus main'
                     page.evaluate('window.scrollTo(0,0)'); page.locator('main').evaluate('(m)=>m.blur()')
+                    metrics['polish']=verify_polish(page,width,route,out,engine,label)
                     report['checks'].append({'engine':engine,'width':width,'height':height,'page':route,**metrics})
                 assert not errors, errors
                 context.close()

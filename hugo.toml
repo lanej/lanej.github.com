@@ -19,6 +19,8 @@ buildExpired = false
   pagerSize = 10
 [markup.goldmark.renderer]
   unsafe = false
+[markup.goldmark.parser]
+  wrapStandAloneImageWithinParagraph = false
 [markup.highlight]
   style = 'evergarden'
   guessSyntax = false

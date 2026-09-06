@@ -1,0 +1,24 @@
+{{- $portrait := (resources.Get "images/josh-lane.webp").Resize "1200x jpg q90" -}}
+{{- $image := $portrait -}}
+{{- $alt := "Josh Lane, photographed against a muted green background" -}}
+{{- $custom := false -}}
+{{- if and .IsPage (eq .Section "writing") -}}
+  {{- with .Params.social_image -}}
+    {{- $resource := $.Resources.Get . -}}
+    {{- if not $resource -}}{{- $resource = resources.Get (strings.TrimPrefix "/" .) -}}{{- end -}}
+    {{- if not $resource -}}
+      {{- errorf "Missing social_image %q on %s; use an article-bundle or assets image" . $.RelPermalink -}}
+    {{- else if not (in (slice "image/jpeg" "image/png" "image/webp") $resource.MediaType.Type) -}}
+      {{- errorf "social_image on %s must be JPEG, PNG, or WebP" $.RelPermalink -}}
+    {{- else -}}
+      {{- $image = $resource -}}
+      {{- if or (gt $resource.Width 1200) (eq $resource.MediaType.Type "image/webp") -}}
+        {{- $image = $resource.Resize (printf "%dx jpg q90" (math.Min 1200 $resource.Width | int)) -}}
+      {{- end -}}
+      {{- $custom = true -}}
+      {{- $alt = $.Params.social_image_alt | default "" -}}
+      {{- if not $alt -}}{{- errorf "social_image_alt is required on %s" $.RelPermalink -}}{{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- return (dict "image" $image "alt" $alt "custom" $custom "portrait" $portrait) -}}

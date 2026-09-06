@@ -1,0 +1,8 @@
+{{ $photo := (resources.Get "images/josh-lane.webp").Resize "1200x jpg q90" }}
+<details class="speaker-resources" id="biography">
+<summary>Speaker resources</summary>
+<div class="speaker-content">
+{{ .Page.RenderString (dict "display" "block") .Inner }}
+<a class="photo-download" href="{{ $photo.RelPermalink }}" download="josh-lane-headshot.jpg">Download headshot (JPEG)</a>
+</div>
+</details>

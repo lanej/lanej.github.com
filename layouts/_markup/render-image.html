@@ -1,7 +1,6 @@
-{{- $url := .Destination -}}
+{{- $url := .Destination | absURL -}}
 {{- $image := .Page.Resources.GetMatch .Destination -}}
-{{- if $image -}}
-<img src="{{ $image.Permalink }}" alt="{{ .PlainText }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if eq $image.ResourceType "image" }}{{ if ne $image.MediaType.SubType "svg+xml" }} width="{{ $image.Width }}" height="{{ $image.Height }}"{{ end }}{{ end }} loading="lazy" decoding="async">
-{{- else -}}
-<img src="{{ $url | absURL }}" alt="{{ .PlainText }}"{{ with .Title }} title="{{ . }}"{{ end }} loading="lazy" decoding="async">
-{{- end -}}
+{{- with $image -}}{{- $url = .Permalink -}}{{- end -}}
+{{- if .IsBlock -}}<figure class="article-figure">{{- end -}}
+<img src="{{ $url }}" alt="{{ .PlainText }}"{{ if not .IsBlock }}{{ with .Title }} title="{{ . }}"{{ end }}{{ end }}{{ with $image }}{{ if eq .ResourceType "image" }}{{ if ne .MediaType.SubType "svg+xml" }} width="{{ .Width }}" height="{{ .Height }}"{{ end }}{{ end }}{{ end }} loading="lazy" decoding="async">
+{{- if .IsBlock -}}{{- with .Title -}}<figcaption>{{ . }}</figcaption>{{- end -}}</figure>{{- end -}}
