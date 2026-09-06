@@ -1,0 +1,21 @@
+<figure class="essay-diagram" data-essay-diagram="harmony-contracts" aria-labelledby="harmony-contracts-caption">
+  <div class="loop-comparison">
+    <section class="diagram-panel" aria-label="Before: compatible time windows">
+      <p class="diagram-label">Before</p>
+      <p class="diagram-description">The retention policy covers the retry promise.</p>
+      <div class="flow-node">Client retry window: 24 hours</div>
+      <div class="flow-arrow" aria-hidden="true">↓</div>
+      <div class="flow-node flow-node-accent">Service memory: at least 24 hours</div>
+      <p class="loop-note">This timing condition holds. Other correctness checks still apply.</p>
+    </section>
+    <section class="diagram-panel" aria-label="After: incompatible time windows">
+      <p class="diagram-label">After a local optimization</p>
+      <p class="diagram-description">Storage falls. The client's promise stays unchanged.</p>
+      <div class="flow-node">Client retry window: 24 hours</div>
+      <div class="flow-arrow" aria-hidden="true">↓</div>
+      <div class="flow-node flow-node-accent">Service memory: 15 minutes</div>
+      <p class="loop-note"><strong>Contract mismatch:</strong> an allowed retry can repeat completed work.</p>
+    </section>
+  </div>
+  <figcaption id="harmony-contracts-caption"><span>Figure 1.</span> Illustrative example: both local rules can be implemented correctly while the shared retry guarantee fails.</figcaption>
+</figure>
