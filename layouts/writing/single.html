@@ -5,7 +5,7 @@
 {{ if .Draft }}<p class="draft-notice">Draft — local preview only</p>{{ end }}
 <h1>{{ .Title }}</h1>
 {{ with .Description }}<p class="article-description">{{ . }}</p>{{ end }}
-<div class="article-meta"><span>Josh Lane</span><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time><span>{{ .ReadingTime }} min read</span>{{ if .Lastmod.After .Date }}<span>Updated <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "January 2, 2006" }}</time></span>{{ end }}</div>
+<div class="article-meta"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time><span>{{ .ReadingTime }} min read</span>{{ if .Lastmod.After .Date }}<span>Updated <time datetime="{{ .Lastmod.Format "2006-01-02" }}">{{ .Lastmod.Format "January 2, 2006" }}</time></span>{{ end }}</div>
 </header>
 {{ if and .Params.toc (gt (len .Fragments.Headings) 0) }}<details class="article-toc"><summary>On this page</summary>{{ .TableOfContents }}</details>{{ end }}
 <div class="prose article-body">{{ .Content }}</div>

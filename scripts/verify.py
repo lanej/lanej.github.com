@@ -3,6 +3,7 @@ import argparse
 import hashlib
 import io
 import json
+import re
 import time
 from pathlib import Path
 from urllib.parse import urljoin, urlparse
@@ -12,6 +13,17 @@ from playwright.sync_api import sync_playwright
 # Phone heights represent usable content space with browser chrome, not full
 # device screenshots. The 320x480 case guards the smallest first viewport.
 PHONE_VIEWPORTS = [(320, 480), (375, 600), (390, 664), (430, 740)]
+
+
+def verify_identity_labels(page):
+    """Identify the owner once in shared page chrome, not above every title."""
+    labels = page.locator(
+        '.site-header .wordmark, .hero h1, .page-header .eyebrow, '
+        '.article-meta, .site-footer'
+    ).all_text_contents()
+    count = sum(len(re.findall(r'\bJosh\s+Lane\b', label, re.IGNORECASE)) for label in labels)
+    assert count == 1, f'Expected one identity label, found {count}: {labels}'
+    return count
 
 
 def verify_home_opening(page, width, height):
@@ -100,13 +112,14 @@ def main():
                     page.locator('img').evaluate_all('(imgs)=>{for(const i of imgs)i.loading="eager";return Promise.all(imgs.map(i=>i.decode()))}')
                     # Capture before assertions and before keyboard navigation changes
                     # the scroll position. Full-page captures alone hid this regression.
-                    if route=='/': page.screenshot(path=str(out/f'{engine}-{width}-{label}-viewport.png'),full_page=False)
+                    if route=='/' or width in (390,1440): page.screenshot(path=str(out/f'{engine}-{width}-{label}-viewport.png'),full_page=False)
                     if width in (390,1440): page.screenshot(path=str(out/f'{engine}-{width}-{label}.png'),full_page=True)
                     assert page.locator('meta[name="site-revision"]').get_attribute('content')==manifest['revision'], f'{route}: wrong revision'
                     metrics=page.evaluate('''()=>({width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth,
                     nav:[...document.querySelectorAll('.site-header nav a')].map(a=>({text:a.textContent,height:a.getBoundingClientRect().height})),
                     images:[...document.images].map(i=>{const frame=i.closest('.hero-portrait,.header-portrait');return {src:i.currentSrc,width:i.getBoundingClientRect().width,height:i.getBoundingClientRect().height,portrait:!!frame,radius:frame?getComputedStyle(frame).borderRadius:null}}),
                     workTop:document.querySelector('.work-section')?.getBoundingClientRect().top})''')
+                    metrics['identity_label_count']=verify_identity_labels(page)
                     assert metrics['scrollWidth']<=width, f'{engine} {width} {route}: horizontal overflow'
                     assert all(a['height']>=44 for a in metrics['nav']), 'Small navigation tap targets'
                     assert page.locator('h1').count()==1

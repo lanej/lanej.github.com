@@ -1,6 +1,6 @@
 {{ define "main" }}
 <section class="page shell"><div class="reading-page writing-index">
-<header class="page-header"><p class="eyebrow">Josh Lane</p><h1>Writing</h1><a class="feed-link" href="{{ "index.xml" | relURL }}">Subscribe via RSS</a></header>
+<header class="page-header"><h1>Writing</h1><a class="feed-link" href="{{ "index.xml" | relURL }}">Subscribe via RSS</a></header>
 {{ range .RegularPages.ByDate.Reverse }}<article class="writing-item"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "January 2, 2006" }}</time><h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2><p>{{ .Description | default (.Summary | plainify) }}</p>{{ if .Draft }}<p>Draft</p>{{ end }}</article>{{ end }}
 </div></section>
 {{ end }}
