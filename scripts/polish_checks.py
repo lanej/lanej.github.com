@@ -1,6 +1,7 @@
 """Interaction, tablet composition, metadata, and enlarged-text regressions."""
 import io
 import json
+from urllib.parse import urlsplit
 from PIL import Image
 
 
@@ -61,8 +62,21 @@ def verify_polish(page, width, route, out, engine, label):
         assert caption.is_visible() and caption.inner_text().strip(), 'Missing visible caption'
 
     image_url = page.locator('meta[property="og:image"]').get_attribute('content')
-    response = page.context.request.get(image_url)
-    assert response.ok, 'Social image does not resolve'
+    image_parts = urlsplit(image_url)
+    canonical = urlsplit(page.locator('link[rel="canonical"]').get_attribute('href'))
+    assert image_parts.scheme in ('http', 'https') and image_parts.netloc, 'Social image URL must be absolute'
+    assert (image_parts.scheme, image_parts.netloc) == (canonical.scheme, canonical.netloc), 'Social image must use the canonical site origin'
+    actual_origin = urlsplit(page.url)
+    fetch_url = image_url
+    # A production build keeps lanej.io canonical metadata during local testing.
+    # Fetch its asset path from the local artifact, not an older live deployment.
+    # Live-domain checks still request the exact public image URL without rewriting.
+    if actual_origin.hostname in ('127.0.0.1', 'localhost', '::1'):
+        fetch_url = image_parts._replace(scheme=actual_origin.scheme, netloc=actual_origin.netloc).geturl()
+    else:
+        assert (actual_origin.scheme, actual_origin.netloc) == (canonical.scheme, canonical.netloc), 'Browser is not on the canonical site'
+    response = page.context.request.get(fetch_url)
+    assert response.ok, f'Social image does not resolve: HTTP {response.status} {fetch_url} (metadata: {image_url})'
     with Image.open(io.BytesIO(response.body())) as image:
         image.load()
         assert image.width == int(page.locator('meta[property="og:image:width"]').get_attribute('content'))
@@ -76,6 +90,7 @@ def verify_polish(page, width, route, out, engine, label):
         if item.get('@type') == 'BlogPosting':
             assert item['image'] == image_url, 'Article social and structured images differ'
     result['social_image'] = image_url
+    result['social_image_verified_url'] = fetch_url
 
     # Reflow is a separate acceptance criterion: enlarged text may extend below
     # the first viewport, but must never be shrunk, clipped, or hidden to fit it.
