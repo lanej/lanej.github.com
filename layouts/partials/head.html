@@ -4,7 +4,9 @@
 {{ $title := cond .IsHome "Josh Lane · CTO at EasyPost" (printf "%s · Josh Lane" .Title) }}
 {{ $article := and .IsPage (eq .Section "writing") }}
 {{ $image := (resources.Get "images/josh-lane.webp").Resize "1200x jpg q90" }}
-{{ $css := slice (resources.Get "css/site.css") (resources.Get "css/editorial.css") | resources.Concat "css/combined.css" | minify | fingerprint }}
+{{ $styles := slice (resources.Get "css/site.css") (resources.Get "css/editorial.css") }}
+{{ if .Params.diagrams }}{{ $styles = $styles | append (resources.Get "css/diagrams.css") }}{{ end }}
+{{ $css := $styles | resources.Concat (cond .Params.diagrams "css/illustrated.css" "css/combined.css") | minify | fingerprint }}
 <title>{{ $title }}</title>
 <meta name="description" content="{{ $description }}">
 <meta name="theme-color" content="#0d1513"><meta name="color-scheme" content="dark">
