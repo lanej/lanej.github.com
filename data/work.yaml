@@ -1,7 +1,7 @@
-- id: financial-infrastructure
+- id: easypost-technology-strategy
   organization: EasyPost
-  title: Connecting platform engineering to financial operations
-  summary: Financial data pipeline redesign and automation to shorten revenue recognition time.
+  title: Turning technology into operating leverage
+  summary: Company-wide technology strategy across product, platform, data, and infrastructure — simplifying systems, strengthening decision capabilities, and connecting architecture to economics.
 - id: engine-yard
   organization: Engine Yard
   title: Building an API for operating cloud infrastructure
