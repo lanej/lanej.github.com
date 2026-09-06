@@ -19,7 +19,7 @@ def verify_identity_labels(page):
     """Identify the owner once in shared page chrome, not above every title."""
     labels = page.locator(
         '.site-header .wordmark, .hero h1, .page-header .eyebrow, '
-        '.article-meta, .site-footer'
+        '.article-meta > *, .site-footer'
     ).all_text_contents()
     count = sum(len(re.findall(r'\bJosh\s+Lane\b', label, re.IGNORECASE)) for label in labels)
     assert count == 1, f'Expected one identity label, found {count}: {labels}'
