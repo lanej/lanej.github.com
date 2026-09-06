@@ -15,6 +15,43 @@ from writing import ROOT, create_draft, prepare_post, hugo_binary
 from check import Document
 
 
+def verify_invalid_share_images(binary, root, origin, env):
+    """Give each invalid input its own bundle and explicit publication metadata."""
+    cases = (
+        ('missing-resource', 'missing.png', 'A test diagram', 'Missing social_image'),
+        ('missing-alt', 'diagram.png', '', 'social_image_alt is required'),
+    )
+    outcomes = []
+    for slug, image, alt, expected in cases:
+        bundle = root/'content/writing'/('invalid-media-'+slug)
+        bundle.mkdir()
+        try:
+            # These are fresh, explicitly published past-date fixtures, not text
+            # substitutions in the file modified by the authoring-workflow test.
+            bundle.joinpath('index.md').write_text(
+                '+++\ntitle="Invalid media fixture"\n'
+                'description="An isolated validation test"\n'
+                'date="2020-01-01T00:00:00Z"\ndraft=false\n'
+                f'social_image={json.dumps(image)}\n'
+                f'social_image_alt={json.dumps(alt)}\n+++\n'
+                'This fixture must fail the build and is never published.\n'
+            )
+            Image.new('RGB',(900,450),(40,60,50)).save(bundle/'diagram.png')
+            failed = subprocess.run(
+                [binary,'--source',str(root),'--destination',str(root/('invalid-output-'+slug)),
+                 '--baseURL',origin], capture_output=True,text=True,env=env,
+            )
+            output = failed.stdout + failed.stderr
+            assert failed.returncode != 0 and expected in output, (
+                f'{slug}: expected a build failure containing {expected!r}; '
+                f'got exit {failed.returncode}\n{output}'
+            )
+            outcomes.append({'case':slug,'status':'rejected','exit_code':failed.returncode})
+        finally:
+            shutil.rmtree(bundle)
+    return outcomes
+
+
 def main():
     binary=hugo_binary(ROOT)
     out=ROOT/'artifacts/writing'; out.mkdir(parents=True,exist_ok=True)
@@ -77,6 +114,7 @@ func example() string { return "a-long-code-line-that-must-scroll-within-the-cod
         thread=Thread(target=server.serve_forever,daemon=True); thread.start()
         try:
             env={**os.environ,'HUGO_PARAMS_REVISION':'writing-fixture'}
+            invalid_media=verify_invalid_share_images(binary,root,origin,env)
             subprocess.run([binary,'--source',str(root),'--destination',str(public),'--baseURL',origin,'--panicOnWarning'],check=True,env=env)
             subprocess.run([sys.executable,str(root/'scripts/check.py'),str(public)],cwd=root,check=True,env=env)
             assert not (public/'writing/private-sentinel').exists()
@@ -87,6 +125,7 @@ func example() string { return "a-long-code-line-that-must-scroll-within-the-cod
                     text=file.read_text()
                     assert 'PRIVATE_DRAFT_SENTINEL_NOT_FOR_PRODUCTION' not in text
                     assert 'FUTURE_SENTINEL_NOT_FOR_PRODUCTION' not in text
+                    assert 'invalid-media-' not in text
             article=(public/'writing/preview-check/index.html').read_text()
             assert 'BlogPosting' in article and 'article:published_time' in article and 'min read' in article
             assert 'On this page' in article and 'width="900" height="450"' in article
@@ -111,15 +150,9 @@ func example() string { return "a-long-code-line-that-must-scroll-within-the-cod
             ordered=[item.findtext('link') for item in items]
             assert ordered.index(origin+'writing/preview-check/') < ordered.index(origin+'writing/existing-writing-fixture/')
             subprocess.run([sys.executable,str(ROOT/'scripts/verify.py'),'--url',origin,'--root',str(public),'--output',str(out),'--engines','chromium,webkit'],check=True)
-            valid=prepared.read_text()
-            for modified,expected in ((valid.replace('social_image = "diagram.png"','social_image = "missing.png"'),'Missing social_image'),(valid.replace('social_image_alt = "A non-square test diagram"','social_image_alt = ""'),'social_image_alt is required')):
-                prepared.write_text(modified)
-                failed=subprocess.run([binary,'--source',str(root),'--destination',str(root/'invalid-output'),'--baseURL',origin],capture_output=True,text=True,env=env)
-                assert failed.returncode!=0 and expected in failed.stdout+failed.stderr, 'Invalid share image was accepted'
-            prepared.write_text(valid)
         finally:
             server.shutdown(); server.server_close(); thread.join()
-        (out/'authoring.json').write_text(json.dumps({'status':'passed','checks':['invalid slug rejected','duplicate draft rejected','empty draft rejected','local preview includes drafts and noindex','promotion preserves assets','production excludes local drafts and future posts','RSS contains only published essays with full text and captions','multiple articles and chronology supported','article metadata, footnotes, tables, code and non-square images rendered','visible captions separate from alt text','article share image, dimensions, and alt override verified','portrait fallback and Person metadata preserved','missing share image and alt text rejected','200% text and navigation tested in both browser engines'],'fixture_published_to_live_site':False},indent=2))
+        (out/'authoring.json').write_text(json.dumps({'status':'passed','checks':['invalid slug rejected','duplicate draft rejected','empty draft rejected','local preview includes drafts and noindex','promotion preserves assets','production excludes local drafts and future posts','RSS contains only published essays with full text and captions','multiple articles and chronology supported','article metadata, footnotes, tables, code and non-square images rendered','visible captions separate from alt text','article share image, dimensions, and alt override verified','portrait fallback and Person metadata preserved','missing share image and alt text rejected','200% text and navigation tested in both browser engines'],'invalid_media':invalid_media,'fixture_published_to_live_site':False},indent=2))
     print('Writing workflow verified in a disposable directory; no sample content published.')
 
 if __name__=='__main__':main()
