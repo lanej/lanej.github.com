@@ -1,0 +1,27 @@
+/* Live text and CSS, translated from the approved article mockups. No rasterized prose. */
+.essay-diagram{margin:2.25em 0;color:var(--text);font-size:.93rem;line-height:1.45;break-inside:avoid}
+.loop-comparison{display:grid;grid-template-columns:1fr;gap:14px}
+.diagram-panel,.formalization-panel{min-width:0;padding:22px;border:1px solid var(--line);border-radius:8px;background:#101c18}
+.essay-diagram .diagram-label{margin:0 0 8px;color:var(--accent);font-size:.76rem;font-weight:650;letter-spacing:.12em;text-transform:uppercase}
+.essay-diagram .diagram-description{margin:0 0 24px;color:var(--muted);font-size:.93rem}
+.flow-row{display:grid;grid-template-columns:1fr 20px 1fr 20px 1.45fr;align-items:center;gap:6px}
+.flow-node{min-width:0;display:flex;align-items:center;justify-content:center;padding:14px 8px;min-height:52px;border:1px solid #607b6c;border-radius:6px;text-align:center;font-size:.9rem;font-weight:500;background:#14231c}
+.flow-node-accent{border-color:var(--accent);background:#1c3026}
+.flow-arrow{color:var(--accent);font-size:1.35rem;text-align:center}
+.essay-diagram .open-loop-note{margin:24px 0 0;color:var(--muted);font-size:.86rem;text-align:center}
+.essay-diagram .loop-intent{margin:0 0 10px;font-size:.84rem;color:var(--accent)}
+.loop-intent span{margin-left:6px}
+.feedback-return{position:relative;display:flex;justify-content:space-between;align-items:center;margin:0 15% 0 12%;padding:12px 0 10px;border:1px solid var(--accent);border-top:0;border-radius:0 0 7px 7px;color:var(--accent)}
+.feedback-label{padding-inline:10px;text-align:center;font-size:.83rem;background:#101c18}
+.feedback-label span{padding-inline:4px}.return-arrow{position:relative;top:-13px;line-height:1;margin-inline:-6px;background:#101c18}
+.essay-diagram .loop-note{margin:14px 0 0;font-size:.82rem;color:var(--muted);text-align:center}
+.essay-diagram figcaption{margin-top:12px;color:var(--muted);font-size:.84rem;line-height:1.6}.essay-diagram figcaption>span{color:var(--accent)}
+.article-body .formalization-steps{display:grid;grid-template-columns:1fr;gap:30px;list-style:none;margin:0;padding:0}
+.article-body .formalization-steps li{position:relative;min-width:0;margin:0}
+.formalization-steps li+li:before{content:'↓';position:absolute;top:-27px;left:calc(50% - 7px);color:var(--accent);font-size:1.25rem}
+.formalization-steps .flow-node{flex-direction:column;gap:5px;min-height:84px;padding:14px}
+.formalization-steps strong{font-size:.95rem;font-weight:550}.formalization-steps .flow-node>span{font-size:.8rem;color:var(--muted)}
+.essay-diagram .formalization-steps p{margin:10px 0 0;font-size:.8rem;line-height:1.5;color:var(--muted);text-align:center}
+@media(min-width:960px){.essay-diagram{width:min(1000px,calc(100vw - 96px));position:relative;left:50%;transform:translateX(-50%)}.loop-comparison{grid-template-columns:1fr 1.15fr}.diagram-panel{padding:26px}.article-body .formalization-steps{grid-template-columns:repeat(4,minmax(0,1fr));gap:28px}.formalization-steps li+li:before{content:'→';top:28px;left:-23px}}
+@media(max-width:420px){.diagram-panel,.formalization-panel{padding:14px}.flow-row{grid-template-columns:minmax(0,.7fr) 14px minmax(0,.95fr) 14px minmax(0,1.45fr);gap:4px}.flow-node{padding:10px 4px;font-size:.82rem;min-height:48px}.flow-arrow{font-size:1.1rem}.feedback-label{font-size:.78rem;padding-inline:5px}.feedback-return{margin-right:19%;margin-left:10%}}
+@media print{.essay-diagram{width:100%;left:auto;transform:none}.diagram-panel,.formalization-panel,.flow-node,.feedback-label,.return-arrow{background:white;color:black}.flow-arrow,.essay-diagram .diagram-label,.essay-diagram figcaption>span,.feedback-return{color:black}.essay-diagram .diagram-description,.essay-diagram .loop-note,.essay-diagram .open-loop-note,.essay-diagram figcaption,.formalization-steps .flow-node>span,.essay-diagram .formalization-steps p{color:#333}}
