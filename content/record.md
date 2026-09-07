@@ -1,9 +1,11 @@
 ---
 title: Work
-description: Technology leadership, shipping systems, cloud infrastructure, speaking, and open-source contributions.
+description: Technology leadership, shipping systems, CDN infrastructure, cloud infrastructure, speaking, and open-source contributions.
 sections:
   - title: EasyPost
     id: easypost-technology-strategy
+  - title: Fastly
+    id: fastly
   - title: Engine Yard
     id: engine-yard
   - title: Speaking
@@ -24,6 +26,20 @@ I lead company-wide technology strategy across product, platform, data, and infr
 - **2019–2022 — engineering and management.** Built warehouse logistics, inventory, order integrations, and fulfillment software. Later led USPS CASS-certified address verification and the decomposition of a monolithic application into services.
 
 Current role: [EasyPost leadership biography](https://www.easypost.com/about/). Career history: [professional profile](https://www.linkedin.com/in/lanejoshlane/).
+
+## Fastly {#fastly}
+
+**API · Internal Engineering · Site Reliability Engineering · 2016–2019**
+
+I worked across three parts of Fastly’s engineering organization as the company scaled its global CDN.
+
+- **API.** Ruby, Rails, and Sinatra backend development, Web Application Firewall work using Racc and Varnish, and API design with GraphQL and JSON:API.
+- **Internal Engineering.** Built internal data pipelines using NSQ, Go, GKE, and Ruby, alongside platform and SRE support with Go, Chef, and GKE.
+- **SRE.** Worked on infrastructure and service reliability using Chef, Go, Kubernetes, and Terraform.
+
+The work covered the customer-facing control surfaces, internal data systems, and operational infrastructure behind the platform.
+
+[Professional profile](https://www.linkedin.com/in/lanejoshlane/)
 
 ## Engine Yard {#engine-yard}
 
