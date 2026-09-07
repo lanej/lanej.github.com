@@ -128,16 +128,29 @@
       card.append(header, heading, content, footer);
       document.body.append(card);
       const entry = {card, trigger: null};
-      close.addEventListener('click', () => {
+      const dismissToReference = () => {
         card.hidePopover();
         entry.trigger?.focus({preventScroll: true});
+      };
+      close.addEventListener('click', dismissToReference);
+      card.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && !event.defaultPrevented) {
+          event.preventDefault();
+          event.stopPropagation();
+          dismissToReference();
+        }
       });
       card.addEventListener('beforetoggle', event => {
         if (event.newState === 'open') card.removeAttribute('data-positioned');
       });
       card.addEventListener('toggle', () => {
-        if (card.matches(':popover-open')) { current = entry; place(entry); }
-        else if (current === entry) current = null;
+        if (card.matches(':popover-open')) {
+          current = entry;
+          place(entry);
+          // WebKit does not consistently reapply popover autofocus on reopening.
+          // Focus only on opening, without moving the reader's scroll position.
+          close.focus({preventScroll: true});
+        } else if (current === entry) current = null;
       });
       return entry;
     }
