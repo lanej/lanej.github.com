@@ -96,9 +96,10 @@ until a build after its date; there is no scheduled publishing service.
 - `assets/images/josh-lane.webp`: approved 1254 × 1254 source photograph. Hugo makes responsive hero, header-avatar and downloadable JPEG derivatives.
 - `drafts/`: local-only work, ignored by Git and excluded from production.
 
-The homepage uses a compact circular portrait on phones and a larger portrait on
-desktop, scaling through tablet widths. Interior pages use one 44-pixel circular
-portrait beside the name. The downloadable image remains uncropped.
+The homepage uses a compact circular portrait beside its introduction. Interior
+pages use a 44-pixel circular home link at the right of the header, with navigation
+on the left and no visible name. The accessible home-link label is retained. The
+downloadable image remains uncropped.
 
 ## Build and verify
 
@@ -120,8 +121,12 @@ images and portrait fallbacks. Missing share images and alt text fail the build.
 Fixture content is never put in this repository’s `content/` or deployed.
 
 Browser tests cover portraits, image resolution, keyboard navigation, section
-links, speaker-resource disclosure, phone navigation rows, tablet composition,
-and text reflow at 200%. At enlarged text sizes, vertical scrolling is allowed;
+links, speaker-resource disclosure, tablet composition, and text reflow at 200%.
+`header_checks.py` requires one navigation row at normal text sizes, the portrait
+at the right margin, aligned centers, no visible header name, an accessible home
+link, unclipped text, and 44-by-44-pixel tap targets. The same checks run on every
+page in preflight and production; header screenshots are saved at mobile and
+desktop sizes. At enlarged text sizes, wrapping and vertical scrolling are allowed;
 we do not shrink text or hide content to pass a first-screen test. Published
 articles are discovered automatically, including their diagrams and citation
 previews. Citation tests cover keyboard/touch interaction, repeated notes, complete

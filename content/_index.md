@@ -1,5 +1,6 @@
 ---
 title: Josh Lane
-description: Josh Lane is Chief Technology Officer at EasyPost. He leads technology strategy across product, platform, data, and infrastructure, with a focus on simplifying systems and increasing organizational leverage.
-intro: I lead EasyPost’s technology organization. I work on the systems, data, and organizational changes that create leverage.
+description: Essays by Josh Lane on software, AI, engineering judgment, and how we organize work. Experience at Engine Yard, Fastly, and EasyPost.
+focus: Software, systems, and judgment.
+intro: I write about how we build software, use AI, and organize work.
 ---

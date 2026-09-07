@@ -3,32 +3,31 @@ import io
 import json
 from urllib.parse import urlsplit
 from PIL import Image
+from header_checks import verify_header
 from citation_checks import verify_citations
 
 
 def verify_polish(page, width, route, out, engine, label):
-    result = {}
-    if width <= 700 and route != '/':
-        wordmark = page.locator('.wordmark').bounding_box()
-        nav = page.locator('.site-header nav').bounding_box()
-        assert nav['y'] >= wordmark['y'] + wordmark['height'], 'Phone navigation must have its own row'
-        result['intentional_navigation_row'] = True
+    result = {'header': verify_header(page, width)}
+    if width in (320, 390, 1440):
+        page.locator('.site-header').screenshot(path=str(out/f'{engine}-{width}-{label}-header.png'))
 
     if route == '/' and 700 < width <= 1000:
         portrait = page.locator('.hero-portrait').bounding_box()
         copy = page.locator('.hero-copy').bounding_box()
-        heading = page.locator('.section-heading').bounding_box()
-        work = page.locator('.work-list').bounding_box()
-        assert 159 <= portrait['width'] <= 221, 'Tablet portrait dominates the introduction'
+        assert 159 <= portrait['width'] <= 161, 'Tablet portrait dominates the introduction'
         assert copy['width'] > portrait['width'], 'Tablet copy is narrower than the portrait'
-        assert work['y'] >= heading['y'] + heading['height'], 'Tablet work section needs a single column'
+        if page.locator('.home-writing').count():
+            heading = page.locator('.home-writing .section-heading').bounding_box()
+            essays = page.locator('.essay-list').bounding_box()
+            assert essays['y'] >= heading['y'] + heading['height'], 'Tablet essays need a single column'
         result['tablet_portrait_width'] = portrait['width']
 
     if route == '/record/':
         links = page.locator('.work-index a')
-        assert links.count() == 4, 'Missing Work section index'
+        expected = {'#easypost-technology-strategy', '#fastly', '#engine-yard', '#sapporo-rubykaigi-2012', '#open-source'}
         anchors = links.evaluate_all('(links) => links.map(a => a.getAttribute("href"))')
-        assert len(set(anchors)) == 4, 'Duplicate section links'
+        assert len(anchors) == len(expected) and set(anchors) == expected, 'Missing or duplicate Work section links'
         for index, anchor in enumerate(anchors):
             target = page.locator(anchor)
             assert target.count() == 1, f'Broken section link: {anchor}'
@@ -38,6 +37,7 @@ def verify_polish(page, width, route, out, engine, label):
         result['section_links'] = anchors
 
     if route == '/about/':
+        assert 'Fastly' in page.locator('.prose').first.inner_text(), 'Fastly is missing from the biography'
         resources = page.locator('details.speaker-resources')
         assert resources.count() == 1 and resources.get_attribute('open') is None
         assert page.locator('#contact').count() == 1
@@ -71,7 +71,7 @@ def verify_polish(page, width, route, out, engine, label):
     fetch_url = image_url
     # A production build keeps lanej.io canonical metadata during local testing.
     # Fetch its asset path from the local artifact, not an older live deployment.
-    # Live-domain checks still request the exact public image URLs without rewriting.
+    # Live-domain checks still request the exact public image URL without rewriting.
     if actual_origin.hostname in ('127.0.0.1', 'localhost', '::1'):
         fetch_url = image_parts._replace(scheme=actual_origin.scheme, netloc=actual_origin.netloc).geturl()
     else:
@@ -108,6 +108,7 @@ def verify_polish(page, width, route, out, engine, label):
                 .filter(el => el.getBoundingClientRect().width > 0 && el.scrollWidth > el.clientWidth + 2)
                 .map(el => ({tag:el.tagName,text:el.textContent.trim(),width:el.clientWidth,scrollWidth:el.scrollWidth}))
         })''')
+        metrics['header'] = verify_header(page, width, allow_wrap=True)
         if width in (320, 768):
             page.screenshot(path=str(out/f'{engine}-{width}-{label}-text-200.png'),full_page=False,scale='css')
         assert metrics['rootFont'] >= 32, 'Enlarged-text test did not enlarge text'

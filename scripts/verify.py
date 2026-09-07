@@ -17,21 +17,24 @@ PHONE_VIEWPORTS = [(320, 480), (375, 600), (390, 664), (430, 740)]
 
 
 def verify_identity_labels(page):
-    """Identify the owner once in shared page chrome, not above every title."""
+    """Name once in the homepage introduction; use an accessible portrait elsewhere."""
     labels = page.locator(
-        '.site-header .wordmark, .hero h1, .page-header .eyebrow, '
+        '.site-header, .hero h1, .page-header .eyebrow, '
         '.article-meta > *, .site-footer'
     ).all_text_contents()
     count = sum(len(re.findall(r'\bJosh\s+Lane\b', label, re.IGNORECASE)) for label in labels)
-    assert count == 1, f'Expected one identity label, found {count}: {labels}'
+    expected = 1 if page.locator('.home-header').count() else 0
+    assert count == expected, f'Expected {expected} visible identity labels, found {count}: {labels}'
     return count
 
 
 def verify_home_opening(page, width, height):
-    """A complete identity and portrait must be visible before the first scroll."""
+    """Show the complete identity, then writing, before employer background."""
     opening = page.evaluate('''() => {
         const rect = selector => {
-            const r = document.querySelector(selector).getBoundingClientRect();
+            const el = document.querySelector(selector);
+            if (!el) return null;
+            const r = el.getBoundingClientRect();
             return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,width:r.width,height:r.height};
         };
         return {
@@ -39,11 +42,33 @@ def verify_home_opening(page, width, height):
                 document.querySelector('.hero').innerText).match(/Josh Lane/g) || []).length,
             identity: rect('.hero-identity'), portrait: rect('.hero-portrait'),
             intro: rect('.hero .intro'), link: rect('.hero .text-link'),
-            work: rect('.work-section')
+            writing: rect('.home-writing'), writingHeading: rect('#writing-title'),
+            firstEssay: rect('.home-writing .writing-item h3 a'),
+            background: rect('.background-section'),
+            firstSection: document.querySelector('.hero').nextElementSibling?.id
         };
     }''')
     assert opening['nameCount'] == 1, 'Homepage repeats the name in its opening'
     assert page.locator('.site-header .wordmark').count() == 0, 'Duplicate homepage wordmark'
+    assert not page.locator('.work-section').count(), 'Career cards must not displace writing on the homepage'
+    assert 'EasyPost' not in page.locator('.hero').inner_text(), 'Homepage introduction is employer-led'
+    assert 'CTO at EasyPost' not in page.title(), 'Homepage search title is employer-led'
+    for company in ('EasyPost', 'Fastly', 'Engine Yard'):
+        assert company in page.locator('.background-section').inner_text(), f'Missing career context: {company}'
+    if opening['writing']:
+        assert opening['firstSection'] == 'writing', 'Writing must immediately follow the introduction'
+        assert opening['writing']['bottom'] <= opening['background']['top'] + 1, 'Career history precedes writing'
+        assert page.locator('.hero .text-link').get_attribute('href') == '#writing', 'Primary link must lead to essays'
+        items = page.locator('.home-writing .writing-item')
+        assert 1 <= items.count() <= 3, 'Expected latest published essays, not placeholders'
+        dates = items.locator('time').evaluate_all('(items)=>items.map(i=>i.dateTime)')
+        assert dates == sorted(dates, reverse=True), 'Latest essays are not in date order'
+        for item in items.all():
+            assert item.locator('h3 a').get_attribute('href').startswith('/writing/')
+            assert item.locator('p:not(.essay-meta)').inner_text().strip(), 'Missing essay description'
+            assert re.search(r'\d+ min read', item.locator('.essay-meta').inner_text()), 'Missing reading time'
+        assert page.locator('.writing-links a[href="/writing/"]').count() == 1
+        assert page.locator('.writing-links a[href="/index.xml"]').count() == 1
     if width <= 700:
         portrait = opening['portrait']
         identity = opening['identity']
@@ -55,9 +80,13 @@ def verify_home_opening(page, width, height):
                    (identity['top'] + identity['bottom']) / 2) <= 2, 'Identity and portrait are misaligned'
         assert opening['intro']['top'] >= max(portrait['bottom'], identity['bottom']) + 12, 'Intro crowds identity'
         assert opening['link']['bottom'] <= height - 16, 'Primary link below first viewport'
-        assert opening['work']['top'] <= 480, 'Mobile hero delays the actual work'
     else:
-        assert opening['work']['top'] < 740, 'Desktop hero pushes work too far down'
+        assert opening['portrait']['width'] <= 161, 'Desktop portrait overwhelms the essays'
+    if opening['writing']:
+        assert opening['writing']['top'] <= 400, 'Introduction delays the essays'
+        assert opening['writingHeading']['bottom'] <= height - 8, 'Writing heading is below first viewport'
+        if height >= 600:
+            assert opening['firstEssay']['bottom'] <= height - 16, 'First essay title is below first viewport'
     return opening
 
 
@@ -147,7 +176,7 @@ def main():
                     metrics=page.evaluate('''()=>({width:innerWidth,height:innerHeight,scrollWidth:document.documentElement.scrollWidth,
                     nav:[...document.querySelectorAll('.site-header nav a')].map(a=>({text:a.textContent,height:a.getBoundingClientRect().height})),
                     images:[...document.images].map(i=>{const frame=i.closest('.hero-portrait,.header-portrait');return {src:i.currentSrc,width:i.getBoundingClientRect().width,height:i.getBoundingClientRect().height,portrait:!!frame,radius:frame?getComputedStyle(frame).borderRadius:null}}),
-                    workTop:document.querySelector('.work-section')?.getBoundingClientRect().top})''')
+                    writingTop:document.querySelector('.home-writing')?.getBoundingClientRect().top})''')
                     metrics['identity_label_count']=verify_identity_labels(page)
                     assert metrics['scrollWidth']<=width, f'{engine} {width} {route}: horizontal overflow'
                     assert all(a['height']>=44 for a in metrics['nav']), 'Small navigation tap targets'
@@ -162,7 +191,10 @@ def main():
                     assert page.locator('.header-portrait').count()==(0 if route=='/' else 1), 'Interior portrait missing or duplicated'
                     assert not page.locator('.portrait-aside').count(), 'Obsolete large interior portrait'
                     if route=='/': metrics['opening']=verify_home_opening(page,width,height)
-                    assert bool(page.locator('.site-header a[href="/writing/"]').count())==('/writing/index.html' in manifest['files']), 'Writing navigation state is wrong'
+                    has_writing = '/writing/index.html' in manifest['files']
+                    assert bool(page.locator('.site-header a[href="/writing/"]').count())==has_writing, 'Writing navigation state is wrong'
+                    if has_writing:
+                        assert page.locator('.site-header nav a').first.get_attribute('href')=='/writing/', 'Writing must be first in navigation'
                     metrics['diagrams']=verify_diagrams(page,width,out,engine,label)
                     if route=='/writing/close-the-loop/':
                         assert len(metrics['diagrams'])==2, 'Close the Loop must contain both approved diagrams'
