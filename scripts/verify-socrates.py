@@ -64,6 +64,11 @@ MEASURE = r'''() => {
     } else {
         connectors.forEach((el,i)=>{const c=box(el),s=box(steps[i]);if(Math.abs(c.x+c.width/2-(s.x+s.width/2))>2) failures.push('Vertical connector off center')});
     }
+    if(!horizontal) {
+        const ret=root.querySelector('.sc-return-path'), label=ret.querySelector('.sc-return-label');
+        const marker=getComputedStyle(ret,'::before');
+        if(box(label).x-box(ret).x < parseFloat(marker.fontSize)*.9) failures.push('Return marker collides with label');
+    }
     for(const c of root.querySelectorAll('.sc-cycle-connector,.sc-flow-connector,.sc-workflow-connector')) {
         if(!visible(c)) continue;
         for(const n of c.closest('.sc-figure').querySelectorAll('[data-node]')) if(overlap(box(c),box(n))) failures.push('Connector crosses a node');

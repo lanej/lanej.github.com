@@ -2,7 +2,7 @@
 <html lang="en-US">
 <head>
 {{ partial "head.html" . }}
-{{ $css := resources.Get "css/socrates.css" | minify | fingerprint }}
+{{ $css := slice (resources.Get "css/socrates.css") (resources.Get "css/socrates-reflow.css") | resources.Concat "css/socratic.css" | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
 </head>
 <body class="socratic-page">
