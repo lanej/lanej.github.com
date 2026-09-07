@@ -126,9 +126,6 @@
       original.addEventListener('click', () => card.hidePopover());
       footer.append(original);
       card.append(header, heading, content, footer);
-      // Explicit, natural-order focusability also includes links when WebKit's
-      // platform keyboard preferences would otherwise skip ordinary anchors.
-      // Keep native Tab navigation: this is a non-modal card, not a focus trap.
       card.querySelectorAll('a[href]').forEach(link => {
         if (!link.hasAttribute('tabindex')) link.tabIndex = 0;
       });
@@ -140,11 +137,28 @@
       };
       close.addEventListener('click', dismissToReference);
       card.addEventListener('keydown', event => {
-        if (event.key === 'Escape' && !event.defaultPrevented) {
+        if (event.defaultPrevented) return;
+        if (event.key === 'Escape') {
           event.preventDefault();
           event.stopPropagation();
           dismissToReference();
+          return;
         }
+        if (event.key !== 'Tab' || event.altKey || event.ctrlKey || event.metaKey) return;
+        // Move through the card in DOM order without letting focus scroll the
+        // underlying article. Scroll only this card when a long note needs it.
+        // At either boundary leave native navigation alone: never wrap or trap.
+        const controls = [...card.querySelectorAll('button, a[href], [tabindex]')]
+          .filter(el => el.tabIndex >= 0 && !el.disabled && el.getClientRects().length);
+        const index = controls.indexOf(document.activeElement);
+        const next = index >= 0 ? controls[index + (event.shiftKey ? -1 : 1)] : null;
+        if (!next) return;
+        event.preventDefault();
+        next.focus({preventScroll: true});
+        const bounds = card.getBoundingClientRect();
+        const target = next.getBoundingClientRect();
+        if (target.top < bounds.top + 8) card.scrollTop += target.top - bounds.top - 8;
+        else if (target.bottom > bounds.bottom - 8) card.scrollTop += target.bottom - bounds.bottom + 8;
       });
       card.addEventListener('beforetoggle', event => {
         if (event.newState === 'open') card.removeAttribute('data-positioned');
