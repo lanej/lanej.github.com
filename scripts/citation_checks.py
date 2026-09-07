@@ -47,7 +47,6 @@ def capture_citation(page, out, engine, width, label, before):
 
 
 def assert_card_fits(page):
-    # Positioning runs before the next paint, after native popover activation.
     page.wait_for_function("""() => {
         const el=document.querySelector('.citation-popover:popover-open');
         if(!el || el.dataset.positioned!=='true') return false;const r=el.getBoundingClientRect();
@@ -61,6 +60,48 @@ def assert_card_fits(page):
     assert visible_card(page).evaluate('(el)=>el.scrollWidth<=el.clientWidth+1'), 'Citation overflows horizontally'
     assert visible_card(page).locator('.citation-close').bounding_box()['height'] >= 44
     return box
+
+
+def verify_source_keyboard(page, out, engine, width, label):
+    """Exercise real keys; await browser focus rather than sampling mid-transition."""
+    card = visible_card(page)
+    expect(card.locator('.citation-close')).to_be_focused()
+    before = reading_position(page)
+    page.evaluate('''() => {
+        window.__citationKeyTrace = [];
+        window.__citationKeyListener = e => {
+            window.__citationKeyTrace.push({event:e.type,key:e.key,target:e.target?.outerHTML?.slice(0,600),
+                active:document.activeElement?.outerHTML?.slice(0,600),prevented:e.defaultPrevented,y:scrollY});
+        };
+        for(const type of ['keydown','keyup','focusin','focusout','scroll'])
+            document.addEventListener(type,window.__citationKeyListener,true);
+    }''')
+    try:
+        page.keyboard.press('Tab')
+        expect(card.locator('a[href]').first).to_be_focused()
+        assert_reading_position(page, before)
+        page.keyboard.press('Shift+Tab')
+        expect(card.locator('.citation-close')).to_be_focused()
+        assert_reading_position(page, before)
+    except Exception as error:
+        state = page.evaluate('''() => ({
+            y:scrollY,hash:location.hash,active:document.activeElement?.outerHTML?.slice(0,1200),
+            trace:window.__citationKeyTrace,
+            cards:[...document.querySelectorAll('.citation-popover:popover-open')].map(el=>({
+                id:el.id,box:el.getBoundingClientRect().toJSON(),
+                controls:[...el.querySelectorAll('button,a[href],[tabindex]')].map(a=>({
+                    html:a.outerHTML,tabIndex:a.tabIndex,rects:a.getClientRects().length}))}))
+        })''')
+        state['page_errors'] = [str(e) for e in page.page_errors()]
+        (out/f'{engine}-{width}-{label}-citation-keyboard-failure.json').write_text(json.dumps(state,indent=2))
+        print('CITATION_KEYBOARD_FAILURE', json.dumps(state), flush=True)
+        raise AssertionError(f'{engine} {width} {label}: source-link keyboard navigation failed: {error}') from error
+    finally:
+        page.evaluate('''() => {
+            for(const type of ['keydown','keyup','focusin','focusout','scroll'])
+                document.removeEventListener(type,window.__citationKeyListener,true);
+            delete window.__citationKeyListener;delete window.__citationKeyTrace;
+        }''')
 
 
 def fallback_check(browser, url, mode):
@@ -179,7 +220,6 @@ def verify_citations(page, width, route, out, engine, label):
         card_links = card.locator('a[href]').evaluate_all('(els)=>els.map(a=>a.href)')
         assert all(link in card_links for link in links if not link.startswith(page.url.split('#')[0]+'#')), 'Source link lost from preview'
         for block in note.locator('p').all():
-            # Complete qualifications must remain, not an automatically summarized excerpt.
             text = block.evaluate('(p)=>{const c=p.cloneNode(true);c.querySelectorAll(".footnote-backref").forEach(a=>a.remove());return c.textContent.trim()}')
             combined = card.inner_text() if card.is_visible() else card.text_content()
             assert ' '.join(text.split()) in ' '.join(combined.split()), 'Citation text was dropped'
@@ -189,18 +229,16 @@ def verify_citations(page, width, route, out, engine, label):
     if width <= 700: trigger.tap()
     else: trigger.click()
     expect(visible_card(page)).to_have_count(1)
+    expect(visible_card(page).locator('.citation-close')).to_be_focused()
     box = assert_card_fits(page)
     assert_reading_position(page, before)
     if width in (390,1440):
         capture_citation(page, out, engine, width, label, before)
-    # Native keyboard dismissal and accessible return to the invoking passage.
     page.keyboard.press('Escape')
     expect(visible_card(page)).to_have_count(0)
     trigger.focus();page.keyboard.press('Enter')
     expect(visible_card(page)).to_have_count(1)
-    expect(visible_card(page).locator('.citation-close')).to_be_focused()
-    page.keyboard.press('Tab')
-    assert visible_card(page).evaluate('(p)=>p.contains(document.activeElement)'), 'Source card is not keyboard reachable'
+    verify_source_keyboard(page, out, engine, width, label)
     page.keyboard.press('Escape')
     expect(trigger).to_be_focused()
     page.keyboard.press('Space')
@@ -209,9 +247,11 @@ def verify_citations(page, width, route, out, engine, label):
     expect(trigger).to_be_focused()
     expect(visible_card(page)).to_have_count(0)
     trigger.click()
+    expect(visible_card(page)).to_have_count(1)
+    expect(visible_card(page).locator('.citation-close')).to_be_focused()
+    assert_card_fits(page)
     page.mouse.click(1,1)
     expect(visible_card(page)).to_have_count(0)
-    # Repeated markers reuse the note, but must return to the actual invoker.
     repeated = triggers.evaluate_all('''els => {
         const seen=new Set();for(let i=0;i<els.length;i++){
             const id=els[i].getAttribute('popovertarget');
@@ -226,7 +266,6 @@ def verify_citations(page, width, route, out, engine, label):
         expect(again).to_be_focused()
     result = {'references':refs.count(),'unique_notes':notes.count(),'open_without_scroll':True,'settled_position_checked':True,'keyboard_and_dismissal':'passed','card':box}
     if width in (390,1440):
-        # Print must show the source list and original markers, not duplicate cards.
         page.emulate_media(media='print')
         expect(refs.first).to_be_visible()
         expect(triggers.first).not_to_be_visible()
