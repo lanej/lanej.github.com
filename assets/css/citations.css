@@ -4,6 +4,8 @@
 .citation-related{text-decoration-line:underline;text-decoration-color:#607b6c;text-decoration-thickness:1px;text-underline-offset:.18em;text-decoration-skip-ink:auto;cursor:pointer;transition:text-decoration-color .14s ease,text-decoration-thickness .14s ease}
 .citation-related:hover,.citation-related-active,.citation-toggle:focus-visible + .citation-related{text-decoration-color:var(--accent);text-decoration-thickness:2px}
 .citation-toggle:focus-visible{outline:none}
+.citation-toggle.citation-text-fallback{display:inline;width:auto;height:auto;margin:0 .25em;overflow:visible;opacity:1;color:inherit;font:inherit;text-decoration:underline;text-decoration-color:#607b6c;text-underline-offset:.18em}
+.citation-text-fallback:focus-visible,.citation-toggle:focus-visible + .citation-related{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
 .citation-popover :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .citation-popover{box-sizing:border-box;position:fixed;inset:auto;margin:0;padding:20px;width:min(440px,calc(100vw - 24px));max-height:65vh;overflow:auto;overscroll-behavior:contain;border:1px solid #607b6c;border-radius:12px;background:#14231c;color:var(--text);box-shadow:0 12px 42px #0008;font:1rem/1.6 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-wrap:anywhere;scrollbar-gutter:stable}
 .citation-popover::backdrop{background:transparent}
