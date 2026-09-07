@@ -39,3 +39,12 @@ Do not publish an empty Writing section or placeholder accomplishments. Distingu
 self-reported career history from independent public evidence. No private research,
 personal contact information beyond approved public routes, confidential company
 metrics, or non-public business strategy belongs in this repository or its drafts.
+
+Citation previews are an approved functional progressive enhancement, not a
+frontend framework. All future writing uses ordinary Markdown footnotes and the
+shared citation assets; no per-article opt-in or duplicated note text. Prefer a
+bold linked work title, author/year when known, and a separate paragraph explaining
+what the source supports. See [citation authoring](docs/citations.md). Never infer
+missing bibliographic metadata or omit qualifications. Preserve static endnotes,
+return links, print, and full-text RSS. Run the shared citation tests (including
+no-JavaScript/unsupported-browser fallbacks) and inspect live mobile/desktop cards.

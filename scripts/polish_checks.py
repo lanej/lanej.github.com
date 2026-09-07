@@ -4,6 +4,7 @@ import json
 from urllib.parse import urlsplit
 from PIL import Image
 from header_checks import verify_header
+from citation_checks import verify_citations
 
 
 def verify_polish(page, width, route, out, engine, label):
@@ -118,5 +119,6 @@ def verify_polish(page, width, route, out, engine, label):
             document.documentElement.style.removeProperty('font-size');
             document.querySelectorAll('details').forEach(el => el.open = false);
         }''')
+    result['citations'] = verify_citations(page, width, route, out, engine, label)
     page.evaluate('window.scrollTo(0,0)')
     return result

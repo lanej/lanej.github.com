@@ -1,0 +1,9 @@
+{{/* All present and future articles opt in through ordinary Markdown footnotes. */}}
+{{ if and .IsPage (eq .Section "writing") }}
+  {{ if strings.Contains .Content "class=\"footnotes\"" }}
+    {{ $css := resources.Get "css/citations.css" | minify | fingerprint }}
+    {{ $js := resources.Get "js/citations.js" | minify | fingerprint }}
+    <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+    <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer data-citation-previews></script>
+  {{ end }}
+{{ end }}

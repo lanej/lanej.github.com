@@ -17,6 +17,7 @@
 <link rel="canonical" href="{{ .Permalink }}">
 <link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+{{ partial "citation-assets.html" . }}
 {{ if or (eq .Kind "404") site.Params.preview .Draft }}<meta name="robots" content="noindex, nofollow">{{ end }}
 <meta property="og:type" content="{{ if $article }}article{{ else }}website{{ end }}">
 <meta property="og:title" content="{{ $title }}"><meta property="og:description" content="{{ $description }}">
