@@ -1,6 +1,8 @@
 """Citation interaction and progressive-enhancement checks for every writing page."""
+import io
 import json
 from pathlib import Path
+from PIL import Image
 from playwright.sync_api import expect
 
 _FIXTURE_ENGINES = set()
@@ -8,6 +10,40 @@ _FIXTURE_ENGINES = set()
 
 def visible_card(page):
     return page.locator('.citation-popover:popover-open')
+
+
+def reading_position(page):
+    return page.evaluate('({y:scrollY,hash:location.hash})')
+
+
+def assert_reading_position(page, before):
+    # Native focus/scroll can be deferred beyond the opening event in WebKit.
+    # Observe the settled state instead of passing on one synchronous snapshot.
+    page.evaluate('() => new Promise(resolve => requestAnimationFrame(() => setTimeout(resolve, 250)))')
+    after = reading_position(page)
+    assert abs(after['y'] - before['y']) <= 2 and after['hash'] == before['hash'], f'Citation moved the reading position: {before} -> {after}'
+    expect(visible_card(page)).to_have_count(1)
+
+
+def capture_citation(page, out, engine, width, label, before):
+    box = assert_card_fits(page)
+    # A locator screenshot may scroll its target into view. A single viewport
+    # capture and pixel crop records the actual open card without that mutation.
+    path = out/f'{engine}-{width}-{label}-citation.png'
+    image_bytes = page.screenshot(path=str(path), full_page=False, scale='css')
+    with Image.open(io.BytesIO(image_bytes)) as image:
+        image.crop((int(box['x']), int(box['y']),
+                    int(box['x'] + box['width'] + 0.5),
+                    int(box['y'] + box['height'] + 0.5))).save(out/f'{engine}-{width}-{label}-citation-card.png')
+    try:
+        assert_reading_position(page, before)
+    except AssertionError:
+        state = page.evaluate('''() => ({y:scrollY,hash:location.hash,
+            active:document.activeElement?.outerHTML,
+            cards:[...document.querySelectorAll('.citation-popover')].map(el=>({
+                id:el.id,open:el.matches(':popover-open'),box:el.getBoundingClientRect().toJSON()}))})''')
+        (out/f'{engine}-{width}-{label}-citation-capture-failure.json').write_text(json.dumps({'before':before,'after':state},indent=2))
+        raise
 
 
 def assert_card_fits(page):
@@ -149,16 +185,14 @@ def verify_citations(page, width, route, out, engine, label):
             assert ' '.join(text.split()) in ' '.join(combined.split()), 'Citation text was dropped'
     trigger = triggers.first
     trigger.scroll_into_view_if_needed()
-    before = page.evaluate('({y:scrollY,hash:location.hash})')
+    before = reading_position(page)
     if width <= 700: trigger.tap()
     else: trigger.click()
     expect(visible_card(page)).to_have_count(1)
     box = assert_card_fits(page)
-    after = page.evaluate('({y:scrollY,hash:location.hash})')
-    assert abs(after['y'] - before['y']) <= 2 and after['hash'] == before['hash'], 'Opening citation moved the reading position'
+    assert_reading_position(page, before)
     if width in (390,1440):
-        page.screenshot(path=str(out/f'{engine}-{width}-{label}-citation.png'),full_page=False)
-        visible_card(page).screenshot(path=str(out/f'{engine}-{width}-{label}-citation-card.png'))
+        capture_citation(page, out, engine, width, label, before)
     # Native keyboard dismissal and accessible return to the invoking passage.
     page.keyboard.press('Escape')
     expect(visible_card(page)).to_have_count(0)
@@ -190,7 +224,7 @@ def verify_citations(page, width, route, out, engine, label):
         expect(visible_card(page)).to_have_count(1)
         page.keyboard.press('Escape')
         expect(again).to_be_focused()
-    result = {'references':refs.count(),'unique_notes':notes.count(),'open_without_scroll':True,'keyboard_and_dismissal':'passed','card':box}
+    result = {'references':refs.count(),'unique_notes':notes.count(),'open_without_scroll':True,'settled_position_checked':True,'keyboard_and_dismissal':'passed','card':box}
     if width in (390,1440):
         # Print must show the source list and original markers, not duplicate cards.
         page.emulate_media(media='print')
@@ -199,8 +233,11 @@ def verify_citations(page, width, route, out, engine, label):
         expect(page.locator('.footnotes')).to_be_visible()
         page.emulate_media(media='screen')
         page.evaluate("document.documentElement.style.fontSize='200%'")
-        trigger.scroll_into_view_if_needed();trigger.click()
+        trigger.scroll_into_view_if_needed()
+        enlarged_before = reading_position(page)
+        trigger.click()
         assert_card_fits(page)
+        assert_reading_position(page, enlarged_before)
         page.keyboard.press('Escape')
         page.evaluate("document.documentElement.style.removeProperty('font-size')")
         result['print_and_200_percent_text']='passed'
