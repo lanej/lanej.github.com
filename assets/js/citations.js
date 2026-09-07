@@ -126,6 +126,12 @@
       original.addEventListener('click', () => card.hidePopover());
       footer.append(original);
       card.append(header, heading, content, footer);
+      // Explicit, natural-order focusability also includes links when WebKit's
+      // platform keyboard preferences would otherwise skip ordinary anchors.
+      // Keep native Tab navigation: this is a non-modal card, not a focus trap.
+      card.querySelectorAll('a[href]').forEach(link => {
+        if (!link.hasAttribute('tabindex')) link.tabIndex = 0;
+      });
       document.body.append(card);
       const entry = {card, trigger: null};
       const dismissToReference = () => {
