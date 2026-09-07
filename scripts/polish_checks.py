@@ -23,9 +23,14 @@ def verify_polish(page, width, route, out, engine, label):
             assert essays['y'] >= heading['y'] + heading['height'], 'Tablet essays need a single column'
         result['tablet_portrait_width'] = portrait['width']
 
+    if route == '/':
+        background = page.locator('.background-section')
+        assert 'UPS' in background.inner_text(), 'Operational background is missing'
+        assert background.locator('a[href="/record/#early-career"]').count() == 1
+
     if route == '/record/':
         links = page.locator('.work-index a')
-        expected = {'#easypost-technology-strategy', '#fastly', '#engine-yard', '#sapporo-rubykaigi-2012', '#open-source'}
+        expected = {'#easypost-technology-strategy', '#fastly', '#engine-yard', '#early-career', '#sapporo-rubykaigi-2012', '#open-source'}
         anchors = links.evaluate_all('(links) => links.map(a => a.getAttribute("href"))')
         assert len(anchors) == len(expected) and set(anchors) == expected, 'Missing or duplicate Work section links'
         for index, anchor in enumerate(anchors):
@@ -35,9 +40,18 @@ def verify_polish(page, width, route, out, engine, label):
             assert page.url.endswith(anchor), f'Section link failed: {anchor}'
             assert target.is_visible(), f'Section is hidden: {anchor}'
         result['section_links'] = anchors
+        earlier = page.locator('#early-career + ul')
+        assert earlier.locator('li').count() == 4, 'Keep earlier work compact and complete'
+        for company in ('HubSpot', '3M / Brontes Technologies', 'EMC', 'UPS'):
+            assert company in earlier.inner_text(), f'Missing earlier employer: {company}'
+        assert 'Quality Engineering Co-op' in earlier.inner_text(), 'Preserve the EMC co-op title'
+        result['earlier_work_verified'] = True
 
     if route == '/about/':
-        assert 'Fastly' in page.locator('.prose').first.inner_text(), 'Fastly is missing from the biography'
+        biography = page.locator('.prose').first.inner_text()
+        for company in ('UPS', 'EMC', '3M', 'Brontes Technologies', 'HubSpot', 'Engine Yard', 'Fastly', 'EasyPost'):
+            assert company in biography, f'Missing career context: {company}'
+        assert 'package handler and then a supervisor' in biography, 'Preserve the operational starting point'
         resources = page.locator('details.speaker-resources')
         assert resources.count() == 1 and resources.get_attribute('open') is None
         assert page.locator('#contact').count() == 1
@@ -49,12 +63,14 @@ def verify_polish(page, width, route, out, engine, label):
         photo = resources.locator('a[download="josh-lane-headshot.jpg"]')
         assert photo.count() == 1 and photo.is_visible()
         assert resources.locator('h2').inner_text() == 'Short biography'
+        assert 'supervision at UPS' in resources.inner_text(), 'Speaker biography lost operational context'
         if width in (390, 1440):
             resources.screenshot(path=str(out/f'{engine}-{width}-speaker-resources-open.png'))
         summary.focus()
         page.keyboard.press('Space')
         assert resources.get_attribute('open') is None, 'Speaker resources did not close with keyboard'
         result['speaker_resources_keyboard'] = 'passed'
+        result['operations_to_technology_context'] = True
 
     # A captioned Markdown image is a figure, never a figure nested in a paragraph.
     assert not page.locator('p > figure.article-figure').count(), 'Invalid block figure within paragraph'
