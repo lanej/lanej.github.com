@@ -11,6 +11,13 @@ inspect screenshots captured from **https://lanej.io/** at mobile and desktop
 sizes. Confirm the expected revision and that the fetched image bytes decode and
 match the build. Never call a change verified solely because a deploy job passed.
 
+Writing is the primary destination. Put it first in navigation and directly after
+the compact homepage introduction, with titles, descriptions, dates, reading times,
+and archive/feed links. Career history supports the essays; keep employer context
+below them. Do not turn the introduction, site title, or description into a company
+biography. EasyPost is the current role, not the whole identity. Preserve accurate
+Fastly and Engine Yard context without inventing responsibilities or outcomes.
+
 Inspect first-viewport screenshots as well as full-page captures. On the homepage,
 show Josh’s name once in the opening. On phones, place the compact circular portrait
 beside the identity, with the introduction below; the complete portrait and primary

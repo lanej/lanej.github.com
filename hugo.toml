@@ -7,7 +7,7 @@ buildDrafts = false
 buildFuture = false
 buildExpired = false
 [params]
-  description = 'Josh Lane, Chief Technology Officer at EasyPost. Technology strategy, organizational leverage, platform and data systems, cloud infrastructure, and open-source work.'
+  description = 'Essays by Josh Lane on software, AI, engineering judgment, and organizations. Engineer and technology leader with experience at Engine Yard, Fastly, and EasyPost.'
   role = 'Chief Technology Officer at EasyPost'
   linkedin = 'https://www.linkedin.com/in/lanejoshlane/'
   github = 'https://github.com/lanej'

@@ -16,18 +16,19 @@ def verify_polish(page, width, route, out, engine, label):
     if route == '/' and 700 < width <= 1000:
         portrait = page.locator('.hero-portrait').bounding_box()
         copy = page.locator('.hero-copy').bounding_box()
-        heading = page.locator('.section-heading').bounding_box()
-        work = page.locator('.work-list').bounding_box()
-        assert 159 <= portrait['width'] <= 221, 'Tablet portrait dominates the introduction'
+        assert 159 <= portrait['width'] <= 161, 'Tablet portrait dominates the introduction'
         assert copy['width'] > portrait['width'], 'Tablet copy is narrower than the portrait'
-        assert work['y'] >= heading['y'] + heading['height'], 'Tablet work section needs a single column'
+        if page.locator('.home-writing').count():
+            heading = page.locator('.home-writing .section-heading').bounding_box()
+            essays = page.locator('.essay-list').bounding_box()
+            assert essays['y'] >= heading['y'] + heading['height'], 'Tablet essays need a single column'
         result['tablet_portrait_width'] = portrait['width']
 
     if route == '/record/':
         links = page.locator('.work-index a')
-        assert links.count() == 4, 'Missing Work section index'
+        expected = {'#easypost-technology-strategy', '#fastly', '#engine-yard', '#sapporo-rubykaigi-2012', '#open-source'}
         anchors = links.evaluate_all('(links) => links.map(a => a.getAttribute("href"))')
-        assert len(set(anchors)) == 4, 'Duplicate section links'
+        assert len(anchors) == len(expected) and set(anchors) == expected, 'Missing or duplicate Work section links'
         for index, anchor in enumerate(anchors):
             target = page.locator(anchor)
             assert target.count() == 1, f'Broken section link: {anchor}'
@@ -37,6 +38,7 @@ def verify_polish(page, width, route, out, engine, label):
         result['section_links'] = anchors
 
     if route == '/about/':
+        assert 'Fastly' in page.locator('.prose').first.inner_text(), 'Fastly is missing from the biography'
         resources = page.locator('details.speaker-resources')
         assert resources.count() == 1 and resources.get_attribute('open') is None
         assert page.locator('#contact').count() == 1
