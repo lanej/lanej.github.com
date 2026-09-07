@@ -36,6 +36,7 @@ jobs:
           server=$!
           trap 'kill "$server"' EXIT
           python3 scripts/verify.py --engines chromium,webkit
+          python3 scripts/verify-socrates.py --engines chromium,webkit
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
@@ -90,7 +91,9 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
       - name: Verify the actual custom domain
-        run: python3 scripts/verify.py --url https://lanej.io/ --output artifacts/live --engines chromium,webkit
+        run: |
+          python3 scripts/verify.py --url https://lanej.io/ --output artifacts/live --engines chromium,webkit
+          python3 scripts/verify-socrates.py --url https://lanej.io/ --output artifacts/live/socrates --engines chromium,webkit
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
