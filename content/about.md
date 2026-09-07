@@ -1,16 +1,18 @@
 ---
 title: About
-description: Writing on software, AI, and organizations, informed by engineering and leadership at Engine Yard, Fastly, and EasyPost.
+description: From frontline operations to software, infrastructure, and technology leadership. Writing about software, AI, and how we organize work.
 ---
-I’m an engineer and technology leader. I write about **software, AI, engineering judgment, and how we organize work**—including the problems that don’t get solved by writing more code.
+I’m an engineer and technology executive. My career has moved from **frontline operations to software and infrastructure, then company-wide technology leadership**. I write about software, AI, engineering judgment, and how we organize work.
 
-At **Engine Yard**, I architected and led development of the cloud API and worked on deployment systems, Azure integration, and platform infrastructure.
+Before I worked in software, I was a package handler and then a supervisor at **UPS**. I was responsible for a workgroup’s safety, production, and attendance. That is still the starting point for how I think about technology: the work people need to do, the systems they depend on, and the outcome someone must own.
 
-At **Fastly, from 2016 to 2019**, I worked as a senior software engineer across API development, internal engineering, and site reliability. That included backend APIs and web application firewall development, data pipelines, and infrastructure tooling.
+My early technical roles were in quality engineering at **EMC**, software engineering and QA automation at **3M’s Brontes Technologies**, and software engineering at **HubSpot**.
+
+At **Engine Yard**, I architected and led development of the cloud API and worked on deployment systems, Azure integration, and platform infrastructure. At **Fastly, from 2016 to 2019**, I worked across backend APIs, web application firewall development, internal data pipelines, and site reliability.
 
 Today I’m **Chief Technology Officer at EasyPost**, leading technology strategy across product, platform, data, and infrastructure. I joined as a senior engineer in 2019 and moved through engineering management, platform leadership, and Vice President of Engineering before becoming CTO in 2026.
 
-Across that work, I keep returning to the same question: **what prevents a system from producing the result it exists to deliver?** Sometimes the answer is architecture. Sometimes it is ownership, data quality, incentives, or work that should simply stop.
+The responsibility has broadened, but the question remains: **what prevents a system from producing the result it exists to deliver?** Sometimes the answer is architecture. Sometimes it is ownership, data quality, incentives, or work that should simply stop.
 
 I’m based in Oakland, California, and hold a B.S. in Electrical and Computer Engineering from Worcester Polytechnic Institute.
 
@@ -29,5 +31,5 @@ For professional conversations and speaking inquiries, [contact me on LinkedIn](
 {{< speaker-resources >}}
 ## Short biography
 
-Josh Lane is an engineer and technology leader who writes about software, AI, and organizational design. He is currently Chief Technology Officer at EasyPost. Previously, he worked on APIs, data pipelines, and site reliability at Fastly, and led cloud API development at Engine Yard. He holds a B.S. in Electrical and Computer Engineering from Worcester Polytechnic Institute and is based in Oakland, California.
+Josh Lane is an engineer and technology executive who writes about software, AI, and organizational design. His career spans package handling and supervision at UPS, quality and software engineering, cloud infrastructure, and technology leadership. He is currently Chief Technology Officer at EasyPost, following engineering roles at Fastly and cloud API leadership at Engine Yard. He holds a B.S. in Electrical and Computer Engineering from Worcester Polytechnic Institute and is based in Oakland, California.
 {{< /speaker-resources >}}

@@ -18,6 +18,15 @@ below them. Do not turn the introduction, site title, or description into a comp
 biography. EasyPost is the current role, not the whole identity. Preserve accurate
 Fastly and Engine Yard context without inventing responsibilities or outcomes.
 
+The career narrative runs from frontline operations through quality/software
+engineering and infrastructure to technology leadership. UPS was package handling
+and supervision; EMC was a quality-engineering co-op; 3M/Brontes was software
+engineering and QA automation; HubSpot was software engineering. Do not inflate
+those titles or imply all four were operations roles. Keep earlier Work entries
+compact (company, role, dates), with the narrative on About and a short background
+below homepage writing. Avoid invented origin stories, achievements, or a claim
+that this was a predetermined career plan.
+
 Inspect first-viewport screenshots as well as full-page captures. On the homepage,
 show Josh’s name once in the opening. On phones, place the compact circular portrait
 beside the identity, with the introduction below; the complete portrait and primary

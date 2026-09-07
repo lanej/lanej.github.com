@@ -1,6 +1,6 @@
 ---
 title: Work
-description: Engineering and technology leadership at EasyPost, Fastly, and Engine Yard, alongside speaking and open-source contributions.
+description: From frontline operations at UPS to software, infrastructure, and technology leadership, alongside speaking and open-source contributions.
 sections:
   - title: EasyPost
     id: easypost-technology-strategy
@@ -8,6 +8,8 @@ sections:
     id: fastly
   - title: Engine Yard
     id: engine-yard
+  - title: Earlier work
+    id: early-career
   - title: Speaking
     id: sapporo-rubykaigi-2012
   - title: Open source
@@ -48,6 +50,15 @@ I architected and led development of the Engine Yard API, from backend services 
 The official Ruby client and command-line utility, `ey-core`, support application deployment and environment management, including a mocked mode for testing integrations without live API calls.
 
 [Engine Yard Core API client](https://github.com/engineyard/core-client-rb)
+
+## Earlier work {#early-career}
+
+- **HubSpot** — Software Engineer · September 2010–July 2011
+- **3M / Brontes Technologies** — Software Engineer and QA Automation Engineer · 2008–2010
+- **EMC** — Quality Engineering Co-op · May 2007–May 2008
+- **UPS** — Supervisor · February 2006–May 2007; Package Handler · July 2005–February 2006
+
+Career history: [professional profile](https://www.linkedin.com/in/lanejoshlane/). Brontes was [acquired by 3M in 2006](https://investors.3m.com/financials/sec-filings/content/0001104659-07-005584/a07-2955_1ex99.htm), before my time there.
 
 ## Speaking {#sapporo-rubykaigi-2012}
 
