@@ -45,7 +45,11 @@ The complete original note, including every qualification and source, is retaine
 - Click/tap the underlined phrase, or reach its control with Tab and press
   Enter/Space. Desktop cards appear nearby; phone cards stay inside the screen.
   Opening a card does not change the URL fragment or scroll away from the passage.
-- Escape, the close button, or a click outside dismisses it. Keyboard/close-button
+- The enhanced web view has no visible citation numbering. Cards are labeled
+  simply **Source**, and the source list at the end of the article is unnumbered.
+  Traditional numbered footnotes remain only as the static fallback for
+  no-JavaScript/unsupported browsers, print, and full-text RSS.
+- Escape, the close button, or a click outside dismisses a card. Keyboard/close-button
   dismissal returns focus to the actual reference, including repeated citations.
 - Long notes scroll inside the card. “Full reference” deliberately follows the
   original endnote link. The underlined phrase does not alter the evidence scope.
