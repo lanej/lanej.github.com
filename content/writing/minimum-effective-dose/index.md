@@ -2,6 +2,7 @@
 title = "Minimum Effective Dose"
 description = "Do enough to learn what matters. Build one complete path, resist speculative scope, and let evidence determine the next investment."
 date = "2026-09-06T18:42:54-07:00"
+lastmod = "2026-09-06T22:35:29-07:00"
 draft = false
 toc = true
 diagrams = true
@@ -29,7 +30,9 @@ Benchmarking databases might be useful. It does not answer whether anyone needs 
 
 I care about decision-relevant information: what we need to know to choose the next action. Not an abstract score for how much we learned.
 
-Dan North's *Deliberate Discovery* makes this distinction useful for engineering. Identify the ignorance constraining progress, then deliberately reduce it enough to proceed.[^north] Eric Ries's original account of the minimum viable product similarly centers validated learning, not merely shipping a smaller product.[^ries] Wes Kao applies minimum effective dose directly to doing enough work to obtain the insight needed for a business decision.[^kao]
+Dan North's *Deliberate Discovery* makes this distinction useful for engineering. Identify the ignorance constraining progress, then deliberately reduce it enough to proceed.[^north] This brings constraint thinking into discovery, before a dependable service exists. The obstacle may be what we have not learned, not delivery capacity. That is different from demonstrating a bottleneck in a working path; the first test may need to establish where the limitation actually lies.
+
+Eric Ries's original account of the minimum viable product similarly centers validated learning, not merely shipping a smaller product.[^ries] Wes Kao applies minimum effective dose directly to doing enough work to obtain the insight needed for a business decision.[^kao]
 
 The questions I want answered before we start are simple:
 
@@ -73,6 +76,22 @@ Sometimes the minimum intervention is not software. A manually prepared report c
 
 The test has to reach the thing we claim to be testing. “It worked” is incomplete unless we can say what worked, for whom, and under which conditions.
 
+## Follow the constraint
+
+Once a path produces a useful result, what prevents it from doing so reliably or at the required scale?
+
+Eli Goldratt's Theory of Constraints gives us a rule for directing the next dose: focus on what limits the system's objective, rather than whichever component is easiest to improve. Its five focusing steps start with identifying the constraint, using it more effectively, and aligning the rest of the system to support that decision. Increasing capacity comes after those steps, not before. Then reassess; do not let the old way of working become the next constraint.[^toc]
+
+Suppose the report proves useful, but repeatedly arrives after the customer's decision. Tracing the path suggests that corrections and a shared review queue cause the delay. The longest wait is a clue, not proof that it governs the outcome.
+
+The next dose could be a bounded trial with clear input requirements and checks that prevent avoidable rework before review. That uses the reviewer's existing capacity better and requires the people preparing the data to change their work too. It does not yet justify a reporting platform or a faster query.
+
+Measure whether usable reports reach decisions sooner, without worsening errors or delaying other necessary work. Moving this report to the front of the queue may only transfer the delay. A successful local change is not enough; look for an improvement across the path.
+
+Work elsewhere is not automatically waste. Safeguards, reliability, and reducing the load on the constrained activity can be necessary. The question is what they contribute to the outcome.
+
+**A steel thread makes the path observable. Constraint thinking helps us choose where to intervene. Minimum effective dose keeps the intervention proportionate to what we need to learn or change.** When evidence reveals a different limit, follow it.
+
 ## Scope creep spends the answer before we have it
 
 This is why I resist scope creep so strongly.
@@ -103,7 +122,7 @@ Kent Beck writes:
 
 He places that sequence alongside slicing work, short feedback cycles, and making difficult changes easier before attempting them. I read it as a discipline for ordering investment, not three giant project phases.
 
-For the report, establish one useful path. Then make its behavior and implementation appropriate for the recurring commitment. Optimize the measured constraint when there is a reason to do so. We might need a faster query. We might instead need a simpler approval process.
+For the report, establish one useful path. Make it dependable enough for the recurring commitment. Then invest where the evidence shows that improvement matters.
 
 Musk describes a related order in his Starbase interview with Everyday Astronaut: question requirements, remove unnecessary parts or steps, simplify what remains, accelerate it, and automate last.[^sequence] The useful connection is that optimization comes after deciding whether the work should exist.
 
@@ -143,13 +162,13 @@ In [Lead With Problems](/writing/lead-with-problems/), I argued for a named owne
 
 That owner also needs to sequence the learning. Otherwise each function can build out its part of the imagined final system while nobody resolves the uncertainty that could invalidate the whole effort.
 
-I want an owner to be able to explain the next test, the resources it needs, and the commitment it could justify. Dependencies, authority, and the conditions for stopping should be explicit. This should be a short working agreement, not a new reporting bureaucracy.
+I want an owner to explain what currently limits the outcome, the evidence behind that diagnosis, and the next test. Which commitments from other functions does it require? What resources does it need, and what would the result justify? Authority and stopping conditions should be explicit. This should be a short working agreement, not a new reporting bureaucracy.
 
 {{< minimum-dose-decision >}}
 
 After the test, return to the claim. What changed? What remains uncertain? What is the strongest conclusion the evidence supports? What did the intervention cost, including the work done by other people?
 
-That is where [closing the loop](/writing/close-the-loop/) matters. The result has to change the next action. Learning that a report is not useful may justify stopping. Learning that it is useful but routinely arrives late may justify a delivery fix, not a reporting platform.
+That is where [closing the loop](/writing/close-the-loop/) matters. The result has to change the next action: stopping, strengthening the path, or moving attention to a different limitation.
 
 This is also not a license for endless experiments. Once the relevant uncertainty is sufficiently resolved, act. A team should not keep asking for another prototype when the evidence already supports a commitment. Nor does a well-understood maintenance task need to masquerade as discovery.
 
@@ -186,6 +205,11 @@ Establish the path. Learn what makes it work. Make the next investment with that
     Jade Rubick · 2023
 
     Describes thin, integrated slices through important use cases. The report example and extension to a business's customer-to-outcome path are illustrative applications, not a case study from Rubick's article.
+
+[^toc]: **[Introduction to Theory of Constraints](https://www.goldrattresearchlabs.com/introduction-to-toc)**  
+    Goldratt Research Labs
+
+    Explains Goldratt's system-level focus and the five focusing steps: identify, exploit, subordinate, elevate, and repeat. The report and review-queue example is hypothetical; the minimum-dose experiment and discovery connection are applications here, not claims of measured results from the source.
 
 [^yagni]: **[Yagni](https://martinfowler.com/bliki/Yagni.html)**  
     Martin Fowler · 2015
