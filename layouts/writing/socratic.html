@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+{{ partial "head.html" . }}
+{{ $css := resources.Get "css/socrates.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+</head>
+<body class="socratic-page">
+<a class="skip-link" href="#main">Skip to content</a>
+{{ partial "header.html" . }}
+<main id="main" tabindex="-1">
+<article class="sc-article" aria-labelledby="socrates-title">
+<div class="sc-meta"><a href="{{ "/writing/" | relURL }}">Writing</a><span><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time> · {{ .ReadingTime }} min read</span></div>
+{{ .Content }}
+</article>
+</main>
+{{ partial "footer.html" . }}
+</body>
+</html>

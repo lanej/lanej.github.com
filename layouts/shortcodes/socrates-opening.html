@@ -1,0 +1,10 @@
+<section class="sc-hero">
+<div class="sc-hero-copy">
+<h1 id="socrates-title">{{ .Page.Title }}</h1>
+<p class="sc-deck">{{ .Page.Description }}</p>
+<blockquote class="sc-accent">{{ .Page.Params.callout }}</blockquote>
+<div class="sc-intro">{{ .Page.RenderString (dict "display" "block") .Inner }}</div>
+</div>
+{{ $art := .Page.Resources.GetMatch "socrates-bust.webp" }}
+<figure class="sc-hero-art"><img src="{{ $art.RelPermalink }}" width="270" height="322" alt="Illustrated bust of Socrates" decoding="async"><figcaption class="sc-caption">Examine the claim before acting on it.</figcaption></figure>
+</section><hr class="sc-divider">

@@ -1,0 +1,11 @@
+{{ $id := .Get "id" }}
+{{ $diagram := .Get "diagram" }}
+{{ if not (in (slice "method" "comparison" "layers" "workflow") $diagram) }}{{ errorf "Unknown Socrates diagram: %s" $diagram }}{{ end }}
+<section class="sc-section" id="{{ $id }}" aria-labelledby="{{ $id }}-title">
+<div class="sc-section-text"><div class="sc-section-no" aria-hidden="true">{{ .Get "number" }}</div>
+<h2 id="{{ $id }}-title">{{ .Get "title" }}</h2>
+{{ with .Get "kicker" }}<p class="sc-kicker">{{ . }}</p>{{ end }}
+<div class="sc-section-copy">{{ .Page.RenderString (dict "display" "block") .Inner }}</div>
+</div>
+{{ partial (printf "socrates/%s.html" $diagram) .Page }}
+</section>
