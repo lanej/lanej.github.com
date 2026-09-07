@@ -1,18 +1,18 @@
 /* Citation cards are a progressive layer over ordinary Markdown endnotes. */
 .article-body{--citation-previews:enabled}
 .citation-toggle{-webkit-tap-highlight-color:transparent;display:inline-block;width:1px;height:1px;margin:0 -1px 0 0;padding:0;border:0;overflow:hidden;opacity:0;background:transparent;color:transparent;font:1px/1 sans-serif;vertical-align:baseline;cursor:pointer}
-.citation-related{text-decoration-line:underline;text-decoration-color:#607b6c;text-decoration-thickness:1px;text-underline-offset:.18em;text-decoration-skip-ink:auto;cursor:pointer;transition:text-decoration-color .14s ease,text-decoration-thickness .14s ease}
+.citation-related{text-decoration-line:underline;text-decoration-color:var(--accent-muted);text-decoration-thickness:1px;text-underline-offset:.18em;text-decoration-skip-ink:auto;cursor:pointer;transition:text-decoration-color .14s ease,text-decoration-thickness .14s ease}
 .citation-related:hover,.citation-related-active,.citation-toggle:focus-visible + .citation-related{text-decoration-color:var(--accent);text-decoration-thickness:2px}
 .citation-toggle:focus-visible{outline:none}
-.citation-toggle.citation-text-fallback{display:inline;width:auto;height:auto;margin:0 .25em;overflow:visible;opacity:1;color:inherit;font:inherit;text-decoration:underline;text-decoration-color:#607b6c;text-underline-offset:.18em}
+.citation-toggle.citation-text-fallback{display:inline;width:auto;height:auto;margin:0 .25em;overflow:visible;opacity:1;color:inherit;font:inherit;text-decoration:underline;text-decoration-color:var(--accent-muted);text-underline-offset:.18em}
 .citation-text-fallback:focus-visible,.citation-toggle:focus-visible + .citation-related{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
 .citation-popover :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-.citation-popover{box-sizing:border-box;position:fixed;inset:auto;margin:0;padding:20px;width:min(440px,calc(100vw - 24px));max-height:65vh;overflow:auto;overscroll-behavior:contain;border:1px solid #607b6c;border-radius:12px;background:#14231c;color:var(--text);box-shadow:0 12px 42px #0008;font:1rem/1.6 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-wrap:anywhere;scrollbar-gutter:stable}
+.citation-popover{box-sizing:border-box;position:fixed;inset:auto;margin:0;padding:20px;width:min(440px,calc(100vw - 24px));max-height:65vh;overflow:auto;overscroll-behavior:contain;border:1px solid var(--accent-muted);border-radius:12px;background:var(--surface-raised);color:var(--text);box-shadow:0 12px 42px #0008;font:1rem/1.6 ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-wrap:anywhere;scrollbar-gutter:stable}
 .citation-popover::backdrop{background:transparent}
 .citation-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:-6px -6px 6px 0}
 .citation-label{margin:0;color:var(--accent);font-size:.72rem;font-weight:650;letter-spacing:.1em;text-transform:uppercase}
 .citation-close{flex-shrink:0;display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:6px;background:transparent;color:var(--muted);font:1.6rem/1 sans-serif;cursor:pointer}
-.citation-close:hover{background:#21372b;color:var(--text)}
+.citation-close:hover{background:var(--surface-hover);color:var(--text)}
 .citation-title{margin:0 0 14px;font-size:1.15rem;line-height:1.35;letter-spacing:-.015em;font-weight:600}
 .citation-content{color:var(--muted)}.citation-content p{margin:0 0 1em}.citation-content>:last-child{margin-bottom:0}.citation-content a,.citation-footer a{color:var(--accent);text-underline-offset:.2em}.citation-content strong{color:var(--text)}.citation-content .citation-metadata{font-size:.9rem;color:var(--accent)}
 .citation-content img{max-width:100%;height:auto}.citation-content pre,.citation-content table{max-width:100%;overflow-x:auto}.citation-content pre{white-space:pre-wrap}.citation-content :is(ul,ol){padding-left:1.4em}
