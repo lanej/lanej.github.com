@@ -2,6 +2,10 @@
   organization: EasyPost
   title: Technology strategy and engineering leadership
   summary: Company-wide technical investment and system consolidation, following hands-on shipping, platform, and financial-infrastructure work.
+- id: fastly
+  organization: Fastly
+  title: APIs, internal platforms, and site reliability
+  summary: Customer-facing APIs, internal data pipelines, and infrastructure and reliability work for a global CDN platform.
 - id: engine-yard
   organization: Engine Yard
   title: Building an API for operating cloud infrastructure
