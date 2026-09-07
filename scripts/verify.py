@@ -61,8 +61,7 @@ def verify_home_opening(page, width, height):
         assert page.locator('.hero .text-link').get_attribute('href') == '#writing', 'Primary link must lead to essays'
         items = page.locator('.home-writing .writing-item')
         assert 1 <= items.count() <= 3, 'Expected latest published essays, not placeholders'
-        dates = items.locator('time').evaluate_all('(items)=>items.map(i=>i.dateTime)')
-        assert dates == sorted(dates, reverse=True), 'Latest essays are not in date order'
+        assert not items.locator('time').count(), 'Homepage writing cards should not expose publication dates'
         for item in items.all():
             assert item.locator('h3 a').get_attribute('href').startswith('/writing/')
             assert item.locator('p:not(.essay-meta)').inner_text().strip(), 'Missing essay description'
@@ -195,6 +194,11 @@ def main():
                     assert bool(page.locator('.site-header a[href="/writing/"]').count())==has_writing, 'Writing navigation state is wrong'
                     if has_writing:
                         assert page.locator('.site-header nav a').first.get_attribute('href')=='/writing/', 'Writing must be first in navigation'
+                    if route=='/writing/':
+                        assert not page.locator('.writing-item time').count(), 'Writing index should not expose publication dates'
+                    elif route.startswith('/writing/'):
+                        assert not page.locator('.article-meta time').count(), 'Article header should not expose publication dates'
+                        assert re.search(r'\d+ min read', page.locator('.article-meta').inner_text()), 'Missing article reading time'
                     metrics['diagrams']=verify_diagrams(page,width,out,engine,label)
                     if route=='/writing/close-the-loop/':
                         assert len(metrics['diagrams'])==2, 'Close the Loop must contain both approved diagrams'
