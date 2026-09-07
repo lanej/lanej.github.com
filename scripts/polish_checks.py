@@ -3,15 +3,13 @@ import io
 import json
 from urllib.parse import urlsplit
 from PIL import Image
+from header_checks import verify_header
 
 
 def verify_polish(page, width, route, out, engine, label):
-    result = {}
-    if width <= 700 and route != '/':
-        wordmark = page.locator('.wordmark').bounding_box()
-        nav = page.locator('.site-header nav').bounding_box()
-        assert nav['y'] >= wordmark['y'] + wordmark['height'], 'Phone navigation must have its own row'
-        result['intentional_navigation_row'] = True
+    result = {'header': verify_header(page, width)}
+    if width in (320, 390, 1440):
+        page.locator('.site-header').screenshot(path=str(out/f'{engine}-{width}-{label}-header.png'))
 
     if route == '/' and 700 < width <= 1000:
         portrait = page.locator('.hero-portrait').bounding_box()
@@ -109,6 +107,7 @@ def verify_polish(page, width, route, out, engine, label):
                 .filter(el => el.getBoundingClientRect().width > 0 && el.scrollWidth > el.clientWidth + 2)
                 .map(el => ({tag:el.tagName,text:el.textContent.trim(),width:el.clientWidth,scrollWidth:el.scrollWidth}))
         })''')
+        metrics['header'] = verify_header(page, width, allow_wrap=True)
         if width in (320, 768):
             page.screenshot(path=str(out/f'{engine}-{width}-{label}-text-200.png'),full_page=False,scale='css')
         assert metrics['rootFont'] >= 32, 'Enlarged-text test did not enlarge text'

@@ -17,13 +17,14 @@ PHONE_VIEWPORTS = [(320, 480), (375, 600), (390, 664), (430, 740)]
 
 
 def verify_identity_labels(page):
-    """Identify the owner once in shared page chrome, not above every title."""
+    """Name once in the homepage introduction; use an accessible portrait elsewhere."""
     labels = page.locator(
-        '.site-header .wordmark, .hero h1, .page-header .eyebrow, '
+        '.site-header, .hero h1, .page-header .eyebrow, '
         '.article-meta > *, .site-footer'
     ).all_text_contents()
     count = sum(len(re.findall(r'\bJosh\s+Lane\b', label, re.IGNORECASE)) for label in labels)
-    assert count == 1, f'Expected one identity label, found {count}: {labels}'
+    expected = 1 if page.locator('.home-header').count() else 0
+    assert count == expected, f'Expected {expected} visible identity labels, found {count}: {labels}'
     return count
 
 
