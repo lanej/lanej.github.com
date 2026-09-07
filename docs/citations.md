@@ -23,13 +23,39 @@ invent a year for an undated document. Link named works naturally in the article
 body too when that helps the argument. Footnotes are for source context, not a
 reason to make every ordinary link interactive.
 
+## Citation scope in the prose
+
+Enhanced articles do not show numbered citation badges. Instead, the prose supported
+by the note gets a subtle underline and becomes the tap/click target for the same
+source card.
+
+The supported range is mechanical and author-controlled: within a paragraph or
+other text block, a footnote marker applies to the text since the previous footnote
+marker in that block, or from the start of the block when it is the first marker.
+Place the marker immediately after the complete passage the source supports.
+Multiple markers in one paragraph therefore divide that paragraph into independently
+cited passages.
+
+```markdown
+Dan North's *Deliberate Discovery* makes this distinction useful for engineering.
+Identify the ignorance constraining progress, then deliberately reduce it enough
+to proceed.[^north] Eric Ries centers validated learning, not merely shipping a
+smaller product.[^ries]
+```
+
+In the enhanced article, the Dan North passage and Eric Ries passage are separately
+underlined. In static HTML, print, RSS, unsupported browsers, or with JavaScript
+blocked, the original numbered footnote markers remain the fallback.
+
 ## Reader behavior
 
-- Click/tap a numbered marker, or focus it and press Enter/Space. Desktop cards
-  appear near the marker; phone cards stay inside the visible screen. Opening a
-  card does not change the URL fragment or scroll away from the passage.
+- Click/tap the underlined supported passage. Keyboard users focus the associated
+  source control and press Enter/Space. Desktop cards appear near the passage;
+  phone cards stay inside the visible screen. Opening a card does not change the
+  URL fragment or scroll away from the passage.
 - Escape, the close button, or a click outside dismisses it. Keyboard/close-button
-  dismissal returns focus to the marker that opened it, including repeated cites.
+  dismissal returns focus to the source control that opened it, including repeated
+  cites.
 - Every source link and qualification stays available. Long notes scroll inside
   the card. “Full reference” deliberately follows the original endnote link.
 - Endnotes and return links remain in the delivered HTML. With no JavaScript,
