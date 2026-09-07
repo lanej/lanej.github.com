@@ -15,7 +15,7 @@ Socrates is a [Claude skill](https://github.com/lanej/dotfiles/blob/e48e4f0f3cc7
 
 That worked well for facts. It was a bad rule for decisions.
 
-Which language does this repository use? Research it. Whether an old restriction still serves a purpose? The repository can tell me that the restriction exists. It cannot tell me whether I still want it.
+Which language does this repository use? Research it. Does an old restriction still serve a purpose? The repository can tell me that the restriction exists. It cannot tell me whether I still want it.
 
 I had optimized the skill to reduce conversation at exactly the point where the conversation was useful. I did not need a faster requirements form. I wanted the agent to help me think through the work before an implementation gave one interpretation momentum.
 
@@ -31,7 +31,7 @@ The useful outcome is sometimes less certainty, not more. We discover the hole i
 
 That is different from endless debate. Socrates still has to converge. The current dialogue loop works one consequential topic at a time: research it, ask one informed question, judge the answer, follow up when it is vague or contradictory, and stop when the relevant issue is stable enough to proceed. There is no question quota to satisfy and no prize for making a small task ceremonial.
 
-> The point is not to get the agent to agree with me. It is to make the assumption visible before either of us builds on it.
+The useful thing is making the assumption visible before either of us builds on it, not getting the agent to agree with me.
 {{< /socrates-section >}}
 
 {{< socrates-section id="request-to-clarity" number="02" title="From request to clarity" kicker="A real bug in Socrates itself" diagram="comparison" >}}
@@ -60,8 +60,6 @@ The layers are problem, requirements, constraints, risks, success, validation, a
 For the session bug, the **problem** is not “the pointer filename is global.” The problem is that one conversation can load another conversation’s specification. That distinction changes the **requirements**: preserve each session’s binding and recover it correctly. It exposes a **risk**: a fallback can silently select the wrong task. That risk changes **success** and **validation**: normal resolution is not enough; we need to force missing, stale, and ambiguous states.
 
 This is where false greens become easier to see. “The new pointer file exists” is evidence about the implementation. It is not evidence that a resumed session loads the intended specification. “Fallback works” is meaningless if the test never makes the fast path unavailable.
-
-> A requirement without a reason is a suggestion. A success metric without a way to falsify it is a hope.
 
 The specification also records authority boundaries. An executor can choose implementation details. It should not decide that ambiguity means “pick the newest specification” merely because that makes the code simpler. If the choice changes what task is being executed, that decision belongs back in the agreement.
 
