@@ -1,4 +1,4 @@
-/* Progressive enhancement: the published Markdown endnotes remain the fallback. */
+/* Progressive enhancement: published Markdown endnotes remain the fallback. */
 (() => {
   'use strict';
 
@@ -9,6 +9,7 @@
     const article = document.querySelector('.article-body');
     if (!article || article.dataset.citationsReady ||
         getComputedStyle(article).getPropertyValue('--citation-previews').trim() !== 'enabled') return;
+
     const cards = new Map();
     let current = null;
 
@@ -18,11 +19,16 @@
         width: view?.width || innerWidth, height: view?.height || innerHeight};
     }
 
+    function anchorFor(entry) {
+      return entry.anchor || entry.trigger;
+    }
+
     function place(entry) {
-      const {card, trigger} = entry;
-      if (!trigger || !card.matches(':popover-open')) return;
+      const {card} = entry;
+      const anchor = anchorFor(entry);
+      if (!anchor || !card.matches(':popover-open')) return;
       const view = viewport();
-      const rect = trigger.getBoundingClientRect();
+      const rect = anchor.getBoundingClientRect();
       const gap = 12;
       card.style.maxHeight = `${Math.max(80, view.height - gap * 2)}px`;
       card.style.width = `${Math.min(440, view.width - gap * 2)}px`;
@@ -62,7 +68,6 @@
       close.type = 'button';
       close.className = 'citation-close';
       close.setAttribute('aria-label', 'Close citation');
-      // Focus explicitly after positioning, never during native popover opening.
       close.textContent = '×';
       header.append(label, close);
 
@@ -70,7 +75,7 @@
       content.className = 'citation-content';
       for (const node of note.childNodes) content.append(node.cloneNode(true));
       content.querySelectorAll('.footnote-backref, [role="doc-backlink"]').forEach(el => el.remove());
-      // Preserve complex notes without introducing duplicate document IDs.
+
       const ids = new Map();
       content.querySelectorAll('[id]').forEach(el => {
         const old = el.id;
@@ -83,19 +88,18 @@
             el.getAttribute(attr).split(/\s+/).map(id => ids.get(id) || id).join(' '));
         }
         const href = el.getAttribute('href');
-        if (href?.startsWith('#') && ids.has(href.slice(1))) el.setAttribute('href', `#${ids.get(href.slice(1))}`);
+        if (href?.startsWith('#') && ids.has(href.slice(1))) {
+          el.setAttribute('href', `#${ids.get(href.slice(1))}`);
+        }
       });
 
       const heading = document.createElement('h2');
       heading.className = 'citation-title';
       heading.id = `${card.id}-title`;
-      // Use only authored text. Never guess authors, dates, or remote page titles.
       const title = content.querySelector('strong a, cite, em, a[href]');
       heading.textContent = title?.textContent.trim() || `Note ${number}`;
       card.setAttribute('aria-labelledby', heading.id);
 
-      // Preferred Markdown: a bold linked title, author/year, then explanatory prose.
-      // Legacy prose notes also work unchanged, including every source and qualification.
       const first = content.firstElementChild;
       if (first?.matches('p') && first.firstElementChild?.matches('strong') &&
           first.textContent.trimStart().startsWith(first.firstElementChild.textContent.trim())) {
@@ -125,12 +129,14 @@
       original.textContent = 'Full reference ↓';
       original.addEventListener('click', () => card.hidePopover());
       footer.append(original);
+
       card.append(header, heading, content, footer);
       card.querySelectorAll('a[href]').forEach(link => {
         if (!link.hasAttribute('tabindex')) link.tabIndex = 0;
       });
       document.body.append(card);
-      const entry = {card, trigger: null};
+
+      const entry = {card, trigger: null, anchor: null};
       const dismissToReference = () => {
         card.hidePopover();
         entry.trigger?.focus({preventScroll: true});
@@ -145,9 +151,6 @@
           return;
         }
         if (event.key !== 'Tab' || event.altKey || event.ctrlKey || event.metaKey) return;
-        // Move through the card in DOM order without letting focus scroll the
-        // underlying article. Scroll only this card when a long note needs it.
-        // At either boundary leave native navigation alone: never wrap or trap.
         const controls = [...card.querySelectorAll('button, a[href], [tabindex]')]
           .filter(el => el.tabIndex >= 0 && !el.disabled && el.getClientRects().length);
         const index = controls.indexOf(document.activeElement);
@@ -167,21 +170,46 @@
         if (card.matches(':popover-open')) {
           current = entry;
           place(entry);
-          // Focus after layout, on every opening, without scrolling the article.
           close.focus({preventScroll: true});
         } else if (current === entry) current = null;
       });
       return entry;
     }
 
-    article.querySelectorAll('a.footnote-ref[href^="#"]').forEach(link => {
+    const links = [...article.querySelectorAll('a.footnote-ref[href^="#"]')];
+    links.forEach((link, index) => {
       let target;
       try { target = decodeURIComponent(link.hash.slice(1)); } catch { return; }
       const note = document.getElementById(target);
       if (!note || !note.closest('.footnotes')) return;
+
       const number = link.textContent.trim();
       if (!cards.has(target)) cards.set(target, makeCard(note, number));
       const entry = cards.get(target);
+      const shell = link.closest('sup') || link;
+      const block = link.closest('p, li, dd, blockquote');
+      let related = null;
+
+      if (block && shell !== block) {
+        const previous = links.slice(0, index).reverse().find(candidate => block.contains(candidate));
+        const previousShell = previous ? (previous.closest('sup') || previous) : null;
+        const range = document.createRange();
+        try {
+          if (previousShell && block.contains(previousShell)) range.setStartAfter(previousShell);
+          else range.setStart(block, 0);
+          range.setEndBefore(shell);
+          const fragment = range.extractContents();
+          if (fragment.textContent.trim()) {
+            related = document.createElement('span');
+            related.className = 'citation-related';
+            related.append(fragment);
+            range.insertNode(related);
+          }
+        } catch {
+          related = null;
+        }
+      }
+
       const trigger = document.createElement('button');
       trigger.type = 'button';
       trigger.className = 'citation-toggle';
@@ -190,24 +218,38 @@
       trigger.setAttribute('aria-label', `Read source note ${number}: ${entry.card.querySelector('.citation-title').textContent}`);
       trigger.setAttribute('aria-haspopup', 'dialog');
       trigger.setAttribute('popovertarget', entry.card.id);
+
+      if (related) {
+        related.before(trigger);
+        related.addEventListener('click', event => {
+          if (event.target.closest('a, button')) return;
+          trigger.click();
+        });
+        related.addEventListener('pointerenter', () => related.classList.add('citation-related-active'));
+        related.addEventListener('pointerleave', () => related.classList.remove('citation-related-active'));
+        shell.classList.add('citation-fallback-shell');
+      } else {
+        link.after(trigger);
+      }
+
       trigger.addEventListener('click', () => {
         if (entry.card.matches(':popover-open') && entry.trigger !== trigger) entry.card.hidePopover();
         entry.trigger = trigger;
-        // Touch browsers need not focus a tapped button. Set the actual invoker
-        // before native opening records where to return focus on dismissal.
+        entry.anchor = related || trigger;
         trigger.focus({preventScroll: true});
-        // Native activation runs after this listener; position before the next paint.
         requestAnimationFrame(() => place(entry));
       });
+
       link.removeAttribute('id');
       link.classList.add('citation-fallback');
-      link.after(trigger);
     });
     article.dataset.citationsReady = 'true';
 
     const reposition = () => {
       if (!current) return;
-      const r = current.trigger.getBoundingClientRect();
+      const anchor = anchorFor(current);
+      if (!anchor) return;
+      const r = anchor.getBoundingClientRect();
       const v = viewport();
       if (r.bottom < v.top || r.top > v.top + v.height) current.card.hidePopover();
       else place(current);
@@ -217,8 +259,6 @@
     window.visualViewport?.addEventListener('resize', reposition, {passive: true});
   }
 
-  // Both the article and its opt-in stylesheet must exist before checking them.
-  // Keep ordinary anchors usable until load, including when a stylesheet fails.
   if (document.readyState === 'complete') initialize();
   else window.addEventListener('load', initialize, {once: true});
 })();
