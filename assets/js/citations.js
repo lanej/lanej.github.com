@@ -62,7 +62,7 @@
       close.type = 'button';
       close.className = 'citation-close';
       close.setAttribute('aria-label', 'Close citation');
-      close.setAttribute('autofocus', '');
+      // Focus explicitly after positioning, never during native popover opening.
       close.textContent = '×';
       header.append(label, close);
 
@@ -153,8 +153,7 @@
         if (card.matches(':popover-open')) {
           current = entry;
           place(entry);
-          // WebKit does not consistently reapply popover autofocus on reopening.
-          // Focus only on opening, without moving the reader's scroll position.
+          // Focus after layout, on every opening, without scrolling the article.
           close.focus({preventScroll: true});
         } else if (current === entry) current = null;
       });
