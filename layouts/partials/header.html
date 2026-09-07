@@ -1,8 +1,8 @@
 <header class="site-header{{ if .IsHome }} home-header{{ end }}"><div class="shell nav-shell">
 {{ if not .IsHome }}<a class="wordmark" href="{{ "/" | relURL }}" aria-label="Josh Lane — home">{{ partial "avatar.html" . }}<span>Josh Lane</span></a>{{ end }}
 <nav aria-label="Primary navigation">
-<a href="{{ "/record/" | relURL }}"{{ if eq .RelPermalink "/record/" }} aria-current="page"{{ end }}>Work</a>
-<a href="{{ "/about/" | relURL }}"{{ if eq .RelPermalink "/about/" }} aria-current="page"{{ end }}>About</a>
 {{ if where site.RegularPages "Section" "writing" }}<a href="{{ "/writing/" | relURL }}"{{ if eq .Section "writing" }} aria-current="page"{{ end }}>Writing</a>{{ end }}
+<a href="{{ "/about/" | relURL }}"{{ if eq .RelPermalink "/about/" }} aria-current="page"{{ end }}>About</a>
+<a href="{{ "/record/" | relURL }}"{{ if eq .RelPermalink "/record/" }} aria-current="page"{{ end }}>Work</a>
 <a href="{{ "/about/#contact" | relURL }}">Contact</a>
 </nav></div></header>

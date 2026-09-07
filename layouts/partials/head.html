@@ -1,13 +1,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {{ $description := .Description | default site.Params.description }}
-{{ $title := cond .IsHome "Josh Lane · CTO at EasyPost" (printf "%s · Josh Lane" .Title) }}
+{{ $title := cond .IsHome "Josh Lane · Writing on software, AI, and organizations" (printf "%s · Josh Lane" .Title) }}
 {{ $article := and .IsPage (eq .Section "writing") }}
 {{ $social := partial "social-image.html" . }}
 {{ $image := $social.image }}
 {{ $styles := slice (resources.Get "css/site.css") (resources.Get "css/editorial.css") }}
-{{ if .Params.diagrams }}{{ $styles = $styles | append (resources.Get "css/diagrams.css") }}{{ end }}
-{{ $css := $styles | resources.Concat (cond .Params.diagrams "css/illustrated.css" "css/combined.css") | minify | fingerprint }}
+{{ $bundle := "css/combined.css" }}
+{{ if .IsHome }}{{ $styles = $styles | append (resources.Get "css/home.css") }}{{ $bundle = "css/home-combined.css" }}{{ end }}
+{{ if .Params.diagrams }}{{ $styles = $styles | append (resources.Get "css/diagrams.css") }}{{ $bundle = "css/illustrated.css" }}{{ end }}
+{{ $css := $styles | resources.Concat $bundle | minify | fingerprint }}
 <title>{{ $title }}</title>
 <meta name="description" content="{{ $description }}">
 <meta name="theme-color" content="#0d1513"><meta name="color-scheme" content="dark">
