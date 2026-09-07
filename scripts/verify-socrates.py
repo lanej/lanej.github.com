@@ -78,6 +78,37 @@ MEASURE = r'''() => {
 }'''
 
 
+def capture_full_page(page, path):
+    """Capture tall pages without asking the browser for an oversized bitmap."""
+    size=page.evaluate('''() => ({
+        width: innerWidth,
+        height: Math.ceil(Math.max(
+            document.documentElement.scrollHeight,
+            document.body ? document.body.scrollHeight : 0
+        ))
+    })''')
+    width, height=int(size['width']), int(size['height'])
+    if max(width,height)<=30000:
+        page.screenshot(path=str(path),full_page=True,scale='css')
+        return
+
+    viewport_height=page.viewport_size['height']
+    target_y=0
+    last_y=-1
+    part=1
+    while target_y<height:
+        page.evaluate('(y)=>window.scrollTo(0,y)',target_y)
+        actual_y=int(page.evaluate('Math.round(window.scrollY)'))
+        if actual_y==last_y:
+            break
+        part_path=path.with_name(f'{path.stem}-part-{part:02d}{path.suffix}')
+        page.screenshot(path=str(part_path),scale='css')
+        last_y=actual_y
+        target_y=actual_y+viewport_height
+        part+=1
+    page.evaluate('window.scrollTo(0,0)')
+
+
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--url',default='http://127.0.0.1:8765/')
@@ -118,7 +149,7 @@ def main():
                         if (width in (390,1440) and scale==100) or (width==320 and scale==200):
                             stem=f'{engine}-{width}-text{scale}'
                             page.screenshot(path=str(out/f'{stem}-opening.png'),scale='css')
-                            page.screenshot(path=str(out/f'{stem}-full.png'),full_page=True,scale='css')
+                            capture_full_page(page,out/f'{stem}-full.png')
                             for panel in page.locator('.sc-figure').all():
                                 panel.screenshot(path=str(out/f'{stem}-{panel.get_attribute("id")}.png'),scale='css')
                         assert not metrics['failures'], f'{engine} {width} {scale}%: {metrics["failures"]}'
