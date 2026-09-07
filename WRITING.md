@@ -4,6 +4,8 @@ This site is a record of working ideas, not a content feed. The writing should f
 
 The standard is simple: make the reasoning legible, ground abstractions in something real, and leave enough texture that the piece could not have been written by anyone with the same bibliography.
 
+`STYLE.md` is the companion visual standard. This file governs reasoning, voice, evidence, structure, and cadence; `STYLE.md` governs the shared presentation system.
+
 ## Start with something observed
 
 Prefer an observation, decision, failure, artifact, or concrete example over a generic thesis.
