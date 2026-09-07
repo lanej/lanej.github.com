@@ -28,8 +28,6 @@ jobs:
         run: bash scripts/install-hugo.sh
       - name: Build and validate
         run: bash scripts/build.sh
-      - name: Diagnose citation focus and screenshot stability
-        run: python3 scripts/citation_probe.py
       - name: Test isolated writing workflow and article layouts
         run: python3 scripts/test-writing.py
       - name: Verify desktop and mobile browsers
