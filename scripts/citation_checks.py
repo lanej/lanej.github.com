@@ -18,32 +18,56 @@ def reading_position(page):
 
 def assert_reading_position(page, before):
     # Native focus/scroll can be deferred beyond the opening event in WebKit.
-    # Observe the settled state instead of passing on one synchronous snapshot.
     page.evaluate('() => new Promise(resolve => requestAnimationFrame(() => setTimeout(resolve, 250)))')
     after = reading_position(page)
     assert abs(after['y'] - before['y']) <= 2 and after['hash'] == before['hash'], f'Citation moved the reading position: {before} -> {after}'
     expect(visible_card(page)).to_have_count(1)
 
 
-def capture_citation(page, out, engine, width, label, before):
-    box = assert_card_fits(page)
-    # A locator screenshot may scroll its target into view. A single viewport
-    # capture and pixel crop records the actual open card without that mutation.
-    path = out/f'{engine}-{width}-{label}-citation.png'
-    image_bytes = page.screenshot(path=str(path), full_page=False, scale='css')
-    with Image.open(io.BytesIO(image_bytes)) as image:
-        image.crop((int(box['x']), int(box['y']),
-                    int(box['x'] + box['width'] + 0.5),
-                    int(box['y'] + box['height'] + 0.5))).save(out/f'{engine}-{width}-{label}-citation-card.png')
+def capture_citation(page, out, engine, width, label):
+    """Capture a fresh real page, without mutating the keyboard test's document.
+
+    WebKit snapshotting can reapply a previously tested #main focus/scroll anchor.
+    Keep the original interaction assertions (including #main) on their own page;
+    take the picture in a clean context at the same URL, viewport, DPR and revision.
+    """
+    view = page.viewport_size
+    assert view is not None
+    revision = page.locator('meta[name="site-revision"]').get_attribute('content')
+    context = page.context.browser.new_context(
+        viewport=view, device_scale_factor=page.evaluate('devicePixelRatio'),
+        is_mobile=width <= 700, has_touch=width <= 700, color_scheme='dark')
     try:
-        assert_reading_position(page, before)
-    except AssertionError:
-        state = page.evaluate('''() => ({y:scrollY,hash:location.hash,
-            active:document.activeElement?.outerHTML,
-            cards:[...document.querySelectorAll('.citation-popover')].map(el=>({
-                id:el.id,open:el.matches(':popover-open'),box:el.getBoundingClientRect().toJSON()}))})''')
-        (out/f'{engine}-{width}-{label}-citation-capture-failure.json').write_text(json.dumps({'before':before,'after':state},indent=2))
-        raise
+        shot = context.new_page()
+        response = shot.goto(page.url.split('#')[0], wait_until='networkidle')
+        assert response and response.ok
+        assert shot.locator('meta[name="site-revision"]').get_attribute('content') == revision
+        expect(shot.locator('.article-body')).to_have_attribute('data-citations-ready', 'true')
+        trigger = shot.locator('.citation-toggle').first
+        trigger.scroll_into_view_if_needed()
+        before = reading_position(shot)
+        if width <= 700:
+            trigger.tap()
+        else:
+            trigger.click()
+        expect(visible_card(shot).locator('.citation-close')).to_be_focused()
+        box = assert_card_fits(shot)
+        assert_reading_position(shot, before)
+        path = out/f'{engine}-{width}-{label}-citation.png'
+        image_bytes = shot.screenshot(path=str(path), full_page=False, scale='device')
+        with Image.open(io.BytesIO(image_bytes)) as image:
+            scale_x, scale_y = image.width / view['width'], image.height / view['height']
+            image.crop((round(box['x'] * scale_x), round(box['y'] * scale_y),
+                        round((box['x'] + box['width']) * scale_x),
+                        round((box['y'] + box['height']) * scale_y))).save(
+                            out/f'{engine}-{width}-{label}-citation-card.png')
+        assert_reading_position(shot, before)
+        (out/f'{engine}-{width}-{label}-citation-capture.json').write_text(json.dumps({
+            'url': shot.url, 'revision': revision, 'viewport': view,
+            'reading_position': before, 'card': box, 'status': 'passed'
+        }, indent=2))
+    finally:
+        context.close()
 
 
 def assert_card_fits(page):
@@ -232,8 +256,6 @@ def verify_citations(page, width, route, out, engine, label):
     expect(visible_card(page).locator('.citation-close')).to_be_focused()
     box = assert_card_fits(page)
     assert_reading_position(page, before)
-    if width in (390,1440):
-        capture_citation(page, out, engine, width, label, before)
     page.keyboard.press('Escape')
     expect(visible_card(page)).to_have_count(0)
     trigger.focus();page.keyboard.press('Enter')
@@ -288,5 +310,7 @@ def verify_citations(page, width, route, out, engine, label):
         if engine not in _FIXTURE_ENGINES:
             fixture_check(browser,engine,out)
             _FIXTURE_ENGINES.add(engine)
+    if width in (390,1440):
+        capture_citation(page, out, engine, width, label)
     page.evaluate('document.activeElement?.blur();window.scrollTo(0,0)')
     return result
