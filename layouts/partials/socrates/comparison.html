@@ -1,14 +1,15 @@
 <figure aria-labelledby="comparison-title" class="sc-figure sc-comparison-figure" data-essay-diagram="socrates-comparison" id="comparison-figure">
-<h3 class="sc-figure-title" id="comparison-title">Without vs. with Socrates</h3>
+<h3 class="sc-figure-title" id="comparison-title">Literal execution vs. examined request</h3>
 <div class="sc-comparison">
-<section aria-labelledby="without-label" class="sc-path sc-path-without"><h4 class="sc-path-label" id="without-label">Without Socrates</h4><div class="sc-path-track">
-<div class="sc-node flow-node" data-node>User request</div><div aria-hidden="true" class="sc-flow-connector"></div>
-<div class="sc-node flow-node" data-node>Assume intent</div><div aria-hidden="true" class="sc-flow-connector sc-grow"></div>
-<div class="sc-node flow-node" data-node>Plan and implement</div></div></section>
-<section aria-labelledby="with-label" class="sc-path sc-path-with"><h4 class="sc-path-label" id="with-label">With Socrates</h4><div class="sc-path-track">
-<div class="sc-node flow-node" data-node>User request</div><div aria-hidden="true" class="sc-flow-connector"></div>
-<div class="sc-node flow-node" data-node>Research + questions</div><div aria-hidden="true" class="sc-flow-connector"></div>
-<div class="sc-node flow-node" data-node>Agree on actual problem</div><div aria-hidden="true" class="sc-flow-connector"></div>
-<div class="sc-node flow-node" data-node>Plan and implement</div></div></section>
-</div><figcaption class="sc-caption">The skill is valuable when the request contains a hidden product or policy decision.</figcaption>
+<section aria-labelledby="without-label" class="sc-path sc-path-without"><h4 class="sc-path-label" id="without-label">Literal execution</h4><div class="sc-path-track">
+<div class="sc-node flow-node" data-node>Fix concurrent Socrates sessions</div><div aria-hidden="true" class="sc-flow-connector"></div>
+<div class="sc-node flow-node" data-node>Rename the shared pointer per session</div><div aria-hidden="true" class="sc-flow-connector sc-grow"></div>
+<div class="sc-node flow-node" data-node>Ship</div></div></section>
+<section aria-labelledby="with-label" class="sc-path sc-path-with"><h4 class="sc-path-label" id="with-label">Examined request</h4><div class="sc-path-track">
+<div class="sc-node flow-node" data-node>Fix concurrent Socrates sessions</div><div aria-hidden="true" class="sc-flow-connector"></div>
+<div class="sc-node flow-node" data-node>Define session identity and resume behavior</div><div aria-hidden="true" class="sc-flow-connector"></div>
+<div class="sc-node flow-node" data-node>Specify missing and stale binding behavior</div><div aria-hidden="true" class="sc-flow-connector"></div>
+<div class="sc-node flow-node" data-node>Stop rather than guess when candidates are ambiguous</div><div aria-hidden="true" class="sc-flow-connector"></div>
+<div class="sc-node flow-node" data-node>Then plan the implementation</div></div></section>
+</div><figcaption class="sc-caption">The extra work is not more ceremony. It is making the failure cases and authority boundaries explicit before implementation chooses them for us.</figcaption>
 </figure>

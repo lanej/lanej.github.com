@@ -1,12 +1,12 @@
 <figure aria-labelledby="layers-title" class="sc-figure sc-layers-figure" data-essay-diagram="socrates-layers" id="layers-figure">
-<h3 class="sc-figure-title" id="layers-title">The seven layers</h3>
+<h3 class="sc-figure-title" id="layers-title">The seven layers, applied to the session bug</h3>
 <ol class="sc-layers">
-<li class="sc-layer-row" style="--level:0"><div class="sc-layer-name flow-node" data-node><span class="sc-layer-number">1</span><strong>Problem</strong></div><span class="sc-layer-description">what we’re solving</span></li>
-<li class="sc-layer-row" style="--level:1"><div class="sc-layer-name flow-node" data-node><span class="sc-layer-number">2</span><strong>Requirements</strong></div><span class="sc-layer-description">what must be true</span></li>
-<li class="sc-layer-row" style="--level:2"><div class="sc-layer-name flow-node" data-node><span class="sc-layer-number">3</span><strong>Constraints</strong></div><span class="sc-layer-description">what we must work within</span></li>
-<li class="sc-layer-row" style="--level:3"><div class="sc-layer-name flow-node" data-node><span class="sc-layer-number">4</span><strong>Risks</strong></div><span class="sc-layer-description">what could go wrong</span></li>
-<li class="sc-layer-row" style="--level:4"><div class="sc-layer-name flow-node" data-node><span class="sc-layer-number">5</span><strong>Success</strong></div><span class="sc-layer-description">measurable outcomes</span></li>
-<li class="sc-layer-row" style="--level:5"><div class="sc-layer-name flow-node" data-node><span class="sc-layer-number">6</span><strong>Validation</strong></div><span class="sc-layer-description">how we’ll know</span></li>
-<li class="sc-layer-row" style="--level:6"><div class="sc-layer-name flow-node" data-node><span class="sc-layer-number">7</span><strong>Execution readiness</strong></div><span class="sc-layer-description">handoff + authority</span></li>
-</ol><figcaption class="sc-caption">A weakness higher in the stack should send us back down, not get papered over in the plan.</figcaption>
+<li class="sc-layer-row" style="--level:0"><div class="sc-layer-name flow-node" data-node><span class="sc-layer-number">1</span><strong>Problem</strong></div><span class="sc-layer-description">one session can load another session’s specification</span></li>
+<li class="sc-layer-row" style="--level:1"><div class="sc-layer-name flow-node" data-node><span class="sc-layer-number">2</span><strong>Requirements</strong></div><span class="sc-layer-description">each session recovers its own binding</span></li>
+<li class="sc-layer-row" style="--level:2"><div class="sc-layer-name flow-node" data-node><span class="sc-layer-number">3</span><strong>Constraints</strong></div><span class="sc-layer-description">preserve saved specifications and resume behavior</span></li>
+<li class="sc-layer-row" style="--level:3"><div class="sc-layer-name flow-node" data-node><span class="sc-layer-number">4</span><strong>Risks</strong></div><span class="sc-layer-description">fallback silently chooses the wrong task</span></li>
+<li class="sc-layer-row" style="--level:4"><div class="sc-layer-name flow-node" data-node><span class="sc-layer-number">5</span><strong>Success</strong></div><span class="sc-layer-description">concurrent and resumed sessions resolve correctly</span></li>
+<li class="sc-layer-row" style="--level:5"><div class="sc-layer-name flow-node" data-node><span class="sc-layer-number">6</span><strong>Validation</strong></div><span class="sc-layer-description">force missing, stale, and ambiguous states</span></li>
+<li class="sc-layer-row" style="--level:6"><div class="sc-layer-name flow-node" data-node><span class="sc-layer-number">7</span><strong>Execution readiness</strong></div><span class="sc-layer-description">permissions, PID source, dependencies, stop conditions</span></li>
+</ol><figcaption class="sc-caption">Each layer changes what the next one must prove. A weakness higher in the stack should send us back down, not get papered over in the plan.</figcaption>
 </figure>
