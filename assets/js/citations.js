@@ -193,6 +193,9 @@
       trigger.addEventListener('click', () => {
         if (entry.card.matches(':popover-open') && entry.trigger !== trigger) entry.card.hidePopover();
         entry.trigger = trigger;
+        // Touch browsers need not focus a tapped button. Set the actual invoker
+        // before native opening records where to return focus on dismissal.
+        trigger.focus({preventScroll: true});
         // Native activation runs after this listener; position before the next paint.
         requestAnimationFrame(() => place(entry));
       });
