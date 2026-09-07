@@ -1,12 +1,12 @@
 ---
 title: About
-description: From building shipping and cloud infrastructure to leading technology at EasyPost.
+description: From building shipping and internet infrastructure to leading technology at EasyPost.
 ---
 I joined **EasyPost** as a senior software engineer in 2019 and became CTO in 2026. In between, I built shipping systems, led platform and financial infrastructure, and ran a 130+ engineer organization across Core API, Enterprise, Platform, and international subsidiaries.
 
 Today I lead the company’s technology organization and strategy across product, platform, data, and infrastructure. I decide which systems to consolidate, which capabilities should become shared infrastructure, and where better data can improve decisions.
 
-Before EasyPost, I architected and led development of Engine Yard’s cloud API and worked on deployment systems, Azure integration, and platform infrastructure. At Fastly, I worked across API development, internal engineering, data pipelines, and site reliability.
+Before EasyPost, I spent three years at **Fastly** across API, internal engineering, and site reliability, working on backend and API systems, internal data pipelines, and the infrastructure behind a global CDN. Earlier, I architected and led development of Engine Yard’s cloud API and worked on deployment systems, Azure integration, and platform infrastructure.
 
 The recurring question in my work is **what prevents a system from producing the result it exists to deliver?** Sometimes the answer is architecture. Sometimes it is ownership, data quality, incentives, or work that should simply stop.
 
@@ -27,5 +27,5 @@ For professional conversations and speaking inquiries, [contact me on LinkedIn](
 {{< speaker-resources >}}
 ## Short biography
 
-Josh Lane is Chief Technology Officer at EasyPost. He joined the company as a senior software engineer in 2019 and progressed through engineering management, platform leadership, and Vice President of Engineering before becoming CTO in 2026. His work spans shipping and cloud infrastructure, data and decision systems, organizational design, and technology strategy. Earlier in his career, he worked at Fastly and Engine Yard. He holds a B.S. in Electrical and Computer Engineering from Worcester Polytechnic Institute and is based in Oakland, California.
+Josh Lane is Chief Technology Officer at EasyPost. He joined the company as a senior software engineer in 2019 and progressed through engineering management, platform leadership, and Vice President of Engineering before becoming CTO in 2026. His work spans shipping and internet infrastructure, data and decision systems, organizational design, and technology strategy. Earlier in his career, he worked across API, internal engineering, and SRE at Fastly and built cloud infrastructure at Engine Yard. He holds a B.S. in Electrical and Computer Engineering from Worcester Polytechnic Institute and is based in Oakland, California.
 {{< /speaker-resources >}}
