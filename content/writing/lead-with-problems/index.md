@@ -2,7 +2,7 @@
 title = "Lead With Problems"
 description = "A problem statement is not enough. Ownership, authority, and accountability have to follow it."
 date = "2026-09-06T23:29:00Z"
-lastmod = "2026-09-07T00:06:30Z"
+lastmod = "2026-09-07T14:52:00Z"
 draft = false
 toc = false
 +++
@@ -11,9 +11,7 @@ If I ask a team to build a dashboard, I have already made several decisions.
 
 I have decided that the problem is missing information. That a dashboard is the right way to provide it. That someone will use the information to make a better decision. And that building software is worth more than the other things the team could do.
 
-Perhaps all of that is true. But if I only communicate the solution, those assumptions arrive as instructions.
-
-The team can execute perfectly without testing any of them.
+Perhaps all of that is true. But if I only communicate the solution, those assumptions arrive as instructions. The team can execute perfectly without testing any of them.
 
 I want the organization to distinguish what we know needs to change from what we currently think might change it.
 
@@ -21,7 +19,7 @@ Marty Cagan makes this distinction in his writing about empowered product teams:
 
 That requires more than a better problem statement. The funding, decision rights, and definition of success cannot still belong to a predetermined solution.
 
-**The problem has to become the unit of ownership, not just the opening paragraph of a project brief.**
+The problem has to become the unit of ownership, not just the opening paragraph of a project brief.
 
 ## A missing solution is not a problem statement
 
@@ -29,7 +27,7 @@ That requires more than a better problem statement. The funding, decision rights
 
 Consider a hypothetical business where new customers stall between signing a contract and completing their first successful transaction. Someone asks for an onboarding dashboard.
 
-The delay could come from unclear requirements, slow access approvals, an unreliable integration, or a handoff nobody owns. A dashboard could make it more visible without making it shorter.
+The delay could come from unclear requirements, slow access approvals, an unreliable integration, or a handoff nobody owns. A dashboard could make the delay more visible without making it shorter.
 
 Start with who is getting stuck, where they wait, and what we have observed. The dashboard is a hypothesis. So are changing a policy, improving documentation, and eliminating a handoff.
 
@@ -39,9 +37,7 @@ There is a line commonly attributed to Charles Kettering:
 
 Defining the problem is productive work. Finding that a customer is waiting for an approval, rather than struggling to use the software, can change both the solution and who needs to be involved.
 
-But the clearer definition only matters if the team can act on it.
-
-**If a team cannot reject the proposed solution while remaining accountable for the problem, it has been assigned a solution.**
+But the clearer definition only matters if the team can act on it. If a team cannot reject the proposed solution while remaining accountable for the problem, it has been assigned a solution.
 
 Putting “improve onboarding” above “build dashboard” does not change that.
 
@@ -53,7 +49,7 @@ My responsibility is to identify the smallest set whose solution would materiall
 
 “Grow revenue” and “improve efficiency” name desirable results without explaining the obstacle or a credible way through it. Richard Rumelt's distinction is useful here: strategy connects a diagnosis to a guiding policy and coordinated actions. A target alone does not do that work.[^strategy]
 
-Teams should surface problems leadership has missed and challenge a diagnosis when the evidence contradicts it. I want the observation early, not only once someone has a solution. Leadership still has to make the choices and resolve competing claims on resources.
+Teams should surface problems leadership has missed and challenge a diagnosis when the evidence contradicts it. Leadership still has to make the choices and resolve competing claims on resources.
 
 ## Put the problem where it can be solved
 
@@ -63,7 +59,7 @@ A proposed solution can quietly determine which department receives the work.
 
 In the onboarding example, the relevant system runs from what Sales promises to what the customer can successfully do. The owner needs to follow that whole path, not just the part inside one department.
 
-The operating model I want separates two responsibilities: **functions develop capabilities and maintain standards; a named problem owner stays accountable for the complete outcome.**
+The operating model I want separates two responsibilities: functions develop capabilities and maintain standards; a named problem owner stays accountable for the complete outcome.
 
 That owner needs capacity commitments from contributing functions, authority within agreed constraints, and a named leader to resolve conflicts beyond that authority.
 
@@ -71,7 +67,7 @@ That owner needs capacity commitments from contributing functions, authority wit
 
 Individual teams can own bounded contributions. Someone must still own the complete outcome. Every department finishing its task does not help a customer who remains stuck.
 
-The people manager and problem owner can be different people. Their commitments must not create two competing priority queues. Capacity, decision rights, and escalation need to be agreed—not negotiated by individual contributors every morning.
+The people manager and problem owner can be different people. Their commitments must not create two competing priority queues. Capacity, decision rights, and escalation need to be agreed rather than renegotiated by individual contributors every morning.
 
 ## Discover the solution together
 
@@ -79,7 +75,7 @@ Problem ownership is not unilateral solution ownership.
 
 In a product team, Product is responsible for value and business viability, Design for usability, and Engineering for feasibility. Those responsibilities support joint discovery; they are not a sequence in which Product decides, Design decorates, and Engineering implements.[^risks]
 
-Engineers should help determine what is worth building. Designers should question whether the workflow makes sense. Product needs to understand what can be sold, supported, funded, and operated—not just what a customer requested. Functions outside the team contribute business constraints and access to customers and data, not merely a list of features to build.[^stakeholders]
+Engineers should help determine what is worth building. Designers should question whether the workflow makes sense. Product needs to understand what can be sold, supported, funded, and operated, not just what a customer requested. Functions outside the team contribute constraints and access to customers and data, not merely a list of features.[^stakeholders]
 
 A named owner makes accountability clear. It does not make one person's judgment sufficient.
 
@@ -111,7 +107,7 @@ Deployment does not end the responsibility. The team still needs to establish wh
 
 For the onboarding trial, assigning an approver is an action; shorter customer waits are the intended result. Compare those waits with the baseline, check errors and support effort, and investigate cases still getting stuck. Then continue, change, or stop the approach.
 
-Outcome measures can move for unrelated reasons. The owner is responsible for distinguishing evidence of improvement from coincidence, escalating blockers, and changing an approach that is not working. Sound process supports that responsibility; it does not replace the result. Neither does a better metric excuse an unsafe or unmaintainable implementation.
+Outcome measures can move for unrelated reasons. The owner is responsible for distinguishing evidence of improvement from coincidence, escalating blockers, and changing an approach that is not working. Sound process supports that responsibility; it does not replace the result.
 
 Stopping is also a decision. The problem may be smaller than expected, the economics may not work, or another problem may deserve the resources. The owner should be able to make that case without defending the continued existence of a project.
 
@@ -119,11 +115,9 @@ Stopping is also a decision. The problem may be smaller than expected, the econo
 
 Leaders can propose solutions. Constraints can be fixed. Routine maintenance does not require elaborate discovery.[^stakeholders] The requirement is to distinguish what is genuinely constrained from what is merely someone's preferred answer.
 
-“I think a dashboard would help because teams cannot see where customers are waiting” is useful: the explanation makes the idea testable. If the dashboard is mandatory, say so. Do not ask a team to discover a solution while privately expecting it to rediscover yours.
+“I think a dashboard would help because teams cannot see where customers are waiting” is useful because the explanation makes the idea testable. If the dashboard is mandatory, say so. Do not ask a team to discover a solution while privately expecting it to rediscover yours.
 
-The discipline matters most when substantial effort is at stake. Choose the problem deliberately, put it where it can be solved, and keep the answer open to evidence.
-
-**If you ask someone to own a problem, leadership must make it possible for them to change the answer—and resolve the dependencies that stand between them and the result.**
+The discipline matters most when substantial effort is at stake: choose the problem deliberately, put it where it can be solved, and give the owner enough authority to let evidence change the answer.
 
 [^teams]: Marty Cagan, [Product vs Feature Teams](https://www.svpg.com/product-vs-feature-teams/), August 29, 2019. The distinction concerns outcome accountability and authority to discover solutions, not merely team composition.
 [^kettering]: Robert W. Lucky, [When the Problem Is the Problem](https://spectrum.ieee.org/when-the-problem-is-the-problem), IEEE Spectrum. Attributes the quotation to Charles Franklin Kettering; this is a secondary attribution, not a verified original Kettering source.
