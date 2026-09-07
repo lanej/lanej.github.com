@@ -111,7 +111,20 @@ def verify_citations(page, width, route, out, engine, label):
         assert page.locator('.citation-toggle').count() == 0
         assert page.locator('script[data-citation-previews]').count() == 0
         return {'references':0}
-    expect(page.locator('.article-body')).to_have_attribute('data-citations-ready','true')
+    try:
+        expect(page.locator('.article-body')).to_have_attribute('data-citations-ready','true')
+    except AssertionError:
+        diagnostic = page.evaluate('''() => ({
+            showPopover:typeof HTMLElement.prototype.showPopover,
+            invoker:'popoverTargetElement' in HTMLButtonElement.prototype,
+            css:getComputedStyle(document.querySelector('.article-body')).getPropertyValue('--citation-previews'),
+            scripts:[...document.querySelectorAll('script[data-citation-previews]')].map(s=>({src:s.src,integrity:s.integrity})),
+            cards:document.querySelectorAll('.citation-popover').length,
+            buttons:document.querySelectorAll('.citation-toggle').length
+        })''')
+        diagnostic['page_errors'] = [str(error) for error in page.page_errors()]
+        (out/f'{engine}-{width}-{label}-citation-failure.json').write_text(json.dumps(diagnostic,indent=2))
+        raise AssertionError(f'Citation initialization failed: {engine} {route}: {diagnostic}') from None
     triggers = page.locator('.article-body .citation-toggle')
     assert triggers.count() == refs.count(), 'Not every footnote got a preview'
     notes = page.locator('.footnotes > ol > li')
