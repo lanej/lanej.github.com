@@ -12,7 +12,7 @@ The interesting part is that rollback was already available.
 
 EasyPost's public reliability guide describes a deployment system built around canary traffic, retained previous versions, and immediate rollback.[^reliability] Those mechanisms did not make failure impossible. They changed what happened after failure.
 
-They are evidence of an earlier lesson that had already been encoded into the system.
+They show what durable learning looks like once it has been encoded into the system, regardless of whether a particular mechanism came from an incident or deliberate design.
 
 What matters after 10:40 is whether this incident leaves another durable change behind.
 
@@ -72,7 +72,7 @@ What it does show is the shape of reliability work: many small changes to the me
 
 The rollback path from the August incident shows the other side of that accumulation. The important fact is not that rollback was invented during the outage. It was already there. Some earlier decision had made recovery a capability of the system instead of an improvisation by the operator.[^reliability]
 
-Yesterday's hard-earned lesson had become today's default behavior.
+The capability was part of the system before anyone needed it that morning.
 
 That is the operational version of the learning loop I described in [Close the Loop](/writing/close-the-loop/): failure produces evidence, but the loop is not really closed until that evidence changes future behavior.
 
