@@ -8,31 +8,29 @@ toc = false
 
 On August 27, EasyPost's public status page recorded a brief degradation of the Core APIs during a deployment. At 10:26 AM, the change was identified and rolled back. By 10:40, the APIs were back to normal.[^status]
 
-The useful part of that incident is not that somebody reacted quickly.
+The interesting part is that rollback was already available.
 
-EasyPost's public reliability guide describes a deployment system built around canary traffic, retained previous versions, and immediate rollback.[^reliability] The incident still happened. The mechanism did not make failure impossible. It changed what happened after failure.
+EasyPost's public reliability guide describes a deployment system built around canary traffic, retained previous versions, and immediate rollback.[^reliability] Those mechanisms did not make failure impossible. They changed what happened after failure.
 
-That distinction matters to me.
+They are evidence of an earlier lesson that had already been encoded into the system.
 
-I do not want an incident-response culture where the lesson is "be more careful next time." People will forget. Teams will change. Context will disappear. Under pressure, somebody will make the same reasonable decision again.
+What matters after 10:40 is whether this incident leaves another durable change behind.
 
-The useful outcome of an incident is a system that has changed because the incident happened.
+## Start with the system
 
-## The people aren't wrong; the system is broken
+When something goes wrong, my starting assumption is that the person nearest the failure is giving me evidence about the system around them.
 
-For incident analysis, this is usually my starting assumption.
-
-It does not mean people never make mistakes, judgment does not matter, or performance problems should be ignored. It means that blaming the person who happened to trigger a failure is usually a poor way to understand why the failure was possible.
+That does not mean people never make mistakes, judgment does not matter, or performance problems should be ignored. It means that blaming the person who happened to trigger a failure is usually a poor way to understand why the failure was possible.
 
 A deploy reaches too much traffic before anyone can see the effect. A dependency can stall every request thread. An operator has to remember an unusual recovery sequence. A dangerous state is technically valid because nothing rejects it.
 
-The person nearest the failure is visible. The conditions that made the failure likely are less visible.
+The person is visible. The conditions that made the failure likely are less visible.
 
 Google's SRE practice makes blamelessness part of the mechanics of learning, not just a preference about tone. Its postmortem guidance starts from the assumption that people acted in good faith with the information available to them, then looks for changes to systems, procedures, and training that reduce recurrence.[^google]
 
-I like that framing because blame destroys signal. If surfacing a mistake is personally expensive, people become rationally selective about which mistakes they surface. Near misses stay private. Ambiguous evidence gets cleaned up before it is shared. The organization learns less precisely because it has made learning risky.
+I like that framing because blame distorts signal. If surfacing a mistake is personally expensive, people become rationally selective about which mistakes they surface. Near misses stay private. Ambiguous evidence gets cleaned up before it is shared. The organization learns less because it has made learning risky.
 
-Blamelessness is useful because it lets you investigate the system honestly.
+Blamelessness is useful because it makes the system easier to investigate honestly.
 
 ## A postmortem can still forget
 
@@ -58,27 +56,11 @@ Not every lesson belongs in code. Some failures expose ambiguous goals, bad ince
 
 But repeated mechanical corrections are a smell. If the same failure keeps producing the same reminder, the reminder is probably living at the wrong layer.
 
-## The learning loop
-
-In [Close the Loop](/writing/close-the-loop/), I separated two kinds of feedback.
-
-The execution loop is short: act, observe, correct, verify.
-
-The learning loop takes longer: failure, reflection, lesson, mechanism, future behavior.
-
-Incident response sits between them. During the incident, the objective is to restore a safe operating state. Afterward, the objective changes. Now the failure is evidence about the design.
-
-A good postmortem asks what happened and why. A good engineering organization then asks a harder question:
-
-> **What should be different in the system when the next person encounters this situation?**
-
-That can result in a test. It can result in a new metric. It can result in changing a deployment system, removing an unsafe option, reducing coupling, or deleting a procedure entirely.
-
-The important property is that the lesson survives the people who learned it.
+A postmortem records what happened. A system change records what was learned.
 
 ## Reliability is accumulated memory
 
-This changes how I think about reliability over time.
+This is the part of incident response that compounds.
 
 A perfectly monotonic uptime graph would be nice, but it is not how complex systems usually improve. Systems change, traffic changes, dependencies change, and new failure modes appear. A better system can still have an incident tomorrow.
 
@@ -88,11 +70,13 @@ EasyPost's public release history repeatedly records work on shipment-purchase p
 
 What it does show is the shape of reliability work: many small changes to the mechanisms that determine how the system behaves when reality differs from the happy path.
 
-The same is true of the rollback path from the August incident. The important fact is not that rollback was invented during the outage. It was already there. Some earlier decision had made recovery a capability of the system instead of an improvisation by the operator.[^reliability]
+The rollback path from the August incident shows the other side of that accumulation. The important fact is not that rollback was invented during the outage. It was already there. Some earlier decision had made recovery a capability of the system instead of an improvisation by the operator.[^reliability]
 
-That is what compounding looks like in operations. Yesterday's hard-earned lesson becomes today's default behavior.
+Yesterday's hard-earned lesson had become today's default behavior.
 
-## Make the lesson cheaper than the incident
+That is the operational version of the learning loop I described in [Close the Loop](/writing/close-the-loop/): failure produces evidence, but the loop is not really closed until that evidence changes future behavior.
+
+## Make the lesson durable
 
 Incidents already cost something: customer trust, engineering attention, interrupted work, lost sleep, sometimes money.
 
