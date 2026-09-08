@@ -10,7 +10,7 @@
 {{ partial "header.html" . }}
 <main id="main" tabindex="-1">
 <article class="sc-article" aria-labelledby="socrates-title">
-<div class="sc-meta"><a href="{{ "/writing/" | relURL }}">Writing</a><span><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2, 2006" }}</time> · {{ .ReadingTime }} min read</span></div>
+<div class="sc-meta"><a href="{{ "/writing/" | relURL }}">Writing</a><span>{{ .ReadingTime }} min read</span></div>
 {{ .Content }}
 </article>
 </main>
