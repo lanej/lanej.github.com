@@ -4,6 +4,8 @@
 .home-intro .role{margin-top:10px;font-size:1.08rem;line-height:1.45}
 .home-intro .intro{max-width:650px;margin:14px 0 6px;font-size:1.05rem}
 .home-intro .hero-portrait{width:160px;max-width:160px}
+.hero-links,.writing-links,.background-links{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:16px;align-items:center}
+.hero-links .text-link{font-size:.93rem;font-weight:500}
 .home-writing{padding-block:30px 36px}
 .home-writing .section-heading{margin-bottom:8px}
 .home-writing .section-heading h2,.background-section h2{margin:0;color:var(--muted);font-size:1rem;line-height:1.5;letter-spacing:0;font-weight:550}
@@ -15,10 +17,9 @@
 .home-writing h3 a{display:inline-block;min-height:44px;align-content:center;text-decoration:none;color:var(--text)}
 .home-writing h3 a:hover{text-decoration:underline;text-decoration-thickness:1px}
 .home-writing .writing-item>p:not(.essay-meta){max-width:760px;font-size:1.02rem;line-height:1.65}
-.writing-links,.background-links{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:16px;align-items:center}
 .background-section{display:grid;grid-template-columns:160px minmax(0,680px);gap:36px;padding-block:32px 48px;border-top:1px solid var(--line)}
 .background-section p{margin:0 0 12px;color:var(--muted);font-size:.98rem}
 .background-section .text-link{font-size:.93rem;font-weight:500}
-@media(max-width:700px){.hero.home-intro{grid-template-columns:minmax(0,1fr) 108px;grid-template-areas:"identity portrait" "copy copy";column-gap:16px;row-gap:18px;padding-block:24px}.home-intro h1{font-size:clamp(2rem,8.5vw,2.5rem)}.home-intro .role{font-size:.95rem;line-height:1.45}.home-intro .intro{margin:0 0 8px;font-size:1.02rem}.home-intro .hero-portrait{width:108px;max-width:108px}.home-writing{padding-block:24px 28px}.home-writing .writing-item{padding-block:20px}.home-writing h3{font-size:1.6rem}.home-writing .writing-item>p:not(.essay-meta){font-size:1rem}.background-section{grid-template-columns:1fr;gap:16px;padding-block:28px 36px}}
+@media(max-width:700px){.hero.home-intro{grid-template-columns:minmax(0,1fr) 108px;grid-template-areas:"identity portrait" "copy copy";column-gap:16px;row-gap:18px;padding-block:24px}.home-intro h1{font-size:clamp(2rem,8.5vw,2.5rem)}.home-intro .role{font-size:.95rem;line-height:1.45}.home-intro .intro{margin:0 0 8px;font-size:1.02rem}.home-intro .hero-portrait{width:108px;max-width:108px}.hero-links{gap:8px 20px}.home-writing{padding-block:24px 28px}.home-writing .writing-item{padding-block:20px}.home-writing h3{font-size:1.6rem}.home-writing .writing-item>p:not(.essay-meta){font-size:1rem}.background-section{grid-template-columns:1fr;gap:16px;padding-block:28px 36px}}
 @media(max-width:360px){.hero.home-intro{grid-template-columns:minmax(0,1fr) 88px}.home-intro .hero-portrait{width:88px;max-width:88px}.home-intro h1{font-size:2rem}}
-@media print{.hero.home-intro,.background-section{display:block;padding:0}.home-writing{border:0}.writing-links,.background-links{display:none}.home-writing h2,.home-writing h3 a,.background-section h2,.background-section p{color:inherit}}
+@media print{.hero.home-intro,.background-section{display:block;padding:0}.home-writing{border:0}.hero-links,.writing-links,.background-links{display:none}.home-writing h2,.home-writing h3 a,.background-section h2,.background-section p{color:inherit}}
