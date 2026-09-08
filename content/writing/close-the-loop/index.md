@@ -4,6 +4,7 @@ description = "What control theory and Unix taught me about building with AI"
 date = 2026-09-06T00:00:00-07:00
 lastmod = 2026-09-07T14:58:00-07:00
 draft = false
+essay_visual = "feedback"
 +++
 
 Most failures I see in AI-assisted engineering are not failures of intelligence. They are failures of feedback.

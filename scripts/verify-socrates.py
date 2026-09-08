@@ -35,7 +35,7 @@ MEASURE = r'''() => {
         }
     }
     const panels=[...root.querySelectorAll('.sc-figure')];
-    if(panels.length!==4) failures.push('Expected four diagrams');
+    if(panels.length!==5) failures.push('Expected five diagrams');
     const measures=panels.map(panel=>{
         const bounds=box(panel);
         if(bounds.x<0 || bounds.right>innerWidth+1) failures.push('Figure outside screen');

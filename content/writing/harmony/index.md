@@ -4,6 +4,7 @@ description = "How Socrates keeps a specification coherent as its assumptions ch
 date = "2026-09-06T18:22:16Z"
 lastmod = "2026-09-07T14:40:00Z"
 draft = false
+essay_visual = "harmony"
 +++
 
 A specification can become incoherent one reasonable answer at a time.

@@ -4,6 +4,7 @@ description = "A problem statement is not enough. Ownership, authority, and acco
 date = "2026-09-06T23:29:00Z"
 lastmod = "2026-09-07T14:52:00Z"
 draft = false
+essay_visual = "ownership"
 +++
 
 If I ask a team to build a dashboard, I have already made several decisions.
