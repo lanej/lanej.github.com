@@ -13,12 +13,12 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - name: Install static verification tools
+      - name: Install verification tools
         run: |
           python3 -m venv .venv
           .venv/bin/pip install -r scripts/requirements.txt
@@ -27,15 +27,15 @@ jobs:
         run: bash scripts/install-hugo.sh
       - name: Build and validate
         run: bash scripts/build.sh
-      - name: Install Chromium for browser smoke tests
-        run: .venv/bin/python -m playwright install --with-deps chromium
       - name: Browser smoke tests
         run: |
-          python3 scripts/test-citation-phrases.py --engines chromium
+          chrome=$(command -v google-chrome || command -v google-chrome-stable)
+          test -n "$chrome"
+          python3 scripts/test-citation-phrases.py --engines chromium --chromium-path "$chrome"
           python3 -m http.server 8765 --directory public >/tmp/site-server.log 2>&1 &
           server=$!
           trap 'kill "$server"' EXIT
-          python3 scripts/browser-smoke.py
+          python3 scripts/browser-smoke.py --chromium-path "$chrome"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
