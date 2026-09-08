@@ -31,7 +31,7 @@ def create_draft(root, slug, title):
         raise FileExistsError('This published slug already exists.')
     folder = root / 'drafts' / slug
     folder.mkdir(parents=True, exist_ok=False)
-    text = f'+++\ntitle = {json.dumps(title, ensure_ascii=False)}\ndescription = ""\ndate = "{now()}"\ndraft = true\ntoc = false\n+++\n\n'
+    text = f'+++\ntitle = {json.dumps(title, ensure_ascii=False)}\ndescription = ""\ndate = "{now()}"\ndraft = true\n+++\n\n'
     path = folder / 'index.md'
     path.write_text(text, encoding='utf-8')
     return path

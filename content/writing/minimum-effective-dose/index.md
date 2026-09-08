@@ -4,8 +4,6 @@ description = "Do enough to learn what matters. Build one complete path, resist 
 date = "2026-09-06T18:42:54-07:00"
 lastmod = "2026-09-07T14:46:00-07:00"
 draft = false
-toc = true
-diagrams = true
 +++
 
 Suppose a customer asks for a report every Monday morning.
@@ -18,7 +16,7 @@ That is the question I want answered first. Not whether we can build a reporting
 
 I want the smallest intervention that gives us a credible answer, then I want the answer to determine the next investment.
 
-**That is what I mean by minimum effective dose: enough intervention to resolve the uncertainty that matters, without accumulating obligations around an answer we do not yet have.**
+> That is what I mean by minimum effective dose: enough intervention to resolve the uncertainty that matters, without accumulating obligations around an answer we do not yet have.
 
 The thing to minimize is the cost of reaching the next informed decision, not the ambition of the eventual result.
 

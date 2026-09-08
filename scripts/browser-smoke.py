@@ -7,11 +7,9 @@ from urllib.parse import urljoin
 from playwright.sync_api import sync_playwright
 
 
-ROUTES = (
-    ('/', 'home'),
-    ('/writing/', 'writing'),
-    ('/writing/close-the-loop/', 'article'),
-    ('/writing/socrates/', 'socrates'),
+ROUTES = (('/', 'home'), ('/writing/', 'writing')) + tuple(
+    (f'/writing/{path.parent.name}/', path.parent.name)
+    for path in sorted(Path('public/writing').glob('*/index.html'))
 )
 VIEWPORTS = ((390, 664), (1440, 900))
 
@@ -61,13 +59,25 @@ def main():
                     assert not page.locator('.article-header time, .sc-meta time').count(), f'{route}: article exposes publication dates'
                     meta_text = ' '.join(page.locator('.article-meta, .sc-meta').all_text_contents())
                     assert 'min read' in meta_text, f'{route}: article missing reading time'
+                    assert page.locator('.sc-section-no').all_text_contents() == [
+                        f'{n:02}' for n in range(1, page.locator('.sc-section').count() + 1)
+                    ], f'{route}: chapter numbering drift'
+                    fonts = page.locator('h1, .sc-deck, .sc-section h2, .sc-section-copy > p').evaluate_all(
+                        '(items) => items.map(el => getComputedStyle(el).fontFamily)'
+                    )
+                    site_font = page.locator('body').evaluate('(el) => getComputedStyle(el).fontFamily')
+                    assert fonts and all(font == site_font for font in fonts), f'{route}: essay font differs from site'
+                    assert page.locator('.sc-section-visuals [data-essay-diagram]').count() == page.locator('[data-essay-diagram]').count(), f'{route}: misplaced diagram'
+
+                    for index, panel in enumerate(page.locator('[data-essay-diagram]').all()):
+                        panel.screenshot(path=str(out / f'{label}-{width}-diagram-{index + 1}.png'))
+                    page.evaluate('window.scrollTo(0, 0)')
 
                 page.evaluate('document.activeElement?.blur()')
                 page.keyboard.press('Tab')
                 assert page.locator('.skip-link').evaluate('(a) => a === document.activeElement'), f'{route}: skip link not first focus target'
 
-                if width == 390:
-                    page.screenshot(path=str(out / f'{label}-{width}.png'), full_page=False)
+                page.screenshot(path=str(out / f'{label}-{width}.png'), full_page=False)
                 checks.append({'route': route, 'width': width})
 
             context.close()

@@ -1,0 +1,40 @@
+{{/* Render Markdown once so citations and RSS retain a single document scope.
+     Chapter boundaries come only from our H2 render hook. Hugo's pinned footnote
+     wrapper separates the shared endnotes from the final chapter. */}}
+{{ $parts := split .Content "<div class=\"footnotes\"" }}
+{{ $chapters := split (index $parts 0) "<!--essay-chapter-->" }}
+<div class="article-body">
+<section class="sc-hero{{ if not .Params.essay_image }} sc-hero-text{{ end }}">
+<div class="sc-hero-copy">
+<header class="article-header">
+<h1 id="essay-title">{{ .Title }}</h1>
+{{ with .Description }}<p class="sc-deck">{{ . }}</p>{{ end }}
+</header>
+{{ with .Params.callout }}<blockquote class="sc-accent"><p>{{ . }}</p></blockquote>{{ end }}
+<div class="sc-intro">{{ index $chapters 0 | safeHTML }}</div>
+</div>
+{{ with .Params.essay_image }}
+{{ $art := $.Resources.GetMatch . }}
+{{ if not $art }}{{ errorf "Missing essay image %s in %s" . $.File.Path }}{{ end }}
+<figure class="sc-hero-art"><img src="{{ $art.RelPermalink }}" width="{{ $art.Width }}" height="{{ $art.Height }}" alt="{{ $.Params.essay_image_alt }}" decoding="async">{{ with $.Params.essay_image_caption }}<figcaption class="sc-caption">{{ . }}</figcaption>{{ end }}</figure>
+{{ end }}
+</section>
+{{ range $index, $chapter := after 1 $chapters }}
+{{ $heading := index (findRE `(?s)^\s*<h2\b[^>]*>.*?</h2>` $chapter 1) 0 }}
+{{ $anchor := replaceRE `(?s).*id="([^"]+)".*` "$1" $heading }}
+{{ $copy := replace $chapter $heading "" 1 }}
+{{/* Only our generated diagram figures are lifted beside the chapter on wide
+     screens. Ordinary images stay at their authored position. */}}
+{{ $figures := findRE `(?s)<figure\b[^>]*data-essay-diagram="[^"]+"[^>]*>.*?</figure>` $copy }}
+{{ range $figures }}{{ $copy = replace $copy . "" 1 }}{{ end }}
+<section class="sc-section{{ if not $figures }} sc-section-text-only{{ end }}" aria-labelledby="{{ $anchor }}"{{ if strings.HasSuffix $anchor "-title" }} id="{{ strings.TrimSuffix "-title" $anchor }}"{{ end }}>
+<div class="sc-section-text">
+<div class="sc-section-no" aria-hidden="true">{{ printf "%02d" (add $index 1) }}</div>
+{{ $heading | safeHTML }}
+<div class="sc-section-copy">{{ $copy | safeHTML }}</div>
+</div>
+{{ with $figures }}<div class="sc-section-visuals">{{ range . }}{{ . | safeHTML }}{{ end }}</div>{{ end }}
+</section>
+{{ end }}
+{{ if gt (len $parts) 1 }}{{ printf "<div class=\"footnotes\"%s" (delimit (after 1 $parts) "<div class=\"footnotes\"") | safeHTML }}{{ end }}
+</div>

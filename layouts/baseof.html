@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en-US">
 <head>{{ partial "head.html" . }}</head>
-<body>
+<body{{ if and .IsPage (eq .Section "writing") }} class="essay-page"{{ end }}>
 <a class="skip-link" href="#main">Skip to content</a>
 {{ partial "header.html" . }}
 <main id="main" tabindex="-1">{{ block "main" . }}{{ end }}</main>

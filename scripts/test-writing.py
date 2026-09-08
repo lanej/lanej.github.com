@@ -95,7 +95,7 @@ func example() string { return "a-long-code-line-that-must-scroll-within-the-cod
 
 [^check]: Footnotes should remain readable and link back correctly.
 '''
-        path.write_text(path.read_text().replace('description = ""','description = "An isolated reading-layout test."').replace('toc = false','toc = true\nsocial_image = "diagram.png"\nsocial_image_alt = "A non-square test diagram"')+body)
+        path.write_text(path.read_text().replace('description = ""','description = "An isolated reading-layout test."').replace('draft = true','draft = true\nsocial_image = "diagram.png"\nsocial_image_alt = "A non-square test diagram"')+body)
         Image.new('RGB',(900,450),(40,60,50)).save(path.parent/'diagram.png')
         hidden=create_draft(root,'private-sentinel','Private sentinel')
         hidden.write_text(hidden.read_text()+'PRIVATE_DRAFT_SENTINEL_NOT_FOR_PRODUCTION')
@@ -128,7 +128,7 @@ func example() string { return "a-long-code-line-that-must-scroll-within-the-cod
                     assert 'invalid-media-' not in text
             article=(public/'writing/preview-check/index.html').read_text()
             assert 'BlogPosting' in article and 'article:published_time' in article and 'min read' in article
-            assert 'On this page' in article and 'width="900" height="450"' in article
+            assert 'sc-section-no' in article and 'width="900" height="450"' in article
             assert '<figcaption>A visible diagram caption, separate from its alt text.</figcaption>' in article
             document=Document(article)
             social_url=origin+'writing/preview-check/diagram.png'

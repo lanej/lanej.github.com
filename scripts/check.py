@@ -57,6 +57,9 @@ def main(root):
             assert not doc.select('time'), f'{path}: visible publication dates are not allowed'
         if is_article:
             assert not doc.select('time'), f'{path}: article header exposes publication dates'
+            assert doc.select('article', **{'class':'sc-article'}), f'{path}: essay bypasses shared format'
+            assert len(doc.select('div', **{'class':'sc-section-no'})) == len(doc.select('h2')), f'{path}: a chapter lost its number'
+            assert len(doc.select('div', **{'class':'footnotes'})) <= 1, f'{path}: duplicated footnote collection'
             if doc.select('div', **{'class':'article-meta'}):
                 assert 'min read' in text, f'{path}: standard article missing reading time'
 
