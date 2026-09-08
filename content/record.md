@@ -11,7 +11,7 @@ sections:
   - title: Speaking
     id: sapporo-rubykaigi-2012
   - title: Career chronology
-    id: career-chronology
+    id: early-career
   - title: Open source
     id: open-source
 ---
@@ -57,7 +57,7 @@ I presented Engine Yard’s approach to automated testing, continuous integratio
 
 [Conference program and abstract](https://sapporo.rubykaigi.org/2012/en/schedule/details/37.html) · [Event report (Japanese)](https://gihyo.jp/news/report/01/sapporo-rubykaigi2012/0001)
 
-## Career chronology {#career-chronology}
+## Career chronology {#early-career}
 
 - **2026–present — EasyPost:** Chief Technology Officer
 - **2025–2026 — EasyPost:** Vice President of Engineering
