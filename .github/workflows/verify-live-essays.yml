@@ -1,0 +1,35 @@
+name: Verify published essay layout
+on:
+  push:
+    branches: [verify/essay-layout-43]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 4b26d0c0a96ef51fa66aa822aad1135298a41faa
+          persist-credentials: false
+      - name: Install verification tools
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install -r scripts/requirements.txt
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+          bash scripts/install-hugo.sh
+      - name: Build the merged revision
+        run: GITHUB_SHA=4b26d0c0a96ef51fa66aa822aad1135298a41faa bash scripts/build.sh
+      - name: Confirm the deployed revision
+        run: python3 scripts/live-smoke.py
+      - name: Capture and check the actual custom domain
+        run: |
+          chrome=$(command -v google-chrome || command -v google-chrome-stable)
+          python3 scripts/browser-smoke.py --url https://lanej.io/ --chromium-path "$chrome" --output artifacts/live
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: live-essay-verification
+          path: artifacts/live/
+          retention-days: 14
