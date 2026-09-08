@@ -58,6 +58,18 @@ But repeated mechanical corrections are a smell. If the same failure keeps produ
 
 A postmortem records what happened. A system change records what was learned.
 
+## Learning changes tools
+
+Encoding a lesson changes more than the implementation. It changes the environment the next person operates inside.
+
+A deployment tool that defaults to a canary makes gradual rollout ordinary. An API that rejects an unsafe configuration removes a decision somebody previously had to remember. Better instrumentation changes which failures become visible soon enough to act on.
+
+The lesson changes the tool, and the tool frames the next person's behavior.
+
+This matters because behavior shaped by the environment is more durable than behavior that depends on instruction. A postmortem can ask people to act differently. A changed tool can make the safer action the natural one, or remove the unsafe action entirely.
+
+Over time, the operating environment becomes a record of what the organization has learned.
+
 ## Reliability is accumulated memory
 
 This is the part of incident response that compounds.
