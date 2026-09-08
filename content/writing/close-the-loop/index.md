@@ -13,8 +13,6 @@ A model can reason well about code, write a plausible implementation, run some c
 
 None of that means the thing actually works.
 
-The useful question is:
-
 > **What signal tells the model that reality moved toward the state I actually wanted?**
 
 That is the difference between an open-loop system and a closed-loop one. Once I started thinking about AI this way, a lot of my tooling changed.
@@ -117,7 +115,7 @@ But there is a boundary.
 
 If a skill says “always run the formatter,” why should that remain a reasoning task? If it says “never write to these paths,” why should that depend on remembering prose?
 
-The rough hierarchy I use is:
+The table maps each concern to the mechanism I use.
 
 | Concern | Mechanism |
 | --- | --- |

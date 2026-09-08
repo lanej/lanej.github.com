@@ -38,7 +38,7 @@
 {{ $heading | safeHTML }}
 <div class="sc-section-copy">{{ $copy | safeHTML }}</div>
 </div>
-{{ with $visuals }}<div class="sc-section-visuals">{{ range . }}{{ if strings.HasPrefix . "<table" }}<div class="essay-table">{{ . | safeHTML }}</div>{{ else }}{{ . | safeHTML }}{{ end }}{{ end }}</div>{{ end }}
+{{ with $visuals }}<div class="sc-section-visuals{{ if gt (len .) 1 }} sc-section-visuals-spread{{ end }}">{{ range . }}{{ if strings.HasPrefix . "<table" }}<div class="essay-table">{{ . | safeHTML }}</div>{{ else }}{{ . | safeHTML }}{{ end }}{{ end }}</div>{{ end }}
 </section>
 {{ end }}
 {{ if gt (len $parts) 1 }}{{ printf "<div class=\"footnotes\"%s" (delimit (after 1 $parts) "<div class=\"footnotes\"") | safeHTML }}{{ end }}

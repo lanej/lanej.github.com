@@ -47,6 +47,7 @@
 .sc-article .sc-section h2{margin:0 0 22px;padding:0;border:0;font:650 clamp(1.6rem,2.3vw,2rem)/1.25 var(--sans);letter-spacing:-.025em;text-wrap:pretty}
 .sc-article .sc-section-no{font:.75rem/1.5 var(--mono);margin-bottom:12px}
 .sc-section-visuals{min-width:0;display:grid;gap:24px;align-self:center}
+.sc-section-visuals-spread{align-self:stretch;align-content:space-evenly}
 .sc-section-visuals .essay-table{min-width:0;overflow-x:auto;color:var(--soft)}
 .sc-section-visuals table{display:table;width:100%;margin:0}
 .sc-article .sc-accent,.sc-article .sc-section-copy blockquote,.sc-article .sc-intro blockquote{border-left:4px solid var(--accent);background:var(--surface);padding:18px 22px;margin:22px 0;color:var(--text);font:1.05rem/1.7 var(--sans)}
@@ -83,7 +84,7 @@
 .sc-hero{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:48px}
 .sc-hero-text{grid-template-columns:minmax(0,var(--copy))}
 .sc-hero-art{width:100%;max-width:480px;justify-self:center}
-.sc-hero-art img{opacity:.9;mix-blend-mode:screen;mask-image:radial-gradient(ellipse at 52% 43%,#000 38%,transparent 73%)}
+.sc-hero-art img{opacity:.9;mask-image:radial-gradient(ellipse at 52% 43%,#000 38%,transparent 73%)}
 .sc-hero-art .sc-caption{text-align:center}
 .sc-hero-symbol svg{width:100%;height:auto;color:var(--accent);overflow:visible}
 .sc-hero-symbol .art-line{fill:none;stroke:currentColor;stroke-width:1.5;opacity:.65}

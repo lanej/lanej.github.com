@@ -59,7 +59,7 @@ The general site shell is capped at `--max: 1120px` with responsive side gutters
 
 Whitespace should separate ideas before borders or containers do. Prefer vertical rhythm to card proliferation.
 
-Column count follows chapter content, not an article-specific layout. On narrow screens, both text and supporting visuals use the available width.
+Column count follows chapter content, not an article-specific layout. When a chapter has multiple visuals, distribute them through the available vertical space. On narrow screens, both text and supporting visuals use the available width.
 
 ## Article chrome
 
