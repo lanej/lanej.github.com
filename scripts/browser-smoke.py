@@ -59,8 +59,8 @@ def main():
                     assert not page.locator('.writing-item time').count(), 'Writing index exposes publication dates'
                 else:
                     assert not page.locator('.article-header time, .sc-meta time').count(), f'{route}: article exposes publication dates'
-                    meta = page.locator('.article-meta, .sc-meta')
-                    assert meta.count() and 'min read' in meta.first.inner_text(), f'{route}: article missing reading time'
+                    meta_text = ' '.join(page.locator('.article-meta, .sc-meta').all_text_contents())
+                    assert 'min read' in meta_text, f'{route}: article missing reading time'
 
                 page.evaluate('document.activeElement?.blur()')
                 page.keyboard.press('Tab')
