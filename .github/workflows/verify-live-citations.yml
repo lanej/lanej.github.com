@@ -1,0 +1,79 @@
+name: Verify published citation columns
+on:
+  push:
+    branches: [verify/citation-layout-44]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: b03c1f750f481b1cd88e74d8acb4f8327452e34b
+          persist-credentials: false
+      - name: Install verification tools
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install -r scripts/requirements.txt
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+          bash scripts/install-hugo.sh
+      - name: Build the merged revision
+        run: GITHUB_SHA=b03c1f750f481b1cd88e74d8acb4f8327452e34b bash scripts/build.sh
+      - name: Confirm the deployed revision
+        run: python3 scripts/live-smoke.py
+      - name: Capture the actual custom domain
+        run: |
+          chrome=$(command -v google-chrome || command -v google-chrome-stable)
+          python3 scripts/browser-smoke.py --url https://lanej.io/ --chromium-path "$chrome" --output artifacts/live
+      - name: Verify citation columns and intact entries
+        run: |
+          python3 - <<'PY'
+          import shutil
+          from playwright.sync_api import sync_playwright
+          with sync_playwright() as p:
+              browser = p.chromium.launch(executable_path=shutil.which('google-chrome'), args=['--no-sandbox'])
+              for width in (390, 768, 961, 1440):
+                  page = browser.new_page(viewport={'width': width, 'height': 900})
+                  page.goto('https://lanej.io/writing/minimum-effective-dose/', wait_until='networkidle')
+                  notes = page.locator('.footnotes > ol')
+                  columns = notes.evaluate('(el) => getComputedStyle(el).columnCount')
+                  assert columns == ('2' if width > 960 else 'auto'), (width, columns)
+                  assert notes.locator(':scope > li').evaluate_all('(items) => items.every(el => el.getClientRects().length === 1)'), 'Split citation'
+                  page.close()
+              browser.close()
+          print('Citation columns and intact entries passed at four widths')
+          PY
+      - name: Compare every served file and decode images
+        run: |
+          python3 - <<'PY'
+          import concurrent.futures,hashlib,io,json,urllib.request,urllib.error
+          from pathlib import Path
+          from PIL import Image
+          expected=json.loads(Path('public/build.json').read_text())
+          def fetch(path):
+              try:
+                  with urllib.request.urlopen('https://lanej.io'+path,timeout=20) as r:return r.read()
+              except urllib.error.HTTPError as e:
+                  if path=='/404.html' and e.code==404:return e.read()
+                  raise
+          live=json.loads(fetch('/build.json'))
+          assert live['revision']==expected['revision']
+          assert live['files']==expected['files']
+          def verify(item):
+              path,digest=item;data=fetch(path)
+              assert hashlib.sha256(data).hexdigest()==digest,path
+              is_image=Path(path).suffix in ('.webp','.png','.jpg','.jpeg','.gif')
+              if is_image:
+                  with Image.open(io.BytesIO(data)) as im:im.load()
+              return int(is_image)
+          with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:images=sum(pool.map(verify,expected['files'].items()))
+          print(json.dumps({'status':'passed','revision':expected['revision'],'matching_live_files':len(expected['files']),'decoded_images':images}))
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: live-citation-verification
+          path: artifacts/live/
+          retention-days: 14
