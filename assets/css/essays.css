@@ -57,7 +57,7 @@
 .sc-article .sc-caption{font:.875rem/1.6 var(--sans);margin-top:18px}
 .sc-article .sc-hero-art img{margin:0}
 .sc-article .article-footer{font:.9rem/1.6 var(--sans)}
-.sc-article .footnotes{max-width:var(--copy);font:.9rem/1.65 var(--sans)}
+.sc-article .footnotes{max-width:none;font:.9rem/1.65 var(--sans)}
 .sc-article .footnotes p{margin:0 0 .7em}
 .sc-article .footnotes ol{padding-left:1.5em}
 .sc-article .sc-section-copy h3{margin:1.5em 0 .7em;font-size:1.2rem}
@@ -96,3 +96,10 @@
 @media(max-width:960px){.sc-hero{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:24px}.sc-hero-text{grid-template-columns:minmax(0,var(--copy))}}
 @media(max-width:640px){.sc-hero{grid-template-columns:minmax(0,1fr)}.sc-hero-art{display:none}}
 @media print{.sc-hero{display:block}.sc-hero-art{display:none}}
+
+/* Use the essay width for endnotes without splitting individual sources. */
+@media screen and (min-width:961px){
+.sc-article .footnotes>ol{column-count:2;column-gap:40px}
+.sc-article .footnotes>ol>li{break-inside:avoid-column;margin:0 0 1.35em}
+.sc-article .article-body .footnotes>ol>li+li{margin-top:0}
+}
