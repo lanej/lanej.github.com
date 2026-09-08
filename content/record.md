@@ -8,12 +8,12 @@ sections:
     id: engine-yard
   - title: Fastly
     id: fastly
-  - title: Open source
-    id: open-source
   - title: Speaking
     id: sapporo-rubykaigi-2012
   - title: Career chronology
     id: career-chronology
+  - title: Open source
+    id: open-source
 ---
 This is a selected record of systems I have built, organizations I have led, and public technical work. [LinkedIn](https://www.linkedin.com/in/lanejoshlane/) has the complete employment history.
 
