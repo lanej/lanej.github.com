@@ -87,7 +87,7 @@ Citations are contextual, not ornamental.
 
 The preferred article treatment is the existing subtle underline on the exact phrase or claim related to the source. Do not underline an entire paragraph when a phrase is sufficient. Do not restore large numeric footnote markers as the primary interaction.
 
-Citation interaction may reveal richer source detail, but the prose must remain readable without opening it. The fallback footnotes must remain available for non-interactive and print contexts.
+Citation interaction may reveal richer source detail, but the prose must remain readable without opening it. The fallback footnotes must remain available for non-interactive and print contexts. Endnotes fill the essay width in two balanced columns on wide screens, reading down the left column and then down the right. Keep each source together. Use a single column on narrow screens and in print.
 
 Citation styling must not make sourced prose visually louder than the argument itself.
 

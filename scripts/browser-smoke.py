@@ -96,6 +96,8 @@ def main():
 
                     for index, panel in enumerate(page.locator('[data-essay-diagram]').all()):
                         panel.screenshot(path=str(out / f'{label}-{width}-diagram-{index + 1}.png'))
+                    if page.locator('.footnotes').count():
+                        page.locator('.footnotes').screenshot(path=str(out / f'{label}-citations-{width}.png'))
                     page.evaluate('window.scrollTo(0, 0)')
 
                 page.evaluate('document.activeElement?.blur()')
