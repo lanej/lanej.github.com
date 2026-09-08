@@ -51,6 +51,15 @@ def main(root):
         assert all(a.get('alt') for a in doc.select('img')), f'{path}: missing image description'
         for forbidden in ('New writing will appear here', 'Evidence over chronology', 'new-about-josh2.jpg', 'headshot-v4'):
             assert forbidden not in text, f'{path}: leftover placeholder or image'
+
+        relative = '/' + str(path.relative_to(root)).replace('index.html', '').replace('\\', '/')
+        if relative in ('/', '/writing/'):
+            assert not doc.select('time'), f'{path}: visible publication dates are not allowed'
+        if is_article:
+            assert not doc.select('time'), f'{path}: article header exposes publication dates'
+            if doc.select('div', **{'class':'article-meta'}):
+                assert 'min read' in text, f'{path}: standard article missing reading time'
+
     for path,doc in documents.items():
         for _,attrs in doc.tags:
             for key in ('href','src'):
