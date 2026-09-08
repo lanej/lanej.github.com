@@ -8,6 +8,7 @@
 {{ $styles := slice (resources.Get "css/site.css") (resources.Get "css/editorial.css") }}
 {{ $bundle := "css/combined.css" }}
 {{ if .IsHome }}{{ $styles = $styles | append (resources.Get "css/home.css") }}{{ $bundle = "css/home-combined.css" }}{{ end }}
+{{ if eq .RelPermalink "/record/" }}{{ $styles = $styles | append (resources.Get "css/work.css") }}{{ $bundle = "css/work-combined.css" }}{{ end }}
 {{ if .Params.diagrams }}{{ $styles = $styles | append (resources.Get "css/diagrams.css") }}{{ $bundle = "css/illustrated.css" }}{{ end }}
 {{ $css := $styles | resources.Concat $bundle | minify | fingerprint }}
 <title>{{ $title }}</title>
