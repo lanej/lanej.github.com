@@ -20,13 +20,15 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--url', default='http://127.0.0.1:8765/')
     parser.add_argument('--output', default='artifacts/smoke')
+    parser.add_argument('--chromium-path', default='')
     args = parser.parse_args()
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)
     checks = []
 
     with sync_playwright() as pw:
-        browser = pw.chromium.launch()
+        launch = {'executable_path': args.chromium_path, 'args': ['--no-sandbox']} if args.chromium_path else {}
+        browser = pw.chromium.launch(**launch)
         for width, height in VIEWPORTS:
             context = browser.new_context(
                 viewport={'width': width, 'height': height},
@@ -56,10 +58,9 @@ def main():
                 elif route == '/writing/':
                     assert not page.locator('.writing-item time').count(), 'Writing index exposes publication dates'
                 else:
-                    assert not page.locator('.article-header time').count(), f'{route}: article exposes publication dates'
-                    meta = page.locator('.article-meta')
-                    if meta.count():
-                        assert 'min read' in meta.inner_text(), f'{route}: standard article missing reading time'
+                    assert not page.locator('.article-header time, .sc-meta time').count(), f'{route}: article exposes publication dates'
+                    meta = page.locator('.article-meta, .sc-meta')
+                    assert meta.count() and 'min read' in meta.first.inner_text(), f'{route}: article missing reading time'
 
                 page.evaluate('document.activeElement?.blur()')
                 page.keyboard.press('Tab')
