@@ -2,14 +2,14 @@
 
 This document defines the shared visual language of the site. `WRITING.md` governs how ideas are expressed; this file governs how they are presented.
 
-The objective is consistency without sameness. A conventional essay, a visual essay such as Socrates, a work page, and the home page may use different compositions. They should still look like parts of one system.
+All essays use the shared Socrates-derived format: the site system sans-serif, numbered chapters, accent callouts, and responsive diagram panels. The home and work pages keep their own layouts. Essays do not have separate visual identities.
 
 When a new page needs a new treatment, extend the system deliberately. Do not create a one-off visual language for the page.
 
 ## Principles
 
 1. **Content establishes hierarchy.** Typography, spacing, rules, and layout should make structure visible without decorating it.
-2. **One site, several compositions.** Reuse tokens and primitives while allowing page-specific arrangements.
+2. **One essay format.** Share typography, chapter hierarchy, callouts, diagrams, and article chrome across the complete writing corpus.
 3. **Restraint is the default.** The dark field, muted copy, pale green accent, thin rules, and generous whitespace already provide identity. Add another treatment only when it carries meaning.
 4. **Mobile is a first-class composition.** Responsive work is not shrinking the desktop layout. Important relationships must remain legible and intentional at phone widths.
 5. **Accessibility is part of the design.** Keyboard targets, focus states, readable contrast, semantic structure, and non-color cues are invariants.
@@ -41,7 +41,7 @@ The site uses the system sans-serif stack. Do not add a display face or article-
 
 The hierarchy is intentionally modest:
 
-- body copy is approximately `1rem–1.0625rem`, with generous line height;
+- body copy is approximately `1rem–1.05rem`, with generous line height;
 - article copy uses `1.8` line height;
 - article titles scale responsively and use tighter tracking;
 - section headings are materially smaller than article titles;
@@ -53,7 +53,7 @@ Avoid excessive typographic emphasis inside prose. Bold, blockquotes, code, and 
 
 ## Measure and layout
 
-Long-form reading width is `--copy: 680px`. Treat that as an invariant for ordinary prose.
+Long-form reading width is capped at `--copy: 680px`. Diagram chapters may use a narrower text column beside their supporting panel; body typography and paragraph rhythm remain identical.
 
 The general site shell is capped at `--max: 1120px` with responsive side gutters. Pages may use the additional width for navigation, portraits, diagrams, indexes, or supporting material, but ordinary paragraph text should not expand to fill it.
 
@@ -63,18 +63,15 @@ A specialized article may break out of the reading column for a diagram or compo
 
 ## Article chrome
 
-Ordinary writing pages share:
+Every essay uses `layouts/writing/single.html`, `layouts/partials/essay-content.html`, and `assets/css/essays.css`. No article-specific layout or stylesheet.
 
-- the global header and footer;
-- a constrained reading column;
-- article title, description, and subdued metadata;
-- consistent heading hierarchy;
-- common link, code, table, blockquote, figure, citation, and footnote treatments;
-- the common article footer and pager where applicable.
+- Writing link and calculated reading time appear above the title. Dates stay in metadata and RSS only.
+- The title, description, opening prose, and optional existing illustration share one opening layout.
+- Every Markdown H2 starts a chapter with a generated two-digit number, short accent rule, common heading size, and thin divider. H3 is an unnumbered subsection.
+- Chapter copy is constrained to a readable measure. A diagram sits beside its chapter on wide screens and follows its copy on narrow screens. Chapters without diagrams use the same heading and spacing.
+- All essays share the same archive/feed footer and citation behavior.
 
-Article metadata is supporting information, not the visual lead. Titles and descriptions should dominate dates and modification information.
-
-A custom layout such as Socrates may change the interior composition, but should retain the site's palette, typography family, navigation, interaction behavior, responsive discipline, and basic spacing logic.
+Chapter numbers come from heading order, not handwritten numbers. Do not independently opt articles into a different contents menu, heading treatment, or metadata position.
 
 ## Links
 
@@ -96,11 +93,11 @@ Citation styling must not make sourced prose visually louder than the argument i
 
 ## Blockquotes and callouts
 
-The standard blockquote is a simple accent rule at the left with indented text. Use it for quotations and the small number of propositions that deserve interruption of the normal reading rhythm.
+Use the Socrates treatment everywhere: a four-pixel accent rule, the common dark surface, shared padding, and normal system sans-serif text. No serif or italic article theme.
 
-Do not create a new card style for each kind of thought.
+Ordinary Markdown blockquotes use this treatment. Use them for a quotation or a central question or proposition worth returning to. Each developed essay should have a clear visual pause, usually in its opening or at a consequential decision. Do not manufacture a maxim or repeat prose just to fill a box.
 
-If a recurring semantic callout becomes necessary, define one reusable component and document its meaning. Visual distinction should correspond to a real semantic distinction.
+An optional `callout` front-matter field supports the opening treatment. Prefer a blockquote in the body when the passage belongs in the argument and full-text RSS.
 
 ## Diagrams
 
@@ -172,31 +169,13 @@ Color cannot be the only indicator of state. Current navigation uses an underlin
 
 Respect semantic HTML before adding ARIA. Motion should be unnecessary to understand the interface.
 
-## Special layouts
+## One format across essays
 
-Special layouts are allowed when the material benefits from them. Socrates is the current example.
+Socrates supplies the chapter and diagram composition; the rest of the site supplies the font and palette. Socrates itself follows the same template as every other essay.
 
-A special layout may vary:
+Allowed differences are content-driven: chapter count, diagram topology, an existing relevant illustration, and the length of the argument. Font, heading size, numbering, callout treatment, spacing, and article chrome are shared.
 
-- section composition;
-- numbering;
-- diagram placement;
-- column relationships;
-- local rhythm;
-- use of kickers or structured labels.
-
-It may not casually vary:
-
-- site palette;
-- font family;
-- navigation and footer identity;
-- link behavior;
-- accessibility conventions;
-- responsive quality;
-- citation semantics;
-- basic visual density.
-
-Before adding a page-specific CSS file, ask whether the requirement is actually a reusable site primitive. If it is, implement it in the common system instead.
+A new diagram may need its own geometry, but it must use the shared panel, node, label, caption, and responsive conventions. Improve the shared components instead of introducing page-specific CSS.
 
 ## Avoid visual drift
 
@@ -239,7 +218,7 @@ Before publishing or changing a shared component:
 5. Inspect every diagram at the narrowest supported width.
 6. Verify keyboard focus and touch targets.
 7. Exercise citation and disclosure interactions.
-8. Compare the page beside at least one ordinary essay and one special layout.
+8. Compare the page beside Socrates and one other essay. Typography and chapter treatments must match.
 9. Ask whether any new visual treatment encodes meaning or merely adds novelty.
 10. If a one-off fix appears likely to recur, move the rule into the common system before publishing.
 
@@ -262,10 +241,10 @@ If two pages answer one of these differently without a content-driven reason, th
 
 ## Relationship to `WRITING.md`
 
-`WRITING.md` intentionally asks article structures and rhetorical cadence to vary. This guide intentionally constrains the visual vocabulary.
+`WRITING.md` lets the argument determine the number and substance of the chapters. It does not authorize different visual formats.
 
 The combined rule is:
 
-> **Standardize the system. Vary the composition.**
+> **One reading format. Different arguments.**
 
 Readers should recognize the site before they recognize the template.

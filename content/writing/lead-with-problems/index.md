@@ -4,7 +4,6 @@ description = "A problem statement is not enough. Ownership, authority, and acco
 date = "2026-09-06T23:29:00Z"
 lastmod = "2026-09-07T14:52:00Z"
 draft = false
-toc = false
 +++
 
 If I ask a team to build a dashboard, I have already made several decisions.
@@ -19,7 +18,7 @@ Marty Cagan makes this distinction in his writing about empowered product teams:
 
 That requires more than a better problem statement. The funding, decision rights, and definition of success cannot still belong to a predetermined solution.
 
-The problem has to become the unit of ownership, not just the opening paragraph of a project brief.
+> The problem has to become the unit of ownership, not just the opening paragraph of a project brief.
 
 ## A missing solution is not a problem statement
 
@@ -68,6 +67,8 @@ That owner needs capacity commitments from contributing functions, authority wit
 Individual teams can own bounded contributions. Someone must still own the complete outcome. Every department finishing its task does not help a customer who remains stuck.
 
 The people manager and problem owner can be different people. Their commitments must not create two competing priority queues. Capacity, decision rights, and escalation need to be agreed rather than renegotiated by individual contributors every morning.
+
+{{< problem-ownership >}}
 
 ## Discover the solution together
 

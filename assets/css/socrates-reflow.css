@@ -1,6 +1,0 @@
-/* Keep the return marker and its label in separate cells at enlarged text sizes. */
-@container diagram (max-width:36rem){
-.sc-return-path{display:grid;grid-template-columns:1em minmax(0,1fr);gap:.5em;padding:0;font:.81rem/1.5 var(--sans)}
-.sc-return-path:before{position:static;grid-column:1;width:auto;height:auto;font:inherit;line-height:inherit}
-.sc-return-label{grid-column:2;font:inherit}
-}

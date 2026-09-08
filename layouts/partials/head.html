@@ -9,7 +9,7 @@
 {{ $bundle := "css/combined.css" }}
 {{ if .IsHome }}{{ $styles = $styles | append (resources.Get "css/home.css") }}{{ $bundle = "css/home-combined.css" }}{{ end }}
 {{ if eq .RelPermalink "/record/" }}{{ $styles = $styles | append (resources.Get "css/work.css") }}{{ $bundle = "css/work-combined.css" }}{{ end }}
-{{ if .Params.diagrams }}{{ $styles = $styles | append (resources.Get "css/diagrams.css") }}{{ $bundle = "css/illustrated.css" }}{{ end }}
+{{ if $article }}{{ $styles = $styles | append (resources.Get "css/diagrams.css") (resources.Get "css/essays.css") }}{{ $bundle = "css/essays-combined.css" }}{{ end }}
 {{ $css := $styles | resources.Concat $bundle | minify | fingerprint }}
 <title>{{ $title }}</title>
 <meta name="description" content="{{ $description }}">

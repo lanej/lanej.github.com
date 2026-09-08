@@ -89,7 +89,7 @@ A qualification is useful when it changes how the claim should be interpreted. D
 
 ## Let the structure follow the material
 
-There is no standard article template.
+There is one standard visual template: the shared Socrates-derived essay format in `STYLE.md`. Use ordinary Markdown H2 headings for its numbered chapters and the shared callout and diagram components. The argument determines what those chapters contain.
 
 Legitimate shapes include:
 
@@ -103,7 +103,7 @@ Legitimate shapes include:
 
 Do not force every piece into an introduction, three supporting sections, a synthesis section, and a restated conclusion.
 
-The visual system can be consistent while the intellectual structure varies.
+Keep the chapter presentation consistent. Vary the substance, chapter count, examples, and reasoning as the material requires.
 
 ## Avoid synthetic cadence
 
@@ -229,7 +229,7 @@ Periodically review several pieces together for:
 - concepts that have drifted in meaning;
 - articles that are different versions of the same argument.
 
-Uniformity belongs in standards of reasoning, attribution, and quality. Variation belongs in structure, cadence, examples, and how an argument discovers its conclusion.
+Uniformity belongs in standards of reasoning, attribution, and quality. Variation belongs in reasoning, cadence, examples, and how an argument discovers its conclusion. Presentation follows the common essay format.
 
 ## The target voice
 

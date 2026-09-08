@@ -24,9 +24,11 @@ force-add private material or put it in an issue, PR, public branch, or CI log.
 
 Each article is a Markdown page bundle: `index.md` plus its images in the same
 folder. Use ordinary Markdown headings, links, tables, fenced code blocks and
-footnotes. TOML front matter provides `title`, `description`, `date`, `draft`, and
-optional `toc = true`. Set `lastmod` explicitly when a published article is
-substantively revised; routine rebuilds do not change its displayed dates.
+footnotes. Every H2 becomes a numbered chapter in the shared essay format;
+blockquotes and diagram shortcodes use the common components in `STYLE.md`.
+TOML front matter provides `title`, `description`, `date`, and `draft`. Set
+`lastmod` explicitly when a published article is substantively revised. Dates
+remain in structured metadata and RSS, outside the visible reading layout.
 
 ### Sources and citation previews
 

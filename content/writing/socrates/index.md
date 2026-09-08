@@ -3,12 +3,12 @@ title = "Socrates: Before I Say ‘Go Build It’"
 description = "I built a Claude skill to challenge the request, preserve the decisions, and make the handoff executable."
 date = 2026-09-06T17:45:00-07:00
 draft = false
-toc = false
-layout = "socratic"
+essay_image = "socrates-bust.webp"
+essay_image_alt = "Illustrated bust of Socrates"
+essay_image_caption = "Examine the claim before acting on it."
 callout = "Research should arm the question, not eliminate it."
 +++
 
-{{< socrates-opening >}}
 I originally told Socrates to ask me fewer questions.
 
 Socrates is a [Claude skill](https://github.com/lanej/dotfiles/blob/e48e4f0f3cc72f8f6ab7a0c025bd5304be24fb2d/claude/commands/socrates.md) I use before planning a piece of work. An earlier version had what sounded like a good rule: read the code, inspect the configuration, look through prior decisions, and try to answer every question before interrupting me. If the agent found a plausible answer, it should record the assumption and move on.
@@ -20,9 +20,9 @@ Which language does this repository use? Research it. Does an old restriction st
 I had optimized the skill to reduce conversation at exactly the point where the conversation was useful. I did not need a faster requirements form. I wanted the agent to help me think through the work before an implementation gave one interpretation momentum.
 
 So I changed the rule: [research should arm the question, not eliminate it](https://github.com/lanej/dotfiles/commit/39048c0f3cc72f8f6ab7a0c025bd5304be24fb2d). Bring me what you found. Explain why it might matter. Then ask the question that the evidence cannot answer for us.
-{{< /socrates-opening >}}
 
-{{< socrates-section id="why-socrates" number="01" title="Why Socrates" diagram="method" >}}
+## Why Socrates {#why-socrates-title}
+
 The part of the [Socratic method](https://plato.stanford.edu/entries/plato-ethics-shorter/#2) I’m borrowing is not “keep asking why.” It is the examination of a claim against the rest of what we think we know. A question exposes an assumption; another commitment puts pressure on it; the contradiction or missing premise becomes visible.
 
 That matters because a request to an AI is not necessarily a correct specification of the problem. I may arrive with a preferred solution and a lot of confidence. The model may have an equally plausible interpretation. Neither deserves to become the plan merely because it was stated first.
@@ -32,9 +32,13 @@ The useful outcome is sometimes less certainty, not more. We discover the hole i
 That is different from endless debate. Socrates still has to converge. The current dialogue loop works one consequential topic at a time: research it, ask one informed question, judge the answer, follow up when it is vague or contradictory, and stop when the relevant issue is stable enough to proceed. There is no question quota to satisfy and no prize for making a small task ceremonial.
 
 The useful thing is making the assumption visible before either of us builds on it, not getting the agent to agree with me.
-{{< /socrates-section >}}
 
-{{< socrates-section id="request-to-clarity" number="02" title="From request to clarity" kicker="A real bug in Socrates itself" diagram="comparison" >}}
+{{< socrates-diagram "method" >}}
+
+## From request to clarity {#request-to-clarity-title}
+
+**A real bug in Socrates itself**
+
 A bug in Socrates became a useful example of what this process is for.
 
 Socrates stores each piece of work in a timestamped directory under `.socrates/`. Originally there was one `.current` file that pointed at the active specification. That was fine while one Claude session worked in a repository. With two sessions, either conversation could replace the pointer. Both specifications could remain perfectly intact while one agent quietly resumed against the other agent’s task.
@@ -50,9 +54,13 @@ Those questions changed the work. The eventual fix binds a specification to `CLA
 That behavior is documented in the [session-binding change](https://github.com/lanej/dotfiles/commit/e48e4f0f3b8b7e5b1fe4d0b3ff17846529902977). The important part is not the filename. It is that the conversation turned “use a different pointer” into a statement of what must remain true when the normal path fails.
 
 A competent agent could have implemented the first sentence in a few minutes. I would have gotten a cleaner version of the same underspecified system.
-{{< /socrates-section >}}
 
-{{< socrates-section id="layered-reasoning" number="03" title="Layered reasoning" kicker="Make the argument inspectable" diagram="layers" >}}
+{{< socrates-diagram "comparison" >}}
+
+## Layered reasoning {#layered-reasoning-title}
+
+**Make the argument inspectable**
+
 Once the dialogue settles, Socrates does something that matters more than producing polished prose: it turns the result into a [reasoning chain](https://github.com/lanej/dotfiles/blob/e48e4f0f3cc72f8f6ab7a0c025bd5304be24fb2d/claude/commands/socrates.md#phase-2--validation-and-layered-reasoning).
 
 The layers are problem, requirements, constraints, risks, success, validation, and execution readiness. I do not care whether all seven headings are present because seven is a nice number. I care that each layer has to follow from the one below it.
@@ -64,9 +72,11 @@ This is where false greens become easier to see. “The new pointer file exists�
 The specification also records authority boundaries. An executor can choose implementation details. It should not decide that ambiguity means “pick the newest specification” merely because that makes the code simpler. If the choice changes what task is being executed, that decision belongs back in the agreement.
 
 That is one of the ways this is specifically about AI. The next agent may be capable and completely unfamiliar with the conversation that produced the requirement. The document has to carry the reasoning that prevents it from helpfully solving a different problem.
-{{< /socrates-section >}}
 
-{{< socrates-section id="preserve-intent" number="04" title="Document, sequence, and preserve intent" diagram="workflow" >}}
+{{< socrates-diagram "layers" >}}
+
+## Document, sequence, and preserve intent {#preserve-intent-title}
+
 The output of Socrates is not the conversation. It is a set of artifacts another process can use: an authoritative `spec.md`, an optional independent critique, a `plan.md`, and verification evidence when the work is done.
 
 A condensed decision record for the session bug might look like this:
@@ -103,7 +113,8 @@ This is an AI workflow, but the underlying discipline is older and broader: exam
 I use Socrates because AI makes execution cheap enough that **starting the wrong work is increasingly the expensive mistake**. Sometimes the outcome is a better plan. Sometimes the outcome is deciding not to build the thing I originally asked for.
 
 Before I say “go build it,” that is exactly the kind of friction I want.
-{{< /socrates-section >}}
+
+{{< socrates-diagram "workflow" >}}
 
 {{< socrates-resources >}}
 Continue with [Close the Loop](/writing/close-the-loop/), on verifying the work against reality. [Read the Socrates source](https://github.com/lanej/dotfiles/blob/e48e4f0f3cc72f8f6ab7a0c025bd5304be24fb2d/claude/commands/socrates.md).
