@@ -3,12 +3,13 @@ title = "Systems That Remember"
 description = "Failure becomes useful when its lesson stops depending on memory."
 date = 2026-09-08T06:15:00-07:00
 draft = false
+essay_visual = "memory"
 toc = false
 +++
 
 On August 27, EasyPost's public status page recorded a brief degradation of the Core APIs during a deployment. At 10:26 AM, the change was identified and rolled back. By 10:40, the APIs were back to normal.[^status]
 
-The interesting part is that rollback was already available.
+> The interesting part is that rollback was already available.
 
 EasyPost's public reliability guide describes a deployment system built around canary traffic, retained previous versions, and immediate rollback.[^reliability] Those mechanisms did not make failure impossible. They changed what happened after failure.
 

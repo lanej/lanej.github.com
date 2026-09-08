@@ -4,6 +4,7 @@ description = "How Socrates keeps a specification coherent as its assumptions ch
 date = "2026-09-06T18:22:16Z"
 lastmod = "2026-09-07T14:40:00Z"
 draft = false
+essay_visual = "harmony"
 +++
 
 A specification can become incoherent one reasonable answer at a time.
@@ -14,7 +15,7 @@ Harmony is one of the properties Socrates evaluates: whether the problem, requir
 
 A requirement can be clear while its acceptance test rewards the wrong behavior. A risk can look acceptable while depending on a fallback another decision removed. Each answer can make sense in isolation. Together, they may no longer describe a viable task.
 
-In [Close the Loop](/writing/close-the-loop/), I argued for feedback that tests a result against reality. Harmony asks a complementary question inside the specification:
+In [Close the Loop](/writing/close-the-loop/), I argued for feedback that tests a result against reality. Harmony applies a complementary check inside the specification.
 
 > **Do our requirements and checks still describe compatible ideas of success?**
 

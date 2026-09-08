@@ -1,0 +1,43 @@
+{{ $captions := dict "feedback" "Close the loop against reality." "harmony" "The parts must preserve the same promise." "ownership" "Own the problem. Test the outcome." "dose" "Enough intervention to learn what matters." "memory" "Learning becomes part of the system." }}
+{{ if not (isset $captions .) }}{{ errorf "Unknown essay visual: %s" . }}{{ end }}
+<figure class="sc-hero-art sc-hero-symbol">
+<svg viewBox="0 0 420 400" aria-hidden="true" focusable="false">
+{{ if eq . "feedback" }}
+<circle class="art-line art-soft" cx="210" cy="200" r="170"/>
+<path class="art-line" d="M210 105C360 105 360 295 210 295S60 105 210 105M197 95l15 10-15 10M223 285l-15 10 15 10"/>
+<rect class="art-node" x="130" y="75" width="160" height="60" rx="8"/><text class="art-label" x="210" y="111">Intent</text>
+<rect class="art-node" x="235" y="170" width="160" height="60" rx="8"/><text class="art-label" x="315" y="206">Action</text>
+<rect class="art-node" x="110" y="265" width="200" height="60" rx="8"/><text class="art-label" x="210" y="301">Reality</text>
+<rect class="art-node" x="25" y="170" width="160" height="60" rx="8"/><text class="art-label" x="105" y="206">Feedback</text>
+{{ else if eq . "harmony" }}
+<circle class="art-line art-soft" cx="210" cy="200" r="170"/>
+<path class="art-line" d="M90 120L330 120 210 305ZM210 120V210M90 120L210 210 330 120M210 210V305"/>
+<circle class="art-node" cx="210" cy="210" r="45"/><text class="art-label" x="210" y="216">Promise</text>
+<rect class="art-node" x="10" y="85" width="165" height="60" rx="8"/><text class="art-label" x="92" y="121">Requirements</text>
+<rect class="art-node" x="250" y="85" width="160" height="60" rx="8"/><text class="art-label" x="330" y="121">Constraints</text>
+<rect class="art-node" x="130" y="285" width="160" height="60" rx="8"/><text class="art-label" x="210" y="321">Verification</text>
+{{ else if eq . "ownership" }}
+<circle class="art-line art-soft" cx="210" cy="200" r="170"/>
+<path class="art-line" d="M210 90V310M203 160l7 10 7-10M203 270l7 10 7-10M295 310C410 310 410 90 295 90M306 82l-12 8 12 8"/>
+<rect class="art-node" x="115" y="60" width="190" height="60" rx="8"/><text class="art-label" x="210" y="96">Problem</text>
+<rect class="art-node" x="90" y="175" width="240" height="60" rx="8"/><text class="art-label" x="210" y="211">Owner + authority</text>
+<rect class="art-node" x="115" y="285" width="190" height="60" rx="8"/><text class="art-label" x="210" y="321">Outcome</text>
+{{ else if eq . "dose" }}
+<circle class="art-line art-soft" cx="210" cy="200" r="170"/>
+<path class="art-line art-soft" d="M50 80L210 205 370 80M105 55L210 205 315 55"/>
+<path class="art-line" d="M210 80V320M203 155l7 10 7-10M203 265l7 10 7-10"/>
+<rect class="art-node" x="110" y="50" width="200" height="60" rx="8"/><text class="art-label" x="210" y="86">Uncertainty</text>
+<rect class="art-node" x="90" y="175" width="240" height="60" rx="8"/><text class="art-label" x="210" y="211">One complete path</text>
+<rect class="art-node" x="110" y="295" width="200" height="60" rx="8"/><text class="art-label" x="210" y="331">Evidence</text>
+{{ else if eq . "memory" }}
+<circle class="art-line art-soft" cx="210" cy="200" r="170"/>
+<path class="art-line" d="M210 90V310M203 155l7 10 7-10M203 265l7 10 7-10M300 310C410 310 410 90 300 90M311 82l-12 8 12 8"/>
+<rect class="art-node" x="110" y="50" width="200" height="60" rx="8"/><text class="art-label" x="210" y="86">Experience</text>
+<rect class="art-line art-soft" x="98" y="163" width="200" height="60" rx="8"/>
+<rect class="art-line art-soft" x="104" y="169" width="200" height="60" rx="8"/>
+<rect class="art-node" x="110" y="175" width="200" height="60" rx="8"/><text class="art-label" x="210" y="211">Encoded learning</text>
+<rect class="art-node" x="110" y="295" width="200" height="60" rx="8"/><text class="art-label" x="210" y="331">Behavior</text>
+{{ end }}
+</svg>
+<figcaption class="sc-caption">{{ index $captions . }}</figcaption>
+</figure>

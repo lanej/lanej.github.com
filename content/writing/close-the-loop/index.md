@@ -4,6 +4,7 @@ description = "What control theory and Unix taught me about building with AI"
 date = 2026-09-06T00:00:00-07:00
 lastmod = 2026-09-07T14:58:00-07:00
 draft = false
+essay_visual = "feedback"
 +++
 
 Most failures I see in AI-assisted engineering are not failures of intelligence. They are failures of feedback.
@@ -11,8 +12,6 @@ Most failures I see in AI-assisted engineering are not failures of intelligence.
 A model can reason well about code, write a plausible implementation, run some checks, and confidently say the task is finished.
 
 None of that means the thing actually works.
-
-The useful question is:
 
 > **What signal tells the model that reality moved toward the state I actually wanted?**
 
@@ -116,7 +115,7 @@ But there is a boundary.
 
 If a skill says “always run the formatter,” why should that remain a reasoning task? If it says “never write to these paths,” why should that depend on remembering prose?
 
-The rough hierarchy I use is:
+The table maps each concern to the mechanism I use.
 
 | Concern | Mechanism |
 | --- | --- |

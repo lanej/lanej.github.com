@@ -11,7 +11,7 @@ ROUTES = (('/', 'home'), ('/writing/', 'writing')) + tuple(
     (f'/writing/{path.parent.name}/', path.parent.name)
     for path in sorted(Path('public/writing').glob('*/index.html'))
 )
-VIEWPORTS = ((390, 664), (1440, 900))
+VIEWPORTS = ((390, 664), (768, 900), (961, 900), (1440, 900))
 
 
 def main():
@@ -68,6 +68,31 @@ def main():
                     site_font = page.locator('body').evaluate('(el) => getComputedStyle(el).fontFamily')
                     assert fonts and all(font == site_font for font in fonts), f'{route}: essay font differs from site'
                     assert page.locator('.sc-section-visuals [data-essay-diagram]').count() == page.locator('[data-essay-diagram]').count(), f'{route}: misplaced diagram'
+
+                    layout_errors = page.locator('.sc-section').evaluate_all('''(chapters) => chapters.flatMap(chapter => {
+                        const text = chapter.querySelector('.sc-section-text').getBoundingClientRect();
+                        const visual = chapter.querySelector('.sc-section-visuals')?.getBoundingClientRect();
+                        const bounds = chapter.getBoundingClientRect();
+                        const name = chapter.querySelector('h2').textContent;
+                        if (!visual) return Math.abs(text.width - bounds.width) > 2 ? [name + ': unused chapter width'] : [];
+                        if (innerWidth <= 960) return visual.top < text.bottom ? [name + ': visual overlaps copy'] : [];
+                        const center = visual.top + visual.height / 2;
+                        const textCenter = text.top + text.height / 2;
+                        return visual.left < text.right || Math.abs(center - textCenter) > 2 ? [name + ': supporting column is not centered'] : [];
+                    })''')
+                    assert not layout_errors, f'{route} at {width}px: {layout_errors}'
+                    assert page.locator('.sc-hero-art').count() == 1, f'{route}: missing opening visual'
+                    assert page.locator('.sc-hero-copy > .sc-accent').count() == 1, f'{route}: missing opening callout'
+                    if label == 'close-the-loop':
+                        assert page.locator('.sc-section-copy table').count() == 0, 'Table remains in the prose column'
+                        assert page.locator('.sc-section-visuals table').count() >= 1, 'Missing supporting table'
+                        page.locator('.sc-section').filter(has=page.locator('table')).first.screenshot(path=str(out / f'chapter-table-{width}.png'))
+                        page.locator('.sc-section-text-only').first.screenshot(path=str(out / f'chapter-full-width-{width}.png'))
+                    if label == 'socrates':
+                        handoff = page.locator('#preserve-intent')
+                        assert handoff.locator('[data-essay-diagram]').count() == 2, 'Handoff needs two diagrams'
+                        handoff.screenshot(path=str(out / f'chapter-handoff-{width}.png'))
+                    page.locator('.sc-hero').screenshot(path=str(out / f'{label}-intro-{width}.png'))
 
                     for index, panel in enumerate(page.locator('[data-essay-diagram]').all()):
                         panel.screenshot(path=str(out / f'{label}-{width}-diagram-{index + 1}.png'))

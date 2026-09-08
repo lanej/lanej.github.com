@@ -4,6 +4,7 @@ description = "Do enough to learn what matters. Build one complete path, resist 
 date = "2026-09-06T18:42:54-07:00"
 lastmod = "2026-09-07T14:46:00-07:00"
 draft = false
+essay_visual = "dose"
 +++
 
 Suppose a customer asks for a report every Monday morning.

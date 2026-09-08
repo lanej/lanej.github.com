@@ -79,24 +79,9 @@ That is one of the ways this is specifically about AI. The next agent may be cap
 
 The output of Socrates is not the conversation. It is a set of artifacts another process can use: an authoritative `spec.md`, an optional independent critique, a `plan.md`, and verification evidence when the work is done.
 
-A condensed decision record for the session bug might look like this:
+The accompanying decision record illustrates what I want the handoff to preserve: the decision, why it exists, what is delegated, and what evidence would demonstrate it. It is a condensed example for the session bug, not a copy from a saved Socrates session.
 
-> **Decision**  
-> If several specifications remain possible, stop. Do not select the newest one automatically.
->
-> **Reason**  
-> Recency does not establish which task the user intended.
->
-> **Executor may decide**  
-> How to implement the lookup and pointer storage.
->
-> **Executor must not change**  
-> Ambiguity into a silent guess.
->
-> **Evidence**  
-> Remove the binding, leave multiple candidates, and confirm that verification refuses to proceed.
-
-That is not copied from a saved Socrates session. It is the kind of information I want the handoff to preserve: the decision, why it exists, what is delegated, and what evidence would demonstrate it.
+{{< socrates-diagram "record" >}}
 
 Once that agreement is stable enough, Socrates freezes and versions the specification before planning. “Frozen” is procedural, not magical file protection. If critique exposes a bad assumption or execution discovers something genuinely new, the specification can reopen. What should not happen is an executor quietly weakening the requirement until its preferred implementation qualifies.
 
