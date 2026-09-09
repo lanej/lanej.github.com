@@ -7,11 +7,11 @@ essay_visual = "memory"
 toc = false
 +++
 
-On August 27, EasyPost's public status page recorded a brief degradation of the Core APIs during a deployment. At 10:26 AM, the change was identified and rolled back. By 10:40, the APIs were back to normal.[^status]
+On August 27, a deployment briefly degraded EasyPost's Core APIs. At 10:26 AM, the change was identified and rolled back. By 10:40, the APIs were back to normal.[^status]
 
 > The interesting part is that rollback was already available.
 
-EasyPost's public reliability guide describes a deployment system built around canary traffic, retained previous versions, and immediate rollback.[^reliability] Those mechanisms did not make failure impossible. They changed what happened after failure.
+EasyPost deploys through a system built around canary traffic, retained previous versions, and immediate rollback.[^reliability] Those mechanisms did not make failure impossible. They changed what happened after failure.
 
 They show what durable learning looks like once it has been encoded into the system, regardless of whether a particular mechanism came from an incident or deliberate design.
 
@@ -79,9 +79,9 @@ A perfectly monotonic uptime graph would be nice, but it is not how complex syst
 
 What I want to see is accumulation.
 
-EasyPost's public release history repeatedly records work on shipment-purchase performance, database-query performance, connection stability, USPS fallback handling, carrier timeout behavior, and other reliability or latency paths.[^releases] The public record cannot tell you which of those changes came from a specific incident or postmortem, and I would not infer that causal chain from release notes alone.
+EasyPost's release history includes repeated work on shipment-purchase performance, database-query performance, connection stability, USPS fallback handling, carrier timeout behavior, and other reliability or latency paths.[^releases]
 
-What it does show is the shape of reliability work: many small changes to the mechanisms that determine how the system behaves when reality differs from the happy path.
+Not every change is incident-driven. The important pattern is the accumulation of small changes to the mechanisms that determine how the system behaves when reality differs from the happy path.
 
 The rollback path from the August incident shows the other side of that accumulation. The important fact is not that rollback was invented during the outage. It was already there. Some earlier decision had made recovery a capability of the system instead of an improvisation by the operator.[^reliability]
 
@@ -101,7 +101,7 @@ That is why I care more about the action that survives the postmortem than the p
 
 People forget. Systems do not have to.
 
-[^status]: EasyPost, [public status page](https://www.easypoststatus.com/), incident history for August 27, 2026.
+[^status]: EasyPost, [status page](https://www.easypoststatus.com/), incident history for August 27, 2026.
 [^reliability]: EasyPost, [Shipping API Reliability Guide](https://www.easypost.com/blog/easypost-api-reliability-guide/), July 14, 2025.
 [^google]: Google SRE, [Postmortem Culture: Learning from Failure](https://sre.google/sre-book/postmortem-culture/) and the [SRE Workbook chapter on postmortem culture](https://sre.google/workbook/postmortem-culture/).
-[^releases]: EasyPost, [public release history](https://docs.easypost.com/releases).
+[^releases]: EasyPost, [release history](https://docs.easypost.com/releases).
