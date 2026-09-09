@@ -63,11 +63,21 @@ A postmortem records what happened. A system change records what was learned.
 
 Encoding a lesson changes more than the implementation. It changes the environment the next person operates inside.
 
-A deployment tool that defaults to a canary makes gradual rollout ordinary. An API that rejects an unsafe configuration removes a decision somebody previously had to remember. Better instrumentation changes which failures become visible soon enough to act on.
+A deployment tool that defaults to a canary makes gradual rollout ordinary. An API that rejects an unsafe configuration removes a decision somebody previously had to remember. Better instrumentation puts evidence in front of an operator before they have to remember to go looking for it.
 
-The lesson changes the tool, and the tool frames the next person's behavior.
+The important mechanism is the default. People tend to take the path a system makes easiest, especially when they are busy, unfamiliar with it, or operating under pressure. A safer procedure that requires remembering an exception is weaker than a tool that makes the safer procedure ordinary.
 
-This matters because behavior shaped by the environment is more durable than behavior that depends on instruction. A postmortem can ask people to act differently. A changed tool can make the safer action the natural one, or remove the unsafe action entirely.
+This is the same idea behind a pit of success: do not merely tell people what the right action is. Shape the environment so that the right action is the natural action, and make the dangerous path harder or impossible when you can.
+
+A postmortem can say, “canary this kind of change.” A deployment system can canary it by default. Training can say, “check this signal before proceeding.” A workflow can put that signal directly in the decision path. Documentation can say, “never create this state.” An API can refuse to create it.
+
+The lesson changes the tool, and the tool changes the behavior that follows from it.
+
+That gives me a useful test for whether an organization has really retained a mechanical lesson:
+
+> A system remembers when someone who never learned the lesson still behaves differently because of it.
+
+The next engineer does not need to know which incident produced a guardrail. They inherit the accumulated judgment embedded in the interface, the defaults, the automation, and the constraints around them.
 
 Over time, the operating environment becomes a record of what the organization has learned.
 
