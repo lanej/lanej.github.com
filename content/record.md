@@ -33,7 +33,7 @@ I became Vice President of Engineering in 2025, leading a 130+ engineer organiza
 
 **Cloud API architecture and development**
 
-I architected and led development of the Engine Yard API, from backend services to the interfaces developers used to operate applications and infrastructure.
+I contributed to the design and implementation of the Engine Yard Core API, extending it for multi-cloud support and technical acquisition integration.
 
 The official Ruby client and command-line utility, `ey-core`, support application deployment and environment management, including a mocked mode for testing integrations without live API calls.
 
