@@ -83,7 +83,7 @@ def capture(args):
                 page.screenshot(path=str(out / filenames['full']), full_page=True, animations='disabled')
                 if route == '/record/':
                     filenames['detail'] = f'{slug}-{label}-companies.png'
-                    page.locator('.career-timeline').screenshot(
+                    page.locator('.career-company[data-company="easypost"]').screenshot(
                         path=str(out / filenames['detail']), animations='disabled')
                 item['images'][label] = filenames
                 page.close()
@@ -111,12 +111,12 @@ def preview_section(manifest, image_root, run_url):
         lines += ['| ' + ' | '.join(cells) + ' |', '',
                   'Select an image to open the full-page screenshot.', '', '</details>', '']
         if all('detail' in page['images'][label] for label in ('mobile', 'desktop')):
-            lines += ['**Company logos in the career chronology**', '',
+            lines += ['**EasyPost: roles and descriptions**', '',
                       '| Mobile | Desktop |', '| --- | --- |']
             details = []
             for label, width in [('mobile', 240), ('desktop', 600)]:
                 src = image_root + '/' + page['images'][label]['detail']
-                details.append(f'<img src="{src}" width="{width}" alt="Company logos: {label}">')
+                details.append(f'<img src="{src}" width="{width}" alt="EasyPost career details: {label}">')
             lines += ['| ' + ' | '.join(details) + ' |', '']
     lines.append(END)
     return '\n'.join(lines)

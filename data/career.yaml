@@ -1,12 +1,17 @@
 - id: easypost
+  anchor: easypost-technology-strategy
   company: EasyPost
   period: 2019–present
   logo: /logos/companies/easypost.svg
   roles:
     - title: Chief Technology Officer
       period: 2026–present
+      description: |
+        I lead technology strategy across product, platform, data, and infrastructure. The work centers on simplifying overlapping products and systems and evaluating technology investments against cost, margin, reliability, and risk.
     - title: Vice President of Engineering
       period: 2025–2026
+      description: |
+        I led a 130+ engineer organization across Core API, Enterprise, Platform, and international subsidiaries.
     - title: Senior Director of Engineering
       period: 2024–2025
     - title: Director of Engineering
@@ -17,6 +22,12 @@
       period: 2020–2022
     - title: Senior Software Engineer
       period: 2019–2020
+      description: |
+        I built warehouse logistics, inventory, order integrations, and fulfillment software.
+  description: |
+    Across engineering management and platform leadership, I was responsible for infrastructure, finance systems, shared services, and developer tooling. That included redesigning financial data pipelines to shorten revenue-recognition time, decomposing a monolithic application into services, and improving reliability and developer throughput.
+
+    [EasyPost leadership biography](https://www.easypost.com/about/)
 - id: fastly
   company: Fastly
   period: 2016–2019
@@ -24,10 +35,18 @@
   roles:
     - title: Senior Software Engineer, SRE
       period: 2018–2019
+      description: |
+        I worked on infrastructure development and site-reliability tooling.
     - title: Senior Software Engineer, Internal Engineering
       period: 2017–2018
+      description: |
+        I worked on internal data pipelines and the systems used to operate the platform.
     - title: Senior Software Engineer, API
       period: 2016–2017
+      description: |
+        I worked on backend APIs and web application firewall development.
+  description: |
+    The implementation work crossed Ruby, Go, Varnish, NSQ, Kubernetes, Chef, and Terraform. The more durable thread was the progression from product-facing software into the infrastructure and operational systems beneath it.
 - id: engine-yard
   company: Engine Yard
   period: 2011–2015
@@ -37,7 +56,14 @@
       period: 2012–2015
     - title: Software Engineer
       period: 2011–2012
+  description: |
+    I contributed to the design and implementation of the Engine Yard Core API, extending it for multi-cloud support and technical acquisition integration.
+
+    The official Ruby client and command-line utility, `ey-core`, support application deployment and environment management, including a mocked mode for testing integrations without live API calls.
+
+    [Engine Yard Core API client](https://github.com/engineyard/core-client-rb)
 - id: hubspot
+  anchor: early-career
   company: HubSpot
   period: 2010–2011
   logo: /logos/companies/hubspot.svg
@@ -49,6 +75,8 @@
   logo: /logos/companies/3m.png
   roles:
     - title: Software Engineer and QA Automation Engineer
+  description: |
+    Brontes was [acquired by 3M in 2006](https://investors.3m.com/financials/sec-filings/content/0001104659-07-005584/a07-2955_1ex99.htm), before my time there.
 - id: emc
   company: EMC
   period: 2007–2008

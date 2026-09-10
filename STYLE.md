@@ -82,11 +82,13 @@ stock icons, redraw logos, tint them to match the site, or hotlink remote favico
 Use a company's standalone brand mark when available, and its real wordmark
 otherwise. Sources and extraction notes live in `static/logos/companies/README.md`.
 
-Use actual job titles consistently in the Work section labels and career history.
-Both read from `data/career.yaml`. Group roles under one employer logo, with newest
-roles first and a thin vertical path connecting small role markers. Dates belong
-below each role; employer tenure belongs below the company name. Keep unknown
-promotion dates unspecified rather than estimating them.
+Work uses one combined career narrative from `data/career.yaml`, not separate
+descriptions and chronology. Group actual job titles under one employer logo,
+with newest roles first and a thin vertical path connecting small role markers.
+Place descriptions under the roles they describe; retain company-wide context
+at company level rather than assigning it to an unverified role or date range.
+Dates belong below each role; employer tenure belongs below the company name.
+Keep unknown promotion dates unspecified rather than estimating them.
 
 ## Links
 

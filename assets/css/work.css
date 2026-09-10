@@ -1,31 +1,12 @@
-/* Actual company logos, locally bundled in uniform circular frames. */
-.work-content .prose h2:is(#easypost-technology-strategy,#engine-yard,#fastly){display:flex;align-items:center;gap:12px}
-.work-content .prose h2:is(#easypost-technology-strategy,#engine-yard,#fastly)::before{content:"";display:inline-block;width:36px;height:36px;flex:0 0 36px}
-.work-content .prose #easypost-technology-strategy{--work-logo:url('/logos/companies/easypost.svg')}
-.work-content .prose #engine-yard{--work-logo:url('/logos/companies/engine-yard.png')}
-.work-content .prose #fastly{--work-logo:url('/logos/companies/fastly.png')}
-
-.work-content .prose h2:is(#easypost-technology-strategy,#engine-yard,#fastly)::before,
-.company-logo{
-  box-sizing:border-box;
-  padding:5px;
-  border-radius:50%;
-  background:#fff var(--work-logo, none) center/contain no-repeat;
-  background-origin:content-box;
-}
-
-@media(max-width:700px){
-  .work-content .prose h2:is(#easypost-technology-strategy,#engine-yard,#fastly){gap:10px}
-}
-
 /* One employer mark; connected role steps stay on the same vertical axis. */
-.company-logo{display:block;width:36px;height:36px;flex:0 0 36px}
+.company-logo{display:block;width:36px;height:36px;flex:0 0 36px;box-sizing:border-box;padding:5px;border-radius:50%;background:#fff}
 .company-logo img{display:block;width:100%;height:100%;object-fit:contain}
 .work-content .prose .career-timeline,
 .work-content .prose .career-roles{list-style:none;padding:0;margin:0}
-.work-content .prose .career-company+ .career-company{margin-top:28px}
+.work-content .prose .career-company+ .career-company{margin-top:36px;padding-top:28px;border-top:1px solid var(--line)}
 .career-company-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.work-content .prose .career-company-header h3{margin:0;font-size:1.1rem;line-height:1.4}
+.work-content .prose .career-company-header h2{display:block;margin:0;padding:0;border:0;font-size:1.55rem;line-height:1.4}
+.work-content .prose .career-company-header h2::before{display:none}
 .work-content .prose .career-tenure{margin:2px 0 0;font-size:.875rem;line-height:1.5}
 .work-content .prose .career-roles>li{position:relative;margin:0;padding:0 0 20px 48px;min-width:0}
 .work-content .prose .career-roles>li:last-child{padding-bottom:0}
@@ -36,7 +17,15 @@
 .career-company:first-child .career-roles-connected>li:first-child::before{background:var(--accent)}
 .work-content .prose .career-timeline{margin-bottom:1.5em}
 
+.career-role-description{margin-top:10px}
+.career-company-description{margin:20px 0 0 48px}
+.work-content .prose .career-role-description p,
+.work-content .prose .career-company-description p{font-size:1rem;line-height:1.7}
+.work-content .prose .career-role-description>:last-child,
+.work-content .prose .career-company-description>:last-child{margin-bottom:0}
+
 @media print{
   .work-content .prose h2::before,.company-logo,.career-roles-connected>li::before,.career-roles-connected>li::after{display:none}
   .work-content .prose .career-roles>li{padding-left:0}
+  .career-company-description{margin-left:0}
 }

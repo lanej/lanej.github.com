@@ -1,15 +1,21 @@
-<ol class="career-timeline" aria-label="Career history, most recent first">
+{{ $page := .Page }}
+<ol class="career-timeline" aria-label="Work and career history, most recent first">
 {{ range hugo.Data.career }}
 <li class="career-company" data-company="{{ .id }}">
   <header class="career-company-header">
     <span class="company-logo" aria-hidden="true"><img src="{{ .logo | relURL }}" alt="{{ .company }} logo" width="26" height="26"></span>
-    <div><h3>{{ .company }}</h3><p class="career-tenure">{{ .period }}</p></div>
+    <div><h2 id="{{ .anchor | default .id }}">{{ .company }}</h2><p class="career-tenure">{{ .period }}</p></div>
   </header>
   <ol class="career-roles{{ if gt (len .roles) 1 }} career-roles-connected{{ end }}" aria-label="{{ .company }} roles, most recent first">
   {{ range .roles }}
-    <li><p class="career-role-title">{{ .title }}</p>{{ with .period }}<p class="career-role-period">{{ . }}</p>{{ end }}</li>
+    <li>
+      <p class="career-role-title">{{ .title }}</p>
+      {{ with .period }}<p class="career-role-period">{{ . }}</p>{{ end }}
+      {{ with .description }}<div class="career-role-description">{{ $page.RenderString (dict "display" "block") . }}</div>{{ end }}
+    </li>
   {{ end }}
   </ol>
+  {{ with .description }}<div class="career-company-description">{{ $page.RenderString (dict "display" "block") . }}</div>{{ end }}
 </li>
 {{ end }}
 </ol>

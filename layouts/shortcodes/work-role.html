@@ -1,7 +1,0 @@
-{{- $companies := where hugo.Data.career "id" (.Get 0) -}}
-{{- if ne (len $companies) 1 -}}
-  {{- errorf "work-role needs one known company: %s" (.Get 0) -}}
-{{- else -}}
-  {{- $role := index (index $companies 0).roles 0 -}}
-  <p class="work-role"><strong>{{ $role.title }}</strong>{{ with $role.period }}<span> · {{ . }}</span>{{ end }}</p>
-{{- end -}}
