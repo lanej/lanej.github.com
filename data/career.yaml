@@ -1,0 +1,64 @@
+- id: easypost
+  company: EasyPost
+  period: 2019–present
+  logo: /logos/companies/easypost.svg
+  roles:
+    - title: Chief Technology Officer
+      period: 2026–present
+    - title: Vice President of Engineering
+      period: 2025–2026
+    - title: Senior Director of Engineering
+      period: 2024–2025
+    - title: Director of Engineering
+      period: 2023–2024
+    - title: Senior Engineering Manager
+      period: 2022–2023
+    - title: Engineering Manager
+      period: 2020–2022
+    - title: Senior Software Engineer
+      period: 2019–2020
+- id: fastly
+  company: Fastly
+  period: 2016–2019
+  logo: /logos/companies/fastly.png
+  roles:
+    - title: Senior Software Engineer, SRE
+      period: 2018–2019
+    - title: Senior Software Engineer, Internal Engineering
+      period: 2017–2018
+    - title: Senior Software Engineer, API
+      period: 2016–2017
+- id: engine-yard
+  company: Engine Yard
+  period: 2011–2015
+  logo: /logos/companies/engine-yard.png
+  roles:
+    - title: Engineering Team Lead
+      period: 2012–2015
+    - title: Software Engineer
+      period: 2011–2012
+- id: hubspot
+  company: HubSpot
+  period: 2010–2011
+  logo: /logos/companies/hubspot.svg
+  roles:
+    - title: Software Engineer
+- id: 3m
+  company: 3M / Brontes Technologies
+  period: 2008–2010
+  logo: /logos/companies/3m.png
+  roles:
+    - title: Software Engineer and QA Automation Engineer
+- id: emc
+  company: EMC
+  period: 2007–2008
+  logo: /logos/companies/emc.svg
+  roles:
+    - title: Quality Engineering Co-op
+- id: ups
+  company: UPS
+  period: 2005–2007
+  logo: /logos/companies/ups.svg
+  roles:
+    - title: Supervisor
+    - title: Package Handler

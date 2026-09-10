@@ -17,7 +17,7 @@ def affected_routes(paths, available):
     routes = set()
     essays = {r for r in available if r.startswith('/writing/') and r != '/writing/'}
     for path in paths:
-        if path == 'assets/css/work.css' or path.startswith(('static/logos/companies/', 'static/icons/heroicons/')):
+        if path in ('assets/css/work.css', 'data/career.yaml', 'layouts/shortcodes/career-timeline.html', 'layouts/shortcodes/work-role.html') or path.startswith(('static/logos/companies/', 'static/icons/heroicons/')):
             routes.add('/record/')
         elif path == 'assets/css/home.css':
             routes.add('/')
@@ -72,6 +72,9 @@ def capture(args):
                 response = page.goto('http://127.0.0.1:8765' + route, wait_until='networkidle')
                 assert response and response.ok, route
                 page.evaluate('document.fonts.ready')
+                if route == '/record/':
+                    page.locator('.company-logo img').evaluate_all(
+                        '(images) => Promise.all(images.map(image => image.decode()))')
                 assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), route
                 assert page.locator('meta[name="site-revision"]').get_attribute('content') == manifest['build_sha']
                 item['title'] = page.locator('h1').inner_text()
@@ -80,7 +83,7 @@ def capture(args):
                 page.screenshot(path=str(out / filenames['full']), full_page=True, animations='disabled')
                 if route == '/record/':
                     filenames['detail'] = f'{slug}-{label}-companies.png'
-                    page.locator('#early-career + ul').screenshot(
+                    page.locator('.career-timeline').screenshot(
                         path=str(out / filenames['detail']), animations='disabled')
                 item['images'][label] = filenames
                 page.close()

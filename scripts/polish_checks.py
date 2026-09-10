@@ -40,8 +40,10 @@ def verify_polish(page, width, route, out, engine, label):
             assert page.url.endswith(anchor), f'Section link failed: {anchor}'
             assert target.is_visible(), f'Section is hidden: {anchor}'
         result['section_links'] = anchors
-        earlier = page.locator('#early-career + ul')
-        assert earlier.locator('li').count() == 4, 'Keep earlier work compact and complete'
+        earlier = page.locator('.career-timeline')
+        assert earlier.locator(':scope > .career-company').count() == 7, 'Keep all seven employers grouped'
+        assert earlier.locator('.company-logo img').count() == 7, 'Use one logo per employer'
+        assert earlier.locator('[data-company="easypost"] .career-roles > li').count() == 7, 'Preserve the EasyPost role progression'
         for company in ('HubSpot', '3M / Brontes Technologies', 'EMC', 'UPS'):
             assert company in earlier.inner_text(), f'Missing earlier employer: {company}'
         assert 'Quality Engineering Co-op' in earlier.inner_text(), 'Preserve the EMC co-op title'

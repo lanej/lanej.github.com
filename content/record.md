@@ -19,7 +19,7 @@ This is a selected record of systems I have built, organizations I have led, and
 
 ## EasyPost {#easypost-technology-strategy}
 
-**Technology strategy and engineering leadership · 2019–present**
+{{< work-role "easypost" >}}
 
 I joined EasyPost as an engineer building warehouse logistics, inventory, order integrations, and fulfillment software. My scope expanded through engineering management and platform leadership to company-wide technology strategy.
 
@@ -31,7 +31,7 @@ I became Vice President of Engineering in 2025, leading a 130+ engineer organiza
 
 ## Engine Yard {#engine-yard}
 
-**Cloud API architecture and development**
+{{< work-role "engine-yard" >}}
 
 I contributed to the design and implementation of the Engine Yard Core API, extending it for multi-cloud support and technical acquisition integration.
 
@@ -41,7 +41,7 @@ The official Ruby client and command-line utility, `ey-core`, support applicatio
 
 ## Fastly {#fastly}
 
-**Backend systems, data infrastructure, and reliability · 2016–2019**
+{{< work-role "fastly" >}}
 
 My work moved from customer-facing APIs toward the systems used to operate the platform. I worked on backend APIs and web application firewall development, then internal data pipelines and site-reliability tooling, and finally infrastructure development in site reliability engineering.
 
@@ -59,15 +59,6 @@ I presented Engine Yard’s approach to automated testing, continuous integratio
 
 ## Career chronology {#early-career}
 
-- **2026–present — EasyPost:** Chief Technology Officer
-- **2025–2026 — EasyPost:** Vice President of Engineering
-- **2022–2025 — EasyPost:** platform leadership
-- **2019–2022 — EasyPost:** engineering and engineering management
-- **2016–2019 — Fastly:** Senior Software Engineer / Site Reliability Engineering
-- **Engine Yard:** cloud API architecture and development
-- **2010–2011 — HubSpot:** Software Engineer
-- **2008–2010 — 3M / Brontes Technologies:** Software Engineer and QA Automation Engineer
-- **2007–2008 — EMC:** Quality Engineering Co-op
-- **2005–2007 — UPS:** Package Handler, then Supervisor
+{{< career-timeline >}}
 
 Brontes was [acquired by 3M in 2006](https://investors.3m.com/financials/sec-filings/content/0001104659-07-005584/a07-2955_1ex99.htm), before my time there.

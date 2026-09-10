@@ -82,6 +82,12 @@ stock icons, redraw logos, tint them to match the site, or hotlink remote favico
 Use a company's standalone brand mark when available, and its real wordmark
 otherwise. Sources and extraction notes live in `static/logos/companies/README.md`.
 
+Use actual job titles consistently in the Work section labels and career history.
+Both read from `data/career.yaml`. Group roles under one employer logo, with newest
+roles first and a thin vertical path connecting small role markers. Dates belong
+below each role; employer tenure belongs below the company name. Keep unknown
+promotion dates unspecified rather than estimating them.
+
 ## Links
 
 Links use the accent color with a thin underline where needed for legibility. Hover may move toward the primary text color.
