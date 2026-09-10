@@ -17,7 +17,7 @@ def affected_routes(paths, available):
     routes = set()
     essays = {r for r in available if r.startswith('/writing/') and r != '/writing/'}
     for path in paths:
-        if path == 'assets/css/work.css' or path.startswith('static/icons/heroicons/'):
+        if path == 'assets/css/work.css' or path.startswith(('static/logos/companies/', 'static/icons/heroicons/')):
             routes.add('/record/')
         elif path == 'assets/css/home.css':
             routes.add('/')
@@ -78,6 +78,10 @@ def capture(args):
                 filenames = {'viewport': f'{slug}-{label}.png', 'full': f'{slug}-{label}-full.png'}
                 page.screenshot(path=str(out / filenames['viewport']), animations='disabled')
                 page.screenshot(path=str(out / filenames['full']), full_page=True, animations='disabled')
+                if route == '/record/':
+                    filenames['detail'] = f'{slug}-{label}-companies.png'
+                    page.locator('#early-career + ul').screenshot(
+                        path=str(out / filenames['detail']), animations='disabled')
                 item['images'][label] = filenames
                 page.close()
             manifest['pages'].append(item)
@@ -103,6 +107,14 @@ def preview_section(manifest, image_root, run_url):
             cells.append(f'<a href="{full}"><img src="{src}" width="{width}" alt="{title}: {label} preview"></a>')
         lines += ['| ' + ' | '.join(cells) + ' |', '',
                   'Select an image to open the full-page screenshot.', '', '</details>', '']
+        if all('detail' in page['images'][label] for label in ('mobile', 'desktop')):
+            lines += ['**Company logos in the career chronology**', '',
+                      '| Mobile | Desktop |', '| --- | --- |']
+            details = []
+            for label, width in [('mobile', 240), ('desktop', 600)]:
+                src = image_root + '/' + page['images'][label]['detail']
+                details.append(f'<img src="{src}" width="{width}" alt="Company logos: {label}">')
+            lines += ['| ' + ' | '.join(details) + ' |', '']
     lines.append(END)
     return '\n'.join(lines)
 

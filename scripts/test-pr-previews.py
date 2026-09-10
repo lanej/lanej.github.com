@@ -13,7 +13,7 @@ class PreviewTests(unittest.TestCase):
 
     def test_company_icons_affect_work(self):
         self.assertEqual(previews.affected_routes(
-            ['assets/css/work.css', 'static/icons/heroicons/cube.svg', 'STYLE.md'], self.routes), ['/record/'])
+            ['assets/css/work.css', 'static/logos/companies/easypost.svg', 'STYLE.md'], self.routes), ['/record/'])
 
     def test_shared_template_affects_every_page(self):
         self.assertEqual(previews.affected_routes(['layouts/partials/header.html'], self.routes), sorted(self.routes))

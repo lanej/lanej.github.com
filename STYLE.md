@@ -75,11 +75,12 @@ Chapter numbers come from heading order, not handwritten numbers. Do not indepen
 
 ## Work icons
 
-Use locally bundled Heroicons Mini (20px solid) beside company headings and career
-entries. These are decorative symbols in the shared accent color, not company
-logos. Keep every company entry aligned; do not depend on remote favicons or omit
-an icon because a brand asset is unavailable. Sources and the license live in
-`static/icons/heroicons/`.
+Use actual company logos beside company headings and career entries, consistently
+fitted inside 36px circular frames with 5px padding and a white interior. Preserve
+each logo's proportions and brand colors. Bundle the assets locally; do not use
+stock icons, redraw logos, tint them to match the site, or hotlink remote favicons.
+Use a company's standalone brand mark when available, and its real wordmark
+otherwise. Sources and extraction notes live in `static/logos/companies/README.md`.
 
 ## Links
 
