@@ -73,6 +73,14 @@ Every essay uses `layouts/writing/single.html`, `layouts/partials/essay-content.
 
 Chapter numbers come from heading order, not handwritten numbers. Do not independently opt articles into a different contents menu, heading treatment, or metadata position.
 
+## Work icons
+
+Use locally bundled Heroicons Mini (20px solid) beside company headings and career
+entries. These are decorative symbols in the shared accent color, not company
+logos. Keep every company entry aligned; do not depend on remote favicons or omit
+an icon because a brand asset is unavailable. Sources and the license live in
+`static/icons/heroicons/`.
+
 ## Links
 
 Links use the accent color with a thin underline where needed for legibility. Hover may move toward the primary text color.

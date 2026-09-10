@@ -1,28 +1,32 @@
-/* Work-page visual anchors. Use only company-hosted brand assets; do not synthesize logos. */
+/* Local Heroicons Mini (20px solid), used as decorative symbols, not company logos. */
 .work-content .prose h2:is(#easypost-technology-strategy,#engine-yard,#fastly){display:flex;align-items:center;gap:12px}
-.work-content .prose h2:is(#easypost-technology-strategy,#engine-yard,#fastly)::before{content:"";display:inline-block;width:28px;height:28px;flex:0 0 28px;background:var(--work-mark) center/contain no-repeat}
-.work-content .prose #easypost-technology-strategy{--work-mark:url('https://www.easypost.com/favicon.ico')}
-.work-content .prose #engine-yard{--work-mark:url('https://www.engineyard.com/favicon.ico')}
-.work-content .prose #fastly{--work-mark:url('https://www.fastly.com/favicon.ico')}
+.work-content .prose h2:is(#easypost-technology-strategy,#engine-yard,#fastly)::before{content:"";display:inline-block;width:20px;height:20px;flex:0 0 20px}
+.work-content .prose #easypost-technology-strategy{--work-icon:url('/icons/heroicons/cube.svg')}
+.work-content .prose #engine-yard{--work-icon:url('/icons/heroicons/cloud.svg')}
+.work-content .prose #fastly{--work-icon:url('/icons/heroicons/bolt.svg')}
 
-/* Preserve the list's normal inline text flow. The previous grid treatment split text nodes into narrow grid items on mobile. */
+/* Preserve inline text flow so wrapped role descriptions remain readable on phones. */
 .work-content .prose #early-career+ul{list-style:none;padding-left:0}
 .work-content .prose #early-career+ul li{display:block;position:relative;padding-left:32px;min-width:0}
-.work-content .prose #early-career+ul li::before{content:"";position:absolute;left:0;top:.2em;width:20px;height:20px;background:var(--work-mark) center/contain no-repeat}
-.work-content .prose #early-career+ul li:nth-child(-n+4){--work-mark:url('https://www.easypost.com/favicon.ico')}
-.work-content .prose #early-career+ul li:nth-child(5){--work-mark:url('https://www.fastly.com/favicon.ico')}
-.work-content .prose #early-career+ul li:nth-child(6){--work-mark:url('https://www.engineyard.com/favicon.ico')}
-.work-content .prose #early-career+ul li:nth-child(7){--work-mark:url('https://www.hubspot.com/favicon.ico')}
-.work-content .prose #early-career+ul li:nth-child(8){--work-mark:url('https://www.3m.com/favicon.ico')}
-.work-content .prose #early-career+ul li:nth-child(9){padding-left:0}
-.work-content .prose #early-career+ul li:nth-child(9)::before{display:none}
-.work-content .prose #early-career+ul li:nth-child(10){--work-mark:url('https://www.ups.com/favicon.ico')}
+.work-content .prose #early-career+ul li::before{content:"";position:absolute;left:0;top:.2em;width:20px;height:20px}
+.work-content .prose #early-career+ul li:nth-child(-n+4){--work-icon:url('/icons/heroicons/cube.svg')}
+.work-content .prose #early-career+ul li:nth-child(5){--work-icon:url('/icons/heroicons/bolt.svg')}
+.work-content .prose #early-career+ul li:nth-child(6){--work-icon:url('/icons/heroicons/cloud.svg')}
+.work-content .prose #early-career+ul li:nth-child(7){--work-icon:url('/icons/heroicons/code-bracket.svg')}
+.work-content .prose #early-career+ul li:nth-child(8){--work-icon:url('/icons/heroicons/beaker.svg')}
+.work-content .prose #early-career+ul li:nth-child(9){--work-icon:url('/icons/heroicons/cpu-chip.svg')}
+.work-content .prose #early-career+ul li:nth-child(10){--work-icon:url('/icons/heroicons/truck.svg')}
+
+.work-content .prose h2:is(#easypost-technology-strategy,#engine-yard,#fastly)::before,
+.work-content .prose #early-career+ul li::before{
+  background-color:var(--accent);
+  -webkit-mask:var(--work-icon) center/contain no-repeat;
+  mask:var(--work-icon) center/contain no-repeat;
+}
 
 @media(max-width:700px){
   .work-content .prose h2:is(#easypost-technology-strategy,#engine-yard,#fastly){gap:10px}
-  .work-content .prose h2:is(#easypost-technology-strategy,#engine-yard,#fastly)::before{width:24px;height:24px;flex-basis:24px}
   .work-content .prose #early-career+ul li{padding-left:30px}
-  .work-content .prose #early-career+ul li:nth-child(9){padding-left:0}
 }
 
 @media print{
