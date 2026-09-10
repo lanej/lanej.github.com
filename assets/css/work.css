@@ -7,6 +7,7 @@
 .career-company-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
 .work-content .prose .career-company-header h2{display:block;margin:0;padding:0;border:0;font-size:1.55rem;line-height:1.4}
 .work-content .prose .career-company-header h2::before{display:none}
+.work-content .prose .career-company-header h2:is(#easypost-technology-strategy,#engine-yard,#fastly)::before{display:none;content:none}
 .work-content .prose .career-tenure{margin:2px 0 0;font-size:.875rem;line-height:1.5}
 .work-content .prose .career-roles>li{position:relative;margin:0;padding:0 0 20px 48px;min-width:0}
 .work-content .prose .career-roles>li:last-child{padding-bottom:0}
