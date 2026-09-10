@@ -138,6 +138,17 @@ dependencies.
 
 ## Deployment
 
+Pull requests include an automatically refreshed **Page previews** section in the
+description. CI captures affected pages at 390px mobile and 1440px desktop widths;
+select a viewport image to open the full-page capture. Shared templates and assets
+conservatively capture every page. The section identifies the source revision and
+preserves text outside its HTML markers.
+
+Images live on separate `pr-previews/<number>` branches and use immutable commit
+URLs, so they stay viewable after Actions artifacts expire and never enter the
+website build. Same-repository PRs publish automatically after the build passes;
+fork PRs provide the `pr-page-previews` download artifact without write access.
+
 Merge a PR into `master`. Actions builds Hugo once, tests the output, deploys that
 exact Pages artifact, then checks **https://lanej.io/**. Production checks wait for
 the expected revision, compare actual response hashes with the tested artifact,
