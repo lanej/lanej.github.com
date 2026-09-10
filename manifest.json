@@ -1,0 +1,20 @@
+{
+  "head_sha": "5931d5b4dea3008049598da0aff91f8e02cd37e2",
+  "build_sha": "3bec50fd0032ec060919e8a70a149fc06e76741e",
+  "pages": [
+    {
+      "route": "/record/",
+      "images": {
+        "mobile": {
+          "viewport": "record-mobile.png",
+          "full": "record-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "record-desktop.png",
+          "full": "record-desktop-full.png"
+        }
+      },
+      "title": "Work"
+    }
+  ]
+}
