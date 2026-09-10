@@ -1,6 +1,6 @@
 {
-  "head_sha": "3acd2be7598ca7b7c693c6bb7079a60177224274",
-  "build_sha": "dea84e55edad7aaf87870f683a7521457eb282d5",
+  "head_sha": "1ccb786efa60d853366ff13204bfe49689870755",
+  "build_sha": "39f61ab7aebe4533094833cbfab459782dd22db4",
   "pages": [
     {
       "route": "/record/",
