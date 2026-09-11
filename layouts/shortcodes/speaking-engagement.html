@@ -1,0 +1,7 @@
+<article class="speaking-engagement">
+<header class="speaking-header">
+<span class="work-logo event-logo" aria-hidden="true"><img src="{{ .Get "logo" | relURL }}" alt="{{ .Get "event" }} logo" width="26" height="26"></span>
+<div><h3>{{ .Get "event" }}</h3><p>{{ .Get "location" }} · {{ .Get "date" }}{{ with .Get "organization" }} · {{ . }}{{ end }}</p></div>
+</header>
+<div class="speaking-detail">{{ .Page.RenderString (dict "display" "block") .Inner }}</div>
+</article>
