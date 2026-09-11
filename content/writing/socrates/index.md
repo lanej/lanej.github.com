@@ -39,17 +39,17 @@ The useful thing is making the assumption visible before either of us builds on 
 
 **What the lock actually stops**
 
-An AI agent doing analysis work has a way to spend real money — one expensive query, or a session that runs long enough to add up. I wanted a hard stop: before anything costly runs, a human has to physically approve it. Touch ID, or nothing happens. The one-line description of the feature was clean: this removes the agent’s ability to approve its own spending.
+I wanted an AI agent to ask before spending more money. An expensive query or a long analysis session could run past the budget I had in mind. The proposed fix was a biometric approval gate: when the work needed approval, I would authorize it with Touch ID.
 
-That sentence claims more than the design delivers.
+The feature’s description went further: it would remove the agent’s ability to approve its own spending.
 
-The same agent I’m gating also has shell access. It can delete the file that remembers today’s spending. It can unset the environment variable that turns the gate on in the first place. It can skip the guarded interface entirely and call the underlying tool directly. None of that requires beating the fingerprint check. The check only stops one specific failure mode: the agent quietly retrying with a bigger budget, typing yes to its own prompt, or not asking at all.
+During review, that claim ran into the rest of the design. The agent retained shell access and other routes to the underlying tools. Requiring a fingerprint in one interface did not put those routes behind the same approval. The useful question became whether the gate was still worth building with that limitation.
 
-That distinction changes what the feature is for. It is not a wall between an agent and my money. It is friction against an *undocumented* shortcut — the kind of thing that happens by drift, not by an agent actively working around a rule. Worth building, on those terms. Not worth building if I expected it to hold against an agent actually trying to get past it.
+I kept it. There was a specific behavior I wanted to stop in the normal workflow: an agent reaching a budget limit, retrying with a larger allowance, and treating its own answer to a confirmation prompt as my permission. Requiring my fingerprint made that approval step mine. It remained useful even though it could not control every action available to the agent.
 
-One of the success criteria had the same problem in miniature: it promised identical behavior from two entry points that don’t even share a process, which was never something the design could deliver. Restating it as “same fail-closed behavior, same limits” was still a real requirement — just not the one originally written down.
+That gave the specification a narrower, testable promise. Within the guarded interface, denying approval or letting it time out must stop the operation. An option that automatically answers yes must not count as authorization. The agent’s access outside that interface remained an explicit limitation.
 
-The gate shipped. It still assumes good faith on the agent’s part. That’s now a stated fact about the feature, instead of an unexamined one.
+The gate shipped with that narrower purpose. The review changed what I was prepared to rely on it for. I could require deliberate approval in this workflow without mistaking the prompt for control over all the agent’s spending.
 
 {{< socrates-diagram "comparison" >}}
 
@@ -61,13 +61,13 @@ Once the dialogue settles, Socrates does something that matters more than produc
 
 The layers are problem, requirements, constraints, risks, success, validation, and execution readiness. I do not care whether all seven headings are present because seven is a nice number. I care that each layer has to follow from the one below it.
 
-For the cost gate, the **problem** is not “the agent can approve its own spending.” The problem is that the fix is described as removing self-approval when it only blocks one narrow, in-band shortcut, and the agent still has shell access to work around it entirely. That distinction changes the **requirements**: state plainly which property is being built — friction against an undocumented shortcut, not containment against an agent actively trying to get around it. It exposes a **risk**: a control can earn more trust than it deserves once its own name overclaims. That risk changes **success** and **validation**: identical behavior across two entry points was never possible, since they don’t share a process model — the real bar is the same fail-closed behavior and the same limits, forced by an actual timeout and an actual denial, not assumed from a clean run.
+For the cost gate, the **problem** was spending beyond an intended budget without a deliberate decision from me. That established a **requirement**: when the guarded workflow asks for approval, only a human can supply it. The **constraint** was that the agent kept its other access to the tools. Recording that constraint exposed a **risk**: I might trust the gate to enforce a spending limit beyond the workflow it actually controlled.
 
-This is where false greens become easier to see. “The fingerprint prompt appears” is evidence about the implementation. It is not evidence that the control holds the property its own description claims. Two entry points looking identical in a terminal does not mean they enforce the same limit underneath.
+From there, **success** becomes concrete: a denied or unanswered request must leave the costly operation unexecuted. **Validation** has to force those cases and inspect what happens afterward. A screenshot of the fingerprint prompt establishes that a prompt appeared. It says nothing about whether the operation still ran after the prompt failed.
 
-The specification also records authority boundaries. An executor can choose the timeout value or the exact prompt wording. It should not decide, on its own, to keep describing the feature as removing self-approval, full stop. Restating what a safety feature is actually worth is a decision, not an implementation detail — if the claim changes, that decision belongs back in the agreement.
+The specification also records what the executor can decide. Prompt wording and internal code structure leave room for judgment. Continuing after a timeout changes the agreement. So does accepting an automated confirmation as approval. Those choices have to come back to me, even if they make the implementation easier.
 
-That is one of the ways this is specifically about AI. The agent being gated is the same kind of agent that might one day resume this very conversation, unaware that “removes self-approval” was already found to overclaim. The document has to carry the correction, not just the code.
+The next agent may have none of the conversation that established these limits. The document has to explain why an apparently helpful fallback would violate the requirement.
 
 {{< socrates-diagram "layers" >}}
 
@@ -83,11 +83,11 @@ Once that agreement is stable enough, Socrates freezes and versions the specific
 
 Then sequencing becomes a different problem. Every task in the plan has to trace back through a requirement to the original problem, and the plan gets its own dependency graph. The question is no longer “what do we mean?” but “what has to happen before what?”
 
-The cost-gate specification went through an independent plan critique. It didn’t catch a bug in the code — it caught a bug in the claim. The plan implemented exactly what was asked and was still wrong about what that implementation was worth: “removes agent self-approval” overstated what a fingerprint prompt can do against an agent that already has shell access. A separate success criterion turned out to be impossible outright, promising identical behavior from two entry points that don’t share a process model.
+In the cost-gate example, independent plan critique exposed the overstated promise. That finding belonged back in the specification, where it could change both the implementation plan and the standard used to judge the result. Leaving the correction in a review comment would make it too easy for a later executor to miss.
 
 That is why I separate specification review from plan review. A specification can be right while the proposed steps fail to preserve it. A plan can be internally coherent while testing the wrong thing.
 
-The final checks forced an actual timeout, forced an actual denial, and confirmed the old `-y`/`--yes` flag could no longer quietly bypass the new gate — it now fires regardless of that flag, unconditionally. The verifier was not allowed to redefine success at the end.
+For the gate, useful verification evidence would show the outcome of denial and timeout, including whether any costly work ran. It would also show that an automated confirmation could not substitute for the required approval. That evidence could establish the agreed behavior within the guarded workflow. The verifier could not turn it into a broader claim about every route the agent could take.
 
 This is an AI workflow, but the underlying discipline is older and broader: examine the claim, make the reasoning explicit, preserve the decisions, sequence the dependencies, and test the thing you actually meant.
 
