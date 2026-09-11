@@ -17,7 +17,7 @@ def affected_routes(paths, available):
     routes = set()
     essays = {r for r in available if r.startswith('/writing/') and r != '/writing/'}
     for path in paths:
-        if path in ('assets/css/work.css', 'data/career.yaml', 'layouts/shortcodes/career-timeline.html', 'layouts/shortcodes/work-role.html') or path.startswith(('static/logos/companies/', 'static/icons/heroicons/')):
+        if path in ('assets/css/work.css', 'data/career.yaml', 'data/contributions.yaml', 'layouts/partials/contributions.html', 'layouts/shortcodes/career-timeline.html', 'layouts/shortcodes/work-role.html') or path.startswith(('static/logos/companies/', 'static/logos/projects/', 'static/icons/heroicons/')):
             routes.add('/record/')
         elif path == 'assets/css/home.css':
             routes.add('/')
@@ -73,8 +73,9 @@ def capture(args):
                 assert response and response.ok, route
                 page.evaluate('document.fonts.ready')
                 if route == '/record/':
-                    page.locator('.company-logo img').evaluate_all(
+                    page.locator('.work-logo img').evaluate_all(
                         '(images) => Promise.all(images.map(image => image.decode()))')
+                    assert page.locator('.project-logo img').count() == page.locator('.contribution').count(), 'Every project needs a GitHub avatar'
                 assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), route
                 assert page.locator('meta[name="site-revision"]').get_attribute('content') == manifest['build_sha']
                 item['title'] = page.locator('h1').inner_text()
@@ -85,6 +86,9 @@ def capture(args):
                     filenames['detail'] = f'{slug}-{label}-companies.png'
                     page.locator('.career-company[data-company="easypost"]').screenshot(
                         path=str(out / filenames['detail']), animations='disabled')
+                    filenames['projects'] = f'{slug}-{label}-projects.png'
+                    page.locator('.contributions').screenshot(
+                        path=str(out / filenames['projects']), animations='disabled')
                 item['images'][label] = filenames
                 page.close()
             manifest['pages'].append(item)
@@ -110,13 +114,16 @@ def preview_section(manifest, image_root, run_url):
             cells.append(f'<a href="{full}"><img src="{src}" width="{width}" alt="{title}: {label} preview"></a>')
         lines += ['| ' + ' | '.join(cells) + ' |', '',
                   'Select an image to open the full-page screenshot.', '', '</details>', '']
-        if all('detail' in page['images'][label] for label in ('mobile', 'desktop')):
-            lines += ['**EasyPost: roles and descriptions**', '',
+        for key, heading, alt in (('detail', 'EasyPost: roles and descriptions', 'EasyPost career details'),
+                                  ('projects', 'Open-source projects', 'Open-source projects')):
+            if not all(key in page['images'][label] for label in ('mobile', 'desktop')):
+                continue
+            lines += [f'**{heading}**', '',
                       '| Mobile | Desktop |', '| --- | --- |']
             details = []
             for label, width in [('mobile', 240), ('desktop', 600)]:
-                src = image_root + '/' + page['images'][label]['detail']
-                details.append(f'<img src="{src}" width="{width}" alt="EasyPost career details: {label}">')
+                src = image_root + '/' + page['images'][label][key]
+                details.append(f'<img src="{src}" width="{width}" alt="{alt}: {label}">')
             lines += ['| ' + ' | '.join(details) + ' |', '']
     lines.append(END)
     return '\n'.join(lines)

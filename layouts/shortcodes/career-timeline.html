@@ -3,7 +3,7 @@
 {{ range hugo.Data.career }}
 <li class="career-company" data-company="{{ .id }}">
   <header class="career-company-header">
-    <span class="company-logo" aria-hidden="true"><img src="{{ .logo | relURL }}" alt="{{ .company }} logo" width="26" height="26"></span>
+    <span class="work-logo company-logo" aria-hidden="true"><img src="{{ .logo | relURL }}" alt="{{ .company }} logo" width="26" height="26"></span>
     <div><h2 id="{{ .anchor | default .id }}">{{ .company }}</h2><p class="career-tenure">{{ .period }}</p></div>
   </header>
   <ol class="career-roles{{ if gt (len .roles) 1 }} career-roles-connected{{ end }}" aria-label="{{ .company }} roles, most recent first">
