@@ -6,7 +6,10 @@ framework, external fonts, analytics, or decorative JavaScript without a concret
 requirement. Never generate or retouch Josh’s photograph; use the supplied image.
 
 Edit the source, not `public/`. Keep one publishing path. Before merging, run the
-pinned Hugo build, source checks, and browser verification. After deployment,
+pinned Hugo build, source checks, and browser verification. Confirm the PR description
+contains current mobile and desktop screenshots of affected pages from the preview
+workflow. Preserve the automated preview markers when editing PR descriptions.
+Screenshots are kept on separate preview branches, not in source. After deployment,
 inspect screenshots captured from **https://lanej.io/** at mobile and desktop
 sizes. Confirm the expected revision and that the fetched image bytes decode and
 match the build. Never call a change verified solely because a deploy job passed.

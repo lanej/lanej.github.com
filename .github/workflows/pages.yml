@@ -18,6 +18,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
+          fetch-depth: 0
       - name: Install verification tools
         run: |
           python3 -m venv .venv
@@ -36,6 +37,25 @@ jobs:
           server=$!
           trap 'kill "$server"' EXIT
           python3 scripts/browser-smoke.py --chromium-path "$chrome"
+      - name: Capture affected pages for PR description
+        if: github.event_name == 'pull_request'
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          chrome=$(command -v google-chrome || command -v google-chrome-stable)
+          python3 scripts/test-pr-previews.py
+          python3 -m http.server 8765 --directory public >/tmp/preview-server.log 2>&1 &
+          server=$!
+          trap 'kill "$server"' EXIT
+          python3 scripts/pr-previews.py capture --base "$PR_BASE_SHA" --chromium-path "$chrome"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: github.event_name == 'pull_request'
+        with:
+          name: pr-page-previews
+          path: artifacts/pr-previews/
+          retention-days: 14
+          if-no-files-found: error
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
@@ -55,6 +75,26 @@ jobs:
         if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
         with:
           path: public/
+  publish-previews:
+    needs: build
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: pr-page-previews
+          path: artifacts/pr-previews/
+      - name: Embed durable screenshots in PR description
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/pr-previews.py publish
   deploy:
     needs: build
     if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'

@@ -73,6 +73,23 @@ Every essay uses `layouts/writing/single.html`, `layouts/partials/essay-content.
 
 Chapter numbers come from heading order, not handwritten numbers. Do not independently opt articles into a different contents menu, heading treatment, or metadata position.
 
+## Work icons
+
+Use actual company logos beside company headings and career entries, consistently
+fitted inside 36px circular frames with 5px padding and a white interior. Preserve
+each logo's proportions and brand colors. Bundle the assets locally; do not use
+stock icons, redraw logos, tint them to match the site, or hotlink remote favicons.
+Use a company's standalone brand mark when available, and its real wordmark
+otherwise. Sources and extraction notes live in `static/logos/companies/README.md`.
+
+Work uses one combined career narrative from `data/career.yaml`, not separate
+descriptions and chronology. Group actual job titles under one employer logo,
+with newest roles first and a thin vertical path connecting small role markers.
+Place descriptions under the roles they describe; retain company-wide context
+at company level rather than assigning it to an unverified role or date range.
+Dates belong below each role; employer tenure belongs below the company name.
+Keep unknown promotion dates unspecified rather than estimating them.
+
 ## Links
 
 Links use the accent color with a thin underline where needed for legibility. Hover may move toward the primary text color.
