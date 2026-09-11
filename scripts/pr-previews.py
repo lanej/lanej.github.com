@@ -17,7 +17,7 @@ def affected_routes(paths, available):
     routes = set()
     essays = {r for r in available if r.startswith('/writing/') and r != '/writing/'}
     for path in paths:
-        if path in ('assets/css/work.css', 'data/career.yaml', 'data/contributions.yaml', 'layouts/partials/contributions.html', 'layouts/shortcodes/career-timeline.html', 'layouts/shortcodes/work-role.html') or path.startswith(('static/logos/companies/', 'static/logos/projects/', 'static/icons/heroicons/')):
+        if path in ('assets/css/work.css', 'data/career.yaml', 'data/contributions.yaml', 'layouts/partials/contributions.html', 'layouts/shortcodes/career-timeline.html', 'layouts/shortcodes/work-role.html', 'layouts/shortcodes/speaking-engagement.html') or path.startswith(('static/logos/companies/', 'static/logos/projects/', 'static/logos/events/', 'static/icons/heroicons/')):
             routes.add('/record/')
         elif path == 'assets/css/home.css':
             routes.add('/')
@@ -76,6 +76,7 @@ def capture(args):
                     page.locator('.work-logo img').evaluate_all(
                         '(images) => Promise.all(images.map(image => image.decode()))')
                     assert page.locator('.project-logo img').count() == page.locator('.contribution').count(), 'Every project needs a GitHub avatar'
+                    assert page.locator('.event-logo img').count() == page.locator('.speaking-engagement').count(), 'Every speaking engagement needs its event logo'
                 assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), route
                 assert page.locator('meta[name="site-revision"]').get_attribute('content') == manifest['build_sha']
                 item['title'] = page.locator('h1').inner_text()
@@ -89,6 +90,10 @@ def capture(args):
                     filenames['projects'] = f'{slug}-{label}-projects.png'
                     page.locator('.contributions').screenshot(
                         path=str(out / filenames['projects']), animations='disabled')
+                    if page.locator('.speaking-engagement').count():
+                        filenames['speaking'] = f'{slug}-{label}-speaking.png'
+                        page.locator('.speaking-engagement').screenshot(
+                            path=str(out / filenames['speaking']), animations='disabled')
                 item['images'][label] = filenames
                 page.close()
             manifest['pages'].append(item)
@@ -115,7 +120,8 @@ def preview_section(manifest, image_root, run_url):
         lines += ['| ' + ' | '.join(cells) + ' |', '',
                   'Select an image to open the full-page screenshot.', '', '</details>', '']
         for key, heading, alt in (('detail', 'EasyPost: roles and descriptions', 'EasyPost career details'),
-                                  ('projects', 'Open-source projects', 'Open-source projects')):
+                                  ('projects', 'Open-source projects', 'Open-source projects'),
+                                  ('speaking', 'Speaking engagements', 'Speaking engagement')):
             if not all(key in page['images'][label] for label in ('mobile', 'desktop')):
                 continue
             lines += [f'**{heading}**', '',

@@ -25,15 +25,16 @@
 .work-content .prose .career-role-description>:last-child,
 .work-content .prose .career-company-description>:last-child{margin-bottom:0}
 
-/* Projects use the same badge and text alignment as employers. */
-.contribution-header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.contribution-header>div{min-width:0}
-.contribution-header h3{margin:0 0 3px}
+/* Projects and speaking engagements share the employer badge and text alignment. */
+.contribution-header,.speaking-header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.contribution-header>div,.speaking-header>div{min-width:0}
+.contribution-header h3,.speaking-header h3{margin:0 0 3px;color:var(--text);font-size:1.2rem;font-weight:550}
 .contribution-header .eyebrow{margin:0}
-.contribution-detail{margin-left:48px}
+.speaking-header p{margin:0;font-size:.875rem;line-height:1.5}
+.contribution-detail,.speaking-detail{margin-left:48px}
 
 @media print{
   .work-content .prose h2::before,.work-logo,.career-roles-connected>li::before,.career-roles-connected>li::after{display:none}
   .work-content .prose .career-roles>li{padding-left:0}
-  .career-company-description,.contribution-detail{margin-left:0}
+  .career-company-description,.contribution-detail,.speaking-detail{margin-left:0}
 }

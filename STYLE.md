@@ -88,6 +88,10 @@ The shared `.work-logo` class keeps both treatments consistent. Keep project nam
 beside the decorative avatars and align descriptions beneath the names. Avatar
 sources live in `static/logos/projects/README.md`.
 
+Speaking engagements use the same badge and alignment, with an official event
+icon beside the conference name and the talk details beneath it. Keep the event
+assets local and document sources in `static/logos/events/README.md`.
+
 Work uses one combined career narrative from `data/career.yaml`, not separate
 descriptions and chronology. Group actual job titles under one employer logo,
 with newest roles first and a thin vertical path connecting small role markers.

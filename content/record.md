@@ -21,10 +21,12 @@ This is a selected record of systems I have built, organizations I have led, and
 
 ## Speaking {#sapporo-rubykaigi-2012}
 
-**Release Early and Release Often: Reducing deployment friction**
+{{< speaking-engagement event="Sapporo RubyKaigi" location="Sapporo, Japan" date="September 14, 2012" organization="Engine Yard" logo="/logos/events/sapporo-rubykaigi-2012.png" >}}
 
-Sapporo RubyKaigi · Sapporo, Japan · September 14, 2012 · Engine Yard
+**Release Early and Release Often: Reducing deployment friction**
 
 I presented Engine Yard’s approach to automated testing, continuous integration, and deployment. The main cloud codebase could be released at least daily while retaining a rigorous testing and release process.
 
 [Conference program and abstract](https://sapporo.rubykaigi.org/2012/en/schedule/details/37.html) · [Event report (Japanese)](https://gihyo.jp/news/report/01/sapporo-rubykaigi2012/0001)
+
+{{< /speaking-engagement >}}
