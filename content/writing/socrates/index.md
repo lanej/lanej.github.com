@@ -37,23 +37,19 @@ The useful thing is making the assumption visible before either of us builds on 
 
 ## From request to clarity {#request-to-clarity-title}
 
-**A real bug in Socrates itself**
+**What the lock actually stops**
 
-A bug in Socrates became a useful example of what this process is for.
+An AI agent doing analysis work has a way to spend real money — one expensive query, or a session that runs long enough to add up. I wanted a hard stop: before anything costly runs, a human has to physically approve it. Touch ID, or nothing happens. The one-line description of the feature was clean: this removes the agent’s ability to approve its own spending.
 
-Socrates stores each piece of work in a timestamped directory under `.socrates/`. Originally there was one `.current` file that pointed at the active specification. That was fine while one Claude session worked in a repository. With two sessions, either conversation could replace the pointer. Both specifications could remain perfectly intact while one agent quietly resumed against the other agent’s task.
+That sentence claims more than the design delivers.
 
-The obvious fix was: **make the pointer session-specific.**
+The same agent I’m gating also has shell access. It can delete the file that remembers today’s spending. It can unset the environment variable that turns the gate on in the first place. It can skip the guarded interface entirely and call the underlying tool directly. None of that requires beating the fingerprint check. The check only stops one specific failure mode: the agent quietly retrying with a bigger budget, typing yes to its own prompt, or not asking at all.
 
-That sentence is a direction, not yet a contract.
+That distinction changes what the feature is for. It is not a wall between an agent and my money. It is friction against an *undocumented* shortcut — the kind of thing that happens by drift, not by an agent actively working around a rule. Worth building, on those terms. Not worth building if I expected it to hold against an agent actually trying to get past it.
 
-What counts as a session? A resumed conversation should recover which specification? If a binding exists but its target has been deleted, do we fail or fall back? If the binding is missing and several specifications exist, is choosing the newest acceptable? What tells us that another candidate is active in a different session?
+One of the success criteria had the same problem in miniature: it promised identical behavior from two entry points that don’t even share a process, which was never something the design could deliver. Restating it as “same fail-closed behavior, same limits” was still a real requirement — just not the one originally written down.
 
-Those questions changed the work. The eventual fix binds a specification to `CLAUDE_CODE_SESSION_ID`, preserves the binding across resume, treats a missing binding and a deleted target as explicit fallback cases, and refuses to guess in non-interactive critique or verification when several candidates remain. The implementation also had to use the Claude process identifier rather than the PID of a shell spawned by a tool call.
-
-That behavior is documented in the [session-binding change](https://github.com/lanej/dotfiles/commit/e48e4f0f3b8b7e5b1fe4d0b3ff17846529902977). The important part is not the filename. It is that the conversation turned “use a different pointer” into a statement of what must remain true when the normal path fails.
-
-A competent agent could have implemented the first sentence in a few minutes. I would have gotten a cleaner version of the same underspecified system.
+The gate shipped. It still assumes good faith on the agent’s part. That’s now a stated fact about the feature, instead of an unexamined one.
 
 {{< socrates-diagram "comparison" >}}
 
@@ -65,13 +61,13 @@ Once the dialogue settles, Socrates does something that matters more than produc
 
 The layers are problem, requirements, constraints, risks, success, validation, and execution readiness. I do not care whether all seven headings are present because seven is a nice number. I care that each layer has to follow from the one below it.
 
-For the session bug, the **problem** is not “the pointer filename is global.” The problem is that one conversation can load another conversation’s specification. That distinction changes the **requirements**: preserve each session’s binding and recover it correctly. It exposes a **risk**: a fallback can silently select the wrong task. That risk changes **success** and **validation**: normal resolution is not enough; we need to force missing, stale, and ambiguous states.
+For the cost gate, the **problem** is not “the agent can approve its own spending.” The problem is that the fix is described as removing self-approval when it only blocks one narrow, in-band shortcut, and the agent still has shell access to work around it entirely. That distinction changes the **requirements**: state plainly which property is being built — friction against an undocumented shortcut, not containment against an agent actively trying to get around it. It exposes a **risk**: a control can earn more trust than it deserves once its own name overclaims. That risk changes **success** and **validation**: identical behavior across two entry points was never possible, since they don’t share a process model — the real bar is the same fail-closed behavior and the same limits, forced by an actual timeout and an actual denial, not assumed from a clean run.
 
-This is where false greens become easier to see. “The new pointer file exists” is evidence about the implementation. It is not evidence that a resumed session loads the intended specification. “Fallback works” is meaningless if the test never makes the fast path unavailable.
+This is where false greens become easier to see. “The fingerprint prompt appears” is evidence about the implementation. It is not evidence that the control holds the property its own description claims. Two entry points looking identical in a terminal does not mean they enforce the same limit underneath.
 
-The specification also records authority boundaries. An executor can choose implementation details. It should not decide that ambiguity means “pick the newest specification” merely because that makes the code simpler. If the choice changes what task is being executed, that decision belongs back in the agreement.
+The specification also records authority boundaries. An executor can choose the timeout value or the exact prompt wording. It should not decide, on its own, to keep describing the feature as removing self-approval, full stop. Restating what a safety feature is actually worth is a decision, not an implementation detail — if the claim changes, that decision belongs back in the agreement.
 
-That is one of the ways this is specifically about AI. The next agent may be capable and completely unfamiliar with the conversation that produced the requirement. The document has to carry the reasoning that prevents it from helpfully solving a different problem.
+That is one of the ways this is specifically about AI. The agent being gated is the same kind of agent that might one day resume this very conversation, unaware that “removes self-approval” was already found to overclaim. The document has to carry the correction, not just the code.
 
 {{< socrates-diagram "layers" >}}
 
@@ -79,7 +75,7 @@ That is one of the ways this is specifically about AI. The next agent may be cap
 
 The output of Socrates is not the conversation. It is a set of artifacts another process can use: an authoritative `spec.md`, an optional independent critique, a `plan.md`, and verification evidence when the work is done.
 
-The accompanying decision record illustrates what I want the handoff to preserve: the decision, why it exists, what is delegated, and what evidence would demonstrate it. It is a condensed example for the session bug, not a copy from a saved Socrates session.
+The accompanying decision record illustrates what I want the handoff to preserve: the decision, why it exists, what is delegated, and what evidence would demonstrate it. It is a condensed example for the cost gate, not a copy from a saved Socrates session.
 
 {{< socrates-diagram "record" >}}
 
@@ -87,11 +83,11 @@ Once that agreement is stable enough, Socrates freezes and versions the specific
 
 Then sequencing becomes a different problem. Every task in the plan has to trace back through a requirement to the original problem, and the plan gets its own dependency graph. The question is no longer “what do we mean?” but “what has to happen before what?”
 
-The session-binding change went through five rounds of independent plan critique. Those rounds caught concrete defects: missing tool permissions, using `$$` when the code needed Claude’s PID, twice dropping the step that loads `spec.md`, a grep-based acceptance check that could false-positive against its own new filenames, and a dogfood test that claimed to exercise fallback without actually forcing execution down the fallback path.
+The cost-gate specification went through an independent plan critique. It didn’t catch a bug in the code — it caught a bug in the claim. The plan implemented exactly what was asked and was still wrong about what that implementation was worth: “removes agent self-approval” overstated what a fingerprint prompt can do against an agent that already has shell access. A separate success criterion turned out to be impossible outright, promising identical behavior from two entry points that don’t share a process model.
 
 That is why I separate specification review from plan review. A specification can be right while the proposed steps fail to preserve it. A plan can be internally coherent while testing the wrong thing.
 
-The final checks deliberately exercised direct resolution, forced fallback, claiming an unbound session, a deleted pointer target, and the picker/write behavior. The verifier was not allowed to redefine success at the end.
+The final checks forced an actual timeout, forced an actual denial, and confirmed the old `-y`/`--yes` flag could no longer quietly bypass the new gate — it now fires regardless of that flag, unconditionally. The verifier was not allowed to redefine success at the end.
 
 This is an AI workflow, but the underlying discipline is older and broader: examine the claim, make the reasoning explicit, preserve the decisions, sequence the dependencies, and test the thing you actually meant.
 
