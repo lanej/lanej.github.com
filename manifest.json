@@ -1,0 +1,24 @@
+{
+  "head_sha": "2ee38b6fdabca229630299e1d89b96fe6716e74d",
+  "build_sha": "77bf495c8fdcf9b0057691cc91d5669f86ae0d79",
+  "pages": [
+    {
+      "route": "/record/",
+      "images": {
+        "mobile": {
+          "viewport": "record-mobile.png",
+          "full": "record-mobile-full.png",
+          "detail": "record-mobile-companies.png",
+          "projects": "record-mobile-projects.png"
+        },
+        "desktop": {
+          "viewport": "record-desktop.png",
+          "full": "record-desktop-full.png",
+          "detail": "record-desktop-companies.png",
+          "projects": "record-desktop-projects.png"
+        }
+      },
+      "title": "Work"
+    }
+  ]
+}
