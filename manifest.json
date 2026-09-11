@@ -1,6 +1,6 @@
 {
-  "head_sha": "2ee38b6fdabca229630299e1d89b96fe6716e74d",
-  "build_sha": "77bf495c8fdcf9b0057691cc91d5669f86ae0d79",
+  "head_sha": "a5007bb210f9ed13dffcd636fb7284dc6451bf7b",
+  "build_sha": "07da4504ea3b42b2b0fb804599704e51251371fd",
   "pages": [
     {
       "route": "/record/",
@@ -9,13 +9,15 @@
           "viewport": "record-mobile.png",
           "full": "record-mobile-full.png",
           "detail": "record-mobile-companies.png",
-          "projects": "record-mobile-projects.png"
+          "projects": "record-mobile-projects.png",
+          "speaking": "record-mobile-speaking.png"
         },
         "desktop": {
           "viewport": "record-desktop.png",
           "full": "record-desktop-full.png",
           "detail": "record-desktop-companies.png",
-          "projects": "record-desktop-projects.png"
+          "projects": "record-desktop-projects.png",
+          "speaking": "record-desktop-speaking.png"
         }
       },
       "title": "Work"
