@@ -1,32 +1,32 @@
-/* Work-page visual anchors. Use only company-hosted brand assets; do not synthesize logos. */
-.work-content .prose h2:is(#easypost-technology-strategy,#engine-yard,#fastly){display:flex;align-items:center;gap:12px}
-.work-content .prose h2:is(#easypost-technology-strategy,#engine-yard,#fastly)::before{content:"";display:inline-block;width:28px;height:28px;flex:0 0 28px;background:var(--work-mark) center/contain no-repeat}
-.work-content .prose #easypost-technology-strategy{--work-mark:url('https://www.easypost.com/favicon.ico')}
-.work-content .prose #engine-yard{--work-mark:url('https://www.engineyard.com/favicon.ico')}
-.work-content .prose #fastly{--work-mark:url('https://www.fastly.com/favicon.ico')}
+/* One employer mark; connected role steps stay on the same vertical axis. */
+.company-logo{display:block;width:36px;height:36px;flex:0 0 36px;box-sizing:border-box;padding:5px;border-radius:50%;background:#fff}
+.company-logo img{display:block;width:100%;height:100%;object-fit:contain}
+.work-content .prose .career-timeline,
+.work-content .prose .career-roles{list-style:none;padding:0;margin:0}
+.work-content .prose .career-company+ .career-company{margin-top:36px;padding-top:28px;border-top:1px solid var(--line)}
+.career-company-header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.work-content .prose .career-company-header h2{display:block;margin:0;padding:0;border:0;font-size:1.55rem;line-height:1.4}
+.work-content .prose .career-company-header h2::before{display:none}
+.work-content .prose .career-company-header h2:is(#easypost-technology-strategy,#engine-yard,#fastly)::before{display:none;content:none}
+.work-content .prose .career-tenure{margin:2px 0 0;font-size:.875rem;line-height:1.5}
+.work-content .prose .career-roles>li{position:relative;margin:0;padding:0 0 20px 48px;min-width:0}
+.work-content .prose .career-roles>li:last-child{padding-bottom:0}
+.work-content .prose .career-role-title{margin:0;color:var(--text);font-size:1rem;font-weight:550;line-height:1.5}
+.work-content .prose .career-role-period{margin:3px 0 0;font-size:.875rem;line-height:1.5}
+.career-roles-connected>li::before{content:"";position:absolute;left:14px;top:9px;width:7px;height:7px;border-radius:50%;background:var(--muted);z-index:1}
+.career-roles-connected>li:not(:last-child)::after{content:"";position:absolute;left:17px;top:12px;bottom:-12px;width:1px;background:var(--line)}
+.career-company:first-child .career-roles-connected>li:first-child::before{background:var(--accent)}
+.work-content .prose .career-timeline{margin-bottom:1.5em}
 
-/* Preserve the list's normal inline text flow. The previous grid treatment split text nodes into narrow grid items on mobile. */
-.work-content .prose #early-career+ul{list-style:none;padding-left:0}
-.work-content .prose #early-career+ul li{display:block;position:relative;padding-left:32px;min-width:0}
-.work-content .prose #early-career+ul li::before{content:"";position:absolute;left:0;top:.2em;width:20px;height:20px;background:var(--work-mark) center/contain no-repeat}
-.work-content .prose #early-career+ul li:nth-child(-n+4){--work-mark:url('https://www.easypost.com/favicon.ico')}
-.work-content .prose #early-career+ul li:nth-child(5){--work-mark:url('https://www.fastly.com/favicon.ico')}
-.work-content .prose #early-career+ul li:nth-child(6){--work-mark:url('https://www.engineyard.com/favicon.ico')}
-.work-content .prose #early-career+ul li:nth-child(7){--work-mark:url('https://www.hubspot.com/favicon.ico')}
-.work-content .prose #early-career+ul li:nth-child(8){--work-mark:url('https://www.3m.com/favicon.ico')}
-.work-content .prose #early-career+ul li:nth-child(9){padding-left:0}
-.work-content .prose #early-career+ul li:nth-child(9)::before{display:none}
-.work-content .prose #early-career+ul li:nth-child(10){--work-mark:url('https://www.ups.com/favicon.ico')}
-
-@media(max-width:700px){
-  .work-content .prose h2:is(#easypost-technology-strategy,#engine-yard,#fastly){gap:10px}
-  .work-content .prose h2:is(#easypost-technology-strategy,#engine-yard,#fastly)::before{width:24px;height:24px;flex-basis:24px}
-  .work-content .prose #early-career+ul li{padding-left:30px}
-  .work-content .prose #early-career+ul li:nth-child(9){padding-left:0}
-}
+.career-role-description{margin-top:10px}
+.career-company-description{margin:20px 0 0 48px}
+.work-content .prose .career-role-description p,
+.work-content .prose .career-company-description p{font-size:1rem;line-height:1.7}
+.work-content .prose .career-role-description>:last-child,
+.work-content .prose .career-company-description>:last-child{margin-bottom:0}
 
 @media print{
-  .work-content .prose h2::before,.work-content .prose #early-career+ul li::before{display:none}
-  .work-content .prose #early-career+ul li{padding-left:0}
-  .work-content .prose #early-career+ul{list-style:disc;padding-left:1.3em}
+  .work-content .prose h2::before,.company-logo,.career-roles-connected>li::before,.career-roles-connected>li::after{display:none}
+  .work-content .prose .career-roles>li{padding-left:0}
+  .career-company-description{margin-left:0}
 }

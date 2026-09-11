@@ -66,12 +66,29 @@ Column count follows chapter content, not an article-specific layout. When a cha
 Every essay uses `layouts/writing/single.html`, `layouts/partials/essay-content.html`, and `assets/css/essays.css`. No article-specific layout or stylesheet.
 
 - Writing link and calculated reading time appear above the title. Dates stay in metadata and RSS only.
-- The title, description, accent callout, opening prose, and relevant visual share one opening layout. The first introductory blockquote becomes the opening callout without duplicating it; RSS keeps the authored order. Use `essay_visual` for a shared vector diagram or `essay_image` for an existing illustration. Large illustrations fade into the background; opening visuals are omitted on small phones where the copy takes priority.
+- The title and description span the full essay width above the opening columns. The accent callout and opening prose sit beside the relevant visual beneath them. The first introductory blockquote becomes the opening callout without duplicating it; RSS keeps the authored order. Use `essay_visual` for a shared vector diagram or `essay_image` for an existing illustration. Large illustrations fade into the background; opening visuals are omitted on small phones where the copy takes priority.
 - Every Markdown H2 starts a chapter with a generated two-digit number, short accent rule, common heading size, and thin divider. H3 is an unnumbered subsection.
 - Chapters without visuals fill the essay width. Diagrams and tables sit in a vertically centered right column on wide screens and follow the chapter copy on narrow screens. Heading and spacing treatments stay shared.
 - All essays share the same archive/feed footer and citation behavior.
 
 Chapter numbers come from heading order, not handwritten numbers. Do not independently opt articles into a different contents menu, heading treatment, or metadata position.
+
+## Work icons
+
+Use actual company logos beside company headings and career entries, consistently
+fitted inside 36px circular frames with 5px padding and a white interior. Preserve
+each logo's proportions and brand colors. Bundle the assets locally; do not use
+stock icons, redraw logos, tint them to match the site, or hotlink remote favicons.
+Use a company's standalone brand mark when available, and its real wordmark
+otherwise. Sources and extraction notes live in `static/logos/companies/README.md`.
+
+Work uses one combined career narrative from `data/career.yaml`, not separate
+descriptions and chronology. Group actual job titles under one employer logo,
+with newest roles first and a thin vertical path connecting small role markers.
+Place descriptions under the roles they describe; retain company-wide context
+at company level rather than assigning it to an unverified role or date range.
+Dates belong below each role; employer tenure belongs below the company name.
+Keep unknown promotion dates unspecified rather than estimating them.
 
 ## Links
 
