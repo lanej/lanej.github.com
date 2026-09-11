@@ -1,7 +1,7 @@
 name: Build, deploy, and verify lanej.io
 on:
   push:
-    branches: [master]
+    branches: [master, verify/socrates-cost-gate-3bcf1b9]
   pull_request:
     branches: [master]
   workflow_dispatch:
