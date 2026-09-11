@@ -1,0 +1,131 @@
+name: Verify merged essays and Work on lanej.io
+on:
+  push:
+    branches: [verify/live-essays-work-50]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: 8e16932ca2100a456d295a80dea5ba92e5bcafd4
+          persist-credentials: false
+      - name: Install verification tools
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install -r scripts/requirements.txt
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+          bash scripts/install-hugo.sh
+      - name: Build the merged revision
+        run: GITHUB_SHA=8e16932ca2100a456d295a80dea5ba92e5bcafd4 bash scripts/build.sh
+      - name: Confirm the deployed revision
+        run: python3 scripts/live-smoke.py
+      - name: Capture the actual custom domain
+        run: |
+          chrome=$(command -v google-chrome || command -v google-chrome-stable)
+          python3 scripts/browser-smoke.py --url https://lanej.io/ --chromium-path "$chrome" --output artifacts/live
+      - name: Verify merged content and responsive layouts
+        run: |
+          python3 - <<'PY'
+          import json, shutil
+          from pathlib import Path
+          from playwright.sync_api import sync_playwright
+          expected=json.loads(Path('public/build.json').read_text())['revision']
+          out=Path('artifacts/live');out.mkdir(parents=True,exist_ok=True)
+          checks=[]
+          with sync_playwright() as p:
+              browser=p.chromium.launch(executable_path=shutil.which('google-chrome'),args=['--no-sandbox'])
+              for width in (320,390,768,1440):
+                  page=browser.new_page(viewport={'width':width,'height':900},color_scheme='dark')
+                  for route,label in (('/','home'),('/record/','record'),('/writing/socrates/','socrates')):
+                      response=page.goto('https://lanej.io'+route,wait_until='networkidle')
+                      assert response.ok
+                      assert page.locator('meta[name="site-revision"]').get_attribute('content')==expected
+                      page.locator('img').evaluate_all('(imgs)=>Promise.all(imgs.map(img=>img.decode()))')
+                      assert page.evaluate('document.documentElement.scrollWidth<=innerWidth+1'),(route,width)
+                      nav=page.locator('.site-header nav a')
+                      assert nav.all_text_contents()==['Writing','About','Work']
+                      rects=nav.evaluate_all('(links)=>links.map(a=>{const r=a.getBoundingClientRect();return {w:r.width,h:r.height,y:r.y}})')
+                      assert all(r['w']>=44 and r['h']>=44 for r in rects)
+                      assert max(r['y'] for r in rects)-min(r['y'] for r in rects)<2
+                      if width in (320,390,1440):
+                          page.locator('.site-header').screenshot(path=str(out/f'{label}-header-{width}.png'))
+                      if route=='/record/':
+                          assert page.locator('.career-company').count()==7
+                          assert page.locator('.company-logo img').count()==7
+                          assert page.locator('[data-company="easypost"] .career-roles>li').count()==7
+                          assert 'post-sales operations' in page.locator('[data-company="easypost"]').inner_text()
+                          circles=page.locator('.company-logo').evaluate_all('(els)=>els.map(el=>{const r=el.getBoundingClientRect();return [r.width,r.height]})')
+                          assert all(abs(w-36)<1 and abs(h-36)<1 for w,h in circles)
+                          for href in page.locator('.work-index a').evaluate_all('(links)=>links.map(a=>a.getAttribute("href"))'):
+                              assert page.locator(href).count()==1,href
+                          if width in (390,1440):
+                              page.screenshot(path=str(out/f'record-{width}.png'))
+                              page.screenshot(path=str(out/f'record-full-{width}.png'),full_page=True)
+                              for company in page.locator('.career-company-header').all():
+                                  name=company.locator('h2').get_attribute('id')
+                                  company.screenshot(path=str(out/f'company-{name}-{width}.png'))
+                      if route=='/writing/socrates/':
+                          body=page.locator('.sc-article').inner_text()
+                          assert 'The gate shipped with that narrower purpose.' in body
+                          assert 'CLAUDE_CODE_SESSION_ID' not in body
+                          assert page.locator('#preserve-intent [data-essay-diagram]').count()==2
+                          if width in (390,1440):
+                              page.locator('#request-to-clarity').screenshot(path=str(out/f'socrates-example-{width}.png'))
+                      if width==320:
+                          page.evaluate('document.documentElement.style.fontSize="200%"')
+                          assert page.evaluate('document.documentElement.scrollWidth<=innerWidth+1'),(route,'200%')
+                          assert nav.evaluate_all('(links)=>links.every(a=>a.scrollWidth<=a.clientWidth+1 && a.scrollHeight<=a.clientHeight+1)')
+                          page.locator('.site-header').screenshot(path=str(out/f'{label}-header-320-enlarged.png'))
+                      checks.append({'route':route,'width':width})
+                  page.close()
+              for width in (390,768,961,1440):
+                  page=browser.new_page(viewport={'width':width,'height':900})
+                  for article in sorted(Path('public/writing').glob('*/index.html')):
+                      page.goto('https://lanej.io/writing/'+article.parent.name+'/',wait_until='networkidle')
+                      widths=page.locator('.sc-hero').evaluate('(el)=>[el.getBoundingClientRect().width,el.querySelector(":scope > .article-header").getBoundingClientRect().width]')
+                      assert abs(widths[0]-widths[1])<2,(article.parent.name,width,widths)
+                      notes=page.locator('.footnotes>ol')
+                      if notes.count():
+                          assert notes.evaluate('(el)=>getComputedStyle(el).columnCount')==('2' if width>960 else 'auto')
+                          assert notes.locator(':scope>li').evaluate_all('(items)=>items.every(el=>el.getClientRects().length===1)')
+                  page.close()
+              browser.close()
+          (out/'merged-features.json').write_text(json.dumps({'status':'passed','revision':expected,'page_checks':checks,'title_and_citation_checks':24},indent=2))
+          print('Merged feature checks passed: logos, roles, article, titles, citations, and responsive headers')
+          PY
+      - name: Compare every served file and decode images
+        run: |
+          python3 - <<'PY'
+          import concurrent.futures,hashlib,io,json,urllib.request,urllib.error
+          from pathlib import Path
+          from PIL import Image
+          expected=json.loads(Path('public/build.json').read_text())
+          def fetch(path):
+              try:
+                  with urllib.request.urlopen('https://lanej.io'+path,timeout=20) as r:return r.read()
+              except urllib.error.HTTPError as e:
+                  if path=='/404.html' and e.code==404:return e.read()
+                  raise
+          live=json.loads(fetch('/build.json'))
+          assert live['revision']==expected['revision']
+          assert live['files']==expected['files']
+          def verify(item):
+              path,digest=item;data=fetch(path)
+              assert hashlib.sha256(data).hexdigest()==digest,path
+              is_image=Path(path).suffix in ('.webp','.png','.jpg','.jpeg','.gif')
+              if is_image:
+                  with Image.open(io.BytesIO(data)) as im:im.load()
+              return int(is_image)
+          with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:images=sum(pool.map(verify,expected['files'].items()))
+          print(json.dumps({'status':'passed','revision':expected['revision'],'matching_live_files':len(expected['files']),'decoded_images':images}))
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: live-essays-work-verification
+          path: artifacts/live/
+          retention-days: 14
