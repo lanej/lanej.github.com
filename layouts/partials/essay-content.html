@@ -5,11 +5,11 @@
 {{ $chapters := split (index $parts 0) "<!--essay-chapter-->" }}
 <div class="article-body">
 <section class="sc-hero{{ if not (or .Params.essay_image .Params.essay_visual) }} sc-hero-text{{ end }}">
-<div class="sc-hero-copy">
 <header class="article-header">
 <h1 id="essay-title">{{ .Title }}</h1>
 {{ with .Description }}<p class="sc-deck">{{ . }}</p>{{ end }}
 </header>
+<div class="sc-hero-copy">
 {{ $intro := index $chapters 0 }}
 {{ with .Params.callout }}<blockquote class="sc-accent"><p>{{ . }}</p></blockquote>{{ else }}
 {{ with findRE `(?s)<blockquote>.*?</blockquote>` $intro 1 }}

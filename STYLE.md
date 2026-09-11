@@ -66,7 +66,7 @@ Column count follows chapter content, not an article-specific layout. When a cha
 Every essay uses `layouts/writing/single.html`, `layouts/partials/essay-content.html`, and `assets/css/essays.css`. No article-specific layout or stylesheet.
 
 - Writing link and calculated reading time appear above the title. Dates stay in metadata and RSS only.
-- The title, description, accent callout, opening prose, and relevant visual share one opening layout. The first introductory blockquote becomes the opening callout without duplicating it; RSS keeps the authored order. Use `essay_visual` for a shared vector diagram or `essay_image` for an existing illustration. Large illustrations fade into the background; opening visuals are omitted on small phones where the copy takes priority.
+- The title and description span the full essay width above the opening columns. The accent callout and opening prose sit beside the relevant visual beneath them. The first introductory blockquote becomes the opening callout without duplicating it; RSS keeps the authored order. Use `essay_visual` for a shared vector diagram or `essay_image` for an existing illustration. Large illustrations fade into the background; opening visuals are omitted on small phones where the copy takes priority.
 - Every Markdown H2 starts a chapter with a generated two-digit number, short accent rule, common heading size, and thin divider. H3 is an unnumbered subsection.
 - Chapters without visuals fill the essay width. Diagrams and tables sit in a vertically centered right column on wide screens and follow the chapter copy on narrow screens. Heading and spacing treatments stay shared.
 - All essays share the same archive/feed footer and citation behavior.

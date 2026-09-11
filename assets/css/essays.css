@@ -37,7 +37,7 @@
 .sc-article .article-header{margin:0 0 22px}
 .sc-article h1{font:700 clamp(2.2rem,3.65vw,3.4rem)/1.12 var(--sans);letter-spacing:-.035em;text-wrap:balance}
 .sc-article .sc-deck{margin-top:16px;font:1.15rem/1.6 var(--sans)}
-.sc-hero-text{grid-template-columns:minmax(0,var(--copy))}
+.sc-hero-text{grid-template-columns:minmax(0,1fr)}
 .sc-hero-copy{max-width:var(--copy)}
 .sc-article .sc-intro,.sc-article .sc-section-copy{font:1.05rem/1.8 var(--sans)}
 .sc-article .sc-intro p,.sc-article .sc-section-copy p{margin:0 0 1em}
@@ -82,7 +82,7 @@
 
 /* Every essay opens with copy and a quiet, relevant visual. */
 .sc-hero{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:48px}
-.sc-hero-text{grid-template-columns:minmax(0,var(--copy))}
+.sc-hero-text{grid-template-columns:minmax(0,1fr)}
 .sc-hero-art{width:100%;max-width:480px;justify-self:center}
 .sc-hero-art img{opacity:.9;mask-image:radial-gradient(ellipse at 52% 43%,#000 38%,transparent 73%)}
 .sc-hero-art .sc-caption{text-align:center}
@@ -93,7 +93,7 @@
 .sc-hero-symbol .art-soft{opacity:.25}
 .sc-record-branches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 @container diagram (max-width:24rem){.sc-record-branches{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:960px){.sc-hero{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:24px}.sc-hero-text{grid-template-columns:minmax(0,var(--copy))}}
+@media(max-width:960px){.sc-hero{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:24px}.sc-hero-text{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:640px){.sc-hero{grid-template-columns:minmax(0,1fr)}.sc-hero-art{display:none}}
 @media print{.sc-hero{display:block}.sc-hero-art{display:none}}
 
@@ -103,3 +103,8 @@
 .sc-article .footnotes>ol>li{break-inside:avoid-column;margin:0 0 1.35em}
 .sc-article .article-body .footnotes>ol>li+li{margin-top:0}
 }
+
+/* The essay title and deck span the opening; only prose and art split below. */
+.sc-hero{row-gap:22px}
+.sc-hero>.article-header{grid-column:1/-1;min-width:0;margin:0}
+.sc-hero-copy>.sc-accent:first-child{margin-top:0}
