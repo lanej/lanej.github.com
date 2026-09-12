@@ -53,13 +53,15 @@ Avoid excessive typographic emphasis inside prose. Bold, blockquotes, code, and 
 
 ## Measure and layout
 
-Essay openings use `--copy: 680px`. Chapters without supporting visuals span the full essay width. Chapters with diagrams or tables use two columns on desktop, with the supporting column vertically centered beside the chapter text; body typography and paragraph rhythm remain identical.
+Every chapter uses a single, horizontally centered column capped at `--copy: 640px`, at every viewport width. The essay container overrides the general site reading measure; other page layouts keep the shared root token. Chapter numbers, headings, prose, diagrams, tables, endnotes, and the article footer align to that reading column. Center the container; keep prose left-aligned. Supporting visuals follow the chapter prose in their authored order, with the shared vertical spacing between multiple figures.
 
-The general site shell is capped at `--max: 1120px` with responsive side gutters. Essays use a shared 1240px shell to accommodate their chapter layouts.
+The 640px essay cap targets roughly 60–75 characters per full body-text line. In Chromium with DejaVu Sans at 16.8px, the decision essay measured a median of 71 characters and a 90th percentile of 75, excluding paragraph-final lines. This is a measured default, not a guarantee for every system font.
+
+Use the available width below the cap, with responsive side gutters. Keep one semantic copy of the text and a continuous top-to-bottom reading order. Do not split prose into newspaper columns or introduce a separate diagram column on wide screens. Keep subheadings with the following content; do not fix chapter heights or shrink type. Print uses the same single column, and full-text RSS retains authored order.
+
+The general site shell is capped at `--max: 1120px`. Essays retain the shared 1240px opening composition for their title, introduction, and accompanying art; the chapter reading column is centered within that shell.
 
 Whitespace should separate ideas before borders or containers do. Prefer vertical rhythm to card proliferation.
-
-Column count follows chapter content, not an article-specific layout. When a chapter has multiple visuals, distribute them through the available vertical space. On narrow screens, both text and supporting visuals use the available width.
 
 ## Article chrome
 
@@ -68,7 +70,7 @@ Every essay uses `layouts/writing/single.html`, `layouts/partials/essay-content.
 - Writing link and calculated reading time appear above the title. Dates stay in metadata and RSS only.
 - The title and description span the full essay width above the opening columns. The accent callout and opening prose sit beside the relevant visual beneath them. The first introductory blockquote becomes the opening callout without duplicating it; RSS keeps the authored order. Use `essay_visual` for a shared vector diagram or `essay_image` for an existing illustration. Large illustrations fade into the background; opening visuals are omitted on small phones where the copy takes priority.
 - Every Markdown H2 starts a chapter with a generated two-digit number, short accent rule, common heading size, and thin divider. H3 is an unnumbered subsection.
-- Chapters without visuals fill the essay width. Diagrams and tables sit in a vertically centered right column on wide screens and follow the chapter copy on narrow screens. Heading and spacing treatments stay shared.
+- Chapters share the centered reading column described above. Headings precede prose; diagrams and tables follow it at every width. Heading and spacing treatments stay shared.
 - All essays share the same archive/feed footer and citation behavior.
 
 Chapter numbers come from heading order, not handwritten numbers. Do not independently opt articles into a different contents menu, heading treatment, or metadata position.
@@ -114,7 +116,7 @@ Citations are contextual, not ornamental.
 
 The preferred article treatment is the existing subtle underline on the exact phrase or claim related to the source. Do not underline an entire paragraph when a phrase is sufficient. Do not restore large numeric footnote markers as the primary interaction.
 
-Citation interaction may reveal richer source detail, but the prose must remain readable without opening it. The fallback footnotes must remain available for non-interactive and print contexts. Endnotes fill the essay width in two balanced columns on wide screens, reading down the left column and then down the right. Keep each source together. Use a single column on narrow screens and in print.
+Citation interaction may reveal richer source detail, but the prose must remain readable without opening it. The fallback footnotes must remain available for non-interactive and print contexts. Endnotes use the same centered, maximum-width column as the chapters, on screen and in print. Keep each source together.
 
 Citation styling must not make sourced prose visually louder than the argument itself.
 
@@ -164,7 +166,7 @@ Article images should preserve intrinsic aspect ratio, stay within their contain
 
 Inline code uses the shared dark surface and compact padding. Code blocks use the same surface with a thin site rule and horizontal scrolling when required.
 
-Chapter tables automatically join the supporting column alongside diagrams, in their authored order. They remain inline in full-text RSS. Tables may scroll horizontally on narrow screens. Do not shrink table text until it becomes unreadable merely to avoid scrolling.
+Chapter tables follow the prose alongside other supporting visuals, in their authored order and within the same centered reading column. They remain inline in full-text RSS. Tables may scroll horizontally on narrow screens. Do not shrink table text until it becomes unreadable merely to avoid scrolling.
 
 Do not introduce syntax or table colors that compete with the site's accent unless a site-wide syntax system is adopted.
 
@@ -225,7 +227,7 @@ The answer to visual monotony is better composition, not more component types.
 
 1. Reuse CSS custom properties from the shared system.
 2. Prefer shared classes and semantic components to page-specific selectors.
-3. Keep article-specific CSS scoped and small; promote repeated patterns into shared CSS.
+3. Keep essay layout in the shared stylesheet. Content-specific diagram geometry may vary, but must reuse the shared visual conventions.
 4. Do not solve overflow with `overflow: hidden` on a parent when content should reflow.
 5. Do not use fixed heights for text-bearing components unless the content is strictly bounded.
 6. Avoid absolute positioning for relationships that need to survive text wrapping.
@@ -233,6 +235,57 @@ The answer to visual monotony is better composition, not more component types.
 8. Preserve print fallbacks for reading content and citations.
 9. Keep JavaScript progressive: the underlying content must remain usable if enhancement fails.
 10. Treat visual verification as part of implementation, not a final polish pass.
+
+## Enforcing the essay standard
+
+The following block is the executable reading contract. The existing browser
+smoke suite reads it directly from this file and compares it with rendered pages.
+`assets/css/essays.css` implements the layout independently; tests never derive
+their expected measure from the CSS being checked.
+
+```json essay-layout
+{
+  "max_width_px": 640,
+  "centered": true,
+  "text_align": "left",
+  "prose_columns": 1,
+  "content_order": ["heading", "prose", "visuals"],
+  "geometry_tolerance_px": 2
+}
+```
+
+Keep exactly one block with this fence label. CI fails before launching a browser
+if it is missing, duplicated, malformed, or contains missing or unsupported keys
+or values. Width accepts a positive integer; rounding tolerance accepts a finite
+number from 0 through 4 pixels. The other fields describe the supported centered,
+left-aligned, single-column format and the stated content order. A different
+layout requires extending the detector, not silently disabling those checks.
+This block configures verification only; it does not generate CSS or parse the
+surrounding prose.
+
+| Standard | Verification |
+| --- | --- |
+| 640px maximum, horizontally centered chapters, headings, prose, visuals, endnotes, and article footer | Browser geometry, with a 2px rounding tolerance |
+| Left-aligned prose in one column; heading before prose before supporting visuals | Computed alignment, column count, and rendered order |
+| System sans-serif, generated chapter numbers, shared opening callout and visual | Existing browser smoke assertions |
+| Responsive reading and intact content | All essays at 320, 390, 768, 961, 1100, and 1440px; representative essays at 200% text and in print |
+| Comfortable line length, diagram clarity, and visual rhythm | Human inspection of current desktop and mobile previews |
+
+Run `bash scripts/build.sh`, serve `public/` locally on port 8765, and run
+`python3 scripts/browser-smoke.py` with the project browser dependencies installed.
+Use `--chromium-path` when supplying a browser binary. The existing GitHub build
+workflow runs the same detector for pull requests and fails the build on drift.
+Keep this one shared detector; do not add separate width tests for each essay.
+`scripts/test-essay-layout.py` exercises the document/CSS boundary once in the
+same workflow, including rejected contracts and mismatched measure changes.
+
+The 640px standard applies to chapter content, notes, and article footers. The
+shared opening composition and other site pages retain their documented layouts.
+A deliberate measure change updates this contract, its prose explanation, and the
+shared CSS together, with current previews for review. The detector changes only
+when adding support for a new kind of rule. Changing the contract alone or the CSS
+alone fails whenever their rendered expectations differ. A passing geometry check
+does not establish readability across every platform font.
 
 ## Visual review
 

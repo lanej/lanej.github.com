@@ -65,5 +65,12 @@ All essays use the shared Socrates-derived chapter format, with the same system
 sans-serif as the rest of the site. No serif theme, custom writing layout, or
 article-specific font, chapter numbering, callout style, or metadata placement.
 Use Markdown H2 headings; the shared renderer generates numbered chapters and
-places diagram shortcodes beside the chapter on desktop and below it on mobile.
+uses one horizontally centered column capped at `--copy: 640px` for every
+chapter. Keep prose left-aligned; place diagrams and tables after it at every
+width. Endnotes and the article footer align to the same column. Preserve DOM
+order, responsive gutters, and readable enlarged text.
 Keep full-text RSS and one document-wide footnote collection. See STYLE.md.
+The existing shared chapter detector reads the json essay-layout block in STYLE.md;
+keep its expectations independent of the CSS under test. Update the contract,
+its explanation, and shared CSS together for intentional changes. Extend the
+same detector when adding supported rules; do not create a second layout suite.

@@ -1,5 +1,5 @@
 .essay-page{background:var(--bg)}
-.sc-article{--panel:var(--surface);--sc-text:var(--text);--soft:var(--muted);--sc-muted:var(--muted);--sc-accent:var(--accent);--rule:var(--line);--border:var(--accent-muted);--sc-gutter:32px;--sans:var(--font-sans);--mono:ui-monospace,SFMono-Regular,Menlo,monospace;width:min(calc(100% - var(--sc-gutter)*2),1240px);margin-inline:auto;color:var(--sc-text);font:1rem/1.55 var(--sans)}
+.sc-article{--copy:640px;--panel:var(--surface);--sc-text:var(--text);--soft:var(--muted);--sc-muted:var(--muted);--sc-accent:var(--accent);--rule:var(--line);--border:var(--accent-muted);--sc-gutter:32px;--sans:var(--font-sans);--mono:ui-monospace,SFMono-Regular,Menlo,monospace;width:min(calc(100% - var(--sc-gutter)*2),1240px);margin-inline:auto;color:var(--sc-text);font:1rem/1.55 var(--sans)}
 .sc-article :where(p,h1,h2,h3,h4,blockquote,figure){margin:0}.sc-article a{color:var(--sc-accent)}.sc-article img,.sc-article svg{display:block;max-width:100%}.sc-article img{height:auto}.sc-article :focus-visible{outline:2px solid var(--sc-accent);outline-offset:4px}
 .sc-article{padding-block:36px 64px}.sc-meta{display:flex;justify-content:space-between;align-items:baseline;gap:12px 28px;margin-bottom:18px;color:var(--sc-accent);font:.68rem/1.5 var(--mono);letter-spacing:.16em;text-transform:uppercase}.sc-meta .sc-preview-state{color:var(--sc-muted)}
 .sc-hero{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:32px;align-items:start}.sc-hero-copy{min-width:0}.sc-hero h1{font:700 clamp(2.5rem,3.65vw,3.4rem)/1.08 var(--sans);letter-spacing:-.025em;text-wrap:balance}.sc-deck{color:var(--soft);font:1.3rem/1.5 var(--sans);margin-top:14px;text-wrap:pretty}.sc-accent,.sc-section-copy blockquote{border-left:4px solid var(--sc-accent);background:var(--surface);padding:18px 22px;font:1.16rem/1.5 var(--sans);color:var(--sc-text);min-width:0;overflow-wrap:anywhere}.sc-accent{margin-block:22px}.sc-intro{font:1.06rem/1.65 var(--sans);color:var(--soft)}.sc-intro p+p{margin-top:14px}.sc-hero-art{margin:0;min-width:0;align-self:center}.sc-hero-art img{width:100%;height:auto;object-fit:contain;opacity:.8}.sc-hero-art .sc-caption{margin-top:0;font:.9rem/1.5 var(--sans);padding-inline:10px;color:var(--sc-muted)}.sc-divider{border:0;border-top:1px solid var(--rule);margin-block:32px 0}
@@ -42,12 +42,14 @@
 .sc-article .sc-intro,.sc-article .sc-section-copy{font:1.05rem/1.8 var(--sans)}
 .sc-article .sc-intro p,.sc-article .sc-section-copy p{margin:0 0 1em}
 .sc-article .sc-intro>:last-child,.sc-article .sc-section-copy>:last-child{margin-bottom:0}
-.sc-article .sc-section{align-items:center;border-bottom:0;border-top:1px solid var(--rule);margin-top:32px;padding-block:30px 0}
-.sc-section-text-only{grid-template-columns:minmax(0,1fr)}
-.sc-article .sc-section h2{margin:0 0 22px;padding:0;border:0;font:650 clamp(1.6rem,2.3vw,2rem)/1.25 var(--sans);letter-spacing:-.025em;text-wrap:pretty}
+.sc-article .sc-section{width:100%;max-width:var(--copy);margin-inline:auto;grid-template-columns:minmax(0,1fr);gap:24px;align-items:start;border-bottom:0;border-top:1px solid var(--rule);margin-top:32px;padding-block:30px 0}
+.sc-section-header,.sc-section-text,.sc-section-visuals{width:100%;max-width:var(--copy);margin-inline:auto;min-width:0}
+.sc-section-header{grid-column:1/-1}
+.sc-article .sc-section h2{margin:0;padding:0;border:0;font:650 clamp(1.6rem,2.3vw,2rem)/1.25 var(--sans);letter-spacing:-.025em;text-wrap:pretty}
+.sc-section-copy{overflow-wrap:anywhere;orphans:3;widows:3}
+.sc-section-copy :where(h3,h4){break-after:avoid}
 .sc-article .sc-section-no{font:.75rem/1.5 var(--mono);margin-bottom:12px}
 .sc-section-visuals{min-width:0;display:grid;gap:24px;align-self:center}
-.sc-section-visuals-spread{align-self:stretch;align-content:space-evenly}
 .sc-section-visuals .essay-table{min-width:0;overflow-x:auto;color:var(--soft)}
 .sc-section-visuals table{display:table;width:100%;margin:0}
 .sc-article .sc-accent,.sc-article .sc-section-copy blockquote,.sc-article .sc-intro blockquote{border-left:4px solid var(--accent);background:var(--surface);padding:18px 22px;margin:22px 0;color:var(--text);font:1.05rem/1.7 var(--sans)}
@@ -56,12 +58,12 @@
 .sc-article .sc-figure-title{margin:0 0 20px;font:.76rem/1.6 var(--sans);font-weight:650;letter-spacing:.1em;color:var(--accent)}
 .sc-article .sc-caption{font:.875rem/1.6 var(--sans);margin-top:18px}
 .sc-article .sc-hero-art img{margin:0}
-.sc-article .article-footer{font:.9rem/1.6 var(--sans)}
-.sc-article .footnotes{max-width:none;font:.9rem/1.65 var(--sans)}
+.sc-article .article-footer{width:100%;max-width:var(--copy);margin-inline:auto;font:.9rem/1.6 var(--sans)}
+.sc-article .footnotes{width:100%;max-width:var(--copy);margin-inline:auto;font:.9rem/1.65 var(--sans)}
 .sc-article .footnotes p{margin:0 0 .7em}
 .sc-article .footnotes ol{padding-left:1.5em}
 .sc-article .sc-section-copy h3{margin:1.5em 0 .7em;font-size:1.2rem}
-.sc-article .sc-section-copy pre{font-family:var(--mono)}
+.sc-article .sc-section-copy pre{font-family:var(--mono);max-width:100%;overflow-x:auto}
 .sc-article .sc-section-copy img{margin:1.75em 0}
 .sc-section-visuals .essay-diagram{width:auto;position:static;left:auto;transform:none;margin:0;container-type:inline-size;container-name:essay-diagram}
 .sc-section-visuals .loop-comparison{grid-template-columns:minmax(0,1fr)}
@@ -76,9 +78,8 @@
 .sc-section-visuals .ownership-roles{display:grid;gap:14px}
 .sc-section-visuals .ownership-roles .flow-node{display:block;text-align:left;padding:16px}
 .sc-section-visuals .ownership-roles p{margin:.5em 0 0;font-size:.9rem;color:var(--muted)}
-@media(max-width:960px){.sc-article .sc-section{grid-template-columns:minmax(0,1fr)}.sc-section-text,.sc-section-visuals{max-width:none}}
 @media(max-width:640px){.sc-article .sc-intro,.sc-article .sc-section-copy{font-size:1rem}.sc-article .sc-deck{font-size:1.05rem}.sc-article .sc-section{padding-top:26px;margin-top:28px}.sc-article .sc-accent,.sc-article .sc-section-copy blockquote,.sc-article .sc-intro blockquote{padding:14px 16px;font-size:1rem}.sc-section-visuals .diagram-panel,.sc-section-visuals .formalization-panel{padding:16px}}
-@media print{.sc-article{--panel:white;--sc-text:black;--soft:black;--sc-muted:#333;--sc-accent:#154b2a;--rule:#bbb;--border:#777}.sc-article .sc-section,.sc-article .sc-hero{display:block}.sc-section-visuals{margin-top:24px}.sc-article .sc-accent,.sc-article .sc-section-copy blockquote,.sc-article .sc-intro blockquote,.sc-section-visuals .diagram-panel,.sc-section-visuals .formalization-panel,.sc-section-visuals .flow-node,.sc-section-visuals .feedback-label,.sc-section-visuals .return-arrow{background:white;color:black}.sc-article .sc-section h2{break-after:avoid}}
+@media print{.sc-article{--panel:white;--sc-text:black;--soft:black;--sc-muted:#333;--sc-accent:#154b2a;--rule:#bbb;--border:#777}.sc-article .sc-section,.sc-article .sc-hero{display:block}.sc-section-header{margin-bottom:22px}.sc-section-visuals{margin-top:24px}.sc-article .sc-accent,.sc-article .sc-section-copy blockquote,.sc-article .sc-intro blockquote,.sc-section-visuals .diagram-panel,.sc-section-visuals .formalization-panel,.sc-section-visuals .flow-node,.sc-section-visuals .feedback-label,.sc-section-visuals .return-arrow{background:white;color:black}.sc-article .sc-section h2{break-after:avoid}}
 
 /* Every essay opens with copy and a quiet, relevant visual. */
 .sc-hero{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:48px}
@@ -97,12 +98,9 @@
 @media(max-width:640px){.sc-hero{grid-template-columns:minmax(0,1fr)}.sc-hero-art{display:none}}
 @media print{.sc-hero{display:block}.sc-hero-art{display:none}}
 
-/* Use the essay width for endnotes without splitting individual sources. */
-@media screen and (min-width:961px){
-.sc-article .footnotes>ol{column-count:2;column-gap:40px}
-.sc-article .footnotes>ol>li{break-inside:avoid-column;margin:0 0 1.35em}
+/* Endnotes follow the same centered reading column as the chapters. */
+.sc-article .footnotes>ol>li{break-inside:avoid;margin:0 0 1.35em}
 .sc-article .article-body .footnotes>ol>li+li{margin-top:0}
-}
 
 /* The essay title and deck span the opening; only prose and art split below. */
 .sc-hero{row-gap:22px}
