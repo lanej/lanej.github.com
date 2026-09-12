@@ -47,6 +47,8 @@ The standard cannot be that nobody is upset. Someone may understand a decision, 
 
 The more useful question is whether we took reasonable steps to avoid making a difficult situation worse. That might mean information early enough to act on, practical support, or a direct answer instead of false hope. A gentle but evasive answer can leave someone unable to plan.
 
+*Crucial Conversations* calls the supposed choice between honesty and respect a “Fool’s Choice.”[^crucial-conversations] We can be clear about what has been decided without dismissing what it costs the person hearing it. Respect does not require ambiguity, and candor does not require contempt.
+
 There are real constraints. Support costs money. A transition takes time. Some information cannot yet be shared. Those constraints should lead to explicit tradeoffs, not a general exemption from considering the people affected.
 
 Some consequences are inseparable from the decision. But calling the overall decision necessary does not make every choice about how to carry it out inevitable.
@@ -79,6 +81,8 @@ People should not have to remain useful to us to be treated with care. Nor shoul
 
 The ethical failure matters on its own. It can also be shortsighted.
 
+Adam Grant’s *Give and Take* describes how generosity can build trust and reputation over time, while also showing how givers can burn out or be exploited without boundaries.[^give-and-take] I take that as an argument for considering more than the immediate exchange—not a promise that every decent act will be repaid.
+
 Forgoing support saves an immediate, visible expense. The longer-term costs are less convenient to count: people becoming more guarded, less willing to extend trust, or less interested in building a future together. A decision can look efficient when the calculation ends before those consequences begin.
 
 The people who remain have also learned something. They have seen how the organization treats people once it no longer needs their work. They do not have to conclude that the underlying decision was wrong to reconsider how much trust they should place in its leaders.
@@ -106,3 +110,13 @@ We can make a defensible decision and still owe people a better implementation. 
 The question is not only whether we achieved the immediate outcome. It is whether we acted with the character and judgment that should make people willing to trust us with the next one.
 
 **How you do it is part of the decision. Being willing to face what you decided is part of the job.**
+
+[^crucial-conversations]: **[Crucial Conversations: Tools for Talking When Stakes Are High](https://www.mheducation.com/highered/mhp/product/crucial-conversations-3e.html)**  
+    Joseph Grenny, Kerry Patterson, Ron McMillan, Al Switzler, and Emily Gregory · Third edition, 2021
+
+    The “Fool’s Choice” rejects treating honesty and respect as incompatible; see also [Crucial Learning’s glossary](https://cruciallearning.com/glossary/). This supports the distinction between candor and disrespect, not a guarantee that painful decisions can leave relationships unchanged. Applying it to the responsibilities around a decision is the argument made here.
+
+[^give-and-take]: **[Give and Take: A Revolutionary Approach to Success](https://adamgrant.net/book/give-and-take/)**  
+    Adam Grant · 2013
+
+    Grant describes both the long-term value of trust and reputation and the risk of burnout or exploitation. His [Wharton interview](https://knowledge.wharton.upenn.edu/podcast/knowledge-at-wharton-podcast/givers-vs-takers-the-surprising-truth-about-who-gets-ahead/) discusses those mechanisms and the importance of boundaries. This informs the long-game argument; it is not evidence that every act of generosity earns a return.
