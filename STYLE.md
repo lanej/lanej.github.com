@@ -53,7 +53,9 @@ Avoid excessive typographic emphasis inside prose. Bold, blockquotes, code, and 
 
 ## Measure and layout
 
-Every chapter uses a single, horizontally centered column capped at `--copy: 680px`, at every viewport width. Chapter numbers, headings, prose, diagrams, tables, endnotes, and the article footer align to that reading column. Center the container; keep prose left-aligned. Supporting visuals follow the chapter prose in their authored order, with the shared vertical spacing between multiple figures.
+Every chapter uses a single, horizontally centered column capped at `--copy: 640px`, at every viewport width. The essay container overrides the general site reading measure; other page layouts keep the shared root token. Chapter numbers, headings, prose, diagrams, tables, endnotes, and the article footer align to that reading column. Center the container; keep prose left-aligned. Supporting visuals follow the chapter prose in their authored order, with the shared vertical spacing between multiple figures.
+
+The 640px essay cap targets roughly 60–75 characters per full body-text line. In Chromium with DejaVu Sans at 16.8px, the decision essay measured a median of 71 characters and a 90th percentile of 75, excluding paragraph-final lines. This is a measured default, not a guarantee for every system font.
 
 Use the available width below the cap, with responsive side gutters. Keep one semantic copy of the text and a continuous top-to-bottom reading order. Do not split prose into newspaper columns or introduce a separate diagram column on wide screens. Keep subheadings with the following content; do not fix chapter heights or shrink type. Print uses the same single column, and full-text RSS retains authored order.
 
