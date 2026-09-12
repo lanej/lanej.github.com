@@ -1,0 +1,14 @@
+{{ $id := printf "decision-responsibility-%d" .Ordinal }}
+<figure class="sc-figure" data-essay-diagram="decision-responsibility" aria-labelledby="{{ $id }}-title {{ $id }}-caption">
+<p class="sc-figure-title" id="{{ $id }}-title">Delegate the work, not the weight</p>
+<div class="decision-track">
+<ol class="decision-stages">
+<li><svg class="decision-stage-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><rect x="5" y="3" width="22" height="26" rx="2"/><path d="m9 10 2 2 3-4m3 3h6m-14 8 2 2 3-4m3 3h6"/></svg><strong class="sc-node-label">Decide</strong><span class="sc-node-detail">Make the call.</span></li>
+<li><svg class="decision-stage-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="M3 4h19v15H11l-6 5v-5H3Zm19 8h7v15h-5l-5 3v-3h-5v-8"/></svg><strong class="sc-node-label">Explain</strong><span class="sc-node-detail">Face the consequences.</span></li>
+<li><svg class="decision-stage-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path d="m13 3 6 0 1 4 4 2 4-1 3 5-3 3v4l2 3-3 5-4-1-4 2-1 2h-6l-1-4-4-2-4 1-3-5 3-3v-4l-2-3 3-5 4 1 4-2Z" transform="translate(1 0) scale(.92)"/><circle cx="16" cy="16" r="5"/></svg><strong class="sc-node-label">Carry out</strong><span class="sc-node-detail">Delegate the work.</span></li>
+<li><svg class="decision-stage-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><circle cx="16" cy="8" r="4"/><path d="M8 29v-6a8 8 0 0 1 16 0v6ZM5 11a3 3 0 1 0 0 6m22-6a3 3 0 1 1 0 6M5 20a5 5 0 0 0-4 5v4h4m22-9a5 5 0 0 1 4 5v4h-4"/></svg><strong class="sc-node-label">Follow through</strong><span class="sc-node-detail">Remain accountable.</span></li>
+</ol>
+<div class="responsibility-rail"><span>Responsibility</span></div>
+</div>
+<figcaption class="sc-caption" id="{{ $id }}-caption">The work can change hands. Responsibility for the decision does not.</figcaption>
+</figure>
