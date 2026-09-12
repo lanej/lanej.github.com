@@ -36,8 +36,8 @@
 {{ $heading := index (findRE `(?s)^\s*<h2\b[^>]*>.*?</h2>` $chapter 1) 0 }}
 {{ $anchor := replaceRE `(?s).*id="([^"]+)".*` "$1" $heading }}
 {{ $copy := replace $chapter $heading "" 1 }}
-{{/* Generated diagrams and chapter tables share the supporting column on wide
-     screens. Ordinary images stay at their authored position. */}}
+{{/* Generated diagrams and chapter tables follow the prose in the same reading
+     column. Ordinary images stay at their authored position. */}}
 {{ $visuals := findRE `(?s)<figure\b[^>]*data-essay-diagram="[^"]+"[^>]*>.*?</figure>|<table\b[^>]*>.*?</table>` $copy }}
 {{ range $visuals }}{{ $copy = replace $copy . "" 1 }}{{ end }}
 <section class="sc-section{{ if not $visuals }} sc-section-text-only{{ end }}" aria-labelledby="{{ $anchor }}"{{ if strings.HasSuffix $anchor "-title" }} id="{{ strings.TrimSuffix "-title" $anchor }}"{{ end }}>

@@ -15,50 +15,37 @@ VIEWPORTS = ((320, 480), (390, 664), (768, 900), (961, 900), (1100, 900), (1440,
 
 
 def chapter_layout_errors(page):
-    """One shared detector for measure, column order, and supporting placement."""
-    return page.locator('.sc-section').evaluate_all('''(chapters) => chapters.flatMap(chapter => {
-        const copy = chapter.querySelector('.sc-section-copy');
-        const text = chapter.querySelector('.sc-section-text').getBoundingClientRect();
-        const header = chapter.querySelector('.sc-section-header').getBoundingClientRect();
-        const visual = chapter.querySelector('.sc-section-visuals')?.getBoundingClientRect();
-        const body = chapter.closest('.article-body').getBoundingClientRect();
-        const rootSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
-        const wide = !matchMedia('print').matches && body.width >= 64 * rootSize;
-        const maxCopy = parseFloat(getComputedStyle(chapter).getPropertyValue('--copy'));
-        const gap = parseFloat(getComputedStyle(chapter).columnGap);
-        const measure = wide ? (body.width - gap) / 2 : Math.min(body.width, maxCopy);
-        const name = chapter.querySelector('h2').textContent;
+    """One shared detector for the centered reading column and content order."""
+    return page.locator('.sc-article').evaluate_all('''(articles) => articles.flatMap(article => {
+        const bounds = article.getBoundingClientRect();
+        const measure = Math.min(bounds.width, parseFloat(getComputedStyle(article).getPropertyValue('--copy')));
+        const center = bounds.left + bounds.width / 2;
         const errors = [];
-        if (header.bottom > text.top + 1 || (visual && header.bottom > visual.top + 1))
-            errors.push('heading overlaps chapter content');
-        if (visual) {
-            if (Math.abs(text.width - measure) > 2 || Math.abs(visual.width - measure) > 2)
-                errors.push('supporting tracks have inconsistent measure');
-            if (wide) {
-                if (Math.abs(visual.left - text.right - gap) > 2 ||
-                    Math.abs((visual.top + visual.bottom - text.top - text.bottom) / 2) > 2)
-                    errors.push('supporting column is not aligned');
-            } else if (visual.top < text.bottom) errors.push('visual overlaps copy');
-        } else {
-            const columns = parseInt(getComputedStyle(copy).columnCount) || 1;
-            if (columns !== (wide ? 2 : 1)) errors.push('incorrect prose column count');
-            const bounds = copy.getBoundingClientRect();
-            let previousColumn = 0;
-            let previousTop = -Infinity;
+        for (const el of article.querySelectorAll('.sc-section, .sc-section-header, .sc-section-text, .sc-section-visuals, .footnotes, .article-footer')) {
+            const rect = el.getBoundingClientRect();
+            if (!rect.width || !rect.height) continue;
+            if (Math.abs(rect.width - measure) > 2 || Math.abs(rect.left + rect.width / 2 - center) > 2)
+                errors.push(el.className + ': reading column is not centered at the shared measure');
+        }
+        for (const chapter of article.querySelectorAll('.sc-section')) {
+            const copy = chapter.querySelector('.sc-section-copy');
+            const header = chapter.querySelector('.sc-section-header').getBoundingClientRect();
+            const text = copy.getBoundingClientRect();
+            const visual = chapter.querySelector('.sc-section-visuals')?.getBoundingClientRect();
+            const name = chapter.querySelector('h2').textContent;
+            if (header.bottom > text.top + 1 || (visual && visual.top < text.bottom - 1))
+                errors.push(name + ': heading, prose, and visuals are not stacked');
+            if ((parseInt(getComputedStyle(copy).columnCount) || 1) !== 1)
+                errors.push(name + ': prose is split into columns');
+            let previousBottom = -Infinity;
             for (const paragraph of copy.querySelectorAll(':scope > p')) {
-                for (const rect of paragraph.getClientRects()) {
-                    if (!rect.width || !rect.height) continue;
-                    if (Math.abs(rect.width - measure) > 2) errors.push('paragraph measure drift');
-                    const column = wide ? Math.round((rect.left - bounds.left) / (measure + gap)) : 0;
-                    if (column > 1 || column < previousColumn ||
-                        (column === previousColumn && rect.top < previousTop - 1))
-                        errors.push('prose is not ordered down each column');
-                    previousColumn = column;
-                    previousTop = rect.top;
-                }
+                const rect = paragraph.getBoundingClientRect();
+                if (Math.abs(rect.width - measure) > 2 || rect.top < previousBottom - 1)
+                    errors.push(name + ': paragraph measure or reading order drift');
+                previousBottom = rect.bottom;
             }
         }
-        return errors.map(error => name + ': ' + error);
+        return errors;
     })''')
 
 
@@ -125,7 +112,7 @@ def main():
                         assert page.locator('.sc-section-copy table').count() == 0, 'Table remains in the prose column'
                         assert page.locator('.sc-section-visuals table').count() >= 1, 'Missing supporting table'
                         page.locator('.sc-section').filter(has=page.locator('table')).first.screenshot(path=str(out / f'chapter-table-{width}.png'))
-                        page.locator('.sc-section-text-only').first.screenshot(path=str(out / f'chapter-reading-columns-{width}.png'))
+                        page.locator('.sc-section-text-only').first.screenshot(path=str(out / f'chapter-centered-column-{width}.png'))
                     if label == 'socrates':
                         handoff = page.locator('#preserve-intent')
                         assert handoff.locator('[data-essay-diagram]').count() == 2, 'Handoff needs two diagrams'

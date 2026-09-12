@@ -53,15 +53,13 @@ Avoid excessive typographic emphasis inside prose. Bold, blockquotes, code, and 
 
 ## Measure and layout
 
-Essay openings and single-column chapters use `--copy: 680px`. When the essay container has at least `64rem` of usable width, each chapter uses two equal columns with a 52px gap. The chapter number and heading span both columns. Prose-only chapters balance text down the left column, then down the right, restarting at each chapter. Chapters with diagrams or tables put prose on the left and supporting content on the right, vertically centered beside the prose; do not nest text columns inside that arrangement. Body typography and paragraph rhythm remain identical.
+Every chapter uses a single, horizontally centered column capped at `--copy: 680px`, at every viewport width. Chapter numbers, headings, prose, diagrams, tables, endnotes, and the article footer align to that reading column. Center the container; keep prose left-aligned. Supporting visuals follow the chapter prose in their authored order, with the shared vertical spacing between multiple figures.
 
-The container threshold responds to enlarged text as well as available space. Below it, cap the chapter content at the shared reading measure and stack supporting visuals after prose. Keep one semantic copy of the text, avoid splitting ordinary paragraphs where practical, and keep subheadings with the following content. Do not fix chapter heights or shrink type to balance columns. Print uses one column; full-text RSS retains authored order.
+Use the available width below the cap, with responsive side gutters. Keep one semantic copy of the text and a continuous top-to-bottom reading order. Do not split prose into newspaper columns or introduce a separate diagram column on wide screens. Keep subheadings with the following content; do not fix chapter heights or shrink type. Print uses the same single column, and full-text RSS retains authored order.
 
-The general site shell is capped at `--max: 1120px` with responsive side gutters. Essays use a shared 1240px shell to accommodate their chapter layouts.
+The general site shell is capped at `--max: 1120px`. Essays retain the shared 1240px opening composition for their title, introduction, and accompanying art; the chapter reading column is centered within that shell.
 
 Whitespace should separate ideas before borders or containers do. Prefer vertical rhythm to card proliferation.
-
-Column count follows chapter content, not an article-specific layout. When a chapter has multiple visuals, distribute them through the available vertical space. On narrow screens, both text and supporting visuals use the available width.
 
 ## Article chrome
 
@@ -70,7 +68,7 @@ Every essay uses `layouts/writing/single.html`, `layouts/partials/essay-content.
 - Writing link and calculated reading time appear above the title. Dates stay in metadata and RSS only.
 - The title and description span the full essay width above the opening columns. The accent callout and opening prose sit beside the relevant visual beneath them. The first introductory blockquote becomes the opening callout without duplicating it; RSS keeps the authored order. Use `essay_visual` for a shared vector diagram or `essay_image` for an existing illustration. Large illustrations fade into the background; opening visuals are omitted on small phones where the copy takes priority.
 - Every Markdown H2 starts a chapter with a generated two-digit number, short accent rule, common heading size, and thin divider. H3 is an unnumbered subsection.
-- Chapters share the equal-column geometry described above. Headings sit above the columns; diagrams and tables follow the chapter copy when the layout collapses. Heading and spacing treatments stay shared.
+- Chapters share the centered reading column described above. Headings precede prose; diagrams and tables follow it at every width. Heading and spacing treatments stay shared.
 - All essays share the same archive/feed footer and citation behavior.
 
 Chapter numbers come from heading order, not handwritten numbers. Do not independently opt articles into a different contents menu, heading treatment, or metadata position.
@@ -116,7 +114,7 @@ Citations are contextual, not ornamental.
 
 The preferred article treatment is the existing subtle underline on the exact phrase or claim related to the source. Do not underline an entire paragraph when a phrase is sufficient. Do not restore large numeric footnote markers as the primary interaction.
 
-Citation interaction may reveal richer source detail, but the prose must remain readable without opening it. The fallback footnotes must remain available for non-interactive and print contexts. Endnotes fill the essay width in two balanced columns on wide screens, reading down the left column and then down the right. Keep each source together. Use a single column on narrow screens and in print.
+Citation interaction may reveal richer source detail, but the prose must remain readable without opening it. The fallback footnotes must remain available for non-interactive and print contexts. Endnotes use the same centered, maximum-width column as the chapters, on screen and in print. Keep each source together.
 
 Citation styling must not make sourced prose visually louder than the argument itself.
 
@@ -166,7 +164,7 @@ Article images should preserve intrinsic aspect ratio, stay within their contain
 
 Inline code uses the shared dark surface and compact padding. Code blocks use the same surface with a thin site rule and horizontal scrolling when required.
 
-Chapter tables automatically join the supporting column alongside diagrams, in their authored order. They remain inline in full-text RSS. Tables may scroll horizontally on narrow screens. Do not shrink table text until it becomes unreadable merely to avoid scrolling.
+Chapter tables follow the prose alongside other supporting visuals, in their authored order and within the same centered reading column. They remain inline in full-text RSS. Tables may scroll horizontally on narrow screens. Do not shrink table text until it becomes unreadable merely to avoid scrolling.
 
 Do not introduce syntax or table colors that compete with the site's accent unless a site-wide syntax system is adopted.
 
