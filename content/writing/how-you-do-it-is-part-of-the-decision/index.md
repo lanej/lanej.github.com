@@ -1,6 +1,6 @@
 +++
 title = "How You Do It Is Part of the Decision"
-description = "The necessity of an outcome does not justify every method used to reach it."
+description = "The authority to make a hard decision comes with a responsibility to face its consequences."
 date = "2026-09-11"
 draft = false
 +++
@@ -11,7 +11,23 @@ Avoiding those decisions is not automatically compassionate. Delay can leave peo
 
 But once we establish that a change is necessary, it is tempting to treat the rest as implementation: make the announcement, assign the follow-up, move on.
 
-I think that draws the boundary too narrowly. How we carry out a decision determines a substantial part of its consequences. It belongs in the reasoning, not outside it.
+I think that draws the boundary too narrowly. How we carry out a decision determines a substantial part of its consequences. And the authority to make it comes with a responsibility to face those consequences, not simply assign them to someone else.
+
+## You do not get to delegate the weight
+
+The person who passes judgment should swing the sword.
+
+The point is not that a leader must personally perform every task that follows a decision. It is that the authority to impose a consequence comes with a responsibility to confront it. You should not get to exercise the power while arranging for someone else to carry all the discomfort.
+
+There is a difference between delegating work and delegating away the hard part.
+
+You can ask someone to coordinate a transition. You can rely on people with the right expertise to carry it out. But you still owe the people affected an explanation you are willing to give yourself. You still have to own the consequences, including the ones that make your decision harder to defend.
+
+“I made the decision; someone else can deal with the people” is not a complete account of leadership.
+
+The minute you start delegating away the hard part—not because someone else is better equipped to do the work, but because you do not want to face it—you start dying as a leader.
+
+You may still hold the title. You may still make the calls. But you are separating the authority you claim from the responsibility that makes it legitimate.
 
 ## Be precise about what was necessary
 
@@ -32,6 +48,20 @@ The business case establishes why the project should end. It does not answer tho
 Some consequences are inseparable from the decision. People may lose work they care about, opportunities they expected, or arrangements they depended on. We should not promise a painless version of change.
 
 But we should be equally honest about which consequences come from choices we still control. Calling the overall decision necessary does not make each of those choices inevitable.
+
+## It should never be easy
+
+It should never be easy. It may get easier.
+
+Experience should make you more capable of acting under pressure. You may become less anxious before a difficult conversation, more precise in your explanation, and better able to listen without becoming defensive. You may stop confusing your own discomfort with evidence that the decision is wrong.
+
+That is different from becoming indifferent to what the decision costs someone else.
+
+The aim is not to suffer enough to prove that you care. Nobody benefits from a leader making a painful event about their own feelings. The aim is to remain willing to face the consequences without needing to hide from them.
+
+You can become steadier without becoming numb.
+
+If the work gets easier because you have placed enough distance between yourself and the people affected, that is not the same kind of progress. You have made it easier to exercise authority by removing part of what should inform its use.
 
 ## Care is compatible with a clear answer
 
@@ -71,12 +101,12 @@ Making the call is only part of the work.
 
 A proposal to stop a project is incomplete if it explains the savings but leaves existing commitments unaddressed. A reorganization is incomplete if it specifies the new reporting lines but leaves people unable to understand their responsibilities.
 
-Before approving a consequential change, we should be able to explain who bears the cost, which consequences are unavoidable, and what we will do about the harm still within our control. Someone should be accountable for that work, with the authority and resources to carry it out.
+Before approving a consequential change, we should be able to explain who bears the cost, which consequences are unavoidable, and what we will do about the harm still within our control. The people carrying out that work need the authority and resources to do it. Their responsibility for execution does not replace ours for the decision.
 
 This does not require an elaborate process. It requires treating execution as part of the proposal rather than a detail to resolve after approval.
 
-It also requires accepting responsibility without asking the people affected to reassure us that we made the right call. Our discomfort is ours to manage.
+It also requires remaining available to the people affected, hearing consequences we failed to anticipate, and correcting what we can. Ownership does not end when someone else takes over the next step.
 
 We can make a defensible decision and still owe people a better implementation. Recognizing that does not require reversing the decision. It requires finishing the work.
 
-**How we do it is not separate from the decision. It is part of what we decided.**
+**How you do it is part of the decision. Being willing to face what you decided is part of the job.**
