@@ -3,6 +3,10 @@ title = "How You Do It Is Part of the Decision"
 description = "Hard decisions reveal our character and shape the trust we will need for the next one."
 date = "2026-09-11"
 draft = false
+essay_image = "damocles.svg"
+essay_image_width = 360
+essay_image_height = 410
+essay_image_alt = "A sword suspended by a thin thread above an empty chair, rendered as a faded engraving."
 +++
 
 Sometimes the right decision leaves someone worse off. A project needs to stop. An organization needs to change. A commitment can no longer be sustained.
@@ -12,6 +16,8 @@ Avoiding those decisions is not automatically compassionate. Delay can leave peo
 But once we establish that a change is necessary, it is tempting to treat the rest as implementation: make the announcement, assign the follow-up, move on.
 
 That draws the boundary too narrowly. How we carry out a decision determines a substantial part of its consequences. It also reveals our character: what we are willing to take responsibility for, whose costs we are willing to consider, and how far beyond the immediate outcome we are prepared to think.
+
+> A necessary outcome can still be reached through unnecessary harm.
 
 ## You do not get to delegate the weight
 
@@ -27,6 +33,8 @@ You can ask someone to coordinate a transition. You can rely on people with the 
 
 The minute you start delegating away the hard part—not because someone else is better equipped to do the work, but because you do not want to face it—you start dying as a leader.
 
+{{< decision-responsibility >}}
+
 ## Be precise about what was necessary
 
 “We had no choice” deserves a more specific question: no choice about what?
@@ -40,8 +48,6 @@ Consider a project that no longer warrants its investment. Continuing would cons
 That does not tell us when to inform the team, how to represent the work they did, or how to handle commitments made to customers. It does not tell us what support people will need to move to their next responsibilities.
 
 The business case establishes why the project should end. It does not answer those other questions.
-
-> A necessary outcome can still be reached through unnecessary harm.
 
 The standard cannot be that nobody is upset. Someone may understand a decision, receive a clear explanation, and still strongly oppose it. Their disappointment does not by itself establish that the decision was wrong. Their acceptance does not establish that it was handled well.
 
@@ -92,6 +98,8 @@ That is the practical sense in which I think about karma. Not a guarantee that t
 Playing the long game is not being decent as a tactic to extract more from people later. It is recognizing that the way we act now helps determine what will be possible between us later.
 
 Decency should not depend on a projected return. But neither should we confuse refusing an affordable expense with sound business judgment. A choice can be ethically wrong and strategically shortsighted at the same time.
+
+{{< decision-carry-forward >}}
 
 ## Finish the decision
 
