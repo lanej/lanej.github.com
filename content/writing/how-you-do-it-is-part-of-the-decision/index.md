@@ -1,6 +1,6 @@
 +++
 title = "How You Do It Is Part of the Decision"
-description = "The authority to make a hard decision does not settle whether you are worth following."
+description = "Hard decisions reveal our character and shape the trust we will need for the next one."
 date = "2026-09-11"
 draft = false
 +++
@@ -12,8 +12,6 @@ Avoiding those decisions is not automatically compassionate. Delay can leave peo
 But once we establish that a change is necessary, it is tempting to treat the rest as implementation: make the announcement, assign the follow-up, move on.
 
 That draws the boundary too narrowly. How we carry out a decision determines a substantial part of its consequences. It also reveals our character: what we are willing to take responsibility for, whose costs we are willing to consider, and how far beyond the immediate outcome we are prepared to think.
-
-The authority to make the call does not settle whether we are worth following.
 
 ## You do not get to delegate the weight
 
@@ -28,8 +26,6 @@ You can ask someone to coordinate a transition. You can rely on people with the 
 “I made the decision; someone else can deal with the people” is not a complete account of leadership.
 
 The minute you start delegating away the hard part—not because someone else is better equipped to do the work, but because you do not want to face it—you start dying as a leader.
-
-You may still hold the title. You may still make the calls. But retaining that power is not the same as remaining a leader people trust.
 
 ## Be precise about what was necessary
 
@@ -69,7 +65,7 @@ You can become steadier without becoming numb.
 
 If the work gets easier because you have placed enough distance between yourself and the people affected, that is not the same kind of progress. You have made it easier to exercise authority by removing part of what should inform its use.
 
-## Ownership is not leadership
+## Character is in the choices
 
 Character is not just whether we can explain a decision. It is what we choose when we have room to choose differently.
 
@@ -78,12 +74,6 @@ A company that genuinely cannot afford to help people through a transition faces
 It is relatively easy to speak well of people while their work serves our needs. The more demanding test comes when our interests diverge. Their contribution does not disappear because their project, role, or agreement no longer fits our plans.
 
 People should not have to remain useful to us to be treated with care. Nor should that care depend on access or negotiating leverage. A standard should be something people can count on without having to secure an exception for themselves.
-
-That is a standard for leadership, not a test of ownership. An ownership stake does not disappear because someone exercises poor judgment. But ownership is not proof of character, and the power to direct the work is not the same as deserving people's trust.
-
-> You can remain a legitimate owner while losing your legitimacy as a leader.
-
-You may retain the power to require compliance. That does not mean you have preserved people's confidence in your judgment or their willingness to follow you through the next difficult decision.
 
 ## Play the long game
 
