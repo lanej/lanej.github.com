@@ -1,5 +1,5 @@
 {{ define "main" }}
-{{ $writing := (where site.RegularPages "Section" "writing").ByDate.Reverse }}
+{{ $writing := (partial "listed-pages.html" (where site.RegularPages "Section" "writing")).ByDate.Reverse }}
 <section class="hero home-intro shell" aria-labelledby="intro-title">
   <header class="hero-identity"><h1 id="intro-title">Josh Lane</h1><p class="role">{{ .Params.focus }}</p></header>
   <figure class="hero-portrait">{{ partial "portrait.html" . }}</figure>

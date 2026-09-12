@@ -2,6 +2,6 @@
 <section class="page shell"><div class="reading-page writing-index">
 <header class="page-header"><h1>{{ .Title }}</h1><a class="feed-link" href="{{ "index.xml" | relURL }}">Subscribe via RSS</a></header>
 {{ with .Content }}<div class="prose writing-intro">{{ . }}</div>{{ end }}
-{{ range .RegularPages.ByDate.Reverse }}<article class="writing-item"><h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2><p>{{ .Description | default (.Summary | plainify) }}</p>{{ if .Draft }}<p>Draft</p>{{ end }}</article>{{ end }}
+{{ range (partial "listed-pages.html" .RegularPages).ByDate.Reverse }}<article class="writing-item"><h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2><p>{{ .Description | default (.Summary | plainify) }}</p>{{ if .Draft }}<p>Draft</p>{{ end }}</article>{{ end }}
 </div></section>
 {{ end }}

@@ -1,3 +1,3 @@
 {{ define "main" }}
-<section class="page shell"><header class="page-header"><h1>{{ .Title }}</h1></header><div class="prose">{{ .Content }}</div>{{ range .RegularPages.ByDate.Reverse }}<article class="writing-item"><h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>{{ with .Description }}<p>{{ . }}</p>{{ end }}</article>{{ end }}</section>
+<section class="page shell"><header class="page-header"><h1>{{ .Title }}</h1></header><div class="prose">{{ .Content }}</div>{{ range (partial "listed-pages.html" .RegularPages).ByDate.Reverse }}<article class="writing-item"><h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>{{ with .Description }}<p>{{ . }}</p>{{ end }}</article>{{ end }}</section>
 {{ end }}
