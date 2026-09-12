@@ -53,7 +53,9 @@ Avoid excessive typographic emphasis inside prose. Bold, blockquotes, code, and 
 
 ## Measure and layout
 
-Essay openings use `--copy: 680px`. Chapters without supporting visuals span the full essay width. Chapters with diagrams or tables use two columns on desktop, with the supporting column vertically centered beside the chapter text; body typography and paragraph rhythm remain identical.
+Essay openings and single-column chapters use `--copy: 680px`. When the essay container has at least `64rem` of usable width, each chapter uses two equal columns with a 52px gap. The chapter number and heading span both columns. Prose-only chapters balance text down the left column, then down the right, restarting at each chapter. Chapters with diagrams or tables put prose on the left and supporting content on the right, vertically centered beside the prose; do not nest text columns inside that arrangement. Body typography and paragraph rhythm remain identical.
+
+The container threshold responds to enlarged text as well as available space. Below it, cap the chapter content at the shared reading measure and stack supporting visuals after prose. Keep one semantic copy of the text, avoid splitting ordinary paragraphs where practical, and keep subheadings with the following content. Do not fix chapter heights or shrink type to balance columns. Print uses one column; full-text RSS retains authored order.
 
 The general site shell is capped at `--max: 1120px` with responsive side gutters. Essays use a shared 1240px shell to accommodate their chapter layouts.
 
@@ -68,7 +70,7 @@ Every essay uses `layouts/writing/single.html`, `layouts/partials/essay-content.
 - Writing link and calculated reading time appear above the title. Dates stay in metadata and RSS only.
 - The title and description span the full essay width above the opening columns. The accent callout and opening prose sit beside the relevant visual beneath them. The first introductory blockquote becomes the opening callout without duplicating it; RSS keeps the authored order. Use `essay_visual` for a shared vector diagram or `essay_image` for an existing illustration. Large illustrations fade into the background; opening visuals are omitted on small phones where the copy takes priority.
 - Every Markdown H2 starts a chapter with a generated two-digit number, short accent rule, common heading size, and thin divider. H3 is an unnumbered subsection.
-- Chapters without visuals fill the essay width. Diagrams and tables sit in a vertically centered right column on wide screens and follow the chapter copy on narrow screens. Heading and spacing treatments stay shared.
+- Chapters share the equal-column geometry described above. Headings sit above the columns; diagrams and tables follow the chapter copy when the layout collapses. Heading and spacing treatments stay shared.
 - All essays share the same archive/feed footer and citation behavior.
 
 Chapter numbers come from heading order, not handwritten numbers. Do not independently opt articles into a different contents menu, heading treatment, or metadata position.

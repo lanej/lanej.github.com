@@ -41,9 +41,11 @@
 {{ $visuals := findRE `(?s)<figure\b[^>]*data-essay-diagram="[^"]+"[^>]*>.*?</figure>|<table\b[^>]*>.*?</table>` $copy }}
 {{ range $visuals }}{{ $copy = replace $copy . "" 1 }}{{ end }}
 <section class="sc-section{{ if not $visuals }} sc-section-text-only{{ end }}" aria-labelledby="{{ $anchor }}"{{ if strings.HasSuffix $anchor "-title" }} id="{{ strings.TrimSuffix "-title" $anchor }}"{{ end }}>
-<div class="sc-section-text">
+<header class="sc-section-header">
 <div class="sc-section-no" aria-hidden="true">{{ printf "%02d" (add $index 1) }}</div>
 {{ $heading | safeHTML }}
+</header>
+<div class="sc-section-text">
 <div class="sc-section-copy">{{ $copy | safeHTML }}</div>
 </div>
 {{ with $visuals }}<div class="sc-section-visuals{{ if gt (len .) 1 }} sc-section-visuals-spread{{ end }}">{{ range . }}{{ if strings.HasPrefix . "<table" }}<div class="essay-table">{{ . | safeHTML }}</div>{{ else }}{{ . | safeHTML }}{{ end }}{{ end }}</div>{{ end }}
