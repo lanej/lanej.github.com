@@ -227,7 +227,7 @@ The answer to visual monotony is better composition, not more component types.
 
 1. Reuse CSS custom properties from the shared system.
 2. Prefer shared classes and semantic components to page-specific selectors.
-3. Keep article-specific CSS scoped and small; promote repeated patterns into shared CSS.
+3. Keep essay layout in the shared stylesheet. Content-specific diagram geometry may vary, but must reuse the shared visual conventions.
 4. Do not solve overflow with `overflow: hidden` on a parent when content should reflow.
 5. Do not use fixed heights for text-bearing components unless the content is strictly bounded.
 6. Avoid absolute positioning for relationships that need to survive text wrapping.
@@ -235,6 +235,33 @@ The answer to visual monotony is better composition, not more component types.
 8. Preserve print fallbacks for reading content and citations.
 9. Keep JavaScript progressive: the underlying content must remain usable if enhancement fails.
 10. Treat visual verification as part of implementation, not a final polish pass.
+
+## Enforcing the essay standard
+
+`STYLE.md` is the design contract. `assets/css/essays.css` implements it; the
+shared `chapter_layout_errors` detector in `scripts/browser-smoke.py` checks the
+rendered result independently of the CSS token. Changing `--copy` alone must not
+silently redefine the test's expectation.
+
+| Standard | Verification |
+| --- | --- |
+| 640px maximum, horizontally centered chapters, headings, prose, visuals, endnotes, and article footer | Browser geometry, with a 2px rounding tolerance |
+| Left-aligned prose in one column; heading before prose before supporting visuals | Computed alignment, column count, and rendered order |
+| System sans-serif, generated chapter numbers, shared opening callout and visual | Existing browser smoke assertions |
+| Responsive reading and intact content | All essays at 320, 390, 768, 961, 1100, and 1440px; representative essays at 200% text and in print |
+| Comfortable line length, diagram clarity, and visual rhythm | Human inspection of current desktop and mobile previews |
+
+Run `bash scripts/build.sh`, serve `public/` locally on port 8765, and run
+`python3 scripts/browser-smoke.py` with the project browser dependencies installed.
+Use `--chromium-path` when supplying a browser binary. The existing GitHub build
+workflow runs the same detector for pull requests and fails the build on drift.
+Keep this one shared detector; do not add separate width tests for each essay.
+
+The 640px standard applies to chapter content, notes, and article footers. The
+shared opening composition and other site pages retain their documented layouts.
+A deliberate change to the reading standard must update this guide, shared CSS,
+and the independent detector together, with current previews for review. A passing
+geometry check does not establish readability across every platform font.
 
 ## Visual review
 

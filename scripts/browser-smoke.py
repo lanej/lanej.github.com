@@ -18,7 +18,8 @@ def chapter_layout_errors(page):
     """One shared detector for the centered reading column and content order."""
     return page.locator('.sc-article').evaluate_all('''(articles) => articles.flatMap(article => {
         const bounds = article.getBoundingClientRect();
-        const measure = Math.min(bounds.width, parseFloat(getComputedStyle(article).getPropertyValue('--copy')));
+        // Keep the expected measure independent of the CSS under test (STYLE.md).
+        const measure = Math.min(bounds.width, 640);
         const center = bounds.left + bounds.width / 2;
         const errors = [];
         for (const el of article.querySelectorAll('.sc-section, .sc-section-header, .sc-section-text, .sc-section-visuals, .footnotes, .article-footer')) {
@@ -40,6 +41,9 @@ def chapter_layout_errors(page):
             let previousBottom = -Infinity;
             for (const paragraph of copy.querySelectorAll(':scope > p')) {
                 const rect = paragraph.getBoundingClientRect();
+                const alignment = getComputedStyle(paragraph).textAlign;
+                if (alignment !== 'left' && alignment !== 'start')
+                    errors.push(name + ': prose must be left-aligned');
                 if (Math.abs(rect.width - measure) > 2 || rect.top < previousBottom - 1)
                     errors.push(name + ': paragraph measure or reading order drift');
                 previousBottom = rect.bottom;

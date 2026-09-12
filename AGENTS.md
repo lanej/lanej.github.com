@@ -70,3 +70,6 @@ chapter. Keep prose left-aligned; place diagrams and tables after it at every
 width. Endnotes and the article footer align to the same column. Preserve DOM
 order, responsive gutters, and readable enlarged text.
 Keep full-text RSS and one document-wide footnote collection. See STYLE.md.
+Enforce the reading standard with the existing shared chapter layout detector;
+its expected 640px cap must remain independent of the CSS value under test.
+Update guide, shared CSS, and detector together when deliberately changing it.
