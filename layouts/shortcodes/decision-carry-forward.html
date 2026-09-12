@@ -1,0 +1,15 @@
+{{ $id := printf "decision-carry-forward-%d" .Ordinal }}
+<figure class="sc-figure" data-essay-diagram="decision-carry-forward" aria-labelledby="{{ $id }}-title {{ $id }}-caption">
+<p class="sc-figure-title" id="{{ $id }}-title">What carries forward</p>
+<div class="carry-forward">
+<div class="sc-node carry-endpoint">A decision</div>
+<div class="sc-flow-connector" aria-hidden="true"></div>
+<div class="carry-paths" role="group" aria-label="Two parallel consequences of the same decision">
+<div class="carry-path"><span class="carry-direction">Outward</span><strong class="sc-node-label">Relationships</strong><p>What others learn from our conduct</p><p class="carry-result">The trust they bring next time</p></div>
+<div class="carry-path"><span class="carry-direction">Inward</span><strong class="sc-node-label">Character</strong><p>What we practice through our choices</p><p class="carry-result">The habits we bring next time</p></div>
+</div>
+<div class="sc-flow-connector" aria-hidden="true"></div>
+<div class="sc-node carry-endpoint">The next decision</div>
+</div>
+<figcaption class="sc-caption" id="{{ $id }}-caption">We carry forward both the trust we leave with others and the habits we build in ourselves.</figcaption>
+</figure>
