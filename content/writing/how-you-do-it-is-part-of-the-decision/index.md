@@ -1,6 +1,6 @@
 +++
 title = "How You Do It Is Part of the Decision"
-description = "The authority to make a hard decision comes with a responsibility to face its consequences."
+description = "The authority to make a hard decision does not settle whether you are worth following."
 date = "2026-09-11"
 draft = false
 +++
@@ -11,7 +11,9 @@ Avoiding those decisions is not automatically compassionate. Delay can leave peo
 
 But once we establish that a change is necessary, it is tempting to treat the rest as implementation: make the announcement, assign the follow-up, move on.
 
-I think that draws the boundary too narrowly. How we carry out a decision determines a substantial part of its consequences. And the authority to make it comes with a responsibility to face those consequences, not simply assign them to someone else.
+That draws the boundary too narrowly. How we carry out a decision determines a substantial part of its consequences. It also reveals our character: what we are willing to take responsibility for, whose costs we are willing to consider, and how far beyond the immediate outcome we are prepared to think.
+
+The authority to make the call does not settle whether we are worth following.
 
 ## You do not get to delegate the weight
 
@@ -27,7 +29,7 @@ You can ask someone to coordinate a transition. You can rely on people with the 
 
 The minute you start delegating away the hard part—not because someone else is better equipped to do the work, but because you do not want to face it—you start dying as a leader.
 
-You may still hold the title. You may still make the calls. But you are separating the authority you claim from the responsibility that makes it legitimate.
+You may still hold the title. You may still make the calls. But retaining that power is not the same as remaining a leader people trust.
 
 ## Be precise about what was necessary
 
@@ -45,9 +47,13 @@ The business case establishes why the project should end. It does not answer tho
 
 > A necessary outcome can still be reached through unnecessary harm.
 
-Some consequences are inseparable from the decision. People may lose work they care about, opportunities they expected, or arrangements they depended on. We should not promise a painless version of change.
+The standard cannot be that nobody is upset. Someone may understand a decision, receive a clear explanation, and still strongly oppose it. Their disappointment does not by itself establish that the decision was wrong. Their acceptance does not establish that it was handled well.
 
-But we should be equally honest about which consequences come from choices we still control. Calling the overall decision necessary does not make each of those choices inevitable.
+The more useful question is whether we took reasonable steps to avoid making a difficult situation worse. That might mean information early enough to act on, practical support, or a direct answer instead of false hope. A gentle but evasive answer can leave someone unable to plan.
+
+There are real constraints. Support costs money. A transition takes time. Some information cannot yet be shared. Those constraints should lead to explicit tradeoffs, not a general exemption from considering the people affected.
+
+Some consequences are inseparable from the decision. But calling the overall decision necessary does not make every choice about how to carry it out inevitable.
 
 ## It should never be easy
 
@@ -63,37 +69,35 @@ You can become steadier without becoming numb.
 
 If the work gets easier because you have placed enough distance between yourself and the people affected, that is not the same kind of progress. You have made it easier to exercise authority by removing part of what should inform its use.
 
-## Care is compatible with a clear answer
+## Ownership is not leadership
 
-The standard cannot be that nobody is upset.
+Character is not just whether we can explain a decision. It is what we choose when we have room to choose differently.
 
-Someone may understand a decision, receive a clear explanation, and still strongly oppose it. Their disappointment does not by itself establish that the decision was wrong. Their acceptance does not establish that it was handled well.
+A company that genuinely cannot afford to help people through a transition faces a different problem from one that can readily afford reasonable support and chooses to provide none. When support is readily affordable, withholding it simply because people lack the power to demand it is a failure of character, not an unavoidable business necessity.
 
-The more useful question is whether we took reasonable steps to avoid making a difficult situation worse.
+It is relatively easy to speak well of people while their work serves our needs. The more demanding test comes when our interests diverge. Their contribution does not disappear because their project, role, or agreement no longer fits our plans.
 
-That might mean giving someone information early enough to act on it. It might mean offering practical support. It might mean saying clearly that a decision is final rather than creating false hope to make the conversation easier.
+People should not have to remain useful to us to be treated with care. Nor should that care depend on access or negotiating leverage. A standard should be something people can count on without having to secure an exception for themselves.
 
-A direct answer can be painful without being disrespectful. A gentle but evasive answer can leave someone unable to plan.
+That is a standard for leadership, not a test of ownership. An ownership stake does not disappear because someone exercises poor judgment. But ownership is not proof of character, and the power to direct the work is not the same as deserving people's trust.
 
-There are real constraints. Support costs money. A transition takes time. Some information cannot yet be shared. Responsible leadership requires taking those constraints seriously, not pretending that every good intention can be funded or every consequence prevented.
+> You can remain a legitimate owner while losing your legitimacy as a leader.
 
-But constraints should lead to explicit tradeoffs. They should not become a general exemption from considering the people affected.
+You may retain the power to require compliance. That does not mean you have preserved people's confidence in your judgment or their willingness to follow you through the next difficult decision.
 
-Where a more responsible approach costs more or takes longer, that belongs in the proposal. We should weigh it before approving the change, not discover afterward that our plan depended on someone else absorbing a cost we never considered.
+## Play the long game
 
-## Make the standard dependable
+The ethical failure matters on its own. It can also be shortsighted.
 
-It is relatively easy to speak well of people while their work serves our needs. The more demanding test comes when the relationship changes.
+Forgoing support saves an immediate, visible expense. The longer-term costs are less convenient to count: people becoming more guarded, less willing to extend trust, or less interested in building a future together. A decision can look efficient when the calculation ends before those consequences begin.
 
-Their project is no longer a priority. Their role no longer fits the organization. An agreement no longer makes sense.
+The people who remain have also learned something. They have seen how the organization treats people once it no longer needs their work. They do not have to conclude that the underlying decision was wrong to reconsider how much trust they should place in its leaders.
 
-Our interests may no longer align. That does not erase their contribution or relieve us of the responsibility to deal with them honestly.
+That is the practical sense in which I think about karma. Not a guarantee that the world will settle every account, but a recognition that our choices shape the relationships and habits we will live with. Repeated decisions shape our character as well as our reputation.
 
-I do not think respectful treatment should require a business case based on whether someone might become a future customer, employee, or source of referrals. People should not have to remain useful to us to be treated with care.
+Playing the long game is not being decent as a tactic to extract more from people later. It is recognizing that the way we act now helps determine what will be possible between us later.
 
-That care should also be dependable. Consistency does not mean identical treatment in every circumstance. It means that differences follow from relevant facts, rather than personal access, convenience, or negotiating leverage.
-
-An organizational standard should be something people can count on without having to secure an exception for themselves.
+Decency should not depend on a projected return. But neither should we confuse refusing an affordable expense with sound business judgment. A choice can be ethically wrong and strategically shortsighted at the same time.
 
 ## Finish the decision
 
@@ -101,12 +105,14 @@ Making the call is only part of the work.
 
 A proposal to stop a project is incomplete if it explains the savings but leaves existing commitments unaddressed. A reorganization is incomplete if it specifies the new reporting lines but leaves people unable to understand their responsibilities.
 
-Before approving a consequential change, we should be able to explain who bears the cost, which consequences are unavoidable, and what we will do about the harm still within our control. The people carrying out that work need the authority and resources to do it. Their responsibility for execution does not replace ours for the decision.
+Before approving a consequential change, we should be able to explain who bears the cost, which consequences are unavoidable, and what we will do about the harm still within our control. Where a more responsible approach costs more or takes longer, that belongs in the proposal—not outside the calculation.
 
-This does not require an elaborate process. It requires treating execution as part of the proposal rather than a detail to resolve after approval.
+The people carrying out that work need the authority and resources to do it. Their responsibility for execution does not replace ours for the decision.
 
-It also requires remaining available to the people affected, hearing consequences we failed to anticipate, and correcting what we can. Ownership does not end when someone else takes over the next step.
+It also requires remaining available to the people affected, hearing consequences we failed to anticipate, and correcting what we can. Responsibility does not end when someone else takes over the next step.
 
 We can make a defensible decision and still owe people a better implementation. Recognizing that does not require reversing the decision. It requires finishing the work.
+
+The question is not only whether we achieved the immediate outcome. It is whether we acted with the character and judgment that should make people willing to trust us with the next one.
 
 **How you do it is part of the decision. Being willing to face what you decided is part of the job.**
