@@ -16,7 +16,11 @@
 <meta name="theme-color" content="#0d1513"><meta name="color-scheme" content="dark">
 <meta name="site-revision" content="{{ site.Params.revision }}">
 <link rel="canonical" href="{{ .Permalink }}">
-<link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
+{{ $favicon := resources.Get "icons/favicon-48.png" | fingerprint }}
+{{ $touchIcon := resources.Get "icons/apple-touch-icon.png" | fingerprint }}
+<link rel="icon" href="{{ "favicon.ico?v=portrait-1" | relURL }}" sizes="16x16 32x32 48x48">
+<link rel="icon" href="{{ $favicon.RelPermalink }}" type="image/png" sizes="48x48">
+<link rel="apple-touch-icon" href="{{ $touchIcon.RelPermalink }}" sizes="180x180">
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
 {{ partial "citation-assets.html" . }}
 {{ if or (eq .Kind "404") site.Params.preview .Draft }}<meta name="robots" content="noindex, nofollow">{{ end }}

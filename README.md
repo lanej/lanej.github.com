@@ -96,6 +96,7 @@ until a build after its date; there is no scheduled publishing service.
 - `assets/css/site.css` and `editorial.css`: compiled into one fingerprinted stylesheet. Articles with `diagrams: true` also include `diagrams.css`.
 - `assets/js/citations.js` and `assets/css/citations.css`: local, fingerprinted citation previews, loaded only by articles with footnotes.
 - `assets/images/josh-lane.webp`: approved 1254 × 1254 source photograph. Hugo makes responsive hero, header-avatar and downloadable JPEG derivatives.
+- `assets/icons/` and `static/favicon.ico`: circular portrait icons for tabs and an opaque iOS home-screen tile. Rebuild from the approved photograph with `bash scripts/build-icons.sh` (ImageMagick 6 or 7); Hugo fingerprints the PNG URLs to refresh cached icons.
 - `drafts/`: local-only work, ignored by Git and excluded from production.
 
 The homepage uses a compact circular portrait beside its introduction. Interior
