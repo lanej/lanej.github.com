@@ -21,7 +21,15 @@
 {{ with .Params.essay_image }}
 {{ $art := $.Resources.GetMatch . }}
 {{ if not $art }}{{ errorf "Missing essay image %s in %s" . $.File.Path }}{{ end }}
-<figure class="sc-hero-art"><img src="{{ $art.RelPermalink }}" width="{{ $art.Width }}" height="{{ $art.Height }}" alt="{{ $.Params.essay_image_alt }}" decoding="async">{{ with $.Params.essay_image_caption }}<figcaption class="sc-caption">{{ . }}</figcaption>{{ end }}</figure>
+{{/* SVG resources do not expose Hugo's raster Width/Height methods. Require
+     explicit intrinsic dimensions and reuse the same image layout and fade. */}}
+{{ $width := 0 }}{{ $height := 0 }}
+{{ if strings.HasSuffix (lower $art.Name) ".svg" }}
+{{ $width = int ($.Params.essay_image_width | default 0) }}
+{{ $height = int ($.Params.essay_image_height | default 0) }}
+{{ if or (le $width 0) (le $height 0) }}{{ errorf "SVG essay image %s in %s requires positive essay_image_width and essay_image_height" . $.File.Path }}{{ end }}
+{{ else }}{{ $width = $art.Width }}{{ $height = $art.Height }}{{ end }}
+<figure class="sc-hero-art"><img src="{{ $art.RelPermalink }}" width="{{ $width }}" height="{{ $height }}" alt="{{ $.Params.essay_image_alt }}" decoding="async">{{ with $.Params.essay_image_caption }}<figcaption class="sc-caption">{{ . }}</figcaption>{{ end }}</figure>
 {{ else }}{{ with .Params.essay_visual }}{{ partial "essay-visual.html" . }}{{ end }}{{ end }}
 </section>
 {{ range $index, $chapter := after 1 $chapters }}
