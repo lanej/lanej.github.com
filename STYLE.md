@@ -238,10 +238,30 @@ The answer to visual monotony is better composition, not more component types.
 
 ## Enforcing the essay standard
 
-`STYLE.md` is the design contract. `assets/css/essays.css` implements it; the
-shared `chapter_layout_errors` detector in `scripts/browser-smoke.py` checks the
-rendered result independently of the CSS token. Changing `--copy` alone must not
-silently redefine the test's expectation.
+The following block is the executable reading contract. The existing browser
+smoke suite reads it directly from this file and compares it with rendered pages.
+`assets/css/essays.css` implements the layout independently; tests never derive
+their expected measure from the CSS being checked.
+
+```json essay-layout
+{
+  "max_width_px": 640,
+  "centered": true,
+  "text_align": "left",
+  "prose_columns": 1,
+  "content_order": ["heading", "prose", "visuals"],
+  "geometry_tolerance_px": 2
+}
+```
+
+Keep exactly one block with this fence label. CI fails before launching a browser
+if it is missing, duplicated, malformed, or contains missing or unsupported keys
+or values. Width accepts a positive integer; rounding tolerance accepts a finite
+number from 0 through 4 pixels. The other fields describe the supported centered,
+left-aligned, single-column format and the stated content order. A different
+layout requires extending the detector, not silently disabling those checks.
+This block configures verification only; it does not generate CSS or parse the
+surrounding prose.
 
 | Standard | Verification |
 | --- | --- |
@@ -256,12 +276,16 @@ Run `bash scripts/build.sh`, serve `public/` locally on port 8765, and run
 Use `--chromium-path` when supplying a browser binary. The existing GitHub build
 workflow runs the same detector for pull requests and fails the build on drift.
 Keep this one shared detector; do not add separate width tests for each essay.
+`scripts/test-essay-layout.py` exercises the document/CSS boundary once in the
+same workflow, including rejected contracts and mismatched measure changes.
 
 The 640px standard applies to chapter content, notes, and article footers. The
 shared opening composition and other site pages retain their documented layouts.
-A deliberate change to the reading standard must update this guide, shared CSS,
-and the independent detector together, with current previews for review. A passing
-geometry check does not establish readability across every platform font.
+A deliberate measure change updates this contract, its prose explanation, and the
+shared CSS together, with current previews for review. The detector changes only
+when adding support for a new kind of rule. Changing the contract alone or the CSS
+alone fails whenever their rendered expectations differ. A passing geometry check
+does not establish readability across every platform font.
 
 ## Visual review
 

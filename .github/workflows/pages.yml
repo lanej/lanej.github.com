@@ -36,6 +36,7 @@ jobs:
           python3 -m http.server 8765 --directory public >/tmp/site-server.log 2>&1 &
           server=$!
           trap 'kill "$server"' EXIT
+          python3 scripts/test-essay-layout.py --chromium-path "$chrome"
           python3 scripts/browser-smoke.py --chromium-path "$chrome"
       - name: Capture affected pages for PR description
         if: github.event_name == 'pull_request'

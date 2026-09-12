@@ -1,6 +1,8 @@
 """Small browser smoke suite for layout behavior that static checks cannot cover."""
 import argparse
 import json
+import math
+import re
 from pathlib import Path
 from urllib.parse import urljoin
 
@@ -14,43 +16,87 @@ ROUTES = (('/', 'home'), ('/writing/', 'writing')) + tuple(
 VIEWPORTS = ((320, 480), (390, 664), (768, 900), (961, 900), (1100, 900), (1440, 900))
 
 
-def chapter_layout_errors(page):
-    """One shared detector for the centered reading column and content order."""
-    return page.locator('.sc-article').evaluate_all('''(articles) => articles.flatMap(article => {
+def read_essay_layout(path=Path(__file__).resolve().parent.parent / 'STYLE.md'):
+    """Read the one explicit contract; prose elsewhere in the guide is not parsed."""
+    source = path.read_text()
+    marker = '```json essay-layout'
+    blocks = re.findall(r'^```json essay-layout\n(.*?)\n```[ \t]*$', source, re.M | re.S)
+    if source.count(marker) != 1 or len(blocks) != 1:
+        raise ValueError('STYLE.md: expected exactly one closed json essay-layout block')
+
+    def unique_keys(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError(f'STYLE.md: duplicate essay-layout key {key}')
+            result[key] = value
+        return result
+
+    try:
+        contract = json.loads(blocks[0], object_pairs_hook=unique_keys)
+    except json.JSONDecodeError as error:
+        raise ValueError(f'STYLE.md: invalid essay-layout JSON: {error.msg}') from error
+    fields = {'max_width_px', 'centered', 'text_align', 'prose_columns',
+              'content_order', 'geometry_tolerance_px'}
+    if not isinstance(contract, dict) or set(contract) != fields:
+        raise ValueError('STYLE.md: essay-layout has missing or unsupported keys')
+    width = contract['max_width_px']
+    tolerance = contract['geometry_tolerance_px']
+    if type(width) is not int or width <= 0:
+        raise ValueError('STYLE.md: max_width_px must be a positive integer')
+    if type(tolerance) not in (int, float) or not math.isfinite(tolerance) or not 0 <= tolerance <= 4:
+        raise ValueError('STYLE.md: geometry_tolerance_px must be between 0 and 4')
+    if (contract['centered'] is not True or contract['text_align'] != 'left'
+            or type(contract['prose_columns']) is not int or contract['prose_columns'] != 1
+            or contract['content_order'] != ['heading', 'prose', 'visuals']):
+        raise ValueError('STYLE.md: unsupported essay layout; detector supports centered, '
+                         'left-aligned, single-column chapters ordered heading, prose, visuals')
+    return contract
+
+
+def chapter_layout_errors(page, contract):
+    """One shared detector compares the rendered layout with STYLE.md."""
+    return page.locator('.sc-article').evaluate_all('''(articles, contract) => articles.flatMap(article => {
         const bounds = article.getBoundingClientRect();
-        // Keep the expected measure independent of the CSS under test (STYLE.md).
-        const measure = Math.min(bounds.width, 640);
+        const measure = Math.min(bounds.width, contract.max_width_px);
+        const tolerance = contract.geometry_tolerance_px;
         const center = bounds.left + bounds.width / 2;
         const errors = [];
         for (const el of article.querySelectorAll('.sc-section, .sc-section-header, .sc-section-text, .sc-section-visuals, .footnotes, .article-footer')) {
             const rect = el.getBoundingClientRect();
             if (!rect.width || !rect.height) continue;
-            if (Math.abs(rect.width - measure) > 2 || Math.abs(rect.left + rect.width / 2 - center) > 2)
-                errors.push(el.className + ': reading column is not centered at the shared measure');
+            if (Math.abs(rect.width - measure) > tolerance || (contract.centered && Math.abs(rect.left + rect.width / 2 - center) > tolerance))
+                errors.push(el.className + ': expected centered ' + measure + 'px reading column (STYLE.md)');
         }
         for (const chapter of article.querySelectorAll('.sc-section')) {
             const copy = chapter.querySelector('.sc-section-copy');
-            const header = chapter.querySelector('.sc-section-header').getBoundingClientRect();
-            const text = copy.getBoundingClientRect();
-            const visual = chapter.querySelector('.sc-section-visuals')?.getBoundingClientRect();
+            const boxes = {
+                heading: chapter.querySelector('.sc-section-header').getBoundingClientRect(),
+                prose: copy.getBoundingClientRect(),
+                visuals: chapter.querySelector('.sc-section-visuals')?.getBoundingClientRect(),
+            };
+            const order = contract.content_order.map(key => boxes[key]).filter(Boolean);
             const name = chapter.querySelector('h2').textContent;
-            if (header.bottom > text.top + 1 || (visual && visual.top < text.bottom - 1))
-                errors.push(name + ': heading, prose, and visuals are not stacked');
-            if ((parseInt(getComputedStyle(copy).columnCount) || 1) !== 1)
-                errors.push(name + ': prose is split into columns');
+            if (order.some((rect, index) => index && order[index - 1].bottom > rect.top + tolerance))
+                errors.push(name + ': expected ' + contract.content_order.join(', ') + ' order (STYLE.md)');
+            if ((parseInt(getComputedStyle(copy).columnCount) || 1) !== contract.prose_columns)
+                errors.push(name + ': prose is split into columns (STYLE.md)');
             let previousBottom = -Infinity;
             for (const paragraph of copy.querySelectorAll(':scope > p')) {
                 const rect = paragraph.getBoundingClientRect();
-                const alignment = getComputedStyle(paragraph).textAlign;
-                if (alignment !== 'left' && alignment !== 'start')
-                    errors.push(name + ': prose must be left-aligned');
-                if (Math.abs(rect.width - measure) > 2 || rect.top < previousBottom - 1)
-                    errors.push(name + ': paragraph measure or reading order drift');
+                const style = getComputedStyle(paragraph);
+                let alignment = style.textAlign;
+                if (alignment === 'start') alignment = style.direction === 'rtl' ? 'right' : 'left';
+                if (alignment === 'end') alignment = style.direction === 'rtl' ? 'left' : 'right';
+                if (alignment !== contract.text_align)
+                    errors.push(name + ': prose must be ' + contract.text_align + '-aligned (STYLE.md)');
+                if (Math.abs(rect.width - measure) > tolerance || rect.top < previousBottom - tolerance)
+                    errors.push(name + ': paragraph measure or reading order drift (STYLE.md)');
                 previousBottom = rect.bottom;
             }
         }
         return errors;
-    })''')
+    })''', contract)
 
 
 def main():
@@ -59,6 +105,7 @@ def main():
     parser.add_argument('--output', default='artifacts/smoke')
     parser.add_argument('--chromium-path', default='')
     args = parser.parse_args()
+    contract = read_essay_layout()
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)
     checks = []
@@ -108,7 +155,7 @@ def main():
                     assert fonts and all(font == site_font for font in fonts), f'{route}: essay font differs from site'
                     assert page.locator('.sc-section-visuals [data-essay-diagram]').count() == page.locator('[data-essay-diagram]').count(), f'{route}: misplaced diagram'
 
-                    layout_errors = chapter_layout_errors(page)
+                    layout_errors = chapter_layout_errors(page, contract)
                     assert not layout_errors, f'{route} at {width}px: {layout_errors}'
                     assert page.locator('.sc-hero-art').count() == 1, f'{route}: missing opening visual'
                     assert page.locator('.sc-hero-copy > .sc-accent').count() == 1, f'{route}: missing opening callout'
@@ -129,12 +176,12 @@ def main():
                         page.locator('.footnotes').screenshot(path=str(out / f'{label}-citations-{width}.png'))
                     if width == 1440 and label in ('how-you-do-it-is-part-of-the-decision', 'socrates', 'close-the-loop'):
                         page.evaluate("document.documentElement.style.fontSize = '200%'")
-                        assert not chapter_layout_errors(page), f'{route}: enlarged-text chapter reflow failed'
+                        assert not chapter_layout_errors(page, contract), f'{route}: enlarged-text chapter reflow failed'
                         assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), f'{route}: enlarged-text overflow'
                         page.locator('.sc-section').first.screenshot(path=str(out / f'{label}-enlarged-text.png'))
                         page.evaluate("document.documentElement.style.fontSize = ''")
                         page.emulate_media(media='print')
-                        assert not chapter_layout_errors(page), f'{route}: print chapter order failed'
+                        assert not chapter_layout_errors(page, contract), f'{route}: print chapter order failed'
                         page.emulate_media(media='screen')
                     page.evaluate('window.scrollTo(0, 0)')
 

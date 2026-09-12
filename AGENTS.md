@@ -70,6 +70,7 @@ chapter. Keep prose left-aligned; place diagrams and tables after it at every
 width. Endnotes and the article footer align to the same column. Preserve DOM
 order, responsive gutters, and readable enlarged text.
 Keep full-text RSS and one document-wide footnote collection. See STYLE.md.
-Enforce the reading standard with the existing shared chapter layout detector;
-its expected 640px cap must remain independent of the CSS value under test.
-Update guide, shared CSS, and detector together when deliberately changing it.
+The existing shared chapter detector reads the json essay-layout block in STYLE.md;
+keep its expectations independent of the CSS under test. Update the contract,
+its explanation, and shared CSS together for intentional changes. Extend the
+same detector when adding supported rules; do not create a second layout suite.
