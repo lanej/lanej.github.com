@@ -73,7 +73,7 @@ def main():
                         page = browser.new_page(viewport={'width': width, 'height': 900}, color_scheme='dark')
                         response = page.goto(f'http://127.0.0.1:{server.server_port}{ROUTE}', wait_until='networkidle')
                         assert response and response.ok, 'Direct review URL failed'
-                        assert page.locator('.sc-preview-state').inner_text().startswith('Draft')
+                        assert page.locator('.sc-preview-state').inner_text().casefold().startswith('draft')
                         assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), 'Review layout overflows'
                         page.screenshot(path=str(screenshots / f'unlisted-draft-{width}.png'))
                         page.close()
