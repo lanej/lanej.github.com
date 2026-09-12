@@ -63,6 +63,18 @@ def main(root):
             if doc.select('div', **{'class':'article-meta'}):
                 assert 'min read' in text, f'{path}: standard article missing reading time'
 
+    unlisted = {path.parent for path, doc in documents.items()
+                if doc.select('article', **{'data-visibility': 'unlisted'})}
+    def is_unlisted(path):
+        return any(path.is_relative_to(directory) for directory in unlisted)
+    for path, doc in documents.items():
+        if is_unlisted(path):
+            assert any('noindex' in a.get('content', '').split(',') for a in doc.select('meta', name='robots')), f'{path}: unlisted page missing noindex'
+    for path in root.rglob('*.xml'):
+        text = path.read_text()
+        for directory in unlisted:
+            assert '/' + directory.relative_to(root).as_posix() + '/' not in text, f'{path}: index exposes an unlisted essay'
+
     for path,doc in documents.items():
         for _,attrs in doc.tags:
             for key in ('href','src'):
@@ -76,6 +88,7 @@ def main(root):
                 target=target.resolve()
                 assert target.is_relative_to(root), f'{path}: link escapes public output'
                 assert target.exists(), f'{path}: broken {url}'
+                assert is_unlisted(path) or not is_unlisted(target), f'{path}: public link exposes unlisted content: {url}'
                 if parts.fragment and target.suffix=='.html':
                     other=documents.get(target) or Document(target.read_text())
                     assert any(a.get('id')==parts.fragment for _,a in other.tags), f'Missing anchor {url}'
@@ -88,9 +101,10 @@ def main(root):
                     assert image.width==image.height and image.width>=48, f'Portrait dimensions: {path}'
     articles=[p for p in (root/'writing').glob('*/index.html')]
     assert not (root/'writing/index.html').exists() or articles, 'Empty writing section'
+    listed_articles=[p for p in articles if not is_unlisted(p)]
     feed=ET.parse(root/'index.xml').getroot()
     items=feed.findall('channel/item')
-    assert len(items)==len(articles), 'RSS must include only published writing'
+    assert len(items)==len(listed_articles), 'RSS must include only listed writing'
     for item in items:
         assert item.findtext('title') and item.findtext('pubDate')
         link=item.findtext('link')
@@ -100,7 +114,8 @@ def main(root):
         assert '<script' not in body and 'citation-popover' not in body and 'citation-toggle' not in body, 'RSS must not depend on citation JavaScript'
         article=root/urlparse(link).path.lstrip('/')/'index.html'
         assert len(Document(body).select('a', **{'class':'footnote-ref'})) == len(documents[article].select('a', **{'class':'footnote-ref'})), 'RSS lost a footnote reference'
-    hashes={'/'+str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file() and p.name not in {'build.json','CNAME','.nojekyll'}}
+    # The public inventory must not become a directory of unlisted URLs or assets.
+    hashes={'/'+str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file() and p.name not in {'build.json','CNAME','.nojekyll'} and not is_unlisted(p)}
     (root/'build.json').write_text(json.dumps({'revision':revision,'files':hashes},sort_keys=True))
     print(f'Passed: {len(documents)} pages, {len(articles)} articles, valid RSS and {len(hashes)} hashed files.')
 

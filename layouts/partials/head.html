@@ -23,7 +23,7 @@
 <link rel="apple-touch-icon" href="{{ $touchIcon.RelPermalink }}" sizes="180x180">
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
 {{ partial "citation-assets.html" . }}
-{{ if or (eq .Kind "404") site.Params.preview .Draft }}<meta name="robots" content="noindex, nofollow">{{ end }}
+{{ if or (eq .Kind "404") site.Params.preview .Draft (eq .Params.unlisted true) }}<meta name="robots" content="noindex, nofollow">{{ end }}
 <meta property="og:type" content="{{ if $article }}article{{ else }}website{{ end }}">
 <meta property="og:title" content="{{ $title }}"><meta property="og:description" content="{{ $description }}">
 <meta property="og:url" content="{{ .Permalink }}"><meta property="og:image" content="{{ $image.Permalink }}">

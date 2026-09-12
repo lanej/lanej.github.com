@@ -1,0 +1,2 @@
+{{/* Filter before sorting or limiting any public page collection. */}}
+{{- return (where . "Params.unlisted" "ne" true) -}}

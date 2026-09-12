@@ -1,6 +1,6 @@
 {{ define "main" }}
-<article class="sc-article" aria-labelledby="essay-title">
-<div class="sc-meta"><a href="{{ "/writing/" | relURL }}">Writing</a><span>{{ .ReadingTime }} min read</span></div>
+<article class="sc-article" aria-labelledby="essay-title"{{ if eq .Params.unlisted true }} data-visibility="unlisted"{{ end }}>
+<div class="sc-meta"><a href="{{ "/writing/" | relURL }}">Writing</a><span>{{ if eq .Params.unlisted true }}<span class="sc-preview-state">Draft · Unlisted · </span>{{ end }}{{ .ReadingTime }} min read</span></div>
 {{ if .Draft }}<p class="draft-notice">Draft — local preview only</p>{{ end }}
 {{ partial "essay-content.html" . }}
 <footer class="article-footer"><a class="text-link" href="{{ "/writing/" | relURL }}">All writing <span aria-hidden="true">→</span></a><a class="feed-link" href="{{ "index.xml" | relURL }}">Subscribe via RSS</a></footer>
