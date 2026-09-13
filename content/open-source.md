@@ -1,5 +1,42 @@
 ---
 title: Open source
-description: Selected contributions to open-source tools, separate from the projects I maintain and my career history.
+description: The tools I build and use, my public GitHub activity, and selected contributions to other projects.
+sections:
+  - title: Dotfiles
+    id: dotfiles
+  - title: Viewrule
+    id: viewrule
+  - title: GitHub activity
+    id: github-activity
+  - title: Contributions
+    id: open-source
 ---
-These are contributions to other projects, from foundational work to small fixes in tools I use. For tools I have built and experiments in progress, see [Projects and Labs](/projects/).
+Open source is part of my day-to-day work: maintaining my own tools, trying them in practice, and contributing improvements upstream. Early experiments and visualizations live in [Labs](/labs/).
+
+## Dotfiles {#dotfiles}
+
+**My everyday development environment · Actively maintained**
+
+My largest ongoing personal open-source project is the environment I work in. These dotfiles bring together Neovim, tmux, zsh, terminal tools, and coding-agent configuration across macOS and Linux.
+
+I keep improving the small things that shape a working day: finding information, moving between sessions, carrying configuration between machines, and giving agents consistent instructions. A Makefile installs the configuration and converges the tools toward the setup I use.
+
+This is an opinionated personal environment. Read the installation steps and scripts before applying it to your own machine.
+
+[Browse the dotfiles](https://github.com/lanej/dotfiles) · [Setup and documentation](https://github.com/lanej/dotfiles#readme)
+
+## Viewrule {#viewrule}
+
+**Experimental tool · Used on this website**
+
+How do you give a coding agent useful design boundaries—and check whether its UI stays within them?
+
+Viewrule combines written design rules with executable browser checks for layout, density, context, and accessibility. It captures both page overviews and native-scale detail so large screens do not conceal small defects. Agents receive findings tied to the rules; human feedback helps refine the constraints.
+
+It includes a CLI and a Claude Code plugin. This website uses it to check its rendered pages. Passing those checks means the configured constraints passed; it does not establish that a design is good or automate every accessibility judgment.
+
+[Source and installation](https://github.com/lanej/viewrule) · [Releases](https://github.com/lanej/viewrule/releases) · [Why feedback matters](/writing/close-the-loop/)
+
+## GitHub activity {#github-activity}
+
+{{< github-activity >}}

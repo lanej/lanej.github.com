@@ -42,11 +42,14 @@ def main(root):
         executable = [a for a in doc.select('script') if a.get('type') != 'application/ld+json']
         has_notes = bool(doc.select('a', **{'class':'footnote-ref'}))
         is_article = bool(doc.select('meta', property='article:published_time'))
-        assert len(executable) == int(has_notes and is_article), f'{path}: citation script loading mismatch'
+        is_labs = path == root / 'labs/index.html'
+        assert len(executable) == int(has_notes and is_article) + int(is_labs), f'{path}: script loading mismatch'
         for script in executable:
             asset = urlparse(script.get('src',''))
-            assert not asset.scheme and not asset.netloc and asset.path.startswith('/js/citations.min.') and asset.path.endswith('.js'), 'Unexpected executable JavaScript'
-            assert 'defer' in script and 'data-citation-previews' in script and script.get('integrity','').startswith('sha256-'), 'Citation script must be deferred, local, and fingerprinted'
+            prefix = '/js/labs.min.' if is_labs else '/js/citations.min.'
+            assert not asset.scheme and not asset.netloc and asset.path.startswith(prefix) and asset.path.endswith('.js'), 'Unexpected executable JavaScript'
+            assert 'defer' in script and script.get('integrity','').startswith('sha256-'), 'Script must be deferred, local, and fingerprinted'
+            assert is_labs or 'data-citation-previews' in script, 'Citation marker missing'
         assert 'citation-popover' not in text, 'Interactive cards must not replace static endnotes'
         assert all(a.get('alt') for a in doc.select('img')), f'{path}: missing image description'
         for forbidden in ('New writing will appear here', 'Evidence over chronology', 'new-about-josh2.jpg', 'headshot-v4'):

@@ -1,0 +1,26 @@
+/* Experiments can use the full shell; their explanatory prose retains its measure. */
+.lab-copy{max-width:none}
+.lab-copy>p,.lab-copy>h2{max-width:var(--copy)}
+.lab-demo{margin-block:28px 36px}
+.lab-demo img{width:100%;height:auto;border:1px solid var(--line);border-radius:4px}
+.lab-demo figcaption,.github-activity figcaption{font-size:.875rem;margin-block:12px;color:var(--muted)}
+.live-demo{margin-top:20px;border-block:1px solid var(--line)}
+.live-demo summary,.activity-counts summary{cursor:pointer;min-height:44px;padding-block:10px;color:var(--accent)}
+.live-demo p{margin-block:12px;max-width:var(--copy)}
+.live-demo iframe{display:block;width:100%;height:740px;border:1px solid var(--line);margin-block:16px}
+.live-demo:not([open]) iframe{display:none}
+.activity-calendar{display:block;width:100%;height:auto;max-width:636px}
+.activity-quarter{display:none}
+.activity-key{display:inline-flex;gap:3px;vertical-align:middle;margin-inline:6px}
+.activity-key i{width:10px;height:10px;border-radius:2px}
+.activity-level-0{fill:var(--line);background:var(--line)}
+.activity-level-1{fill:#385845;background:#385845}
+.activity-level-2{fill:#528665;background:#528665}
+.activity-level-3{fill:#76ad89;background:#76ad89}
+.activity-level-4{fill:var(--accent);background:var(--accent)}
+.activity-counts{margin-bottom:16px}
+.activity-counts table{border-collapse:collapse;width:100%;text-align:left}
+.activity-counts th,.activity-counts td{padding:8px;border-bottom:1px solid var(--line)}
+.activity-counts td{text-align:right;font-variant-numeric:tabular-nums}
+@media(max-width:700px){.activity-year{display:none}.activity-quarter{display:block}.activity-quarter .activity-calendar{max-width:312px}.github-activity figcaption .activity-quarter{display:inline}.live-demo iframe{height:680px}}
+@media print{.live-demo{display:none}.activity-year{display:block}.activity-quarter{display:none}}

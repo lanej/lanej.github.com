@@ -1,0 +1,9 @@
+{{ $days := .days }}
+{{ $weeks := div (add (len $days) 6) 7 }}
+<svg class="activity-calendar" role="img" aria-labelledby="{{ .id }}-title {{ .id }}-desc" viewBox="0 0 {{ mul $weeks 12 }} 84">
+<title id="{{ .id }}-title">{{ .label }}</title>
+<desc id="{{ .id }}-desc">{{ (index $days 0).date }} to {{ (index $days (sub (len $days) 1)).date }}. Each square is one day, from top to bottom within each week. Brighter squares indicate more contributions as categorized by GitHub. Monthly totals follow.</desc>
+{{ range $i, $day := $days }}
+<rect x="{{ mul (div $i 7) 12 }}" y="{{ mul (mod $i 7) 12 }}" width="10" height="10" rx="2" class="activity-level-{{ .level }}"><title>{{ .date }}: {{ .count }} contributions</title></rect>
+{{ end }}
+</svg>

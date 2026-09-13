@@ -1,0 +1,15 @@
+{{ with hugo.Data.github_activity }}
+<figure class="github-activity" aria-labelledby="activity-caption">
+<div class="activity-year">{{ partial "activity-calendar.html" (dict "days" .days "id" "activity-year" "label" "GitHub contributions over the last year") }}</div>
+<div class="activity-quarter">{{ partial "activity-calendar.html" (dict "days" (last (add 84 (cond (eq (mod (len .days) 7) 0) 7 (mod (len .days) 7))) .days) "id" "activity-quarter" "label" "GitHub contributions over the last 13 weeks") }}</div>
+<figcaption id="activity-caption"><span class="activity-year">Last year</span><span class="activity-quarter">Last 13 weeks</span> · Less <span class="activity-key" aria-hidden="true">{{ range seq 0 4 }}<i class="activity-level-{{ . }}"></i>{{ end }}</span> More</figcaption>
+<p><strong>{{ .total | lang.FormatNumber 0 }} contributions</strong> across {{ time.Format "January 2, 2006" .start }} – {{ time.Format "January 2, 2006" .end }}. Retrieved {{ time.Format "January 2, 2006" .retrieved }}.</p>
+<p>Publicly visible GitHub profile activity, which can include anonymized private contributions. Counts show activity, not impact.</p>
+<details class="activity-counts"><summary>Monthly contribution totals</summary>
+<table><thead><tr><th scope="col">Month</th><th scope="col">Contributions</th></tr></thead><tbody>
+{{ $months := dict }}{{ range .days }}{{ $month := substr .date 0 7 }}{{ $months = merge $months (dict $month (add (index $months $month | default 0) .count)) }}{{ end }}
+{{ range $month, $count := $months }}<tr><th scope="row">{{ time.Format "January 2006" (printf "%s-01" $month) }}</th><td>{{ $count | lang.FormatNumber 0 }}</td></tr>{{ end }}
+</tbody></table><p>First and last months may be partial.</p></details>
+<p><a href="{{ .profile }}">View current activity on GitHub</a> · <a href="https://docs.github.com/en/account-and-profile/reference/profile-contributions-reference">What GitHub counts</a></p>
+</figure>
+{{ end }}

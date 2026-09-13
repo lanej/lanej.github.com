@@ -9,7 +9,7 @@ spec.loader.exec_module(previews)
 
 
 class PreviewTests(unittest.TestCase):
-    routes = {'/', '/record/', '/projects/', '/open-source/', '/about/', '/writing/', '/writing/example/'}
+    routes = {'/', '/record/', '/labs/', '/open-source/', '/about/', '/writing/', '/writing/example/'}
 
     def test_company_icons_affect_work(self):
         self.assertEqual(previews.affected_routes(

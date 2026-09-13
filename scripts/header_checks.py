@@ -7,7 +7,7 @@ def verify_header(page, width, *, allow_wrap=False):
     # inner_text ignores attributes: an accessible name must not become visible chrome.
     assert 'Josh Lane' not in header.inner_text(), 'Visible name returned to the header'
     links = header.locator('nav a')
-    expected = ['Projects', 'Open source', 'Work', 'About']
+    expected = ['Labs', 'Open source', 'Work', 'About']
     if header.locator('a[href="/writing/"]').count():
         expected.insert(0, 'Writing')
     assert links.evaluate_all('(items) => items.map(a => a.getAttribute("aria-label"))') == expected, 'Navigation labels/order changed'

@@ -31,4 +31,4 @@ I presented Engine Yard’s approach to automated testing, continuous integratio
 
 ## Software projects {#open-source}
 
-My [own tools and experiments](/projects/) and [open-source contributions](/open-source/) now have their own pages.
+My [open-source tools and contributions](/open-source/) and [Labs experiments](/labs/) have their own pages.
