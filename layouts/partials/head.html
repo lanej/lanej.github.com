@@ -8,7 +8,8 @@
 {{ $styles := slice (resources.Get "css/site.css") (resources.Get "css/editorial.css") }}
 {{ $bundle := "css/combined.css" }}
 {{ if .IsHome }}{{ $styles = $styles | append (resources.Get "css/home.css") }}{{ $bundle = "css/home-combined.css" }}{{ end }}
-{{ if eq .RelPermalink "/record/" }}{{ $styles = $styles | append (resources.Get "css/work.css") }}{{ $bundle = "css/work-combined.css" }}{{ end }}
+{{ if in (slice "/record/" "/open-source/") .RelPermalink }}{{ $styles = $styles | append (resources.Get "css/work.css") }}{{ $bundle = "css/work-combined.css" }}{{ end }}
+{{ if in (slice "/labs/" "/open-source/") .RelPermalink }}{{ $styles = $styles | append (resources.Get "css/projects.css") }}{{ $bundle = printf "css/%s-combined.css" .File.ContentBaseName }}{{ end }}
 {{ if $article }}{{ $styles = $styles | append (resources.Get "css/diagrams.css") (resources.Get "css/essays.css") }}{{ $bundle = "css/essays-combined.css" }}{{ end }}
 {{ $css := $styles | resources.Concat $bundle | minify | fingerprint }}
 <title>{{ $title }}</title>
@@ -40,3 +41,5 @@
 <script type="application/ld+json">{{ $post | jsonify | safeJS }}</script>
 {{ end }}
 <link rel="alternate" type="application/rss+xml" title="Josh Lane — Writing" href="{{ "index.xml" | absURL }}">
+
+{{ if eq .RelPermalink "/labs/" }}{{ $labs := resources.Get "js/labs.js" | minify | fingerprint }}<script src="{{ $labs.RelPermalink }}" defer integrity="{{ $labs.Data.Integrity }}"></script>{{ end }}

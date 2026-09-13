@@ -4,6 +4,8 @@ on:
     branches: [master]
   pull_request:
     branches: [master]
+  schedule:
+    - cron: "23 9 * * 1"
   workflow_dispatch:
 permissions:
   contents: read
@@ -31,6 +33,10 @@ jobs:
         run: bash scripts/install-hugo.sh
       - name: Install pinned Viewrule
         run: bash scripts/install-viewrule.sh
+      - name: Refresh public GitHub activity
+        run: |
+          python3 scripts/test-github-activity.py
+          python3 scripts/github-activity.py
       - name: Build and validate
         run: bash scripts/build.sh
       - name: Browser smoke tests

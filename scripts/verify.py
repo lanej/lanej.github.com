@@ -41,7 +41,7 @@ def verify_home_opening(page, width, height):
             nameCount: ((document.querySelector('.site-header').innerText + '\\n' +
                 document.querySelector('.hero').innerText).match(/Josh Lane/g) || []).length,
             identity: rect('.hero-identity'), portrait: rect('.hero-portrait'),
-            intro: rect('.hero .intro'), link: rect('.hero .text-link'),
+            intro: rect('.hero .intro'), link: rect('.site-header nav a[href="/writing/"]'),
             writing: rect('.home-writing'), writingHeading: rect('#writing-title'),
             firstEssay: rect('.home-writing .writing-item h3 a'),
             background: rect('.background-section'),
@@ -58,7 +58,7 @@ def verify_home_opening(page, width, height):
     if opening['writing']:
         assert opening['firstSection'] == 'writing', 'Writing must immediately follow the introduction'
         assert opening['writing']['bottom'] <= opening['background']['top'] + 1, 'Career history precedes writing'
-        assert page.locator('.hero .text-link').get_attribute('href') == '#writing', 'Primary link must lead to essays'
+        assert page.locator('.site-header nav a').first.get_attribute('href') == '/writing/', 'Primary link must lead to essays'
         items = page.locator('.home-writing .writing-item')
         assert 1 <= items.count() <= 3, 'Expected latest published essays, not placeholders'
         assert not items.locator('time').count(), 'Homepage writing cards should not expose publication dates'

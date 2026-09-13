@@ -9,11 +9,16 @@ spec.loader.exec_module(previews)
 
 
 class PreviewTests(unittest.TestCase):
-    routes = {'/', '/record/', '/about/', '/writing/', '/writing/example/'}
+    routes = {'/', '/record/', '/labs/', '/open-source/', '/about/', '/writing/', '/writing/example/'}
 
     def test_company_icons_affect_work(self):
         self.assertEqual(previews.affected_routes(
-            ['assets/css/work.css', 'static/logos/companies/easypost.svg', 'STYLE.md'], self.routes), ['/record/'])
+            ['assets/css/work.css', 'static/logos/companies/easypost.svg', 'STYLE.md'], self.routes), ['/open-source/', '/record/'])
+
+    def test_contributions_affect_open_source(self):
+        self.assertEqual(previews.affected_routes(
+            ['data/contributions.yaml', 'layouts/partials/contributions.html',
+             'static/logos/projects/ogen-github.png'], self.routes), ['/open-source/'])
 
     def test_shared_template_affects_every_page(self):
         self.assertEqual(previews.affected_routes(['layouts/partials/header.html'], self.routes), sorted(self.routes))

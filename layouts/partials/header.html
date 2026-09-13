@@ -1,8 +1,17 @@
 <header class="site-header{{ if .IsHome }} home-header{{ end }}"><div class="shell nav-shell">
 <nav aria-label="Primary navigation">
-{{ if where site.RegularPages "Section" "writing" }}<a href="{{ "/writing/" | relURL }}"{{ if eq .Section "writing" }} aria-current="page"{{ end }}>Writing</a>{{ end }}
-<a href="{{ "/about/" | relURL }}"{{ if eq .RelPermalink "/about/" }} aria-current="page"{{ end }}>About</a>
-<a href="{{ "/record/" | relURL }}"{{ if eq .RelPermalink "/record/" }} aria-current="page"{{ end }}>Work</a>
+{{ $page := . }}
+{{ $links := slice
+  (dict "label" "Writing" "path" "/writing/" "icon" "writing")
+  (dict "label" "Labs" "path" "/labs/" "icon" "labs")
+  (dict "label" "Open source" "path" "/open-source/" "icon" "source")
+  (dict "label" "Work" "path" "/record/" "icon" "work")
+  (dict "label" "About" "path" "/about/" "icon" "about") }}
+{{ range $links }}
+{{ if or (ne .icon "writing") (where site.RegularPages "Section" "writing") }}
+<a href="{{ .path | relURL }}" aria-label="{{ .label }}" title="{{ .label }}"{{ if or (eq $page.RelPermalink .path) (and (eq .icon "writing") (eq $page.Section "writing")) }} aria-current="page"{{ end }}>{{ partial "nav-icon.html" .icon }}<span class="nav-label">{{ .label }}</span></a>
+{{ end }}
+{{ end }}
 </nav>
 {{ if not .IsHome }}<a class="wordmark" href="{{ "/" | relURL }}" aria-label="Josh Lane — home">{{ partial "avatar.html" . }}</a>{{ end }}
 </div></header>

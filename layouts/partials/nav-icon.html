@@ -1,0 +1,8 @@
+<svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+{{ if eq . "writing" }}<path d="M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1Zm0 0v15"/>
+{{ else if eq . "labs" }}<path d="M9 3h6m-5 0v6L4 19a1.4 1.4 0 0 0 1 2h14a1.4 1.4 0 0 0 1-2L14 9V3M7 15h10"/><path d="M10 17h.01M14 19h.01"/>
+{{ else if eq . "source" }}<path d="m7 6-6 6 6 6m10-12 6 6-6 6M14 3l-4 18"/>
+{{ else if eq . "work" }}<rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V3h8v4M3 12c6 3 12 3 18 0m-9 1v3"/>
+{{ else if eq . "about" }}<circle cx="12" cy="7" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/>
+{{ end }}
+</svg>

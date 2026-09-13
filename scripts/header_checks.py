@@ -7,10 +7,10 @@ def verify_header(page, width, *, allow_wrap=False):
     # inner_text ignores attributes: an accessible name must not become visible chrome.
     assert 'Josh Lane' not in header.inner_text(), 'Visible name returned to the header'
     links = header.locator('nav a')
-    expected = ['About', 'Work', 'Contact']
+    expected = ['Labs', 'Open source', 'Work', 'About']
     if header.locator('a[href="/writing/"]').count():
         expected.insert(0, 'Writing')
-    assert links.all_text_contents() == expected, 'Navigation labels/order changed'
+    assert links.evaluate_all('(items) => items.map(a => a.getAttribute("aria-label"))') == expected, 'Navigation labels/order changed'
     assert header.locator('.wordmark').count() == (0 if home else 1), 'Unexpected home-link count'
     if not home:
         avatar = header.get_by_role('link', name='Josh Lane — home', exact=True)

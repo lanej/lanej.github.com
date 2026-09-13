@@ -17,7 +17,11 @@ def affected_routes(paths, available):
     routes = set()
     essays = {r for r in available if r.startswith('/writing/') and r != '/writing/'}
     for path in paths:
-        if path in ('assets/css/work.css', 'data/career.yaml', 'data/contributions.yaml', 'layouts/partials/contributions.html', 'layouts/shortcodes/career-timeline.html', 'layouts/shortcodes/work-role.html', 'layouts/shortcodes/speaking-engagement.html') or path.startswith(('static/logos/companies/', 'static/logos/projects/', 'static/logos/events/', 'static/icons/heroicons/')):
+        if path == 'assets/css/work.css':
+            routes.update(('/record/', '/open-source/'))
+        elif path in ('data/contributions.yaml', 'layouts/partials/contributions.html') or path.startswith('static/logos/projects/'):
+            routes.add('/open-source/')
+        elif path in ('data/career.yaml', 'layouts/shortcodes/career-timeline.html', 'layouts/shortcodes/work-role.html', 'layouts/shortcodes/speaking-engagement.html') or path.startswith(('static/logos/companies/', 'static/logos/events/', 'static/icons/heroicons/')):
             routes.add('/record/')
         elif path == 'assets/css/home.css':
             routes.add('/')
@@ -73,7 +77,7 @@ def capture(args):
                 response = page.goto('http://127.0.0.1:8765' + route, wait_until='networkidle')
                 assert response and response.ok, route
                 page.evaluate('document.fonts.ready')
-                if route == '/record/':
+                if route in ('/record/', '/open-source/'):
                     page.locator('.work-logo img').evaluate_all(
                         '(images) => Promise.all(images.map(image => image.decode()))')
                     assert page.locator('.project-logo img').count() == page.locator('.contribution').count(), 'Every project needs a GitHub avatar'
@@ -88,13 +92,14 @@ def capture(args):
                     filenames['detail'] = f'{slug}-{label}-companies.png'
                     page.locator('.career-company[data-company="easypost"]').screenshot(
                         path=str(out / filenames['detail']), animations='disabled')
-                    filenames['projects'] = f'{slug}-{label}-projects.png'
-                    page.locator('.contributions').screenshot(
-                        path=str(out / filenames['projects']), animations='disabled')
                     if page.locator('.speaking-engagement').count():
                         filenames['speaking'] = f'{slug}-{label}-speaking.png'
                         page.locator('.speaking-engagement').screenshot(
                             path=str(out / filenames['speaking']), animations='disabled')
+                if route == '/open-source/':
+                    filenames['projects'] = f'{slug}-{label}-projects.png'
+                    page.locator('.contributions').screenshot(
+                        path=str(out / filenames['projects']), animations='disabled')
                 item['images'][label] = filenames
                 page.close()
             manifest['pages'].append(item)
