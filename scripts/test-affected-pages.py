@@ -23,6 +23,11 @@ class SelectionTests(unittest.TestCase):
         '/about/': PageAnchors('<main class="prose" id="biography"></main>'),
     }
 
+    def test_discovery_visual_dependencies(self):
+        for name in ("item-visual", "writing-item-visual"):
+            self.assertEqual(affected_routes([f"layouts/partials/{name}.html"], self.routes), ["/", "/writing/"])
+        self.assertEqual(affected_routes(["content/writing/example/art.webp"], self.routes), ["/", "/writing/", "/writing/example/"])
+
     def test_page_specific_templates(self):
         self.assertEqual(affected_routes(['layouts/home.html'], self.routes), ['/'])
         self.assertEqual(affected_routes(['layouts/writing/list.html'], self.routes), ['/writing/'])

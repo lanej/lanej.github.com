@@ -147,6 +147,8 @@ def affected_routes(paths, available, *, root=None, base=None, page_names=None):
     direct = {
         'layouts/home.html': {'/'}, 'assets/css/home.css': {'/'},
         'layouts/writing/list.html': {'/writing/'},
+        'layouts/partials/item-visual.html': {'/', '/writing/'},
+        'layouts/partials/writing-item-visual.html': {'/', '/writing/'},
         'layouts/writing/single.html': essays,
         'layouts/partials/essay-content.html': essays,
         'assets/css/essays.css': essays, 'assets/css/diagrams.css': essays,
@@ -184,6 +186,8 @@ def affected_routes(paths, available, *, root=None, base=None, page_names=None):
         elif path == '.ui-review/rules.json' and root is not None and base is not None:
             current = Path(root) / path
             routes.update(rule_routes(previous_text(root, base, path), current.read_text(), page_names or route_names(available)))
+        elif path.startswith('content/writing/') and not path.endswith('.md'):
+            routes.update(essays | {'/', '/writing/'})
         elif path.startswith('content/') and path.endswith('.md'):
             relative = path.removeprefix('content/').removesuffix('.md')
             parts = relative.split('/')

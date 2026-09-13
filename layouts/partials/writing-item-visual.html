@@ -1,0 +1,5 @@
+{{ $image := "" }}
+{{ with .Params.essay_image }}
+  {{ with $.Resources.GetMatch . }}{{ $image = .RelPermalink }}{{ end }}
+{{ end }}
+{{ partial "item-visual.html" (dict "image" $image "alt" .Params.essay_image_alt "symbol" .Params.essay_visual) }}

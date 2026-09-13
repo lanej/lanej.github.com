@@ -68,6 +68,14 @@ def main():
                 )
                 assert all(height >= 44 for height in nav_heights), f'{route}: small navigation target'
 
+                if route in ('/', '/writing/'):
+                    for item in page.locator('.writing-item, .lab-item').all():
+                        assert item.locator('.item-visual svg, .item-visual img').count() == 1, 'Discovery item visual missing'
+                    for img in page.locator('.item-visual img').all():
+                        img.scroll_into_view_if_needed()
+                        img.evaluate('(img) => img.decode()')
+                        assert img.evaluate('(img) => img.naturalWidth > 0'), 'Discovery illustration failed to decode'
+
                 if route == '/':
                     assert not page.locator('.home-writing time').count(), 'Homepage exposes publication dates'
                     assert page.locator('.home-writing .writing-item').count() >= 1, 'Homepage writing missing'

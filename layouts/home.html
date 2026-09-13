@@ -14,6 +14,7 @@
   <div class="essay-list">
   {{ range first 3 . }}
     <article class="writing-item">
+      {{ partial "writing-item-visual.html" . }}
       <p class="essay-meta"><span>{{ .ReadingTime }} min read</span></p>
       <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
       {{ with .Description }}<p>{{ . }}</p>{{ end }}
@@ -28,6 +29,7 @@
   <div class="section-heading"><h2 id="labs-title">Labs</h2></div>
   {{ range .Params.featured }}
   <article class="lab-item">
+    {{ partial "item-visual.html" (dict "symbol" .anchor) }}
     <p class="lab-meta">{{ .status }}</p>
     <h3><a href="{{ printf "/labs/#%s" .anchor | relURL }}">{{ .title }}</a></h3>
     <p>{{ .description }}</p>

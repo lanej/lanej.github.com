@@ -350,3 +350,12 @@ The combined rule is:
 > **One reading format. Different arguments.**
 
 Readers should recognize the site before they recognize the template.
+
+## Discovery item visuals
+
+Home Writing and Labs items and the Writing archive use one 64px subject visual
+above each title. Reuse authored essay illustrations with contain sizing; diagram
+essays use simplified, label-free symbols of their existing themes. Labs symbols
+represent the route experiment and layout demonstration, not invented project logos.
+Keep the shared green palette, full-width text, and decorative semantics: adjacent
+titles provide accessible context. New essays fall back to a document symbol.
