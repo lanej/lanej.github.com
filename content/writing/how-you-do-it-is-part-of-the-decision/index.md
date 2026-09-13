@@ -2,6 +2,7 @@
 title = "How You Do It Is Part of the Decision"
 description = "Hard decisions reveal our character and shape the trust we will need for the next one."
 date = "2026-09-11"
+lastmod = "2026-09-13"
 draft = false
 essay_image = "damocles.svg"
 essay_image_width = 360
@@ -10,23 +11,23 @@ essay_image_alt = "A sword suspended by a thin thread above an empty chair, rend
 essay_image_caption = "The Sword of Damocles: the peril attached to authority."
 +++
 
-Sometimes the right decision leaves someone worse off. A project needs to stop. An organization needs to change. A commitment can no longer be sustained.
+> The necessity of an outcome does not justify every method used to reach it.
 
-Delay can leave people investing more time in work with no future, or allow a manageable problem to become a crisis. Leadership requires a willingness to act despite those consequences.
+Leadership sometimes requires decisions that leave people worse off. Avoiding those decisions can be a failure of responsibility. But so can treating their necessity as permission to stop examining our choices.
 
-But establishing that a change is necessary does not settle how to carry it out. The announcement, the transition, and the support we provide determine a substantial part of what happens next. They belong in the reasoning that makes the decision defensible.
+Establishing that something must change answers only part of the question. We still have to justify the approach, account for the people who bear its costs, and take responsibility for what follows. Those are not matters to settle after the decision. They are part of what we are deciding.
 
-How we handle that work also gives people evidence about our character. They learn what our commitments mean when keeping them becomes difficult, and whether they can rely on us the next time their interests are at stake.
-
-> A necessary outcome can still be reached through unnecessary harm.
+That is where our standards become more than statements of intent. Integrity has to govern choices that are costly and contested, not only choices that are easy to defend. The goal is not to avoid hard decisions. It is to remain accountable for the whole decision.
 
 ## You do not get to delegate the weight
 
 The person who passes judgment should swing the sword.[^sword]
 
-The authority to impose a consequence comes with a responsibility to confront it. You should not get to exercise the power while arranging for someone else to carry all the discomfort.
+The authority to impose a consequence comes with a responsibility to answer for it. That responsibility does not depend on who delivers the news.
 
 You can ask someone to coordinate a transition. You can rely on people with the right expertise to carry it out. But you still owe the people affected an explanation you are willing to give yourself. You still have to own the consequences, including the ones that make your decision harder to defend.
+
+A leader can attend every conversation and still evade responsibility. Another can appropriately delegate those conversations while setting the standard, providing resources, and correcting failures. The test is whether we remain answerable for what happens.
 
 “I made the decision; someone else can deal with the people” is not a complete account of leadership. Distance can remove precisely the information that should inform our judgment: what the plan actually asks of someone, and where it leaves them.
 
@@ -40,6 +41,8 @@ The minute you start delegating away the hard part—not because someone else is
 
 Ending an investment? Acting before a deadline? Giving people little information? Leaving them to work out the consequences themselves?
 
+A necessary objective is not the same as a necessary intervention. Needing to reduce costs does not establish that a particular staffing reduction is the right plan. We still have to compare it with other ways of meeting the need.
+
 Consider a project that no longer warrants its investment. Continuing would consume resources needed elsewhere. Stopping it may be the right call.
 
 That does not tell us when to inform the team, how to represent their work, or how to handle commitments made to customers. It does not tell us what support people need to move to their next responsibilities. Those choices face their own constraints and need their own justification.
@@ -48,15 +51,15 @@ The standard cannot be that nobody is upset. Someone may understand a decision a
 
 *Crucial Conversations* calls the supposed choice between honesty and respect a “Fool’s Choice.”[^crucial-conversations] We can be clear about what has been decided without dismissing what it costs the person hearing it. A gentle but evasive answer can leave someone unable to plan.
 
-Support costs money. A transition takes time. Some information cannot yet be shared. We should weigh those constraints before approving the change, with a dependable standard for how people will be treated. Calling the overall decision necessary does not make every choice about its execution inevitable.
+Support costs money. A transition takes time. Some information cannot yet be shared. We should weigh those constraints before approving the change, with a dependable standard for how people will be treated.
 
-## It should never be easy
+Avoidable harm is not always unjustified harm. One consequence may be avoidable only by imposing a greater cost elsewhere. The obligation is to examine the alternatives, make defensible tradeoffs, and own their costs. Calling the overall decision necessary does not make every choice about its execution inevitable.
 
-It should never be easy. It may get easier.
+## Composure is not indifference
 
-Experience should make you more capable of acting under pressure. You may become less anxious before a difficult conversation, more precise in your explanation, and better able to listen without becoming defensive. You may stop confusing your discomfort with evidence that the decision is wrong.
+Experience should make us better at carrying the responsibility, not more willing to disregard it. You may become less anxious before a difficult conversation, more precise in your explanation, and better able to listen without becoming defensive. You may stop confusing your discomfort with evidence that the decision is wrong.
 
-Nobody benefits from a leader making a painful event about their own feelings. You can become steadier without becoming numb. Someone else's loss should still carry moral weight, even when you are certain about the decision.
+Personal distress is not evidence that we acted well. A composed leader can take another person's loss seriously; an anguished one can still treat them carelessly. Someone else's loss should carry moral weight without making the event about our own feelings.
 
 In *Meditations* 5.20, Marcus Aurelius describes turning an impediment into material for action. In 6.30, he puts kindness alongside disciplined action.[^marcus] I take those ideas together: the difficult conversation is part of the work of leadership. Here, the obstacle to overcome is our temptation to avoid responsibility, not the person affected by our decision.
 
@@ -69,6 +72,8 @@ Character shows in what we choose when we have room to choose differently.
 It is relatively easy to speak well of people while their work serves our needs. The more demanding test comes when our interests diverge. Their contribution does not disappear because their project, role, or agreement no longer fits our plans. People should not have to remain useful to us to be treated with care.
 
 Epictetus argues in *Discourses* 2.18 that our actions strengthen the corresponding habits.[^epictetus] Each decision is practice for the next one. Facing consequences and arranging not to face them are both things we can become practiced at. Experience alone does not tell us which we are learning.
+
+The pattern matters as much as the individual call. If urgency repeatedly becomes our reason to break a commitment or refuse to hear the consequences, we should question what we are practicing. Expedience cannot become a standing permission to abandon our standards.
 
 Those choices become evidence for other people, too. Do we keep an inconvenient commitment? Acknowledge an error? Apply a standard consistently when the circumstances are comparable? People see whether our account of ourselves survives contact with a difficult situation.
 
@@ -84,17 +89,17 @@ In three experiments, Christine Porath and Amir Erez found that rudeness reduced
 
 We can set demanding targets, negotiate firmly, stop failed investments, and terminate employment when the reasons warrant it. Listening does not give someone a veto; correcting an error does not mean abandoning the goal. The work still has to meet the requirement.
 
-A successful outcome is not proof that every part of the method was necessary. Could we achieve the result while preserving more of the information and cooperation the next result will require?
+A successful outcome does not establish that aggression caused it, let alone that aggression was necessary. We have to ask what a different approach might have achieved and what information or cooperation we sacrificed along the way.
 
 ## Play the long game
 
-A business needs capable people who will choose to join, stay, and do difficult work together. Losing people can disrupt execution; attracting replacements depends on more than having a vacancy. Research connects turnover with organizational performance and recruiting outcomes with the job, the organization, and how candidates experience the process.[^talent] I take those findings as a reason to include the people needed for continued execution in the business case for change.
+A business needs capable people who will choose to join, stay, and do difficult work together. Losing people can disrupt execution; attracting replacements depends on more than having a vacancy. Turnover and recruiting research give us reason to include the people needed for continued execution in the business case for change.[^talent]
 
-Enjoying our colleagues matters, but trust asks more than whether we like them. Roger Mayer, James Davis, and David Schoorman's model distinguishes ability, benevolence, and integrity: can you do the work, do you care about my interests, and do you follow principles I can accept?[^trust-model] A demanding colleague can earn that confidence while making decisions I dislike.
+Enjoying our colleagues matters, but trust asks more than whether we like them. The distinction between ability, benevolence, and integrity is useful here: can you do the work, do you care about my interests, and do you follow principles I can accept?[^trust-model] A demanding colleague can earn that confidence while making decisions I dislike.
 
-Kurt Dirks and Donald Ferrin's meta-analysis linked trust in leadership with commitment, performance, and lower intention to quit.[^leadership-trust] That last measure is an intention, not an observed departure. Pay, workload, growth, and the work itself still matter. Trust belongs among the conditions that make staying worthwhile; it cannot stand in for all of them.
+Research associates trust in leadership with commitment, job performance, and lower intention to quit.[^leadership-trust] Pay, workload, growth, and the work itself still matter. Trust belongs among the conditions that make staying worthwhile; it cannot stand in for all of them.
 
-A layoff makes this concrete. Joel Brockner and colleagues found worse reactions among remaining employees who identified with departing colleagues and perceived the departing employees' compensation as inadequate.[^layoff-survivors] Removing an expense leaves a team that still has to believe it can work effectively together.
+A layoff makes this concrete. Research on layoff survivors found worse reactions among remaining employees who identified with departing colleagues and perceived the departing employees' compensation as inadequate.[^layoff-survivors] Removing an expense leaves a team that still has to believe it can work effectively together.
 
 Adam Grant's *Give and Take* describes how generosity can build trust and reputation, and how givers can burn out or be exploited without boundaries.[^give-and-take] The longer horizon includes both what others learn from our conduct and what we practice through our choices. That is the practical sense in which I think about karma: we carry those relationships and habits into the next decision.
 
@@ -104,15 +109,15 @@ Decency deserves no less consideration when its return is uncertain. Integrity c
 
 ## Finish the decision
 
-Before approving a consequential change, we should be able to explain who bears the cost, which consequences are unavoidable, and what we will do about the harm still within our control. Where a responsible approach costs more or takes longer, that belongs in the proposal.
+Before approving a consequential change, we should be able to explain why this approach is justified, who bears its costs, and which alternatives we considered. That includes choices about timing, communication, and support. Where a responsible approach costs more or takes longer, that belongs in the proposal.
+
+When a proposal only works because we have left out the costs of carrying it out responsibly, the proposal is not finished.
 
 For a reduction in staff, I would want a plan for the business that remains: what work stops, which commitments continue, and who has the capacity to meet them. The plan should specify how people will be told and what transition support is reasonably possible. Someone needs the authority and resources to carry that work through.
 
 Then judge the result beyond the announcement. Did the savings materialize after transition costs? Can the remaining team meet its commitments? Are important risks still raised early? Are we losing effective people the plan depended on retaining? Retaining everyone is not the objective; sustaining the capabilities the business needs is.
 
 We must remain available to hear consequences we failed to anticipate and correct what we can. An explanation that was defensible at approval does not relieve us of responsibility for how the plan works in practice.
-
-I want us to make the changes the business needs without needlessly damaging its ability to succeed. That means meeting the moment and the goal: making the hard call, carrying it out with integrity, and taking responsibility for what follows.
 
 **How you do it is part of the decision. Being willing to face what you decided is part of the job.**
 
