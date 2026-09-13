@@ -1,0 +1,48 @@
+{
+  "head_sha": "e89a05b62bf72ba8706eb88522bc097b3a8a4268",
+  "build_sha": "3c051b0bb8207292ff3ea723bcf282c13b4190d6",
+  "pages": [
+    {
+      "route": "/",
+      "images": {
+        "mobile": {
+          "viewport": "home-mobile.png",
+          "full": "home-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "home-desktop.png",
+          "full": "home-desktop-full.png"
+        }
+      },
+      "title": "Josh Lane"
+    },
+    {
+      "route": "/writing/",
+      "images": {
+        "mobile": {
+          "viewport": "writing-mobile.png",
+          "full": "writing-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "writing-desktop.png",
+          "full": "writing-desktop-full.png"
+        }
+      },
+      "title": "Writing"
+    },
+    {
+      "route": "/writing/how-you-do-it-is-part-of-the-decision/",
+      "images": {
+        "mobile": {
+          "viewport": "writing-how-you-do-it-is-part-of-the-decision-mobile.png",
+          "full": "writing-how-you-do-it-is-part-of-the-decision-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "writing-how-you-do-it-is-part-of-the-decision-desktop.png",
+          "full": "writing-how-you-do-it-is-part-of-the-decision-desktop-full.png"
+        }
+      },
+      "title": "How You Do It Is Part of the Decision"
+    }
+  ]
+}
