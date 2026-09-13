@@ -247,6 +247,7 @@ from the stylesheet being checked.
 | --- | --- |
 | Fill the centered column, capped at 640px, within 2px rounding tolerance | `essay-reading-measure` (`reading-column`) |
 | Heading, prose, then optional supporting visuals in DOM and visible order | `essay-chapter-order` (`vertical-order`) |
+| Every authored chapter and visual container remains visible | `essay-chapters-visible`, `essay-visuals-visible` (`vertical-order`) |
 | Sequential paragraphs without overlap or rearrangement | `essay-paragraph-order` (`vertical-order`) |
 | Left-aligned prose in one column | `essay-prose-alignment`, `essay-prose-direction`, `essay-prose-columns` (`style`) |
 | Text components do not truncate their own content | `site-text-not-clipped` (`no-clip`) |

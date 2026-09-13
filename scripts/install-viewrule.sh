@@ -2,8 +2,8 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 # Update the release URL and verified checksum together; never install latest.
-version=0.3.0
-checksum=5ab24b47eab578eb5ab732ff7d65b715423e7e90ce13d72cb49c9ce7cc31e0bc
+version=0.3.1
+checksum=d22783f3d37f5a7fcb0f6fae1504e4ac62ef94c56d56844d121739bf7d525419
 node -e 'if (Number(process.versions.node.split(".")[0]) < 22) process.exit(1)'
 archive=$(mktemp -d)
 trap 'rm -rf "$archive"' EXIT

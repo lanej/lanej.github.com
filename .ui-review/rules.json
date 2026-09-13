@@ -148,5 +148,43 @@
       "DR-007"
     ],
     "reason": "STYLE.md: Measure and layout. The English essay corpus uses left-to-right text; together with the alignment rule this makes logical start physically left-aligned."
+  },
+  {
+    "id": "essay-chapters-visible",
+    "type": "vertical-order",
+    "selector": ".sc-article",
+    "groups": [
+      {
+        "selector": ".sc-section",
+        "optional": false
+      }
+    ],
+    "tolerance": 2,
+    "optional": true,
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "reason": "STYLE.md: Presentation should survive the content. Every authored chapter remains visible and follows the document order."
+  },
+  {
+    "id": "essay-visuals-visible",
+    "type": "vertical-order",
+    "selector": ".sc-section:has(.sc-section-visuals)",
+    "groups": [
+      {
+        "selector": ".sc-section-visuals",
+        "optional": false
+      }
+    ],
+    "tolerance": 2,
+    "optional": true,
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "reason": "STYLE.md: Diagrams. A chapter may have no supporting visual; an authored visual container must remain visible rather than being hidden to fit the layout."
   }
 ]

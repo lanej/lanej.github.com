@@ -48,6 +48,8 @@ reading measure, DOM/visual order, prose alignment/columns, text clipping, diagr
 captions, introduction text size, page overflow, and axe WCAG A/AA findings including
 confirmed text contrast. Optional essay selectors allow other page types; required
 readiness and chapter groups prevent absent essay structure from silently passing.
+Required order groups also reject partially hidden content; authored chapters,
+paragraphs, and visual containers cannot disappear merely to fit the layout.
 
 The wrapper isolates shared user configuration under `.tools/viewrule-global` so
 personal dashboard density rules do not change the site's CI contract. Put the
