@@ -17,6 +17,7 @@ class PreviewTests(unittest.TestCase):
 
     def test_shared_template_affects_every_page(self):
         self.assertEqual(previews.affected_routes(['layouts/partials/header.html'], self.routes), sorted(self.routes))
+        self.assertEqual(previews.affected_routes(['.ui-review/rules.json'], self.routes), sorted(self.routes))
 
     def test_career_data_and_role_shortcodes_affect_work(self):
         self.assertEqual(previews.affected_routes(

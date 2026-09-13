@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "baseURL": "http://127.0.0.1:8765",
+  "enforceOnStop": false,
+  "sourcePaths": [
+    "assets",
+    "layouts",
+    "content",
+    "data",
+    "static",
+    "hugo.toml",
+    "STYLE.md",
+    ".ui-review/site.json",
+    ".ui-review/rules.json",
+    "scripts/viewrule.py"
+  ],
+  "accessibility": true,
+  "viewports": [
+    {
+      "name": "small",
+      "width": 320,
+      "height": 480
+    },
+    {
+      "name": "mobile",
+      "width": 390,
+      "height": 664
+    },
+    {
+      "name": "tablet",
+      "width": 768,
+      "height": 900
+    },
+    {
+      "name": "breakpoint",
+      "width": 961,
+      "height": 900
+    },
+    {
+      "name": "laptop",
+      "width": 1100,
+      "height": 900
+    },
+    {
+      "name": "desktop",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "4k",
+      "width": 3840,
+      "height": 2160
+    }
+  ],
+  "detailCapture": {
+    "width": 1280,
+    "height": 1000,
+    "overlap": 64,
+    "maxTiles": 160
+  }
+}

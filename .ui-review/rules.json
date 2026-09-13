@@ -1,0 +1,190 @@
+[
+  {
+    "id": "site-introduction-text",
+    "type": "min-font-size",
+    "selector": ".home-intro .intro",
+    "pages": [
+      "home"
+    ],
+    "min": 16,
+    "severity": "error",
+    "designRules": [
+      "DR-007"
+    ],
+    "reason": "STYLE.md: Typography. Keep the home introduction at least 16 CSS pixels; reflow it instead of shrinking it to increase density."
+  },
+  {
+    "id": "site-text-not-clipped",
+    "type": "no-clip",
+    "selector": "main h1, main h2, main h3, main p",
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "reason": "STYLE.md: Presentation should survive the content. Text-bearing components must not truncate their own content with hidden or clip overflow. Ancestor clipping still needs browser and visual review."
+  },
+  {
+    "id": "site-diagram-context",
+    "type": "context",
+    "selector": "[data-essay-diagram]",
+    "required": [
+      "figcaption"
+    ],
+    "optional": true,
+    "severity": "error",
+    "designRules": [
+      "DR-003"
+    ],
+    "reason": "STYLE.md: Diagrams. When a shared diagram is present, keep a visible caption beside it. This detects missing context, not the accuracy of its explanation."
+  },
+  {
+    "id": "essay-reading-measure",
+    "type": "reading-column",
+    "selector": ".sc-section, .sc-section-header, .sc-section-text, .sc-section-visuals, .sc-section-copy > p, .sc-article .footnotes, .sc-article .article-footer",
+    "container": ".sc-article",
+    "maxWidth": 640,
+    "tolerance": 2,
+    "reason": "STYLE.md: Measure and layout. Chapter content, endnotes, and footer fill the centered 640px reading column with responsive gutters below the cap.",
+    "severity": "error",
+    "optional": true,
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ]
+  },
+  {
+    "id": "essay-chapter-order",
+    "type": "vertical-order",
+    "selector": ".sc-section",
+    "groups": [
+      {
+        "selector": ".sc-section-header",
+        "optional": false
+      },
+      {
+        "selector": ".sc-section-copy",
+        "optional": false
+      },
+      {
+        "selector": ".sc-section-visuals",
+        "optional": true
+      }
+    ],
+    "tolerance": 2,
+    "reason": "STYLE.md: Measure and layout. Preserve heading, prose, then supporting visuals in both DOM and visible order.",
+    "severity": "error",
+    "optional": true,
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ]
+  },
+  {
+    "id": "essay-paragraph-order",
+    "type": "vertical-order",
+    "selector": ".sc-section-copy:has(> p)",
+    "groups": [
+      {
+        "selector": ":scope > p",
+        "optional": false
+      }
+    ],
+    "tolerance": 2,
+    "reason": "STYLE.md: Measure and layout. Paragraphs retain one continuous top-to-bottom reading order.",
+    "severity": "error",
+    "optional": true,
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ]
+  },
+  {
+    "id": "essay-prose-alignment",
+    "type": "style",
+    "selector": ".sc-section-copy > p",
+    "property": "text-align",
+    "allowed": [
+      "left",
+      "start"
+    ],
+    "reason": "STYLE.md: Measure and layout. Center the reading column and keep prose left-aligned. Logical start is left only with the companion left-to-right rule.",
+    "severity": "error",
+    "optional": true,
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ]
+  },
+  {
+    "id": "essay-prose-columns",
+    "type": "style",
+    "selector": ".sc-section-copy",
+    "property": "column-count",
+    "allowed": [
+      "auto",
+      "1"
+    ],
+    "reason": "STYLE.md: Measure and layout. Preserve one prose column, including on wide screens, at enlarged text sizes, and in print.",
+    "severity": "error",
+    "optional": true,
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ]
+  },
+  {
+    "id": "essay-prose-direction",
+    "type": "style",
+    "selector": ".sc-section-copy > p",
+    "property": "direction",
+    "allowed": [
+      "ltr"
+    ],
+    "optional": true,
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "reason": "STYLE.md: Measure and layout. The English essay corpus uses left-to-right text; together with the alignment rule this makes logical start physically left-aligned."
+  },
+  {
+    "id": "essay-chapters-visible",
+    "type": "vertical-order",
+    "selector": ".sc-article",
+    "groups": [
+      {
+        "selector": ".sc-section",
+        "optional": false
+      }
+    ],
+    "tolerance": 2,
+    "optional": true,
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "reason": "STYLE.md: Presentation should survive the content. Every authored chapter remains visible and follows the document order."
+  },
+  {
+    "id": "essay-visuals-visible",
+    "type": "vertical-order",
+    "selector": ".sc-section:has(.sc-section-visuals)",
+    "groups": [
+      {
+        "selector": ".sc-section-visuals",
+        "optional": false
+      }
+    ],
+    "tolerance": 2,
+    "optional": true,
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "reason": "STYLE.md: Diagrams. A chapter may have no supporting visual; an authored visual container must remain visible rather than being hidden to fit the layout."
+  }
+]

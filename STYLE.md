@@ -238,54 +238,50 @@ The answer to visual monotony is better composition, not more component types.
 
 ## Enforcing the essay standard
 
-The following block is the executable reading contract. The existing browser
-smoke suite reads it directly from this file and compares it with rendered pages.
-`assets/css/essays.css` implements the layout independently; tests never derive
-their expected measure from the CSS being checked.
+[Viewrule](https://github.com/lanej/viewrule) owns the essay detector. The executable
+contract is `.ui-review/rules.json`; `.ui-review/site.json` declares capture settings.
+The shared CSS implements the layout independently. Expected geometry never comes
+from the stylesheet being checked.
 
-```json essay-layout
-{
-  "max_width_px": 640,
-  "centered": true,
-  "text_align": "left",
-  "prose_columns": 1,
-  "content_order": ["heading", "prose", "visuals"],
-  "geometry_tolerance_px": 2
-}
-```
-
-Keep exactly one block with this fence label. CI fails before launching a browser
-if it is missing, duplicated, malformed, or contains missing or unsupported keys
-or values. Width accepts a positive integer; rounding tolerance accepts a finite
-number from 0 through 4 pixels. The other fields describe the supported centered,
-left-aligned, single-column format and the stated content order. A different
-layout requires extending the detector, not silently disabling those checks.
-This block configures verification only; it does not generate CSS or parse the
-surrounding prose.
-
-| Standard | Verification |
+| Standard | Viewrule rule |
 | --- | --- |
-| 640px maximum, horizontally centered chapters, headings, prose, visuals, endnotes, and article footer | Browser geometry, with a 2px rounding tolerance |
-| Left-aligned prose in one column; heading before prose before supporting visuals | Computed alignment, column count, and rendered order |
-| System sans-serif, generated chapter numbers, shared opening callout and visual | Existing browser smoke assertions |
-| Responsive reading and intact content | All essays at 320, 390, 768, 961, 1100, and 1440px; representative essays at 200% text and in print |
-| Comfortable line length, diagram clarity, and visual rhythm | Human inspection of current desktop and mobile previews |
+| Fill the centered column, capped at 640px, within 2px rounding tolerance | `essay-reading-measure` (`reading-column`) |
+| Heading, prose, then optional supporting visuals in DOM and visible order | `essay-chapter-order` (`vertical-order`) |
+| Every authored chapter and visual container remains visible | `essay-chapters-visible`, `essay-visuals-visible` (`vertical-order`) |
+| Sequential paragraphs without overlap or rearrangement | `essay-paragraph-order` (`vertical-order`) |
+| Left-aligned prose in one column | `essay-prose-alignment`, `essay-prose-direction`, `essay-prose-columns` (`style`) |
+| Text components do not truncate their own content | `site-text-not-clipped` (`no-clip`) |
+| Visible captions on shared diagrams | `site-diagram-context` (`context`) |
+| At least 16px home introduction text | `site-introduction-text` (`min-font-size`) |
+| Page overflow and confirmed WCAG A/AA accessibility violations, including text contrast | Built-in Viewrule checks |
 
-Run `bash scripts/build.sh`, serve `public/` locally on port 8765, and run
-`python3 scripts/browser-smoke.py` with the project browser dependencies installed.
-Use `--chromium-path` when supplying a browser binary. The existing GitHub build
-workflow runs the same detector for pull requests and fails the build on drift.
-Keep this one shared detector; do not add separate width tests for each essay.
-`scripts/test-essay-layout.py` exercises the document/CSS boundary once in the
-same workflow, including rejected contracts and mismatched measure changes.
+The English essay corpus uses left-to-right text. The direction rule makes CSS
+`text-align: start` equivalent to physical left alignment; right, center, and
+justified prose fail. Print uses dark text on light surfaces through the shared
+print tokens, including code, tables, and diagram labels.
 
-The 640px standard applies to chapter content, notes, and article footers. The
-shared opening composition and other site pages retain their documented layouts.
-A deliberate measure change updates this contract, its prose explanation, and the
-shared CSS together, with current previews for review. The detector changes only
-when adding support for a new kind of rule. Changing the contract alone or the CSS
-alone fails whenever their rendered expectations differ. A passing geometry check
-does not establish readability across every platform font.
+Every built essay runs at 320, 390, 768, 961, 1100, 1440, and 3840 CSS pixels.
+Socrates, Close the Loop, and the decision essay also run at 1440px in print media
+and at 200% root text. Other pages run at mobile, desktop, and 4K widths (404 at
+mobile and desktop). Full-page captures include overlapping native-scale details;
+incomplete coverage fails rather than passing a resized overview.
+
+Essay selectors are optional on non-essay pages. Each essay's required readiness
+selector includes `.sc-article .sc-section`, and required chapter order groups
+ensure prose and headings cannot silently disappear. Supporting visuals remain
+optional in text-only chapters. Full-text RSS, chapter numbering, citation behavior,
+and other functional checks remain in the website workflow.
+
+Run the commands in [Viewrule integration](docs/viewrule.md). The previous Python
+chapter detector and its regression were removed; the installed Viewrule workflow
+now owns their readable, broken, and document/CSS mismatch cases. Extend that
+engine when a new measurement is needed rather than adding a local detector.
+
+An intended change to the measure updates the relevant rule, this explanation,
+and the shared CSS together, with current previews for review. A passing geometry
+check does not establish comfortable line length for every platform font or prove
+that a diagram supports an argument. Contrast cases axe cannot resolve remain
+explicit manual-review items.
 
 ## Visual review
 

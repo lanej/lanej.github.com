@@ -31,8 +31,9 @@ def affected_routes(paths, available):
             routes.add('/' + '/'.join(parts) + '/' if parts else '/')
             if relative.startswith('writing/'):
                 routes.update(('/', '/writing/'))
-        elif path.startswith(('layouts/', 'assets/', 'static/', 'data/')) or path == 'hugo.toml':
+        elif path.startswith(('layouts/', 'assets/', 'static/', 'data/', '.ui-review/')) or path == 'hugo.toml':
             # Shared templates and assets can affect every page.
+            # A changed design contract also needs current visual evidence.
             routes.update(available)
     return sorted(routes & set(available))
 
