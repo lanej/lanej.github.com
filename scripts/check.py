@@ -23,12 +23,27 @@ def main(root):
     source = Path('assets/images/josh-lane.webp')
     assert hashlib.sha256(source.read_bytes()).hexdigest() == 'e1505b9e7535ac59efc634f4259fd37d581afaef1e187eae51442899c0313e47', 'Unexpected source photograph bytes'
     assert Path('CNAME').read_bytes() == Path('static/CNAME').read_bytes() == b'lanej.io\n', 'Domain marker mismatch'
+    # Safari can discover the domain-root icon even on separately hosted projects.
+    assert (root / 'apple-touch-icon.png').is_file(), 'Missing domain-root Apple touch icon'
+    touch_bytes = (root / 'apple-touch-icon.png').read_bytes()
+    assert touch_bytes == Path('assets/icons/apple-touch-icon.png').read_bytes(), 'Root touch icon is stale; run scripts/build-icons.sh'
+    with Image.open(root / 'apple-touch-icon.png') as icon:
+        assert icon.size == (180, 180), 'Touch icon must be 180x180'
+        assert icon.convert('RGBA').getchannel('A').getextrema() == (255, 255), 'Touch icon must be opaque'
+        assert all(icon.convert('RGB').getpixel(point) == (13, 21, 19)
+                   for point in ((0, 0), (179, 0), (0, 179), (179, 179))), 'Touch icon must have dark-green corners'
     revision = os.getenv('HUGO_PARAMS_REVISION', 'local')
     documents = {}
     for path in root.rglob('*.html'):
         text = path.read_text()
         doc = Document(text)
         documents[path] = doc
+        touch_links = doc.select('link', rel='apple-touch-icon')
+        assert len(touch_links) == 1 and touch_links[0].get('sizes') == '180x180', f'{path}: missing 180px touch icon'
+        touch_url = urlparse(touch_links[0].get('href', ''))
+        assert not touch_url.scheme and not touch_url.netloc and touch_url.path.startswith('/icons/'), f'{path}: touch icon must be local'
+        assert (root / unquote(touch_url.path.lstrip('/'))).read_bytes() == touch_bytes, f'{path}: touch icon differs from root fallback'
+        assert doc.select('link', rel='icon', type='image/png', sizes='48x48'), f'{path}: missing browser favicon'
         assert len(doc.select('h1')) == 1, f'{path}: expected one h1'
         assert doc.select('title'), f'{path}: missing title'
         for name in ('description', 'viewport', 'site-revision'):

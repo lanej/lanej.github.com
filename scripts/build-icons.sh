@@ -5,7 +5,7 @@ cd "$(dirname "$0")/.."
 if command -v magick >/dev/null 2>&1; then im=magick; else im=convert; fi
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
-mkdir -p assets/icons
+mkdir -p assets/icons static
 
 # Apply the same circular frame used on the site, without changing the photograph.
 "$im" assets/images/josh-lane.webp -resize 720x720 \
@@ -21,3 +21,6 @@ cp "$tmp/48.png" assets/icons/favicon-48.png
 "$im" "$tmp/circle.png" -resize 156x156 -background '#0d1513' \
   -alpha remove -alpha off -gravity center -extent 180x180 -strip \
   assets/icons/apple-touch-icon.png
+
+# Domain-root fallback for Safari and standalone GitHub Pages project mounts.
+cp assets/icons/apple-touch-icon.png static/apple-touch-icon.png
