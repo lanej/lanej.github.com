@@ -30,7 +30,7 @@ def verify_polish(page, width, route, out, engine, label):
 
     if route == '/record/':
         links = page.locator('.work-index a')
-        expected = {'#easypost-technology-strategy', '#fastly', '#engine-yard', '#early-career', '#sapporo-rubykaigi-2012', '#open-source'}
+        expected = {'#easypost-technology-strategy', '#fastly', '#engine-yard', '#early-career', '#sapporo-rubykaigi-2012'}
         anchors = links.evaluate_all('(links) => links.map(a => a.getAttribute("href"))')
         assert len(anchors) == len(expected) and set(anchors) == expected, 'Missing or duplicate Work section links'
         for index, anchor in enumerate(anchors):

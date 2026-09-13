@@ -1,6 +1,6 @@
 ---
 title: Work
-description: Selected work in software, infrastructure, technology leadership, speaking, and open source.
+description: Selected work in software, infrastructure, technology leadership, and speaking.
 sections:
   - title: EasyPost
     id: easypost-technology-strategy
@@ -12,8 +12,6 @@ sections:
     id: early-career
   - title: Speaking
     id: sapporo-rubykaigi-2012
-  - title: Open source
-    id: open-source
 ---
 This is a selected record of systems I have built, organizations I have led, and public technical work. [LinkedIn](https://www.linkedin.com/in/lanejoshlane/) has the complete employment history.
 
@@ -30,3 +28,7 @@ I presented Engine Yard’s approach to automated testing, continuous integratio
 [Conference program and abstract](https://sapporo.rubykaigi.org/2012/en/schedule/details/37.html) · [Event report (Japanese)](https://gihyo.jp/news/report/01/sapporo-rubykaigi2012/0001)
 
 {{< /speaking-engagement >}}
+
+## Software projects {#open-source}
+
+My [own tools and experiments](/projects/) and [open-source contributions](/open-source/) now have their own pages.

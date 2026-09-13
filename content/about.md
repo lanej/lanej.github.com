@@ -14,7 +14,7 @@ The scope has changed, but the question has not: **what prevents a system from p
 
 I’m based in Oakland, California, and hold a B.S. in Electrical and Computer Engineering from Worcester Polytechnic Institute.
 
-[Read my writing](/writing/) · [Selected work and contributions](/record/) · [Professional profile](https://www.linkedin.com/in/lanejoshlane/)
+[Read my writing](/writing/) · [Projects and experiments](/projects/) · [Open-source contributions](/open-source/) · [Career and speaking](/record/) · [Professional profile](https://www.linkedin.com/in/lanejoshlane/)
 
 ## Contact {#contact}
 

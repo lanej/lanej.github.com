@@ -82,6 +82,9 @@ def main(root):
                 parts=urlparse(url)
                 if not url or parts.scheme not in ('','https') or (parts.netloc and parts.netloc != 'lanej.io'):
                     continue
+                # A separate GitHub Pages repository owns this project mount.
+                if url == 'https://lanej.io/delivery-time-estimate-viz/':
+                    continue
                 target=root/unquote(parts.path.lstrip('/')) if parts.path.startswith('/') else path.parent/unquote(parts.path)
                 if not parts.path: target=path
                 if target.is_dir(): target=target/'index.html'

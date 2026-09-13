@@ -108,7 +108,11 @@ Links use the accent color with a thin underline where needed for legibility. Ho
 
 Do not invent article-specific link colors or animated treatments.
 
-Navigation links are quieter than prose links and use current-page underlining rather than a filled active state.
+Navigation uses Writing, Projects, Open source, Work, and About in that order.
+At 700px and below, show icons with accessible names; above that, show icons and
+labels. Keep 44px targets and mark the current destination with a short underline.
+Projects includes Labs with explicit prototype status and limitations; open-source
+contributions live on their own page, separate from career history.
 
 ## Citations
 

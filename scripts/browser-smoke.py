@@ -5,9 +5,10 @@ from pathlib import Path
 from urllib.parse import urljoin
 
 from playwright.sync_api import sync_playwright
+from header_checks import verify_header
 
 
-ROUTES = (('/', 'home'), ('/writing/', 'writing')) + tuple(
+ROUTES = (('/', 'home'), ('/writing/', 'writing'), ('/projects/', 'projects'), ('/open-source/', 'open-source'), ('/record/', 'work'), ('/about/', 'about')) + tuple(
     (f'/writing/{path.parent.name}/', path.parent.name)
     for path in sorted(Path('public/writing').glob('*/index.html'))
 )
@@ -45,6 +46,7 @@ def main():
                 assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), f'{route}: horizontal overflow at {width}px'
                 assert not errors, f'{route}: browser errors: {errors}'
 
+                verify_header(page, width)
                 nav_heights = page.locator('.site-header nav a').evaluate_all(
                     '(items) => items.map(a => a.getBoundingClientRect().height)'
                 )
@@ -55,7 +57,7 @@ def main():
                     assert page.locator('.home-writing .writing-item').count() >= 1, 'Homepage writing missing'
                 elif route == '/writing/':
                     assert not page.locator('.writing-item time').count(), 'Writing index exposes publication dates'
-                else:
+                elif route.startswith('/writing/'):
                     assert not page.locator('.article-header time, .sc-meta time').count(), f'{route}: article exposes publication dates'
                     meta_text = ' '.join(page.locator('.article-meta, .sc-meta').all_text_contents())
                     assert 'min read' in meta_text, f'{route}: article missing reading time'
@@ -93,10 +95,24 @@ def main():
                         page.evaluate("document.documentElement.style.fontSize = ''")
                     page.evaluate('window.scrollTo(0, 0)')
 
+                if route == '/projects/':
+                    assert page.locator('#viewrule, #labs').count() == 2
+                    assert page.get_by_role('link', name='Open the experiment', exact=True).get_attribute('href') == 'https://lanej.io/delivery-time-estimate-viz/'
+                if route == '/open-source/':
+                    assert page.locator('.contributions .contribution').count() > 0
+                if route == '/record/':
+                    assert page.locator('.contributions').count() == 0
+                if route == '/projects/' and width in (320, 1440):
+                    page.evaluate("document.documentElement.style.fontSize = '200%'")
+                    verify_header(page, width, allow_wrap=True)
+                    assert page.evaluate('document.documentElement.scrollWidth <= innerWidth')
+                    page.evaluate("document.documentElement.style.fontSize = ''")
+
                 page.evaluate('document.activeElement?.blur()')
                 page.keyboard.press('Tab')
                 assert page.locator('.skip-link').evaluate('(a) => a === document.activeElement'), f'{route}: skip link not first focus target'
 
+                page.locator('.skip-link').evaluate('(a) => a.blur()')
                 page.screenshot(path=str(out / f'{label}-{width}.png'), full_page=False)
                 checks.append({'route': route, 'width': width})
 
