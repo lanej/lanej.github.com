@@ -61,10 +61,13 @@ Use the available width below the cap, with responsive side gutters. Keep one se
 
 The general site shell is capped at `--max: 1120px`. Essays retain the shared 1240px opening composition for their title, introduction, and accompanying art; the chapter reading column is centered within that shell.
 
-The Writing archive uses the same left content edge as the other section pages,
-aligned with the navigation and footer shell. Keep its heading, introduction, and
-entries on that edge while retaining the general 680px copy cap. Do not apply the
-centered essay reading-column layout to the archive.
+The Writing archive uses the full site shell, with its heading and introduction
+aligned to the navigation and footer left edge. The introduction keeps the 680px
+copy cap. Essays form two equal columns with a 48px gutter when each can be at
+least 24rem wide; otherwise they form one full-width column. The shell cap prevents
+a third column. Preserve newest-first DOM order, flowing left to right across each
+row. At 200% root text, the archive returns to one column. Keep titles and descriptions
+together and let rows grow with their content. Do not center the archive as an essay.
 
 Whitespace should separate ideas before borders or containers do. Prefer vertical rhythm to card proliferation.
 
@@ -256,7 +259,8 @@ from the stylesheet being checked.
 
 | Standard | Viewrule rule |
 | --- | --- |
-| Writing archive heading, introduction, and entries share the site shell left edge within 2px | `writing-index-shell-alignment` (`align`) |
+| Writing archive heading, introduction, and left-column entries share the shell left edge within 2px | `writing-index-shell-alignment` (`align`) |
+| Two archive columns on wide screens, one at narrow widths or enlarged text; entries remain separate and read across rows | `writing-grid-right-edge`, `writing-grid-first-row`, `writing-grid-no-overlap`, `writing-grid-phone-column`, `writing-grid-enlarged-column`, `writing-grid-reading-order` |
 | Fill the centered column, capped at 640px, within 2px rounding tolerance | `essay-reading-measure` (`reading-column`) |
 | Heading, prose, then optional supporting visuals in DOM and visible order | `essay-chapter-order` (`vertical-order`) |
 | Every authored chapter and visual container remains visible | `essay-chapters-visible`, `essay-visuals-visible` (`vertical-order`) |

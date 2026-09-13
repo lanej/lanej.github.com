@@ -41,8 +41,11 @@ readiness selector, and writes the ignored native `.ui-review/config.json`.
 It adds desktop print and 200% root-text states for three representative essays.
 The Writing archive runs at all seven configured widths and at 200% root text on
 narrow phone, ordinary phone, and desktop. Its `writing-index-shell-alignment`
-rule compares the heading, introduction, and entries with the navigation/footer
-left edge (2px tolerance), independently of the CSS margins under test.
+rule compares the heading, introduction, grid, and left-column entries with the
+navigation/footer left edge (2px tolerance), independently of CSS margins. The
+archive grid rules check the second column against the right shell edge, the two
+newest essays sharing the first row, non-overlap, row-wise reading order, and a
+full-width single column at narrow sizes and enlarged text.
 `.ui-review/rules.json` is the versioned native rule file; rule-authoring commands
 write directly to it. No wrapper implements browser measurements.
 

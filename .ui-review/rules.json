@@ -190,7 +190,7 @@
   {
     "id": "writing-index-shell-alignment",
     "type": "align",
-    "selector": ".nav-shell, .writing-index h1, .writing-intro, .writing-item, .footer-shell",
+    "selector": ".nav-shell, .writing-index h1, .writing-intro, .writing-grid, .writing-item:nth-child(odd), .footer-shell",
     "pages": [
       "writing",
       "writing-enlarged"
@@ -201,6 +201,117 @@
     "designRules": [
       "DR-006"
     ],
-    "reason": "STYLE.md: Measure and layout. The Writing archive heading, introduction, and entries share the left edge of the site navigation and footer shell, like the other section pages."
+    "reason": "STYLE.md: Measure and layout. The archive heading, introduction, grid, and left-column entries share the site shell left edge."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "writing-grid-right-edge",
+    "type": "align",
+    "selector": ".nav-shell, .writing-grid, .writing-grid > .writing-item:nth-child(even), .footer-shell",
+    "pages": [
+      "writing"
+    ],
+    "viewports": [
+      "breakpoint",
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "edge": "right",
+    "tolerance": 2,
+    "reason": "STYLE.md: The second archive column reaches the shell right edge at wide normal-text sizes."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "writing-grid-first-row",
+    "type": "align",
+    "selector": ".writing-grid > .writing-item:nth-child(-n+2)",
+    "pages": [
+      "writing"
+    ],
+    "viewports": [
+      "breakpoint",
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "edge": "top",
+    "tolerance": 2,
+    "reason": "STYLE.md: The two newest essays share the first row on wide screens."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "writing-grid-no-overlap",
+    "type": "no-overlap",
+    "selector": ".writing-grid > .writing-item",
+    "pages": [
+      "writing",
+      "writing-enlarged"
+    ],
+    "reason": "STYLE.md: Archive entries must remain separate without overlap as descriptions and titles wrap."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "writing-grid-phone-column",
+    "type": "reading-column",
+    "selector": ".writing-grid > .writing-item",
+    "container": ".writing-grid",
+    "pages": [
+      "writing"
+    ],
+    "viewports": [
+      "small",
+      "mobile",
+      "tablet"
+    ],
+    "maxWidth": 1120,
+    "tolerance": 2,
+    "reason": "STYLE.md: The archive uses one full-width column at phone and tablet test widths."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "writing-grid-enlarged-column",
+    "type": "reading-column",
+    "selector": ".writing-grid > .writing-item",
+    "container": ".writing-grid",
+    "pages": [
+      "writing-enlarged"
+    ],
+    "maxWidth": 1120,
+    "tolerance": 2,
+    "reason": "STYLE.md: At 200% text the archive reflows to one full-width column to preserve readable lines."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "writing-grid-reading-order",
+    "type": "style",
+    "selector": ".writing-grid",
+    "property": "grid-auto-flow",
+    "allowed": [
+      "row"
+    ],
+    "pages": [
+      "writing",
+      "writing-enlarged"
+    ],
+    "reason": "STYLE.md: Keep newest-first DOM order flowing left to right across rows, then downward."
   }
 ]
