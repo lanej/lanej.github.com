@@ -15,6 +15,8 @@ Open source is part of my day-to-day work: maintaining my own tools, trying them
 
 ## Dotfiles {#dotfiles}
 
+{{< project-logo src="/logos/projects/dotfiles.png" alt="Dotfiles repository logo" >}}
+
 **My everyday development environment · Actively maintained**
 
 My largest ongoing personal open-source project is the environment I work in. These dotfiles bring together Neovim, tmux, zsh, terminal tools, and coding-agent configuration across macOS and Linux.
@@ -26,6 +28,8 @@ This is an opinionated personal environment. Read the installation steps and scr
 [Browse the dotfiles](https://github.com/lanej/dotfiles) · [Setup and documentation](https://github.com/lanej/dotfiles#readme)
 
 ## Viewrule {#viewrule}
+
+{{< project-logo src="/logos/projects/viewrule.png" alt="Viewrule repository logo" >}}
 
 **Experimental tool · Used on this website**
 
