@@ -190,7 +190,7 @@
   {
     "id": "writing-index-shell-alignment",
     "type": "align",
-    "selector": ".nav-shell, .writing-index h1, .writing-intro, .writing-item, .footer-shell",
+    "selector": ".nav-shell, .writing-index h1, .writing-intro, .writing-grid, .writing-item:nth-child(odd), .footer-shell",
     "pages": [
       "writing",
       "writing-enlarged"
@@ -201,6 +201,405 @@
     "designRules": [
       "DR-006"
     ],
-    "reason": "STYLE.md: Measure and layout. The Writing archive heading, introduction, and entries share the left edge of the site navigation and footer shell, like the other section pages."
+    "reason": "STYLE.md: Measure and layout. The archive heading, introduction, grid, and left-column entries share the site shell left edge."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "writing-grid-right-edge",
+    "type": "align",
+    "selector": ".nav-shell, .writing-grid, .writing-grid > .writing-item:nth-child(even), .footer-shell",
+    "pages": [
+      "writing"
+    ],
+    "viewports": [
+      "breakpoint",
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "edge": "right",
+    "tolerance": 2,
+    "reason": "STYLE.md: The second archive column reaches the shell right edge at wide normal-text sizes."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "writing-grid-first-row",
+    "type": "align",
+    "selector": ".writing-grid > .writing-item:nth-child(-n+2)",
+    "pages": [
+      "writing"
+    ],
+    "viewports": [
+      "breakpoint",
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "edge": "top",
+    "tolerance": 2,
+    "reason": "STYLE.md: The two newest essays share the first row on wide screens."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "writing-grid-no-overlap",
+    "type": "no-overlap",
+    "selector": ".writing-grid > .writing-item",
+    "pages": [
+      "writing",
+      "writing-enlarged"
+    ],
+    "reason": "STYLE.md: Archive entries must remain separate without overlap as descriptions and titles wrap."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "writing-grid-phone-column",
+    "type": "reading-column",
+    "selector": ".writing-grid > .writing-item",
+    "container": ".writing-grid",
+    "pages": [
+      "writing"
+    ],
+    "viewports": [
+      "small",
+      "mobile",
+      "tablet"
+    ],
+    "maxWidth": 1120,
+    "tolerance": 2,
+    "reason": "STYLE.md: The archive uses one full-width column at phone and tablet test widths."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "writing-grid-enlarged-column",
+    "type": "reading-column",
+    "selector": ".writing-grid > .writing-item",
+    "container": ".writing-grid",
+    "pages": [
+      "writing-enlarged"
+    ],
+    "maxWidth": 1120,
+    "tolerance": 2,
+    "reason": "STYLE.md: At 200% text the archive reflows to one full-width column to preserve readable lines."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "writing-grid-reading-order",
+    "type": "style",
+    "selector": ".writing-grid",
+    "property": "grid-auto-flow",
+    "allowed": [
+      "row"
+    ],
+    "pages": [
+      "writing",
+      "writing-enlarged"
+    ],
+    "reason": "STYLE.md: Keep newest-first DOM order flowing left to right across rows, then downward."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "home-destination-first-row",
+    "type": "align",
+    "selector": ".home-writing, .home-labs",
+    "pages": [
+      "home"
+    ],
+    "viewports": [
+      "breakpoint",
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "edge": "top",
+    "tolerance": 2,
+    "reason": "STYLE.md: Writing and Labs begin side by side below the introduction on wide screens."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "home-destination-left-edge",
+    "type": "align",
+    "selector": ".nav-shell, .home-intro, .home-writing, .footer-shell",
+    "pages": [
+      "home",
+      "home-enlarged"
+    ],
+    "edge": "left",
+    "tolerance": 2,
+    "reason": "STYLE.md: Writing leads the homepage destination grid at the shared site left edge."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "home-destination-right-edge",
+    "type": "align",
+    "selector": ".nav-shell, .home-labs, .footer-shell",
+    "pages": [
+      "home"
+    ],
+    "viewports": [
+      "breakpoint",
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "edge": "right",
+    "tolerance": 2,
+    "reason": "STYLE.md: Labs occupies the right column out to the shared shell edge."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "home-destinations-no-overlap",
+    "type": "no-overlap",
+    "selector": ".home-writing, .home-labs",
+    "pages": [
+      "home",
+      "home-enlarged"
+    ],
+    "reason": "STYLE.md: The Writing and Labs sections must not overlap as content wraps."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "home-destinations-phone-order",
+    "type": "vertical-order",
+    "selector": ".home-discovery",
+    "groups": [
+      {
+        "selector": ".home-writing",
+        "optional": false
+      },
+      {
+        "selector": ".home-labs",
+        "optional": false
+      }
+    ],
+    "pages": [
+      "home"
+    ],
+    "viewports": [
+      "small",
+      "mobile",
+      "tablet"
+    ],
+    "tolerance": 2,
+    "reason": "STYLE.md: At phone and tablet widths, Writing stacks before Labs in DOM and visual order."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "home-destinations-enlarged-order",
+    "type": "vertical-order",
+    "selector": ".home-discovery",
+    "groups": [
+      {
+        "selector": ".home-writing",
+        "optional": false
+      },
+      {
+        "selector": ".home-labs",
+        "optional": false
+      }
+    ],
+    "pages": [
+      "home-enlarged"
+    ],
+    "tolerance": 2,
+    "reason": "STYLE.md: At enlarged text sizes, Writing stacks before Labs rather than squeezing the two columns."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "home-work-follows-destinations",
+    "type": "vertical-order",
+    "selector": "main",
+    "groups": [
+      {
+        "selector": ".home-discovery",
+        "optional": false
+      },
+      {
+        "selector": ".background-section",
+        "optional": false
+      }
+    ],
+    "pages": [
+      "home",
+      "home-enlarged"
+    ],
+    "tolerance": 2,
+    "reason": "STYLE.md: Career context follows both Writing and Labs in DOM and visual order."
+  },
+  {
+    "id": "home-portrait-before-identity",
+    "type": "style",
+    "selector": ".home-intro",
+    "property": "grid-template-areas",
+    "allowed": [
+      "\"portrait identity\" \"portrait copy\"",
+      "\"portrait identity\" \"copy copy\""
+    ],
+    "pages": [
+      "home",
+      "home-enlarged"
+    ],
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "reason": "STYLE.md: The portrait sits left of the identity; phone introduction copy spans both columns."
+  },
+  {
+    "id": "discovery-visual-beside-title",
+    "type": "style",
+    "selector": ".item-heading",
+    "property": "grid-template-areas",
+    "allowed": [
+      "\"visual title\""
+    ],
+    "pages": [
+      "home",
+      "home-enlarged",
+      "writing",
+      "writing-enlarged"
+    ],
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "reason": "STYLE.md: The icon sits beside the title, without a separate row above it."
+  },
+  {
+    "id": "discovery-visual-title-no-overlap",
+    "type": "no-overlap",
+    "selector": ".item-heading > .item-visual, .item-heading > h2, .item-heading > h3",
+    "pages": [
+      "home",
+      "home-enlarged",
+      "writing",
+      "writing-enlarged"
+    ],
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "reason": "STYLE.md: The compact visual must not overlap the title."
+  },
+  {
+    "id": "discovery-description-full-width",
+    "type": "reading-column",
+    "selector": ".item-description",
+    "container": ".discovery-item",
+    "maxWidth": 1120,
+    "tolerance": 2,
+    "pages": [
+      "home",
+      "home-enlarged",
+      "writing",
+      "writing-enlarged"
+    ],
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "reason": "STYLE.md: Descriptions fill their item width; the icon must not indent the paragraph."
+  },
+  {
+    "id": "discovery-symbol-height",
+    "type": "max-height",
+    "selector": ".item-visual",
+    "max": 32,
+    "pages": [
+      "home",
+      "home-enlarged",
+      "writing",
+      "writing-enlarged"
+    ],
+    "severity": "error",
+    "designRules": [
+      "DR-008"
+    ],
+    "reason": "STYLE.md: Subject symbols stay within 32px so they do not add an oversized row."
+  },
+  {
+    "id": "discovery-heading-before-description",
+    "type": "vertical-order",
+    "selector": ".discovery-item",
+    "groups": [
+      {
+        "selector": ".item-heading",
+        "optional": false
+      },
+      {
+        "selector": ".item-description",
+        "optional": false
+      }
+    ],
+    "tolerance": 2,
+    "pages": [
+      "home",
+      "home-enlarged",
+      "writing",
+      "writing-enlarged"
+    ],
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "reason": "STYLE.md: The title and symbol stay together above the full-width description."
+  },
+  {
+    "id": "home-destination-titles-visible",
+    "type": "visible-count",
+    "selector": ".home-discovery .item-heading",
+    "min": 5,
+    "pages": [
+      "home"
+    ],
+    "viewports": [
+      "desktop",
+      "4k"
+    ],
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "reason": "STYLE.md: At desktop and 4K normal text sizes, all three essay titles and both Labs titles are visible together in the first viewport."
   }
 ]

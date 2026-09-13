@@ -1,0 +1,5 @@
+{{ $symbol := .Params.essay_visual | default "document" }}
+{{ with .Params.essay_image }}
+  {{ $symbol = index (dict "damocles.svg" "judgment" "socrates-bust.webp" "inquiry") . | default "document" }}
+{{ end }}
+{{ partial "item-visual.html" (dict "symbol" $symbol) }}

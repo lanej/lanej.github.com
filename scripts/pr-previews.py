@@ -9,37 +9,10 @@ import subprocess
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
+from affected_pages import affected_routes, changed_paths, change_base
+
 START = '<!-- page-previews:start -->'
 END = '<!-- page-previews:end -->'
-
-
-def affected_routes(paths, available):
-    routes = set()
-    essays = {r for r in available if r.startswith('/writing/') and r != '/writing/'}
-    for path in paths:
-        if path == 'assets/css/work.css':
-            routes.update(('/record/', '/open-source/'))
-        elif path in ('data/contributions.yaml', 'layouts/partials/contributions.html') or path.startswith('static/logos/projects/'):
-            routes.add('/open-source/')
-        elif path in ('data/career.yaml', 'layouts/shortcodes/career-timeline.html', 'layouts/shortcodes/work-role.html', 'layouts/shortcodes/speaking-engagement.html') or path.startswith(('static/logos/companies/', 'static/logos/events/', 'static/icons/heroicons/')):
-            routes.add('/record/')
-        elif path == 'assets/css/home.css':
-            routes.add('/')
-        elif path in ('assets/css/essays.css', 'assets/css/diagrams.css'):
-            routes.update(essays)
-        elif path.startswith('content/') and path.endswith('.md'):
-            relative = path.removeprefix('content/').removesuffix('.md')
-            parts = relative.split('/')
-            if parts[-1] in ('index', '_index'):
-                parts.pop()
-            routes.add('/' + '/'.join(parts) + '/' if parts else '/')
-            if relative.startswith('writing/'):
-                routes.update(('/', '/writing/'))
-        elif path.startswith(('layouts/', 'assets/', 'static/', 'data/', '.ui-review/')) or path == 'hugo.toml':
-            # Shared templates and assets can affect every page.
-            # A changed design contract also needs current visual evidence.
-            routes.update(available)
-    return sorted(routes & set(available))
 
 
 def replace_section(body, section):
@@ -57,14 +30,22 @@ def capture(args):
     for path in Path('public').rglob('index.html'):
         relative = path.parent.relative_to('public').as_posix()
         available.add('/' if relative == '.' else '/' + relative + '/')
-    changed = subprocess.check_output(
-        ['git', 'diff', '--name-only', '--no-renames', '-z', args.base + '...HEAD'],
-    ).decode().split('\0')
-    routes = affected_routes(changed, available)
+    if Path('public/404.html').is_file():
+        available.add('/404.html')
+    if args.selection:
+        routes = sorted(set(json.loads(Path(args.selection).read_text())['routes']) & available)
+    else:
+        root = Path.cwd()
+        base = change_base(root, args.base)
+        routes = affected_routes(changed_paths(root, base), available, root=root, base=base)
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)
     manifest = {'head_sha': os.environ['PR_HEAD_SHA'],
                 'build_sha': os.environ['GITHUB_SHA'], 'pages': []}
+    if not routes:
+        (out / 'manifest.json').write_text(json.dumps(manifest, indent=2))
+        print('No affected pages; skipping browser preview capture.')
+        return
     with sync_playwright() as pw:
         browser = pw.chromium.launch(executable_path=args.chromium_path or None)
         for route in routes:
@@ -205,8 +186,9 @@ if __name__ == '__main__':
     parser.add_argument('command', choices=['capture', 'publish'])
     parser.add_argument('--output', default='artifacts/pr-previews')
     parser.add_argument('--base')
+    parser.add_argument('--selection', help='Reuse the visual suite page selection.')
     parser.add_argument('--chromium-path', default='')
     arguments = parser.parse_args()
-    if arguments.command == 'capture' and not arguments.base:
-        parser.error('capture requires --base')
+    if arguments.command == 'capture' and not (arguments.base or arguments.selection):
+        parser.error('capture requires --base or --selection')
     {'capture': capture, 'publish': publish}[arguments.command](arguments)

@@ -1,0 +1,26 @@
+{{/* Small subject identifiers for discovery lists; the adjacent title supplies context. */}}
+<div class="item-visual" aria-hidden="true">
+<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+{{ if eq .symbol "judgment" }}
+<path d="M32 7v7m0 0-8 11 8 20 8-20-8-11ZM20 43h24M25 43v8h14v-8M32 51v6"/>
+{{ else if eq .symbol "inquiry" }}
+<path d="M15 10h34a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6H30L17 56V46h-2a6 6 0 0 1-6-6V16a6 6 0 0 1 6-6Z"/><path d="M26 23a6 6 0 1 1 9 5c-3 1-3 3-3 5"/><circle cx="32" cy="39" r="1"/>
+{{ else if eq .symbol "memory" }}
+<path d="M14 20V12h36v8M10 28V20h44v8"/><rect x="10" y="28" width="44" height="24" rx="3"/><path d="M24 39h16M24 45h10"/>
+{{ else if eq .symbol "dose" }}
+<path opacity=".4" d="M10 49h44M10 49V15"/><path d="M13 43c12 0 12-26 25-26h14"/><path stroke-dasharray="3 4" d="M29 49V24"/><circle cx="29" cy="27" r="4" fill="var(--bg)"/>
+{{ else if eq .symbol "ownership" }}
+<circle cx="32" cy="32" r="22" opacity=".4"/><circle cx="32" cy="32" r="12"/><circle cx="32" cy="32" r="3"/><path d="M32 5v9M32 50v9M5 32h9M50 32h9"/>
+{{ else if eq .symbol "harmony" }}
+<path d="M32 12 12 48h40ZM32 12v25M12 48l20-11 20 11"/><circle cx="32" cy="12" r="5" fill="var(--bg)"/><circle cx="12" cy="48" r="5" fill="var(--bg)"/><circle cx="52" cy="48" r="5" fill="var(--bg)"/><circle cx="32" cy="37" r="5" fill="var(--bg)"/>
+{{ else if eq .symbol "feedback" }}
+<path d="M49 23A19 19 0 0 0 15 18l-4 8m0-12v12h12M15 41a19 19 0 0 0 34 5l4-8m0 12V38H41"/><circle cx="32" cy="32" r="4"/>
+{{ else if eq .symbol "delivery-time" }}
+<path opacity=".4" d="m10 7 4 50M29 7l4 50M48 7l4 50M6 17l50-4M7 35l50-4M8 53l50-4"/><path d="m16 44 16-1-2-18 14-1"/><circle cx="16" cy="44" r="4" fill="var(--bg)"/><path d="M51 17c0 6-7 12-7 12s-7-6-7-12a7 7 0 1 1 14 0Z"/><circle cx="44" cy="17" r="2"/>
+{{ else if eq .symbol "design-constraints" }}
+<rect x="8" y="11" width="48" height="42" rx="3"/><path d="M8 21h48M23 21v32M14 16h1m5 0h1m5 0h1"/><path opacity=".4" d="M29 28h20M29 35h20M29 42h8"/><path d="m41 44 4 4 10-12"/>
+{{ else }}
+<path d="M16 8h25l9 9v39H16ZM41 8v10h9M24 29h18M24 37h18M24 45h12"/>
+{{ end }}
+</svg>
+</div>

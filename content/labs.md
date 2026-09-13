@@ -1,6 +1,15 @@
 ---
 title: Labs
 layout: labs
+featured:
+  - title: Delivery-time uncertainty
+    anchor: delivery-time
+    status: Interactive prototype
+    description: Replay simulated deliveries over real Oakland streets and explore how a map can show both an estimate and its uncertainty.
+  - title: Design constraints in context
+    anchor: design-constraints
+    status: Interactive demonstration
+    description: Explore a shipment dashboard with illustrative data and deliberate design violations. Compare their effects with the intended layout.
 description: Small experiments in delivery uncertainty, visualization, and interface design, with working examples and explicit limits.
 ---
 Working experiments: a way to explore an idea, see what it does, and refine it. Tools I maintain and use live on [Open source](/open-source/).

@@ -1,3 +1,5 @@
 # Build verification only; the published website has no runtime dependencies.
 Pillow==12.3.0
 playwright==1.57.0
+
+tinycss2==1.4.0

@@ -6,3 +6,7 @@ approved/
 *.lock
 *.tmp
 auth*.json
+
+# Generated affected-page project and auditable selection.
+affected/
+selection.json

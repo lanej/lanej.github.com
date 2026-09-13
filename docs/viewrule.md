@@ -22,16 +22,60 @@ In another terminal, from the same checkout:
 ```sh
 # One-time browser installation, or set VIEWRULE_BROWSER_PATH to existing Chromium.
 python3 scripts/viewrule.py install-browser
+# Default: changes since the branch's merge base with origin/master, including local edits.
 python3 scripts/viewrule.py check
+# Explicit comparison or full audit:
+python3 scripts/viewrule.py check --base COMMIT
+python3 scripts/viewrule.py check --all
+# Optional preview URL override:
+python3 scripts/viewrule.py check --url http://127.0.0.1:8873
 ```
 
 Rebuild after changing source and rerun the check against that build. The command
-prints the HTML report and JSON paths under `.ui-review/runs/`. Inspect the overview
+prints the selected routes and HTML/JSON report paths. Affected-page reports live
+under `.ui-review/affected/.ui-review/runs/`; full audits use `.ui-review/runs/`. Inspect the overview
 for composition and native-scale tiles for text and diagram detail. At 4K, a reduced
 full-page image alone is insufficient evidence. Failed rules and incomplete captures
 exit 1; invalid setup exits 2. CI runs this command in the existing build job against
 the same `public/` artifact that can deploy, using the runner's Chrome binary.
 Reports are retained in `preflight-verification`, including when the check fails.
+
+## Selecting affected pages
+
+PR builds compare the tested checkout with the PR base commit. Push builds use the
+pre-push commit, so a multi-commit push includes every change. Local checks default
+to the merge base with `origin/master`, including staged, unstaged, untracked,
+deleted, and renamed files. An invalid/missing baseline fails setup; an initial
+push with the all-zero before SHA checks everything. Scheduled and manually
+dispatched workflows run full audits, as does `check --all`.
+
+`scripts/affected_pages.py` is shared by the visual suite and PR previews. Direct
+page templates select their routes; article edits also select Home and Writing;
+Labs content selects Home and Labs. Targeted edits in shared CSS are parsed with
+pinned tinycss2: changed rules, media contexts, and cascade order are compared,
+then required class/id anchors are matched to built HTML. Global or unanchored
+selectors, imports, fonts, runtime-only classes, and unknown shared dependencies
+conservatively select all pages. This is dependency selection, not a geometry check.
+
+Changed Viewrule rules select both their old and new page scopes; unscoped rules
+select everything. Viewport/capture configuration changes are global, while source
+path bookkeeping and documentation-only changes do not change rendered pages.
+Every selected route retains all its configured widths, print states, and enlarged
+text states. We reduce pages, never the coverage within an affected page.
+
+`viewrule.py select` writes `.ui-review/selection.json` with the baseline, changed
+files, routes, page states, and viewport count. CI uses that same list for functional
+browser screenshots and PR previews. No affected pages produces an explicit skip,
+without launching a capture browser. Build, links, image hashes, RSS/source checks,
+and the shared citation fixture tests still run.
+
+The full canonical contract is validated before selection so invalid rules cannot
+be hidden by filtering. The wrapper copies in-scope source files into a generated
+project and filters only its rule copy to selected page names. Versioned rules are
+never rewritten. The native engine fingerprints the snapshot; each run rebuilds it
+and removes deleted source files. Reports and selection evidence are retained in
+the workflow artifact. `contract` and rule-authoring commands still use the full
+canonical project by default.
 
 ## Contract and coverage
 
@@ -39,10 +83,15 @@ Reports are retained in `preflight-verification`, including when the check fails
 `scripts/viewrule.py` discovers all built pages, gives essays a required chapter
 readiness selector, and writes the ignored native `.ui-review/config.json`.
 It adds desktop print and 200% root-text states for three representative essays.
-The Writing archive runs at all seven configured widths and at 200% root text on
-narrow phone, ordinary phone, and desktop. Its `writing-index-shell-alignment`
-rule compares the heading, introduction, and entries with the navigation/footer
-left edge (2px tolerance), independently of the CSS margins under test.
+When selected, the homepage and Writing archive run at all seven configured widths and at 200%
+root text on narrow phone, ordinary phone, and desktop. The homepage rules protect
+Writing/Labs placement, stacking order, and Work below both sections.
+The archive’s `writing-index-shell-alignment`
+rule compares the heading, introduction, grid, and left-column entries with the
+navigation/footer left edge (2px tolerance), independently of CSS margins. The
+archive grid rules check the second column against the right shell edge, the two
+newest essays sharing the first row, non-overlap, row-wise reading order, and a
+full-width single column at narrow sizes and enlarged text.
 `.ui-review/rules.json` is the versioned native rule file; rule-authoring commands
 write directly to it. No wrapper implements browser measurements.
 
@@ -72,7 +121,9 @@ repair or fabricated approval occurs.
 ## Feedback and changes
 
 Before an agent changes UI, run `contract` and read STYLE.md. After a change, rebuild,
-run `check`, and review the actual report. Record the user's words against that run:
+run `check`, and review the actual report. For the canonical feedback/learning
+workflow below, use `check --all` and record the user's words against that full
+project report (affected-page reports belong to the generated scoped project):
 
 ```sh
 python3 scripts/viewrule.py feedback --report .ui-review/runs/RUN/report.json \

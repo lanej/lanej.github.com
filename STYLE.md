@@ -61,10 +61,20 @@ Use the available width below the cap, with responsive side gutters. Keep one se
 
 The general site shell is capped at `--max: 1120px`. Essays retain the shared 1240px opening composition for their title, introduction, and accompanying art; the chapter reading column is centered within that shell.
 
-The Writing archive uses the same left content edge as the other section pages,
-aligned with the navigation and footer shell. Keep its heading, introduction, and
-entries on that edge while retaining the general 680px copy cap. Do not apply the
-centered essay reading-column layout to the archive.
+The homepage keeps the compact introduction above a two-column destination grid:
+Writing on the left and Labs on the right. Each column needs at least 24rem, with a
+48px gutter; narrow screens and enlarged text stack Writing before Labs. Keep the
+latest three essays, reading times, archive and RSS links. Labs uses concise previews
+of the existing experiments with explicit prototype/demonstration status and links
+to their explanatory sections. Career context follows both destinations.
+
+The Writing archive uses the full site shell, with its heading and introduction
+aligned to the navigation and footer left edge. The introduction keeps the 680px
+copy cap. Essays form two equal columns with a 48px gutter when each can be at
+least 24rem wide; otherwise they form one full-width column. The shell cap prevents
+a third column. Preserve newest-first DOM order, flowing left to right across each
+row. At 200% root text, the archive returns to one column. Keep titles and descriptions
+together and let rows grow with their content. Do not center the archive as an essay.
 
 Whitespace should separate ideas before borders or containers do. Prefer vertical rhythm to card proliferation.
 
@@ -256,7 +266,9 @@ from the stylesheet being checked.
 
 | Standard | Viewrule rule |
 | --- | --- |
-| Writing archive heading, introduction, and entries share the site shell left edge within 2px | `writing-index-shell-alignment` (`align`) |
+| Homepage Writing and Labs share a row and shell edges on wide screens; stack in that order on phones and enlarged text, with Work below both | `home-destination-first-row`, `home-destination-left-edge`, `home-destination-right-edge`, `home-destinations-no-overlap`, `home-destinations-phone-order`, `home-destinations-enlarged-order`, `home-work-follows-destinations` |
+| Writing archive heading, introduction, and left-column entries share the shell left edge within 2px | `writing-index-shell-alignment` (`align`) |
+| Two archive columns on wide screens, one at narrow widths or enlarged text; entries remain separate and read across rows | `writing-grid-right-edge`, `writing-grid-first-row`, `writing-grid-no-overlap`, `writing-grid-phone-column`, `writing-grid-enlarged-column`, `writing-grid-reading-order` |
 | Fill the centered column, capped at 640px, within 2px rounding tolerance | `essay-reading-measure` (`reading-column`) |
 | Heading, prose, then optional supporting visuals in DOM and visible order | `essay-chapter-order` (`vertical-order`) |
 | Every authored chapter and visual container remains visible | `essay-chapters-visible`, `essay-visuals-visible` (`vertical-order`) |
@@ -272,11 +284,12 @@ The English essay corpus uses left-to-right text. The direction rule makes CSS
 justified prose fail. Print uses dark text on light surfaces through the shared
 print tokens, including code, tables, and diagram labels.
 
-Every built essay runs at 320, 390, 768, 961, 1100, 1440, and 3840 CSS pixels.
+Every selected essay runs at 320, 390, 768, 961, 1100, 1440, and 3840 CSS pixels.
 Socrates, Close the Loop, and the decision essay also run at 1440px in print media
-and at 200% root text. The Writing archive runs at all seven widths, plus 200%
+and at 200% root text. When selected, the homepage and Writing archive run at all seven widths, plus 200%
 root text at 320, 390, and 1440px. Other pages run at mobile, desktop, and 4K widths (404 at
-mobile and desktop). Full-page captures include overlapping native-scale details;
+mobile and desktop). Change builds select affected routes; scheduled/manual audits
+cover all pages. Selection never removes states from an affected route. Full-page captures include overlapping native-scale details;
 incomplete coverage fails rather than passing a resized overview.
 
 Essay selectors are optional on non-essay pages. Each essay's required readiness
@@ -337,3 +350,25 @@ The combined rule is:
 > **One reading format. Different arguments.**
 
 Readers should recognize the site before they recognize the template.
+
+## Discovery item visuals
+
+Home Writing and Labs items and the Writing archive use a 32px subject symbol
+beside the title with a 10px gap. Descriptions use the full item width below that
+heading; the icon must not reserve a column beside the paragraph. Keep homepage
+titles at 1.6rem (1.5rem on phones), preserving the body text scale. Reading time
+and experiment status follow the description inline, separated by a muted dot.
+Use 18px vertical item padding (16px on phones) and 8px before archive links.
+At the configured desktop and 4K normal-text sizes, keep all three essay titles
+and both Labs titles visible in the first viewport; enlarged text reflows freely.
+
+Use shared, label-free symbols with consistent line weight and the site accent.
+At this small size, judgment and inquiry symbols identify the Damocles and Socrates
+essays; their existing illustrations remain in the article openings. Labs symbols
+represent the route experiment and layout demonstration, not invented project logos.
+Adjacent titles supply accessible context; symbols are decorative. New essays
+fall back to a document symbol.
+
+The homepage portrait sits to the left of the name and role. On desktop it spans
+the identity and introduction rows; on phones the introduction spans the full
+width below portrait and name. Keep the portrait first in the source order.
