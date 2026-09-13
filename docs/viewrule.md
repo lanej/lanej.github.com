@@ -39,8 +39,10 @@ Reports are retained in `preflight-verification`, including when the check fails
 `scripts/viewrule.py` discovers all built pages, gives essays a required chapter
 readiness selector, and writes the ignored native `.ui-review/config.json`.
 It adds desktop print and 200% root-text states for three representative essays.
-The Writing archive runs at all seven configured widths and at 200% root text on
-narrow phone, ordinary phone, and desktop. Its `writing-index-shell-alignment`
+The homepage and Writing archive run at all seven configured widths and at 200%
+root text on narrow phone, ordinary phone, and desktop. The homepage rules protect
+Writing/Labs placement, stacking order, and Work below both sections.
+The archive’s `writing-index-shell-alignment`
 rule compares the heading, introduction, grid, and left-column entries with the
 navigation/footer left edge (2px tolerance), independently of CSS margins. The
 archive grid rules check the second column against the right shell edge, the two

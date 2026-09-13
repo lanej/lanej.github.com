@@ -313,5 +313,155 @@
       "writing-enlarged"
     ],
     "reason": "STYLE.md: Keep newest-first DOM order flowing left to right across rows, then downward."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "home-destination-first-row",
+    "type": "align",
+    "selector": ".home-writing, .home-labs",
+    "pages": [
+      "home"
+    ],
+    "viewports": [
+      "breakpoint",
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "edge": "top",
+    "tolerance": 2,
+    "reason": "STYLE.md: Writing and Labs begin side by side below the introduction on wide screens."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "home-destination-left-edge",
+    "type": "align",
+    "selector": ".nav-shell, .home-intro, .home-writing, .footer-shell",
+    "pages": [
+      "home",
+      "home-enlarged"
+    ],
+    "edge": "left",
+    "tolerance": 2,
+    "reason": "STYLE.md: Writing leads the homepage destination grid at the shared site left edge."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "home-destination-right-edge",
+    "type": "align",
+    "selector": ".nav-shell, .home-labs, .footer-shell",
+    "pages": [
+      "home"
+    ],
+    "viewports": [
+      "breakpoint",
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "edge": "right",
+    "tolerance": 2,
+    "reason": "STYLE.md: Labs occupies the right column out to the shared shell edge."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "home-destinations-no-overlap",
+    "type": "no-overlap",
+    "selector": ".home-writing, .home-labs",
+    "pages": [
+      "home",
+      "home-enlarged"
+    ],
+    "reason": "STYLE.md: The Writing and Labs sections must not overlap as content wraps."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "home-destinations-phone-order",
+    "type": "vertical-order",
+    "selector": ".home-discovery",
+    "groups": [
+      {
+        "selector": ".home-writing",
+        "optional": false
+      },
+      {
+        "selector": ".home-labs",
+        "optional": false
+      }
+    ],
+    "pages": [
+      "home"
+    ],
+    "viewports": [
+      "small",
+      "mobile",
+      "tablet"
+    ],
+    "tolerance": 2,
+    "reason": "STYLE.md: At phone and tablet widths, Writing stacks before Labs in DOM and visual order."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "home-destinations-enlarged-order",
+    "type": "vertical-order",
+    "selector": ".home-discovery",
+    "groups": [
+      {
+        "selector": ".home-writing",
+        "optional": false
+      },
+      {
+        "selector": ".home-labs",
+        "optional": false
+      }
+    ],
+    "pages": [
+      "home-enlarged"
+    ],
+    "tolerance": 2,
+    "reason": "STYLE.md: At enlarged text sizes, Writing stacks before Labs rather than squeezing the two columns."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "id": "home-work-follows-destinations",
+    "type": "vertical-order",
+    "selector": "main",
+    "groups": [
+      {
+        "selector": ".home-discovery",
+        "optional": false
+      },
+      {
+        "selector": ".background-section",
+        "optional": false
+      }
+    ],
+    "pages": [
+      "home",
+      "home-enlarged"
+    ],
+    "tolerance": 2,
+    "reason": "STYLE.md: Career context follows both Writing and Labs in DOM and visual order."
   }
 ]

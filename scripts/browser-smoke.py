@@ -60,6 +60,13 @@ def main():
                 if route == '/':
                     assert not page.locator('.home-writing time').count(), 'Homepage exposes publication dates'
                     assert page.locator('.home-writing .writing-item').count() >= 1, 'Homepage writing missing'
+                    assert page.locator('.home-discovery > section').evaluate_all('(items) => items.map(el => el.id)') == ['writing', 'labs'], 'Homepage destination order changed'
+                    labs = page.locator('.home-labs .lab-item')
+                    assert labs.count() >= 1, 'Homepage labs missing'
+                    for lab in labs.all():
+                        assert lab.locator('.lab-meta').inner_text().startswith('Interactive'), 'Lab status missing'
+                        assert lab.locator('h3 a').get_attribute('href').startswith('/labs/#'), 'Lab link must open its explanatory section'
+                    assert page.locator('.home-labs a[href="/labs/"]').count() == 1, 'All labs link missing'
                 elif route == '/writing/':
                     assert not page.locator('.writing-item time').count(), 'Writing index exposes publication dates'
                 elif route.startswith('/writing/'):

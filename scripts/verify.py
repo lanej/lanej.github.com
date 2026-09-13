@@ -45,7 +45,8 @@ def verify_home_opening(page, width, height):
             writing: rect('.home-writing'), writingHeading: rect('#writing-title'),
             firstEssay: rect('.home-writing .writing-item h3 a'),
             background: rect('.background-section'),
-            firstSection: document.querySelector('.hero').nextElementSibling?.id
+            firstSection: document.querySelector('.hero').nextElementSibling?.id,
+            firstDestination: document.querySelector('.home-discovery')?.firstElementChild?.id
         };
     }''')
     assert opening['nameCount'] == 1, 'Homepage repeats the name in its opening'
@@ -56,7 +57,7 @@ def verify_home_opening(page, width, height):
     for company in ('EasyPost', 'Fastly', 'Engine Yard'):
         assert company in page.locator('.background-section').inner_text(), f'Missing career context: {company}'
     if opening['writing']:
-        assert opening['firstSection'] == 'writing', 'Writing must immediately follow the introduction'
+        assert opening['firstSection'] == 'discover' and opening['firstDestination'] == 'writing', 'Writing must lead discovery immediately after the introduction'
         assert opening['writing']['bottom'] <= opening['background']['top'] + 1, 'Career history precedes writing'
         assert page.locator('.site-header nav a').first.get_attribute('href') == '/writing/', 'Primary link must lead to essays'
         items = page.locator('.home-writing .writing-item')
