@@ -38,9 +38,12 @@ def prepare():
         essay = document.article
         page = {'name': 'home' if route == '/' else relative, 'path': route,
                 'ready': '.sc-article .sc-section' if essay else 'main h1'}
-        if not essay:
+        if not essay and relative != 'writing':
             page['viewports'] = ['mobile', 'desktop', '4k']
         pages.append(page)
+        if relative == 'writing':
+            pages.append(dict(page, name='writing-enlarged', textScale=2,
+                              viewports=['small', 'mobile', 'desktop']))
         if relative in ('writing/socrates', 'writing/close-the-loop',
                         'writing/how-you-do-it-is-part-of-the-decision'):
             pages.extend([

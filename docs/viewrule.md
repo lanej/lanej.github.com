@@ -39,6 +39,10 @@ Reports are retained in `preflight-verification`, including when the check fails
 `scripts/viewrule.py` discovers all built pages, gives essays a required chapter
 readiness selector, and writes the ignored native `.ui-review/config.json`.
 It adds desktop print and 200% root-text states for three representative essays.
+The Writing archive runs at all seven configured widths and at 200% root text on
+narrow phone, ordinary phone, and desktop. Its `writing-index-shell-alignment`
+rule compares the heading, introduction, and entries with the navigation/footer
+left edge (2px tolerance), independently of the CSS margins under test.
 `.ui-review/rules.json` is the versioned native rule file; rule-authoring commands
 write directly to it. No wrapper implements browser measurements.
 
