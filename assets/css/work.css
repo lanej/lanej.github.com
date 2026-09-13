@@ -33,6 +33,10 @@
 .speaking-header p{margin:0;font-size:.875rem;line-height:1.5}
 .contribution-detail,.speaking-detail{margin-left:48px}
 
+/* Featured repository marks are transparent artwork, not white-backed badges. */
+.featured-project-logo{margin:8px 0 14px}
+.featured-project-logo img{display:block;width:64px;height:64px;object-fit:contain}
+
 @media print{
   .work-content .prose h2::before,.work-logo,.career-roles-connected>li::before,.career-roles-connected>li::after{display:none}
   .work-content .prose .career-roles>li{padding-left:0}
