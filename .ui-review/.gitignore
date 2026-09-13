@@ -1,0 +1,8 @@
+# Generated from site.json and the production build by scripts/viewrule.py.
+config.json
+runs/
+latest.json
+approved/
+*.lock
+*.tmp
+auth*.json

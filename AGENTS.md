@@ -70,7 +70,14 @@ chapter. Keep prose left-aligned; place diagrams and tables after it at every
 width. Endnotes and the article footer align to the same column. Preserve DOM
 order, responsive gutters, and readable enlarged text.
 Keep full-text RSS and one document-wide footnote collection. See STYLE.md.
-The existing shared chapter detector reads the json essay-layout block in STYLE.md;
-keep its expectations independent of the CSS under test. Update the contract,
-its explanation, and shared CSS together for intentional changes. Extend the
-same detector when adding supported rules; do not create a second layout suite.
+Viewrule is the sole essay geometry detector. Before changing UI, build the site
+and run `python3 scripts/viewrule.py contract`; read `.ui-review/rules.json` and
+STYLE.md. Keep expectations independent of the CSS under test. Update the rules,
+their explanation, and shared CSS together for intentional changes. Run
+`python3 scripts/viewrule.py check` against the production preview and inspect
+native-scale detail tiles, including 4K, print, and enlarged-text captures.
+New measurements and their regression coverage belong in the Viewrule repository;
+do not recreate a Python chapter detector or another local layout suite. Keep
+functional browser checks for navigation, citations, RSS, and progressive behavior.
+Use only the user's actual feedback when recording adjustment or approval; a
+passing check is not design approval. See docs/viewrule.md for commands and limits.

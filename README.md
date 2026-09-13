@@ -114,8 +114,12 @@ python -m playwright install --with-deps chromium webkit
 bash scripts/install-hugo.sh
 bash scripts/build.sh
 python scripts/test-writing.py
+# Node 22+ is needed only for development checks.
+bash scripts/install-viewrule.sh
+python scripts/viewrule.py install-browser
 python -m http.server 8765 --directory public &
 python scripts/verify.py --engines chromium,webkit
+python scripts/viewrule.py check
 ```
 
 `test-writing.py` creates a disposable site and checks draft-to-publication,
@@ -136,6 +140,13 @@ previews. Citation tests cover keyboard/touch interaction, repeated notes, compl
 source content, long-note scrolling, print, no-JavaScript and unsupported-browser
 fallbacks, plus disposable future-article fixtures. The test tools are not visitor
 dependencies.
+
+Viewrule is the sole essay geometry detector. It checks the site's versioned
+reading-column and order rules on real Hugo output, including 4K, enlarged-text,
+and print captures, and runs axe checks for contrast and accessibility. The former
+Python chapter detector and its regression now live in Viewrule's shared engine.
+Read [the integration guide](docs/viewrule.md) for the agent workflow, feedback,
+version pin, reports, coverage, and measurement limits.
 
 ## Deployment
 

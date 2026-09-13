@@ -23,7 +23,7 @@
 
 .sc-article .sc-resources{margin-top:28px;font:.85rem/1.6 var(--sans);color:var(--sc-muted)}
 .sc-article .sc-resources a{display:inline-block;min-height:44px;padding-block:10px}
-@media print{.essay-page{background:white;color:black}.sc-article{width:100%;padding:0;--sc-text:black;--soft:black;--sc-muted:#333;--sc-accent:#154b2a}.sc-hero-art{display:none}.sc-hero,.sc-section{display:block}.sc-figure{break-inside:avoid;margin-block:20px}.sc-layer-name{color:#091710}}
+@media print{.essay-page{background:white;color:black}.sc-article{width:100%;padding:0;--sc-text:black;--soft:black;--sc-muted:#333;--sc-accent:#154b2a}.sc-hero-art{display:none}.sc-hero,.sc-section{display:block}.sc-figure{break-inside:avoid;margin-block:20px}.sc-layer-name{color:#091710}.sc-layer-name:before{background:#e3ebe5}}
 
 /* Keep the return marker and its label in separate cells at enlarged text sizes. */
 @container diagram (max-width:36rem){
