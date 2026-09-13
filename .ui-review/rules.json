@@ -463,5 +463,24 @@
     ],
     "tolerance": 2,
     "reason": "STYLE.md: Career context follows both Writing and Labs in DOM and visual order."
+  },
+  {
+    "id": "home-portrait-before-identity",
+    "type": "style",
+    "selector": ".home-intro",
+    "property": "grid-template-areas",
+    "allowed": [
+      "\"portrait identity\" \"portrait copy\"",
+      "\"portrait identity\" \"copy copy\""
+    ],
+    "pages": [
+      "home",
+      "home-enlarged"
+    ],
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "reason": "STYLE.md: The portrait sits left of the identity; phone introduction copy spans both columns."
   }
 ]

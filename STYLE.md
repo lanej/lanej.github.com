@@ -359,3 +359,7 @@ essays use simplified, label-free symbols of their existing themes. Labs symbols
 represent the route experiment and layout demonstration, not invented project logos.
 Keep the shared green palette, full-width text, and decorative semantics: adjacent
 titles provide accessible context. New essays fall back to a document symbol.
+
+The homepage portrait sits to the left of the name and role. On desktop it spans
+the identity and introduction rows; on phones the introduction spans the full
+width below portrait and name. Keep the portrait first in the source order.
