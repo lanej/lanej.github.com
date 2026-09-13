@@ -14,12 +14,11 @@
   <div class="essay-list">
   {{ range first 3 . }}
     <article class="writing-item discovery-item">
+      <div class="item-heading">
       {{ partial "writing-item-visual.html" . }}
-      <div class="item-copy">
-      <p class="essay-meta"><span>{{ .ReadingTime }} min read</span></p>
       <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-      {{ with .Description }}<p>{{ . }}</p>{{ end }}
       </div>
+      <p class="item-description item-copy">{{ .Description }} <span class="essay-meta">{{ .ReadingTime }} min read</span></p>
     </article>
   {{ end }}
   </div>
@@ -31,12 +30,11 @@
   <div class="section-heading"><h2 id="labs-title">Labs</h2></div>
   {{ range .Params.featured }}
   <article class="lab-item discovery-item">
+    <div class="item-heading">
     {{ partial "item-visual.html" (dict "symbol" .anchor) }}
-    <div class="item-copy">
-    <p class="lab-meta">{{ .status }}</p>
     <h3><a href="{{ printf "/labs/#%s" .anchor | relURL }}">{{ .title }}</a></h3>
-    <p>{{ .description }}</p>
     </div>
+    <p class="item-description item-copy">{{ .description }} <span class="lab-meta">{{ .status }}</span></p>
   </article>
   {{ end }}
   <div class="writing-links"><a class="text-link" href="{{ .RelPermalink }}">All labs <span aria-hidden="true">→</span></a></div>

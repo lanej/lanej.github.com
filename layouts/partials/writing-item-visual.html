@@ -1,5 +1,5 @@
-{{ $image := "" }}
+{{ $symbol := .Params.essay_visual | default "document" }}
 {{ with .Params.essay_image }}
-  {{ with $.Resources.GetMatch . }}{{ $image = .RelPermalink }}{{ end }}
+  {{ $symbol = index (dict "damocles.svg" "judgment" "socrates-bust.webp" "inquiry") . | default "document" }}
 {{ end }}
-{{ partial "item-visual.html" (dict "image" $image "alt" .Params.essay_image_alt "symbol" .Params.essay_visual) }}
+{{ partial "item-visual.html" (dict "symbol" $symbol) }}

@@ -484,12 +484,12 @@
     "reason": "STYLE.md: The portrait sits left of the identity; phone introduction copy spans both columns."
   },
   {
-    "id": "discovery-visual-beside-copy",
+    "id": "discovery-visual-beside-title",
     "type": "style",
-    "selector": ".discovery-item",
+    "selector": ".item-heading",
     "property": "grid-template-areas",
     "allowed": [
-      "\"visual copy\""
+      "\"visual title\""
     ],
     "pages": [
       "home",
@@ -501,12 +501,12 @@
     "designRules": [
       "DR-006"
     ],
-    "reason": "STYLE.md: Discovery visuals sit beside the copy in a single row, without creating extra space above titles."
+    "reason": "STYLE.md: The icon sits beside the title, without a separate row above it."
   },
   {
-    "id": "discovery-visual-copy-no-overlap",
+    "id": "discovery-visual-title-no-overlap",
     "type": "no-overlap",
-    "selector": ".discovery-item > .item-visual, .discovery-item > .item-copy",
+    "selector": ".item-heading > .item-visual, .item-heading > h2, .item-heading > h3",
     "pages": [
       "home",
       "home-enlarged",
@@ -517,6 +517,89 @@
     "designRules": [
       "DR-006"
     ],
-    "reason": "STYLE.md: The compact visual has a separate column so it cannot overlap titles or descriptions."
+    "reason": "STYLE.md: The compact visual must not overlap the title."
+  },
+  {
+    "id": "discovery-description-full-width",
+    "type": "reading-column",
+    "selector": ".item-description",
+    "container": ".discovery-item",
+    "maxWidth": 1120,
+    "tolerance": 2,
+    "pages": [
+      "home",
+      "home-enlarged",
+      "writing",
+      "writing-enlarged"
+    ],
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "reason": "STYLE.md: Descriptions fill their item width; the icon must not indent the paragraph."
+  },
+  {
+    "id": "discovery-symbol-height",
+    "type": "max-height",
+    "selector": ".item-visual",
+    "max": 32,
+    "pages": [
+      "home",
+      "home-enlarged",
+      "writing",
+      "writing-enlarged"
+    ],
+    "severity": "error",
+    "designRules": [
+      "DR-008"
+    ],
+    "reason": "STYLE.md: Subject symbols stay within 32px so they do not add an oversized row."
+  },
+  {
+    "id": "discovery-heading-before-description",
+    "type": "vertical-order",
+    "selector": ".discovery-item",
+    "groups": [
+      {
+        "selector": ".item-heading",
+        "optional": false
+      },
+      {
+        "selector": ".item-description",
+        "optional": false
+      }
+    ],
+    "tolerance": 2,
+    "pages": [
+      "home",
+      "home-enlarged",
+      "writing",
+      "writing-enlarged"
+    ],
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "reason": "STYLE.md: The title and symbol stay together above the full-width description."
+  },
+  {
+    "id": "home-destination-titles-visible",
+    "type": "visible-count",
+    "selector": ".home-discovery .item-heading",
+    "min": 5,
+    "pages": [
+      "home"
+    ],
+    "viewports": [
+      "desktop",
+      "4k"
+    ],
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "reason": "STYLE.md: At desktop and 4K normal text sizes, all three essay titles and both Labs titles are visible together in the first viewport."
   }
 ]

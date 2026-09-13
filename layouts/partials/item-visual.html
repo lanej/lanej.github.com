@@ -1,10 +1,11 @@
 {{/* Small subject identifiers for discovery lists; the adjacent title supplies context. */}}
 <div class="item-visual" aria-hidden="true">
-{{ if .image }}
-<img src="{{ .image }}" alt="{{ .alt }}" width="64" height="64" loading="lazy" decoding="async">
-{{ else }}
-<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" focusable="false">
-{{ if eq .symbol "memory" }}
+<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+{{ if eq .symbol "judgment" }}
+<path d="M32 7v7m0 0-8 11 8 20 8-20-8-11ZM20 43h24M25 43v8h14v-8M32 51v6"/>
+{{ else if eq .symbol "inquiry" }}
+<path d="M15 10h34a6 6 0 0 1 6 6v24a6 6 0 0 1-6 6H30L17 56V46h-2a6 6 0 0 1-6-6V16a6 6 0 0 1 6-6Z"/><path d="M26 23a6 6 0 1 1 9 5c-3 1-3 3-3 5"/><circle cx="32" cy="39" r="1"/>
+{{ else if eq .symbol "memory" }}
 <path d="M14 20V12h36v8M10 28V20h44v8"/><rect x="10" y="28" width="44" height="24" rx="3"/><path d="M24 39h16M24 45h10"/>
 {{ else if eq .symbol "dose" }}
 <path opacity=".4" d="M10 49h44M10 49V15"/><path d="M13 43c12 0 12-26 25-26h14"/><path stroke-dasharray="3 4" d="M29 49V24"/><circle cx="29" cy="27" r="4" fill="var(--bg)"/>
@@ -22,5 +23,4 @@
 <path d="M16 8h25l9 9v39H16ZM41 8v10h9M24 29h18M24 37h18M24 45h12"/>
 {{ end }}
 </svg>
-{{ end }}
 </div>

@@ -353,14 +353,21 @@ Readers should recognize the site before they recognize the template.
 
 ## Discovery item visuals
 
-Home Writing and Labs items and the Writing archive use one subject visual
-beside the text: 48px on desktop and 36px on phones, with a 16px/12px gap.
-Keep icon and copy in the same grid row; the visual must not add a separate row
-above the title or description. Reuse authored essay illustrations with contain sizing; diagram
-essays use simplified, label-free symbols of their existing themes. Labs symbols
+Home Writing and Labs items and the Writing archive use a 32px subject symbol
+beside the title with a 10px gap. Descriptions use the full item width below that
+heading; the icon must not reserve a column beside the paragraph. Keep homepage
+titles at 1.6rem (1.5rem on phones), preserving the body text scale. Reading time
+and experiment status follow the description inline, separated by a muted dot.
+Use 18px vertical item padding (16px on phones) and 8px before archive links.
+At the configured desktop and 4K normal-text sizes, keep all three essay titles
+and both Labs titles visible in the first viewport; enlarged text reflows freely.
+
+Use shared, label-free symbols with consistent line weight and the site accent.
+At this small size, judgment and inquiry symbols identify the Damocles and Socrates
+essays; their existing illustrations remain in the article openings. Labs symbols
 represent the route experiment and layout demonstration, not invented project logos.
-Keep the shared green palette, flexible text column, and decorative semantics: adjacent
-titles provide accessible context. New essays fall back to a document symbol.
+Adjacent titles supply accessible context; symbols are decorative. New essays
+fall back to a document symbol.
 
 The homepage portrait sits to the left of the name and role. On desktop it spans
 the identity and introduction rows; on phones the introduction spans the full
