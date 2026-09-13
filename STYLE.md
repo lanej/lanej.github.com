@@ -353,11 +353,13 @@ Readers should recognize the site before they recognize the template.
 
 ## Discovery item visuals
 
-Home Writing and Labs items and the Writing archive use one 64px subject visual
-above each title. Reuse authored essay illustrations with contain sizing; diagram
+Home Writing and Labs items and the Writing archive use one subject visual
+beside the text: 48px on desktop and 36px on phones, with a 16px/12px gap.
+Keep icon and copy in the same grid row; the visual must not add a separate row
+above the title or description. Reuse authored essay illustrations with contain sizing; diagram
 essays use simplified, label-free symbols of their existing themes. Labs symbols
 represent the route experiment and layout demonstration, not invented project logos.
-Keep the shared green palette, full-width text, and decorative semantics: adjacent
+Keep the shared green palette, flexible text column, and decorative semantics: adjacent
 titles provide accessible context. New essays fall back to a document symbol.
 
 The homepage portrait sits to the left of the name and role. On desktop it spans

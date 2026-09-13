@@ -3,7 +3,7 @@
 <header class="page-header"><h1>{{ .Title }}</h1><a class="feed-link" href="{{ "index.xml" | relURL }}">Subscribe via RSS</a></header>
 {{ with .Content }}<div class="prose writing-intro">{{ . }}</div>{{ end }}
 <div class="writing-grid">
-{{ range (partial "listed-pages.html" .RegularPages).ByDate.Reverse }}<article class="writing-item">{{ partial "writing-item-visual.html" . }}<h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2><p>{{ .Description | default (.Summary | plainify) }}</p>{{ if .Draft }}<p>Draft</p>{{ end }}</article>{{ end }}
+{{ range (partial "listed-pages.html" .RegularPages).ByDate.Reverse }}<article class="writing-item discovery-item">{{ partial "writing-item-visual.html" . }}<div class="item-copy"><h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2><p>{{ .Description | default (.Summary | plainify) }}</p>{{ if .Draft }}<p>Draft</p>{{ end }}</div></article>{{ end }}
 </div>
 </div></section>
 {{ end }}

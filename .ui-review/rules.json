@@ -482,5 +482,41 @@
       "DR-006"
     ],
     "reason": "STYLE.md: The portrait sits left of the identity; phone introduction copy spans both columns."
+  },
+  {
+    "id": "discovery-visual-beside-copy",
+    "type": "style",
+    "selector": ".discovery-item",
+    "property": "grid-template-areas",
+    "allowed": [
+      "\"visual copy\""
+    ],
+    "pages": [
+      "home",
+      "home-enlarged",
+      "writing",
+      "writing-enlarged"
+    ],
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "reason": "STYLE.md: Discovery visuals sit beside the copy in a single row, without creating extra space above titles."
+  },
+  {
+    "id": "discovery-visual-copy-no-overlap",
+    "type": "no-overlap",
+    "selector": ".discovery-item > .item-visual, .discovery-item > .item-copy",
+    "pages": [
+      "home",
+      "home-enlarged",
+      "writing",
+      "writing-enlarged"
+    ],
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "reason": "STYLE.md: The compact visual has a separate column so it cannot overlap titles or descriptions."
   }
 ]
