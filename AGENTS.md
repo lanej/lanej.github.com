@@ -74,7 +74,9 @@ Viewrule is the sole essay geometry detector. Before changing UI, build the site
 and run `python3 scripts/viewrule.py contract`; read `.ui-review/rules.json` and
 STYLE.md. Keep expectations independent of the CSS under test. Update the rules,
 their explanation, and shared CSS together for intentional changes. Run
-`python3 scripts/viewrule.py check` against the production preview and inspect
+`python3 scripts/viewrule.py check` against the production preview. This checks
+affected pages with all their configured states; use `--all` for a full audit.
+Keep selection shared with browser checks and PR previews, and inspect
 native-scale detail tiles, including 4K, print, and enlarged-text captures.
 New measurements and their regression coverage belong in the Viewrule repository;
 do not recreate a Python chapter detector or another local layout suite. Keep

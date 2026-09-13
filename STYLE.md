@@ -284,11 +284,12 @@ The English essay corpus uses left-to-right text. The direction rule makes CSS
 justified prose fail. Print uses dark text on light surfaces through the shared
 print tokens, including code, tables, and diagram labels.
 
-Every built essay runs at 320, 390, 768, 961, 1100, 1440, and 3840 CSS pixels.
+Every selected essay runs at 320, 390, 768, 961, 1100, 1440, and 3840 CSS pixels.
 Socrates, Close the Loop, and the decision essay also run at 1440px in print media
-and at 200% root text. The homepage and Writing archive run at all seven widths, plus 200%
+and at 200% root text. When selected, the homepage and Writing archive run at all seven widths, plus 200%
 root text at 320, 390, and 1440px. Other pages run at mobile, desktop, and 4K widths (404 at
-mobile and desktop). Full-page captures include overlapping native-scale details;
+mobile and desktop). Change builds select affected routes; scheduled/manual audits
+cover all pages. Selection never removes states from an affected route. Full-page captures include overlapping native-scale details;
 incomplete coverage fails rather than passing a resized overview.
 
 Essay selectors are optional on non-essay pages. Each essay's required readiness

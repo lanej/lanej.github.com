@@ -12,7 +12,8 @@
     "STYLE.md",
     ".ui-review/site.json",
     ".ui-review/rules.json",
-    "scripts/viewrule.py"
+    "scripts/viewrule.py",
+    "scripts/affected_pages.py"
   ],
   "accessibility": true,
   "viewports": [

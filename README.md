@@ -119,7 +119,7 @@ bash scripts/install-viewrule.sh
 python scripts/viewrule.py install-browser
 python -m http.server 8765 --directory public &
 python scripts/verify.py --engines chromium,webkit
-python scripts/viewrule.py check
+python scripts/viewrule.py check  # affected pages; use --all for the full site
 ```
 
 `test-writing.py` creates a disposable site and checks draft-to-publication,
@@ -132,7 +132,7 @@ links, speaker-resource disclosure, tablet composition, and text reflow at 200%.
 `header_checks.py` requires one navigation row at normal text sizes, the portrait
 at the right margin, aligned centers, no visible header name, an accessible home
 link, unclipped text, and 44-by-44-pixel tap targets. The same checks run on every
-page in preflight and production; header screenshots are saved at mobile and
+selected page in change preflight, and every page in full audits; header screenshots are saved at mobile and
 desktop sizes. At enlarged text sizes, wrapping and vertical scrolling are allowed;
 we do not shrink text or hide content to pass a first-screen test. Published
 articles are discovered automatically, including their diagrams and citation
@@ -152,8 +152,10 @@ version pin, reports, coverage, and measurement limits.
 
 Pull requests include an automatically refreshed **Page previews** section in the
 description. CI captures affected pages at 390px mobile and 1440px desktop widths;
-select a viewport image to open the full-page capture. Shared templates and assets
-conservatively capture every page. The section identifies the source revision and
+select a viewport image to open the full-page capture. Visual checks, browser
+screenshots, and previews share one affected-page list. Targeted CSS edits and
+page-scoped rule changes select their consumers; genuinely global or unknown
+shared changes capture every page. Scheduled/manual audits retain full coverage. The section identifies the source revision and
 preserves text outside its HTML markers.
 
 Images live on separate `pr-previews/<number>` branches and use immutable commit

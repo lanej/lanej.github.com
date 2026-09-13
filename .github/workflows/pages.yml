@@ -16,6 +16,9 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
+    env:
+      VIEWRULE_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+      VIEWRULE_FULL: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -39,7 +42,12 @@ jobs:
           python3 scripts/github-activity.py
       - name: Build and validate
         run: bash scripts/build.sh
-      - name: Browser smoke tests
+      - name: Select affected pages
+        run: |
+          python3 scripts/test-affected-pages.py
+          python3 scripts/test-pr-previews.py
+          python3 scripts/viewrule.py select
+      - name: Browser checks for selected pages
         run: |
           chrome=$(command -v google-chrome || command -v google-chrome-stable)
           test -n "$chrome"
@@ -47,20 +55,18 @@ jobs:
           python3 -m http.server 8765 --directory public >/tmp/site-server.log 2>&1 &
           server=$!
           trap 'kill "$server"' EXIT
-          python3 scripts/browser-smoke.py --chromium-path "$chrome"
+          python3 scripts/browser-smoke.py --selection .ui-review/selection.json --chromium-path "$chrome"
           VIEWRULE_BROWSER_PATH="$chrome" python3 scripts/viewrule.py check
       - name: Capture affected pages for PR description
         if: github.event_name == 'pull_request'
         env:
-          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           chrome=$(command -v google-chrome || command -v google-chrome-stable)
-          python3 scripts/test-pr-previews.py
           python3 -m http.server 8765 --directory public >/tmp/preview-server.log 2>&1 &
           server=$!
           trap 'kill "$server"' EXIT
-          python3 scripts/pr-previews.py capture --base "$PR_BASE_SHA" --chromium-path "$chrome"
+          python3 scripts/pr-previews.py capture --selection .ui-review/selection.json --chromium-path "$chrome"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: github.event_name == 'pull_request'
         with:
@@ -76,6 +82,8 @@ jobs:
             artifacts/smoke/
             artifacts/local/citation-phrases.json
             .ui-review/runs/
+            .ui-review/affected/.ui-review/runs/
+            .ui-review/selection.json
           include-hidden-files: true
           retention-days: 14
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
