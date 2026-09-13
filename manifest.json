@@ -1,6 +1,6 @@
 {
-  "head_sha": "1ec6939c63a9e7c9752e045f01282b93d41e72d1",
-  "build_sha": "586cae428466c6223c105a2130bf925fe8d587f2",
+  "head_sha": "c03095a43dfaed446fb2f04ef9fad7105b2d8c05",
+  "build_sha": "5649416e832d26c34899dda53be8d98749bf2470",
   "pages": [
     {
       "route": "/",
@@ -31,6 +31,20 @@
       "title": "About"
     },
     {
+      "route": "/labs/",
+      "images": {
+        "mobile": {
+          "viewport": "labs-mobile.png",
+          "full": "labs-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "labs-desktop.png",
+          "full": "labs-desktop-full.png"
+        }
+      },
+      "title": "Labs"
+    },
+    {
       "route": "/open-source/",
       "images": {
         "mobile": {
@@ -45,20 +59,6 @@
         }
       },
       "title": "Open source"
-    },
-    {
-      "route": "/projects/",
-      "images": {
-        "mobile": {
-          "viewport": "projects-mobile.png",
-          "full": "projects-mobile-full.png"
-        },
-        "desktop": {
-          "viewport": "projects-desktop.png",
-          "full": "projects-desktop-full.png"
-        }
-      },
-      "title": "Projects"
     },
     {
       "route": "/record/",
