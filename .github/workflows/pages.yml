@@ -13,12 +13,15 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
           fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
       - name: Install verification tools
         run: |
           python3 -m venv .venv
@@ -26,6 +29,8 @@ jobs:
           echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
       - name: Install pinned Hugo
         run: bash scripts/install-hugo.sh
+      - name: Install pinned Viewrule
+        run: bash scripts/install-viewrule.sh
       - name: Build and validate
         run: bash scripts/build.sh
       - name: Browser smoke tests
@@ -36,8 +41,8 @@ jobs:
           python3 -m http.server 8765 --directory public >/tmp/site-server.log 2>&1 &
           server=$!
           trap 'kill "$server"' EXIT
-          python3 scripts/test-essay-layout.py --chromium-path "$chrome"
           python3 scripts/browser-smoke.py --chromium-path "$chrome"
+          VIEWRULE_BROWSER_PATH="$chrome" python3 scripts/viewrule.py check
       - name: Capture affected pages for PR description
         if: github.event_name == 'pull_request'
         env:
@@ -64,6 +69,8 @@ jobs:
           path: |
             artifacts/smoke/
             artifacts/local/citation-phrases.json
+            .ui-review/runs/
+          include-hidden-files: true
           retention-days: 14
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
