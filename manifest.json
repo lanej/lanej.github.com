@@ -1,6 +1,6 @@
 {
-  "head_sha": "dec2dfd626b95de59fb5c5ada675833e5652c272",
-  "build_sha": "4a763fc3e4b8a9c40137883894b7d2cf1e119856",
+  "head_sha": "2abe88406afa654c60303430da20963f0044f54b",
+  "build_sha": "dc7d048e96210fcdcafcb4a45731aa38bcf9411d",
   "pages": [
     {
       "route": "/",
@@ -15,20 +15,6 @@
         }
       },
       "title": "Josh Lane"
-    },
-    {
-      "route": "/about/",
-      "images": {
-        "mobile": {
-          "viewport": "about-mobile.png",
-          "full": "about-mobile-full.png"
-        },
-        "desktop": {
-          "viewport": "about-desktop.png",
-          "full": "about-desktop-full.png"
-        }
-      },
-      "title": "About"
     },
     {
       "route": "/labs/",
@@ -61,24 +47,6 @@
       "title": "Open source"
     },
     {
-      "route": "/record/",
-      "images": {
-        "mobile": {
-          "viewport": "record-mobile.png",
-          "full": "record-mobile-full.png",
-          "detail": "record-mobile-companies.png",
-          "speaking": "record-mobile-speaking.png"
-        },
-        "desktop": {
-          "viewport": "record-desktop.png",
-          "full": "record-desktop-full.png",
-          "detail": "record-desktop-companies.png",
-          "speaking": "record-desktop-speaking.png"
-        }
-      },
-      "title": "Work"
-    },
-    {
       "route": "/writing/",
       "images": {
         "mobile": {
@@ -91,104 +59,6 @@
         }
       },
       "title": "Writing"
-    },
-    {
-      "route": "/writing/close-the-loop/",
-      "images": {
-        "mobile": {
-          "viewport": "writing-close-the-loop-mobile.png",
-          "full": "writing-close-the-loop-mobile-full.png"
-        },
-        "desktop": {
-          "viewport": "writing-close-the-loop-desktop.png",
-          "full": "writing-close-the-loop-desktop-full.png"
-        }
-      },
-      "title": "Close the Loop"
-    },
-    {
-      "route": "/writing/harmony/",
-      "images": {
-        "mobile": {
-          "viewport": "writing-harmony-mobile.png",
-          "full": "writing-harmony-mobile-full.png"
-        },
-        "desktop": {
-          "viewport": "writing-harmony-desktop.png",
-          "full": "writing-harmony-desktop-full.png"
-        }
-      },
-      "title": "Harmony"
-    },
-    {
-      "route": "/writing/how-you-do-it-is-part-of-the-decision/",
-      "images": {
-        "mobile": {
-          "viewport": "writing-how-you-do-it-is-part-of-the-decision-mobile.png",
-          "full": "writing-how-you-do-it-is-part-of-the-decision-mobile-full.png"
-        },
-        "desktop": {
-          "viewport": "writing-how-you-do-it-is-part-of-the-decision-desktop.png",
-          "full": "writing-how-you-do-it-is-part-of-the-decision-desktop-full.png"
-        }
-      },
-      "title": "How You Do It Is Part of the Decision"
-    },
-    {
-      "route": "/writing/lead-with-problems/",
-      "images": {
-        "mobile": {
-          "viewport": "writing-lead-with-problems-mobile.png",
-          "full": "writing-lead-with-problems-mobile-full.png"
-        },
-        "desktop": {
-          "viewport": "writing-lead-with-problems-desktop.png",
-          "full": "writing-lead-with-problems-desktop-full.png"
-        }
-      },
-      "title": "Lead With Problems"
-    },
-    {
-      "route": "/writing/minimum-effective-dose/",
-      "images": {
-        "mobile": {
-          "viewport": "writing-minimum-effective-dose-mobile.png",
-          "full": "writing-minimum-effective-dose-mobile-full.png"
-        },
-        "desktop": {
-          "viewport": "writing-minimum-effective-dose-desktop.png",
-          "full": "writing-minimum-effective-dose-desktop-full.png"
-        }
-      },
-      "title": "Minimum Effective Dose"
-    },
-    {
-      "route": "/writing/socrates/",
-      "images": {
-        "mobile": {
-          "viewport": "writing-socrates-mobile.png",
-          "full": "writing-socrates-mobile-full.png"
-        },
-        "desktop": {
-          "viewport": "writing-socrates-desktop.png",
-          "full": "writing-socrates-desktop-full.png"
-        }
-      },
-      "title": "Socrates: Before I Say \u2018Go Build It\u2019"
-    },
-    {
-      "route": "/writing/systems-that-remember/",
-      "images": {
-        "mobile": {
-          "viewport": "writing-systems-that-remember-mobile.png",
-          "full": "writing-systems-that-remember-mobile-full.png"
-        },
-        "desktop": {
-          "viewport": "writing-systems-that-remember-desktop.png",
-          "full": "writing-systems-that-remember-desktop-full.png"
-        }
-      },
-      "title": "Systems That Remember"
     }
   ]
 }
