@@ -61,6 +61,11 @@ Use the available width below the cap, with responsive side gutters. Keep one se
 
 The general site shell is capped at `--max: 1120px`. Essays retain the shared 1240px opening composition for their title, introduction, and accompanying art; the chapter reading column is centered within that shell.
 
+The Writing archive uses the same left content edge as the other section pages,
+aligned with the navigation and footer shell. Keep its heading, introduction, and
+entries on that edge while retaining the general 680px copy cap. Do not apply the
+centered essay reading-column layout to the archive.
+
 Whitespace should separate ideas before borders or containers do. Prefer vertical rhythm to card proliferation.
 
 ## Article chrome
@@ -251,6 +256,7 @@ from the stylesheet being checked.
 
 | Standard | Viewrule rule |
 | --- | --- |
+| Writing archive heading, introduction, and entries share the site shell left edge within 2px | `writing-index-shell-alignment` (`align`) |
 | Fill the centered column, capped at 640px, within 2px rounding tolerance | `essay-reading-measure` (`reading-column`) |
 | Heading, prose, then optional supporting visuals in DOM and visible order | `essay-chapter-order` (`vertical-order`) |
 | Every authored chapter and visual container remains visible | `essay-chapters-visible`, `essay-visuals-visible` (`vertical-order`) |
@@ -268,7 +274,8 @@ print tokens, including code, tables, and diagram labels.
 
 Every built essay runs at 320, 390, 768, 961, 1100, 1440, and 3840 CSS pixels.
 Socrates, Close the Loop, and the decision essay also run at 1440px in print media
-and at 200% root text. Other pages run at mobile, desktop, and 4K widths (404 at
+and at 200% root text. The Writing archive runs at all seven widths, plus 200%
+root text at 320, 390, and 1440px. Other pages run at mobile, desktop, and 4K widths (404 at
 mobile and desktop). Full-page captures include overlapping native-scale details;
 incomplete coverage fails rather than passing a resized overview.
 

@@ -186,5 +186,21 @@
       "DR-007"
     ],
     "reason": "STYLE.md: Diagrams. A chapter may have no supporting visual; an authored visual container must remain visible rather than being hidden to fit the layout."
+  },
+  {
+    "id": "writing-index-shell-alignment",
+    "type": "align",
+    "selector": ".nav-shell, .writing-index h1, .writing-intro, .writing-item, .footer-shell",
+    "pages": [
+      "writing",
+      "writing-enlarged"
+    ],
+    "edge": "left",
+    "tolerance": 2,
+    "severity": "error",
+    "designRules": [
+      "DR-006"
+    ],
+    "reason": "STYLE.md: Measure and layout. The Writing archive heading, introduction, and entries share the left edge of the site navigation and footer shell, like the other section pages."
   }
 ]
