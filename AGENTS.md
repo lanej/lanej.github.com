@@ -67,10 +67,11 @@ article-specific font, chapter numbering, callout style, or metadata placement.
 Use Markdown H2 headings; the shared renderer generates numbered chapters.
 Every essay uses the same responsive columns: on wide screens, the opening and
 chapters align prose in the left column and supporting visuals in the right.
-Chapters without a visual keep the same prose position. At narrow widths, enlarged
+Chapter titles span both columns. Without a visual, chapter prose flows down
+the left column and then the right, balanced within each chapter. At narrow widths, enlarged
 text, and in print, stack heading, prose, and supporting visuals in a centered
 reading column capped at 640px. Preserve authored DOM order and left-aligned prose;
-never divide running text into newspaper columns. Endnotes and the footer follow
+use one prose column when stacked. Endnotes and the footer follow
 the prose column. Keep the same subject icon on discovery entries and essay headers.
 Keep full-text RSS and one document-wide footnote collection. See STYLE.md.
 Viewrule is the sole essay geometry detector. Before changing UI, build the site

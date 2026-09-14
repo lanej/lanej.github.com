@@ -117,7 +117,6 @@
    Container rem units also respond to enlarged root text. */
 .sc-article{container:essay / inline-size}
 .sc-hero{grid-template-columns:minmax(0,1fr);max-width:var(--copy);margin-inline:auto;column-gap:48px}
-.sc-section-main{min-width:0;display:grid;gap:24px}
 .sc-section-visuals{align-self:start}
 .sc-hero-art{align-self:start}
 .sc-hero-mobile-diagram{display:none}
@@ -140,7 +139,10 @@
 @container essay (min-width:64rem){
   .sc-hero{max-width:none;grid-template-columns:repeat(2,minmax(0,1fr))}
   .sc-article .sc-section{max-width:none;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:48px}
-  .sc-section-main{grid-column:1}
+  .sc-section-text{grid-column:1}
+  .sc-section-text-only .sc-section-text{grid-column:1/-1}
+  .sc-section-text-only .sc-section-copy{column-count:2;column-gap:48px;column-fill:balance}
+  .sc-section-text-only .sc-section-copy>:where(p,blockquote,ul,ol,pre,figure){break-inside:avoid-column}
   .sc-section-visuals{grid-column:2}
   .sc-hero-copy,.sc-section-header,.sc-section-text,.sc-section-visuals{max-width:none}
   .sc-article .article-footer,.sc-article .footnotes{width:calc((100% - 48px)/2);max-width:none;margin-left:0;margin-right:auto}
@@ -149,5 +151,4 @@
   .sc-article{container-type:normal}
   .sc-title{display:block}
   .sc-title .item-visual{display:none}
-  .sc-section-main{display:block}
 }

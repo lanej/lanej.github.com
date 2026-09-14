@@ -114,8 +114,7 @@ protection is a separate repository setting.
 Functional browser checks remain responsible for navigation, citations, chapter
 numbering, image behavior, print fallbacks, and RSS. Detector regressions moved to
 Viewrule's existing installed-CLI workflow; do not restore a parallel site detector.
-No area-occupancy quota applies to essays: whitespace outside the reading column
-is intentional. Geometry cannot prove readability for every font or the relevance
+No area-occupancy quota applies to essays: short chapters need not fill a viewport. Geometry cannot prove readability for every font or the relevance
 of a diagram. Inspect inconclusive axe results manually; no automatic source
 repair or fabricated approval occurs.
 
@@ -151,8 +150,13 @@ Removing the integration removes the build step, wrapper, installer, and rules;
 it does not require changing Hugo or visitor assets. Preserve wanted feedback and
 references before manually deleting local tool/run directories.
 
-Essay layout regressions protect the shared prose edges across openings, chapters
-with and without figures, and endnotes at laptop/desktop/4K widths. Narrow and
+Essay layout rules protect the shared column edges at laptop/desktop/4K widths.
+Chapter titles span the essay width. Chapters with figures pair prose and visuals;
+text-only chapters fill that width with two balanced prose columns. Native CSS
+column flow preserves source order down the left column and then the right.
+Single-column paragraph geometry rules apply only to stacked states or chapters
+with visuals; wide text-only chapters use column-count, gutter, balancing, and
+fragmentation rules instead. Narrow and
 print/enlarged states keep the centered 640px reading column; figures stack after
 prose. Browser checks compare each essay header SVG with its archive SVG, so the
 subject mark remains the same from discovery to reading. Every essay receives
