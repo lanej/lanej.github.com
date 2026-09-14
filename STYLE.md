@@ -59,7 +59,9 @@ columns with a 48px gutter: prose on the left and supporting visuals on the righ
 The 1240px essay shell caps each column at 596px. Chapter headings span both
 columns. When a chapter has supporting visuals, prose occupies the left column
 and visuals the right. Without visuals, prose flows down the left column and
-then the right, balanced separately within each chapter. Keep paragraphs,
+then the right, balanced separately within each chapter. A 1px muted rule in the
+gutter separates the two prose columns beneath the heading. Use the site line
+color; omit the rule in stacked layouts and between prose and supporting visuals. Keep paragraphs,
 callouts, lists, code blocks, and figures together where they fit; keep subsection
 headings with the following text. Do not add illustrations just to fill space.
 Endnotes and the footer retain their left-column alignment.
@@ -294,7 +296,7 @@ from the stylesheet being checked.
 | Top-to-bottom paragraphs in single-column states; native column flow in wide text-only chapters | `essay-paragraph-order` (`vertical-order`) |
 | Left-aligned prose; two balanced columns for wide text-only chapters, one otherwise | `essay-prose-alignment`, `essay-prose-direction`, `essay-prose-columns`, `essay-text-only-columns-wide`, `essay-prose-columns-narrow`, `essay-prose-columns-print-enlarged` (`style`) |
 | Full-width chapter headings and text-only containers | `essay-chapter-title-span` (`align`) |
-| Shared gutter, balanced columns, intact blocks where possible | `essay-text-only-column-gap`, `essay-text-only-column-balance`, `essay-text-only-keep-blocks` (`style`) |
+| Shared gutter, balanced columns, intact blocks where possible | `essay-text-only-column-gap`, `essay-text-only-column-balance`, `essay-text-only-column-rule`, `essay-text-only-keep-blocks` (`style`) |
 | Text components do not truncate their own content | `site-text-not-clipped` (`no-clip`) |
 | Visible captions on shared diagrams | `site-diagram-context` (`context`) |
 | At least 16px home introduction text | `site-introduction-text` (`min-font-size`) |

@@ -141,7 +141,7 @@
   .sc-article .sc-section{max-width:none;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:48px}
   .sc-section-text{grid-column:1}
   .sc-section-text-only .sc-section-text{grid-column:1/-1}
-  .sc-section-text-only .sc-section-copy{column-count:2;column-gap:48px;column-fill:balance}
+  .sc-section-text-only .sc-section-copy{column-count:2;column-gap:48px;column-fill:balance;column-rule:1px solid var(--line)}
   .sc-section-text-only .sc-section-copy>:where(p,blockquote,ul,ol,pre,figure){break-inside:avoid-column}
   .sc-section-visuals{grid-column:2}
   .sc-hero-copy,.sc-section-header,.sc-section-text,.sc-section-visuals{max-width:none}

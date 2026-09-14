@@ -1271,6 +1271,36 @@
     ]
   },
   {
+    "id": "essay-text-only-column-rule",
+    "type": "style",
+    "selector": ".sc-section-text-only .sc-section-copy",
+    "reason": "STYLE.md: A thin site-line-colored divider separates wide prose columns beneath the chapter heading, reinforcing left-column-first reading.",
+    "severity": "error",
+    "optional": true,
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/harmony",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/lead-with-problems",
+      "writing/minimum-effective-dose",
+      "writing/socrates",
+      "writing/systems-that-remember"
+    ],
+    "viewports": [
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "property": "column-rule",
+    "allowed": [
+      "1px solid rgb(43, 58, 52)"
+    ]
+  },
+  {
     "id": "essay-text-only-column-balance",
     "type": "style",
     "selector": ".sc-section-text-only .sc-section-copy",
