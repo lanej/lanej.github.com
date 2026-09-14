@@ -114,7 +114,7 @@ def css_routes(before, after, documents):
     return selected
 
 
-def rule_routes(before, after, page_names):
+def rule_routes(before, after, page_names, documents=None):
     old = {rule['id']: rule for rule in json.loads(before or '[]')}
     new = {rule['id']: rule for rule in json.loads(after or '[]')}
     selected = set()
@@ -125,6 +125,14 @@ def rule_routes(before, after, page_names):
             if rule is None:
                 continue
             if not rule.get('pages'):
+                # Optional checks cannot fail on pages where their selector is absent.
+                # Required/global checks and uncertain selectors still select everything.
+                anchors = selector_anchors(rule.get('selector')) if rule.get('optional') else None
+                if anchors and documents is not None:
+                    matches = {route for route, page in documents.items() if anchors & page.anchors}
+                    if matches:
+                        selected.update(matches)
+                        continue
                 return set(page_names.values())
             selected.update(page_names[name] for name in rule['pages'] if name in page_names)
     return selected
@@ -147,8 +155,9 @@ def affected_routes(paths, available, *, root=None, base=None, page_names=None):
     direct = {
         'layouts/home.html': {'/'}, 'assets/css/home.css': {'/'},
         'layouts/writing/list.html': {'/writing/'},
-        'layouts/partials/item-visual.html': {'/', '/writing/'},
-        'layouts/partials/writing-item-visual.html': {'/', '/writing/'},
+        'layouts/partials/item-visual.html': essays | {'/', '/writing/'},
+        'layouts/partials/writing-item-visual.html': essays | {'/', '/writing/'},
+        'layouts/partials/essay-visual.html': essays,
         'layouts/writing/single.html': essays,
         'layouts/partials/essay-content.html': essays,
         'assets/css/essays.css': essays, 'assets/css/diagrams.css': essays,
@@ -184,8 +193,13 @@ def affected_routes(paths, available, *, root=None, base=None, page_names=None):
             current = Path(root) / path
             routes.update(css_routes(previous_text(root, base, path), current.read_text() if current.exists() else '', documents))
         elif path == '.ui-review/rules.json' and root is not None and base is not None:
+            if documents is None:
+                documents = {}
+                for route in available:
+                    file = Path(root) / 'public' / (route.lstrip('/') + 'index.html' if route.endswith('/') else route.lstrip('/'))
+                    documents[route] = PageAnchors(file.read_text())
             current = Path(root) / path
-            routes.update(rule_routes(previous_text(root, base, path), current.read_text(), page_names or route_names(available)))
+            routes.update(rule_routes(previous_text(root, base, path), current.read_text(), page_names or route_names(available), documents))
         elif path.startswith('content/writing/') and not path.endswith('.md'):
             routes.update(essays | {'/', '/writing/'})
         elif path.startswith('content/') and path.endswith('.md'):

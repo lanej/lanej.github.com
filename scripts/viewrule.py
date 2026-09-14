@@ -52,8 +52,7 @@ def prepare():
         if relative == 'writing':
             pages.append(dict(page, name='writing-enlarged', textScale=2,
                               viewports=['small', 'mobile', 'desktop']))
-        if relative in ('writing/socrates', 'writing/close-the-loop',
-                        'writing/how-you-do-it-is-part-of-the-decision'):
+        if essay:
             pages.extend([
                 dict(page, name=relative + '-print', media='print', viewports=['desktop']),
                 dict(page, name=relative + '-enlarged', textScale=2, viewports=['desktop']),

@@ -41,38 +41,49 @@
   {
     "id": "essay-reading-measure",
     "type": "reading-column",
-    "selector": ".sc-section, .sc-section-header, .sc-section-text, .sc-section-visuals, .sc-section-copy > p, .sc-article .footnotes, .sc-article .article-footer",
+    "selector": ".sc-section, .sc-section-header, .sc-section-text, .sc-section-visuals, .sc-section-copy > p, .sc-article .footnotes, .sc-article .article-footer, .sc-section-main, .sc-hero",
     "container": ".sc-article",
     "maxWidth": 640,
     "tolerance": 2,
-    "reason": "STYLE.md: Measure and layout. Chapter content, endnotes, and footer fill the centered 640px reading column with responsive gutters below the cap.",
+    "reason": "STYLE.md: At narrow widths, every opening, chapter, supporting visual, endnote, and footer fills the centered reading column capped at 640px.",
     "severity": "error",
     "optional": true,
     "designRules": [
       "DR-006",
       "DR-007"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/harmony",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/lead-with-problems",
+      "writing/minimum-effective-dose",
+      "writing/socrates",
+      "writing/systems-that-remember"
+    ],
+    "viewports": [
+      "small",
+      "mobile",
+      "tablet",
+      "breakpoint"
     ]
   },
   {
     "id": "essay-chapter-order",
     "type": "vertical-order",
-    "selector": ".sc-section",
+    "selector": ".sc-section-main",
     "groups": [
       {
         "selector": ".sc-section-header",
         "optional": false
       },
       {
-        "selector": ".sc-section-copy",
+        "selector": ".sc-section-text",
         "optional": false
-      },
-      {
-        "selector": ".sc-section-visuals",
-        "optional": true
       }
     ],
     "tolerance": 2,
-    "reason": "STYLE.md: Measure and layout. Preserve heading, prose, then supporting visuals in both DOM and visible order.",
+    "reason": "STYLE.md: Each chapter keeps its heading before its prose in both DOM and visual order.",
     "severity": "error",
     "optional": true,
     "designRules": [
@@ -601,5 +612,379 @@
       "DR-007"
     ],
     "reason": "STYLE.md: At desktop and 4K normal text sizes, all three essay titles and both Labs titles are visible together in the first viewport."
+  },
+  {
+    "id": "essay-reading-measure-print-enlarged",
+    "type": "reading-column",
+    "selector": ".sc-section, .sc-section-header, .sc-section-text, .sc-section-visuals, .sc-section-copy > p, .sc-article .footnotes, .sc-article .article-footer, .sc-section-main, .sc-hero",
+    "container": ".sc-article",
+    "maxWidth": 640,
+    "tolerance": 2,
+    "reason": "STYLE.md: Print and enlarged text retain a centered single reading column capped at 640px.",
+    "severity": "error",
+    "optional": true,
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "pages": [
+      "writing/close-the-loop-print",
+      "writing/close-the-loop-enlarged",
+      "writing/harmony-print",
+      "writing/harmony-enlarged",
+      "writing/how-you-do-it-is-part-of-the-decision-print",
+      "writing/how-you-do-it-is-part-of-the-decision-enlarged",
+      "writing/lead-with-problems-print",
+      "writing/lead-with-problems-enlarged",
+      "writing/minimum-effective-dose-print",
+      "writing/minimum-effective-dose-enlarged",
+      "writing/socrates-print",
+      "writing/socrates-enlarged",
+      "writing/systems-that-remember-print",
+      "writing/systems-that-remember-enlarged"
+    ]
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "id": "essay-wide-prose-left",
+    "type": "align",
+    "selector": ".sc-article, .sc-hero-copy, .sc-section-main, .sc-section-header, .sc-section-text, .sc-article .footnotes, .sc-article .article-footer",
+    "edge": "left",
+    "tolerance": 2,
+    "pages": [
+      "writing/close-the-loop",
+      "writing/harmony",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/lead-with-problems",
+      "writing/minimum-effective-dose",
+      "writing/socrates",
+      "writing/systems-that-remember"
+    ],
+    "viewports": [
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "reason": "STYLE.md: Openings, chapters with or without visuals, endnotes, and the footer share the same left prose column on wide screens."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "id": "essay-wide-prose-right",
+    "type": "align",
+    "selector": ".sc-hero-copy, .sc-section-main, .sc-section-header, .sc-section-text, .sc-article .footnotes, .sc-article .article-footer",
+    "edge": "right",
+    "tolerance": 2,
+    "pages": [
+      "writing/close-the-loop",
+      "writing/harmony",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/lead-with-problems",
+      "writing/minimum-effective-dose",
+      "writing/socrates",
+      "writing/systems-that-remember"
+    ],
+    "viewports": [
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "reason": "STYLE.md: Openings, chapters with or without visuals, endnotes, and the footer share the same left prose column on wide screens."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "id": "essay-prose-local-measure",
+    "type": "reading-column",
+    "selector": ".sc-section-copy > p",
+    "container": ".sc-section-text",
+    "maxWidth": 640,
+    "tolerance": 2,
+    "optional": true,
+    "reason": "STYLE.md: Paragraphs fill the bounded prose column without indentation or a second text column."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "id": "essay-support-columns-no-overlap",
+    "type": "no-overlap",
+    "selector": ".sc-section-main, .sc-section-visuals",
+    "optional": true,
+    "reason": "STYLE.md: Prose and supporting visuals must remain separate as the essay reflows."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "id": "essay-support-order-narrow",
+    "type": "vertical-order",
+    "selector": ".sc-section",
+    "groups": [
+      {
+        "selector": ".sc-section-main",
+        "optional": false
+      },
+      {
+        "selector": ".sc-section-visuals",
+        "optional": true
+      }
+    ],
+    "tolerance": 2,
+    "pages": [
+      "writing/close-the-loop",
+      "writing/harmony",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/lead-with-problems",
+      "writing/minimum-effective-dose",
+      "writing/socrates",
+      "writing/systems-that-remember"
+    ],
+    "reason": "STYLE.md: Supporting figures follow their chapter prose when the layout stacks.",
+    "viewports": [
+      "small",
+      "mobile",
+      "tablet",
+      "breakpoint"
+    ]
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "id": "essay-support-order-print-enlarged",
+    "type": "vertical-order",
+    "selector": ".sc-section",
+    "groups": [
+      {
+        "selector": ".sc-section-main",
+        "optional": false
+      },
+      {
+        "selector": ".sc-section-visuals",
+        "optional": true
+      }
+    ],
+    "tolerance": 2,
+    "pages": [
+      "writing/close-the-loop-print",
+      "writing/close-the-loop-enlarged",
+      "writing/harmony-print",
+      "writing/harmony-enlarged",
+      "writing/how-you-do-it-is-part-of-the-decision-print",
+      "writing/how-you-do-it-is-part-of-the-decision-enlarged",
+      "writing/lead-with-problems-print",
+      "writing/lead-with-problems-enlarged",
+      "writing/minimum-effective-dose-print",
+      "writing/minimum-effective-dose-enlarged",
+      "writing/socrates-print",
+      "writing/socrates-enlarged",
+      "writing/systems-that-remember-print",
+      "writing/systems-that-remember-enlarged"
+    ],
+    "reason": "STYLE.md: Supporting figures follow their chapter prose when the layout stacks."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "id": "essay-title-icon-present",
+    "type": "min-size",
+    "selector": ".sc-title .item-visual",
+    "pages": [
+      "writing/close-the-loop",
+      "writing/harmony",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/lead-with-problems",
+      "writing/minimum-effective-dose",
+      "writing/socrates",
+      "writing/systems-that-remember",
+      "writing/close-the-loop-enlarged",
+      "writing/harmony-enlarged",
+      "writing/how-you-do-it-is-part-of-the-decision-enlarged",
+      "writing/lead-with-problems-enlarged",
+      "writing/minimum-effective-dose-enlarged",
+      "writing/socrates-enlarged",
+      "writing/systems-that-remember-enlarged"
+    ],
+    "reason": "STYLE.md: Every essay opening retains the same subject mark as its discovery entry.",
+    "minWidth": 32,
+    "minHeight": 32
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "type": "vertical-order",
+    "selector": ".sc-hero",
+    "groups": [
+      {
+        "selector": ".article-header",
+        "optional": false
+      },
+      {
+        "selector": ".sc-hero-copy",
+        "optional": false
+      },
+      {
+        "selector": ".sc-hero-art",
+        "optional": false
+      }
+    ],
+    "tolerance": 2,
+    "reason": "STYLE.md: Opening visuals remain visible and follow prose when the essay stacks.",
+    "id": "essay-opening-order-narrow",
+    "pages": [
+      "writing/close-the-loop",
+      "writing/harmony",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/lead-with-problems",
+      "writing/minimum-effective-dose",
+      "writing/socrates",
+      "writing/systems-that-remember"
+    ],
+    "viewports": [
+      "small",
+      "mobile",
+      "tablet",
+      "breakpoint"
+    ]
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "type": "vertical-order",
+    "selector": ".sc-hero",
+    "groups": [
+      {
+        "selector": ".article-header",
+        "optional": false
+      },
+      {
+        "selector": ".sc-hero-copy",
+        "optional": false
+      },
+      {
+        "selector": ".sc-hero-art",
+        "optional": false
+      }
+    ],
+    "tolerance": 2,
+    "reason": "STYLE.md: Opening visuals remain visible and follow prose when the essay stacks.",
+    "id": "essay-opening-order-enlarged",
+    "pages": [
+      "writing/close-the-loop-enlarged",
+      "writing/harmony-enlarged",
+      "writing/how-you-do-it-is-part-of-the-decision-enlarged",
+      "writing/lead-with-problems-enlarged",
+      "writing/minimum-effective-dose-enlarged",
+      "writing/socrates-enlarged",
+      "writing/systems-that-remember-enlarged"
+    ]
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "id": "essay-opening-no-overlap",
+    "type": "no-overlap",
+    "selector": ".sc-hero-copy, .sc-hero-art",
+    "optional": true,
+    "reason": "STYLE.md: Opening prose and supporting art remain separate in both column layouts."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "id": "essay-opening-label-size",
+    "type": "min-font-size",
+    "selector": ".sc-hero-step, .sc-hero-promise-label",
+    "optional": true,
+    "reason": "STYLE.md: Reflowed opening diagram labels remain readable without shrinking their text.",
+    "min": 16
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/harmony",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/lead-with-problems",
+      "writing/minimum-effective-dose",
+      "writing/socrates",
+      "writing/systems-that-remember"
+    ],
+    "viewports": [
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "id": "essay-wide-columns",
+    "type": "style",
+    "selector": ".sc-hero, .sc-section",
+    "property": "grid-template-columns",
+    "allowed": [
+      "494px 494px",
+      "596px 596px"
+    ],
+    "reason": "STYLE.md: At 1100px, the 1036px essay shell yields two 494px columns; at 1440px and 4K, the 1240px cap yields two 596px columns. Both use a 48px gutter."
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/harmony",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/lead-with-problems",
+      "writing/minimum-effective-dose",
+      "writing/socrates",
+      "writing/systems-that-remember"
+    ],
+    "viewports": [
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "id": "essay-wide-support-right",
+    "type": "align",
+    "selector": ".sc-article, .sc-section-visuals",
+    "edge": "right",
+    "tolerance": 2,
+    "reason": "STYLE.md: Supporting chapter figures occupy the right essay column and share the shell right edge."
   }
 ]

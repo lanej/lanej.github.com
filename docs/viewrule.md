@@ -57,8 +57,9 @@ then required class/id anchors are matched to built HTML. Global or unanchored
 selectors, imports, fonts, runtime-only classes, and unknown shared dependencies
 conservatively select all pages. This is dependency selection, not a geometry check.
 
-Changed Viewrule rules select both their old and new page scopes; unscoped rules
-select everything. Viewport/capture configuration changes are global, while source
+Changed Viewrule rules select both their old and new page scopes; unscoped required rules
+select everything. Optional rules with explicit class/id selectors select their
+built-page consumers; selectors that cannot be resolved still select everything. Viewport/capture configuration changes are global, while source
 path bookkeeping and documentation-only changes do not change rendered pages.
 Every selected route retains all its configured widths, print states, and enlarged
 text states. We reduce pages, never the coverage within an affected page.
@@ -82,7 +83,7 @@ canonical project by default.
 `.ui-review/site.json` contains URL, viewport, capture, and freshness settings.
 `scripts/viewrule.py` discovers all built pages, gives essays a required chapter
 readiness selector, and writes the ignored native `.ui-review/config.json`.
-It adds desktop print and 200% root-text states for three representative essays.
+It adds desktop print and 200% root-text states for every essay.
 When selected, the homepage and Writing archive run at all seven configured widths and at 200%
 root text on narrow phone, ordinary phone, and desktop. The homepage rules protect
 Writing/Labs placement, stacking order, and Work below both sections.
@@ -96,8 +97,8 @@ full-width single column at narrow sizes and enlarged text.
 write directly to it. No wrapper implements browser measurements.
 
 [STYLE.md](../STYLE.md#enforcing-the-essay-standard) maps each rule to the design
-requirement and documents viewport coverage. Viewrule checks bounded, centered
-reading measure, DOM/visual order, prose alignment/columns, text clipping, diagram
+requirement and documents viewport coverage. Viewrule checks bounded reading measure, consistent wide-screen prose columns,
+centered stacked layouts, DOM/visual order, prose alignment, text clipping, diagram
 captions, introduction text size, page overflow, and axe WCAG A/AA findings including
 confirmed text contrast. Optional essay selectors allow other page types; required
 readiness and chapter groups prevent absent essay structure from silently passing.
@@ -149,3 +150,10 @@ workflow after upgrading. Restore the prior pin to roll back.
 Removing the integration removes the build step, wrapper, installer, and rules;
 it does not require changing Hugo or visitor assets. Preserve wanted feedback and
 references before manually deleting local tool/run directories.
+
+Essay layout regressions protect the shared prose edges across openings, chapters
+with and without figures, and endnotes at laptop/desktop/4K widths. Narrow and
+print/enlarged states keep the centered 640px reading column; figures stack after
+prose. Browser checks compare each essay header SVG with its archive SVG, so the
+subject mark remains the same from discovery to reading. Every essay receives
+its own print and enlarged-text state because the shared layout affects the corpus.

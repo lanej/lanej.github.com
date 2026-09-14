@@ -64,11 +64,14 @@ no-JavaScript/unsupported-browser fallbacks) and inspect live mobile/desktop car
 All essays use the shared Socrates-derived chapter format, with the same system
 sans-serif as the rest of the site. No serif theme, custom writing layout, or
 article-specific font, chapter numbering, callout style, or metadata placement.
-Use Markdown H2 headings; the shared renderer generates numbered chapters and
-uses one horizontally centered column capped at `--copy: 640px` for every
-chapter. Keep prose left-aligned; place diagrams and tables after it at every
-width. Endnotes and the article footer align to the same column. Preserve DOM
-order, responsive gutters, and readable enlarged text.
+Use Markdown H2 headings; the shared renderer generates numbered chapters.
+Every essay uses the same responsive columns: on wide screens, the opening and
+chapters align prose in the left column and supporting visuals in the right.
+Chapters without a visual keep the same prose position. At narrow widths, enlarged
+text, and in print, stack heading, prose, and supporting visuals in a centered
+reading column capped at 640px. Preserve authored DOM order and left-aligned prose;
+never divide running text into newspaper columns. Endnotes and the footer follow
+the prose column. Keep the same subject icon on discovery entries and essay headers.
 Keep full-text RSS and one document-wide footnote collection. See STYLE.md.
 Viewrule is the sole essay geometry detector. Before changing UI, build the site
 and run `python3 scripts/viewrule.py contract`; read `.ui-review/rules.json` and
