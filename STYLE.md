@@ -64,7 +64,9 @@ gutter separates the two prose columns beneath the heading. Use the site line
 color; omit the rule in stacked layouts and between prose and supporting visuals. Keep paragraphs,
 callouts, lists, code blocks, and figures together where they fit; keep subsection
 headings with the following text. Do not add illustrations just to fill space.
-Endnotes and the footer retain their left-column alignment.
+Endnotes use the same two balanced columns, 48px gutter, and muted divider across
+the full essay width. Each numbered citation stays together, reading down the
+left column before the right. The footer retains its left-column alignment.
 
 Below that threshold, and with enlarged text or print, use one centered reading
 column capped at 640px. Container queries use rem units so enlarged text triggers
@@ -157,7 +159,7 @@ Citations are contextual, not ornamental.
 
 The preferred article treatment is the existing subtle underline on the exact phrase or claim related to the source. Do not underline an entire paragraph when a phrase is sufficient. Do not restore large numeric footnote markers as the primary interaction.
 
-Citation interaction may reveal richer source detail, but the prose must remain readable without opening it. The fallback footnotes must remain available for non-interactive and print contexts. Endnotes align with the chapter prose column, including when it centers in narrow layouts and print. Keep each source together.
+Citation interaction may reveal richer source detail, but the prose must remain readable without opening it. The fallback footnotes must remain available for non-interactive and print contexts. Endnotes span the essay width in two balanced columns on wide screens, using the same gutter and muted divider as prose. Narrow layouts, enlarged text, and print use one centered reading column. Keep each source together, including its explanation and return link.
 
 Citation styling must not make sourced prose visually louder than the argument itself.
 

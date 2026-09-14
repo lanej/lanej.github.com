@@ -679,7 +679,7 @@
     ],
     "id": "essay-wide-prose-right",
     "type": "align",
-    "selector": ".sc-hero-copy, .sc-section:not(.sc-section-text-only) .sc-section-text, .sc-article .footnotes, .sc-article .article-footer",
+    "selector": ".sc-hero-copy, .sc-section:not(.sc-section-text-only) .sc-section-text, .sc-article .article-footer",
     "edge": "right",
     "tolerance": 2,
     "pages": [
@@ -696,7 +696,7 @@
       "desktop",
       "4k"
     ],
-    "reason": "STYLE.md: Openings, chapters with visuals, endnotes, and the footer share the left column right edge; text-only chapters span both columns."
+    "reason": "STYLE.md: Openings, chapters with visuals, and the footer share the left column right edge; text-only chapters and endnotes span both columns."
   },
   {
     "severity": "error",
@@ -1059,13 +1059,13 @@
   {
     "id": "essay-prose-columns-narrow",
     "type": "style",
-    "selector": ".sc-section-text-only .sc-section-copy",
+    "selector": ".sc-section-text-only .sc-section-copy, .sc-article .footnotes > ol",
     "property": "column-count",
     "allowed": [
       "auto",
       "1"
     ],
-    "reason": "STYLE.md: Text-only chapters return to one sequential reading column at narrow widths, enlarged text, and print.",
+    "reason": "STYLE.md: Text-only chapters return to one sequential reading column at narrow widths, enlarged text, and print. The same treatment applies to endnotes.",
     "severity": "error",
     "optional": true,
     "designRules": [
@@ -1091,13 +1091,13 @@
   {
     "id": "essay-prose-columns-print-enlarged",
     "type": "style",
-    "selector": ".sc-section-text-only .sc-section-copy",
+    "selector": ".sc-section-text-only .sc-section-copy, .sc-article .footnotes > ol",
     "property": "column-count",
     "allowed": [
       "auto",
       "1"
     ],
-    "reason": "STYLE.md: Text-only chapters return to one sequential reading column at narrow widths, enlarged text, and print.",
+    "reason": "STYLE.md: Text-only chapters return to one sequential reading column at narrow widths, enlarged text, and print. The same treatment applies to endnotes.",
     "severity": "error",
     "optional": true,
     "designRules": [
@@ -1185,8 +1185,8 @@
   {
     "id": "essay-chapter-title-span",
     "type": "align",
-    "selector": ".sc-article, .sc-section-header, .sc-section-text-only .sc-section-text",
-    "reason": "STYLE.md: Chapter titles and text-only prose containers span the full essay width.",
+    "selector": ".sc-article, .sc-section-header, .sc-section-text-only .sc-section-text, .sc-article .footnotes",
+    "reason": "STYLE.md: Chapter titles, text-only prose containers, and endnotes span the full essay width.",
     "severity": "error",
     "optional": true,
     "designRules": [
@@ -1213,8 +1213,8 @@
   {
     "id": "essay-text-only-columns-wide",
     "type": "style",
-    "selector": ".sc-section-text-only .sc-section-copy",
-    "reason": "STYLE.md: Every wide text-only chapter uses two prose columns.",
+    "selector": ".sc-section-text-only .sc-section-copy, .sc-article .footnotes > ol",
+    "reason": "STYLE.md: Every wide text-only chapter uses two prose columns. The same treatment applies to endnotes.",
     "severity": "error",
     "optional": true,
     "designRules": [
@@ -1243,8 +1243,8 @@
   {
     "id": "essay-text-only-column-gap",
     "type": "style",
-    "selector": ".sc-section-text-only .sc-section-copy",
-    "reason": "STYLE.md: Text-only prose uses the same 48px gutter as prose beside visuals.",
+    "selector": ".sc-section-text-only .sc-section-copy, .sc-article .footnotes > ol",
+    "reason": "STYLE.md: Text-only prose uses the same 48px gutter as prose beside visuals. The same treatment applies to endnotes.",
     "severity": "error",
     "optional": true,
     "designRules": [
@@ -1273,8 +1273,8 @@
   {
     "id": "essay-text-only-column-rule",
     "type": "style",
-    "selector": ".sc-section-text-only .sc-section-copy",
-    "reason": "STYLE.md: A thin site-line-colored divider separates wide prose columns beneath the chapter heading, reinforcing left-column-first reading.",
+    "selector": ".sc-section-text-only .sc-section-copy, .sc-article .footnotes > ol",
+    "reason": "STYLE.md: A thin site-line-colored divider separates wide prose columns beneath the chapter heading, reinforcing left-column-first reading. The same treatment applies to endnotes.",
     "severity": "error",
     "optional": true,
     "designRules": [
@@ -1303,8 +1303,8 @@
   {
     "id": "essay-text-only-column-balance",
     "type": "style",
-    "selector": ".sc-section-text-only .sc-section-copy",
-    "reason": "STYLE.md: Balance prose within each chapter without fixed heights or manual breaks.",
+    "selector": ".sc-section-text-only .sc-section-copy, .sc-article .footnotes > ol",
+    "reason": "STYLE.md: Balance prose within each chapter without fixed heights or manual breaks. The same treatment applies to endnotes.",
     "severity": "error",
     "optional": true,
     "designRules": [
@@ -1359,5 +1359,21 @@
     "allowed": [
       "avoid-column"
     ]
+  },
+  {
+    "id": "essay-endnotes-keep-source",
+    "type": "style",
+    "selector": ".sc-article .footnotes > ol > li",
+    "property": "break-inside",
+    "allowed": [
+      "avoid"
+    ],
+    "optional": true,
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "reason": "STYLE.md: Each citation keeps its source, explanation, and return link together across columns and pages."
   }
 ]

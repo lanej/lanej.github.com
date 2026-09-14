@@ -71,8 +71,9 @@ Chapter titles span both columns. Without a visual, chapter prose flows down
 the left column and then the right, balanced within each chapter. At narrow widths, enlarged
 text, and in print, stack heading, prose, and supporting visuals in a centered
 reading column capped at 640px. Preserve authored DOM order and left-aligned prose;
-use one prose column when stacked. Endnotes and the footer follow
-the prose column. Keep the same subject icon on discovery entries and essay headers.
+use one prose column when stacked. Endnotes use the same two-column treatment
+on wide screens, keeping each citation intact, and one column when stacked.
+The footer follows the left prose column. Keep the same subject icon on discovery entries and essay headers.
 Keep full-text RSS and one document-wide footnote collection. See STYLE.md.
 Viewrule is the sole essay geometry detector. Before changing UI, build the site
 and run `python3 scripts/viewrule.py contract`; read `.ui-review/rules.json` and
