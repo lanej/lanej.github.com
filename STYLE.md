@@ -56,10 +56,13 @@ Avoid excessive typographic emphasis inside prose. Bold, blockquotes, code, and 
 Every essay shares one responsive column system for its opening and chapters.
 When the essay container has at least 64rem of readable width, use two equal
 columns with a 48px gutter: prose on the left and supporting visuals on the right.
-The 1240px essay shell caps each column at 596px. Chapters without a supporting
-visual keep their heading and prose in that same left column; do not center them
-or add illustrations merely to fill the other column. Endnotes and the footer
-align with the prose column.
+The 1240px essay shell caps each column at 596px. Chapter headings span both
+columns. When a chapter has supporting visuals, prose occupies the left column
+and visuals the right. Without visuals, prose flows down the left column and
+then the right, balanced separately within each chapter. Keep paragraphs,
+callouts, lists, code blocks, and figures together where they fit; keep subsection
+headings with the following text. Do not add illustrations just to fill space.
+Endnotes and the footer retain their left-column alignment.
 
 Below that threshold, and with enlarged text or print, use one centered reading
 column capped at 640px. Container queries use rem units so enlarged text triggers
@@ -67,7 +70,7 @@ the same reflow. Keep headings before prose and figures after prose in DOM order
 stack opening art and supporting diagrams below their prose at narrow widths.
 Opening diagrams reflow into readable labeled nodes on phones; illustrations
 retain their aspect ratio. Keep text left-aligned and preserve natural word spacing.
-Never split running paragraphs into newspaper columns or shrink text to fit.
+Use one prose column in stacked layouts; never shrink text to fit.
 
 The general site shell is capped at `--max: 1120px`; essays use the shared 1240px
 shell. Titles and descriptions span the essay opening above the copy and art.
@@ -288,8 +291,10 @@ from the stylesheet being checked.
 | Heading before prose; supporting visuals alongside on wide screens and after prose when stacked | `essay-chapter-order`, `essay-support-order-narrow`, `essay-support-order-print-enlarged`, `essay-support-columns-no-overlap` |
 | Every authored chapter and visual container remains visible | `essay-chapters-visible`, `essay-visuals-visible` (`vertical-order`) |
 | Opening visuals follow prose when stacked and stay separate on wide screens; title icons remain visible | `essay-opening-order-narrow`, `essay-opening-order-enlarged`, `essay-opening-no-overlap`, `essay-title-icon-present` |
-| Sequential paragraphs without overlap or rearrangement | `essay-paragraph-order` (`vertical-order`) |
-| Left-aligned prose in one column | `essay-prose-alignment`, `essay-prose-direction`, `essay-prose-columns` (`style`) |
+| Top-to-bottom paragraphs in single-column states; native column flow in wide text-only chapters | `essay-paragraph-order` (`vertical-order`) |
+| Left-aligned prose; two balanced columns for wide text-only chapters, one otherwise | `essay-prose-alignment`, `essay-prose-direction`, `essay-prose-columns`, `essay-text-only-columns-wide`, `essay-prose-columns-narrow`, `essay-prose-columns-print-enlarged` (`style`) |
+| Full-width chapter headings and text-only containers | `essay-chapter-title-span` (`align`) |
+| Shared gutter, balanced columns, intact blocks where possible | `essay-text-only-column-gap`, `essay-text-only-column-balance`, `essay-text-only-keep-blocks` (`style`) |
 | Text components do not truncate their own content | `site-text-not-clipped` (`no-clip`) |
 | Visible captions on shared diagrams | `site-diagram-context` (`context`) |
 | At least 16px home introduction text | `site-introduction-text` (`min-font-size`) |

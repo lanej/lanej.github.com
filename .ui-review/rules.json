@@ -41,7 +41,7 @@
   {
     "id": "essay-reading-measure",
     "type": "reading-column",
-    "selector": ".sc-section, .sc-section-header, .sc-section-text, .sc-section-visuals, .sc-section-copy > p, .sc-article .footnotes, .sc-article .article-footer, .sc-section-main, .sc-hero",
+    "selector": ".sc-section, .sc-section-header, .sc-section-text, .sc-section-visuals, .sc-section-copy > p, .sc-article .footnotes, .sc-article .article-footer, .sc-hero",
     "container": ".sc-article",
     "maxWidth": 640,
     "tolerance": 2,
@@ -71,7 +71,7 @@
   {
     "id": "essay-chapter-order",
     "type": "vertical-order",
-    "selector": ".sc-section-main",
+    "selector": ".sc-section",
     "groups": [
       {
         "selector": ".sc-section-header",
@@ -94,7 +94,7 @@
   {
     "id": "essay-paragraph-order",
     "type": "vertical-order",
-    "selector": ".sc-section-copy:has(> p)",
+    "selector": ".sc-section:not(.sc-section-text-only) .sc-section-copy:has(> p)",
     "groups": [
       {
         "selector": ":scope > p",
@@ -102,7 +102,7 @@
       }
     ],
     "tolerance": 2,
-    "reason": "STYLE.md: Measure and layout. Paragraphs retain one continuous top-to-bottom reading order.",
+    "reason": "STYLE.md: Chapters with visuals retain one left prose column and top-to-bottom paragraph order.",
     "severity": "error",
     "optional": true,
     "designRules": [
@@ -130,13 +130,13 @@
   {
     "id": "essay-prose-columns",
     "type": "style",
-    "selector": ".sc-section-copy",
+    "selector": ".sc-section:not(.sc-section-text-only) .sc-section-copy",
     "property": "column-count",
     "allowed": [
       "auto",
       "1"
     ],
-    "reason": "STYLE.md: Measure and layout. Preserve one prose column, including on wide screens, at enlarged text sizes, and in print.",
+    "reason": "STYLE.md: Chapters with visuals retain one left prose column and top-to-bottom paragraph order.",
     "severity": "error",
     "optional": true,
     "designRules": [
@@ -616,7 +616,7 @@
   {
     "id": "essay-reading-measure-print-enlarged",
     "type": "reading-column",
-    "selector": ".sc-section, .sc-section-header, .sc-section-text, .sc-section-visuals, .sc-section-copy > p, .sc-article .footnotes, .sc-article .article-footer, .sc-section-main, .sc-hero",
+    "selector": ".sc-section, .sc-section-header, .sc-section-text, .sc-section-visuals, .sc-section-copy > p, .sc-article .footnotes, .sc-article .article-footer, .sc-hero",
     "container": ".sc-article",
     "maxWidth": 640,
     "tolerance": 2,
@@ -652,7 +652,7 @@
     ],
     "id": "essay-wide-prose-left",
     "type": "align",
-    "selector": ".sc-article, .sc-hero-copy, .sc-section-main, .sc-section-header, .sc-section-text, .sc-article .footnotes, .sc-article .article-footer",
+    "selector": ".sc-article, .sc-hero-copy, .sc-section-header, .sc-section-text, .sc-article .footnotes, .sc-article .article-footer",
     "edge": "left",
     "tolerance": 2,
     "pages": [
@@ -669,7 +669,7 @@
       "desktop",
       "4k"
     ],
-    "reason": "STYLE.md: Openings, chapters with or without visuals, endnotes, and the footer share the same left prose column on wide screens."
+    "reason": "STYLE.md: Chapter headings and copy begin at the shared left essay edge on wide screens."
   },
   {
     "severity": "error",
@@ -679,7 +679,7 @@
     ],
     "id": "essay-wide-prose-right",
     "type": "align",
-    "selector": ".sc-hero-copy, .sc-section-main, .sc-section-header, .sc-section-text, .sc-article .footnotes, .sc-article .article-footer",
+    "selector": ".sc-hero-copy, .sc-section:not(.sc-section-text-only) .sc-section-text, .sc-article .footnotes, .sc-article .article-footer",
     "edge": "right",
     "tolerance": 2,
     "pages": [
@@ -696,7 +696,7 @@
       "desktop",
       "4k"
     ],
-    "reason": "STYLE.md: Openings, chapters with or without visuals, endnotes, and the footer share the same left prose column on wide screens."
+    "reason": "STYLE.md: Openings, chapters with visuals, endnotes, and the footer share the left column right edge; text-only chapters span both columns."
   },
   {
     "severity": "error",
@@ -706,12 +706,12 @@
     ],
     "id": "essay-prose-local-measure",
     "type": "reading-column",
-    "selector": ".sc-section-copy > p",
+    "selector": ".sc-section:not(.sc-section-text-only) .sc-section-copy > p",
     "container": ".sc-section-text",
     "maxWidth": 640,
     "tolerance": 2,
     "optional": true,
-    "reason": "STYLE.md: Paragraphs fill the bounded prose column without indentation or a second text column."
+    "reason": "STYLE.md: Chapters with visuals retain one left prose column and top-to-bottom paragraph order."
   },
   {
     "severity": "error",
@@ -721,7 +721,7 @@
     ],
     "id": "essay-support-columns-no-overlap",
     "type": "no-overlap",
-    "selector": ".sc-section-main, .sc-section-visuals",
+    "selector": ".sc-section-text, .sc-section-visuals",
     "optional": true,
     "reason": "STYLE.md: Prose and supporting visuals must remain separate as the essay reflows."
   },
@@ -736,7 +736,7 @@
     "selector": ".sc-section",
     "groups": [
       {
-        "selector": ".sc-section-main",
+        "selector": ".sc-section-text",
         "optional": false
       },
       {
@@ -773,7 +773,7 @@
     "selector": ".sc-section",
     "groups": [
       {
-        "selector": ".sc-section-main",
+        "selector": ".sc-section-text",
         "optional": false
       },
       {
@@ -986,5 +986,348 @@
     "edge": "right",
     "tolerance": 2,
     "reason": "STYLE.md: Supporting chapter figures occupy the right essay column and share the shell right edge."
+  },
+  {
+    "id": "essay-paragraph-order-narrow",
+    "type": "vertical-order",
+    "selector": ".sc-section-text-only .sc-section-copy:has(> p)",
+    "groups": [
+      {
+        "selector": ":scope > p",
+        "optional": false
+      }
+    ],
+    "tolerance": 2,
+    "reason": "STYLE.md: Text-only chapters return to one sequential reading column at narrow widths, enlarged text, and print.",
+    "severity": "error",
+    "optional": true,
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/harmony",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/lead-with-problems",
+      "writing/minimum-effective-dose",
+      "writing/socrates",
+      "writing/systems-that-remember"
+    ],
+    "viewports": [
+      "small",
+      "mobile",
+      "tablet",
+      "breakpoint"
+    ]
+  },
+  {
+    "id": "essay-paragraph-order-print-enlarged",
+    "type": "vertical-order",
+    "selector": ".sc-section-text-only .sc-section-copy:has(> p)",
+    "groups": [
+      {
+        "selector": ":scope > p",
+        "optional": false
+      }
+    ],
+    "tolerance": 2,
+    "reason": "STYLE.md: Text-only chapters return to one sequential reading column at narrow widths, enlarged text, and print.",
+    "severity": "error",
+    "optional": true,
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "pages": [
+      "writing/close-the-loop-print",
+      "writing/close-the-loop-enlarged",
+      "writing/harmony-print",
+      "writing/harmony-enlarged",
+      "writing/how-you-do-it-is-part-of-the-decision-print",
+      "writing/how-you-do-it-is-part-of-the-decision-enlarged",
+      "writing/lead-with-problems-print",
+      "writing/lead-with-problems-enlarged",
+      "writing/minimum-effective-dose-print",
+      "writing/minimum-effective-dose-enlarged",
+      "writing/socrates-print",
+      "writing/socrates-enlarged",
+      "writing/systems-that-remember-print",
+      "writing/systems-that-remember-enlarged"
+    ]
+  },
+  {
+    "id": "essay-prose-columns-narrow",
+    "type": "style",
+    "selector": ".sc-section-text-only .sc-section-copy",
+    "property": "column-count",
+    "allowed": [
+      "auto",
+      "1"
+    ],
+    "reason": "STYLE.md: Text-only chapters return to one sequential reading column at narrow widths, enlarged text, and print.",
+    "severity": "error",
+    "optional": true,
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/harmony",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/lead-with-problems",
+      "writing/minimum-effective-dose",
+      "writing/socrates",
+      "writing/systems-that-remember"
+    ],
+    "viewports": [
+      "small",
+      "mobile",
+      "tablet",
+      "breakpoint"
+    ]
+  },
+  {
+    "id": "essay-prose-columns-print-enlarged",
+    "type": "style",
+    "selector": ".sc-section-text-only .sc-section-copy",
+    "property": "column-count",
+    "allowed": [
+      "auto",
+      "1"
+    ],
+    "reason": "STYLE.md: Text-only chapters return to one sequential reading column at narrow widths, enlarged text, and print.",
+    "severity": "error",
+    "optional": true,
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "pages": [
+      "writing/close-the-loop-print",
+      "writing/close-the-loop-enlarged",
+      "writing/harmony-print",
+      "writing/harmony-enlarged",
+      "writing/how-you-do-it-is-part-of-the-decision-print",
+      "writing/how-you-do-it-is-part-of-the-decision-enlarged",
+      "writing/lead-with-problems-print",
+      "writing/lead-with-problems-enlarged",
+      "writing/minimum-effective-dose-print",
+      "writing/minimum-effective-dose-enlarged",
+      "writing/socrates-print",
+      "writing/socrates-enlarged",
+      "writing/systems-that-remember-print",
+      "writing/systems-that-remember-enlarged"
+    ]
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "id": "essay-prose-local-measure-narrow",
+    "type": "reading-column",
+    "selector": ".sc-section-text-only .sc-section-copy > p",
+    "container": ".sc-section-text",
+    "maxWidth": 640,
+    "tolerance": 2,
+    "optional": true,
+    "reason": "STYLE.md: Text-only chapters return to one sequential reading column at narrow widths, enlarged text, and print.",
+    "pages": [
+      "writing/close-the-loop",
+      "writing/harmony",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/lead-with-problems",
+      "writing/minimum-effective-dose",
+      "writing/socrates",
+      "writing/systems-that-remember"
+    ],
+    "viewports": [
+      "small",
+      "mobile",
+      "tablet",
+      "breakpoint"
+    ]
+  },
+  {
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "id": "essay-prose-local-measure-print-enlarged",
+    "type": "reading-column",
+    "selector": ".sc-section-text-only .sc-section-copy > p",
+    "container": ".sc-section-text",
+    "maxWidth": 640,
+    "tolerance": 2,
+    "optional": true,
+    "reason": "STYLE.md: Text-only chapters return to one sequential reading column at narrow widths, enlarged text, and print.",
+    "pages": [
+      "writing/close-the-loop-print",
+      "writing/close-the-loop-enlarged",
+      "writing/harmony-print",
+      "writing/harmony-enlarged",
+      "writing/how-you-do-it-is-part-of-the-decision-print",
+      "writing/how-you-do-it-is-part-of-the-decision-enlarged",
+      "writing/lead-with-problems-print",
+      "writing/lead-with-problems-enlarged",
+      "writing/minimum-effective-dose-print",
+      "writing/minimum-effective-dose-enlarged",
+      "writing/socrates-print",
+      "writing/socrates-enlarged",
+      "writing/systems-that-remember-print",
+      "writing/systems-that-remember-enlarged"
+    ]
+  },
+  {
+    "id": "essay-chapter-title-span",
+    "type": "align",
+    "selector": ".sc-article, .sc-section-header, .sc-section-text-only .sc-section-text",
+    "reason": "STYLE.md: Chapter titles and text-only prose containers span the full essay width.",
+    "severity": "error",
+    "optional": true,
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/harmony",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/lead-with-problems",
+      "writing/minimum-effective-dose",
+      "writing/socrates",
+      "writing/systems-that-remember"
+    ],
+    "viewports": [
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "edge": "right",
+    "tolerance": 2
+  },
+  {
+    "id": "essay-text-only-columns-wide",
+    "type": "style",
+    "selector": ".sc-section-text-only .sc-section-copy",
+    "reason": "STYLE.md: Every wide text-only chapter uses two prose columns.",
+    "severity": "error",
+    "optional": true,
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/harmony",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/lead-with-problems",
+      "writing/minimum-effective-dose",
+      "writing/socrates",
+      "writing/systems-that-remember"
+    ],
+    "viewports": [
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "property": "column-count",
+    "allowed": [
+      "2"
+    ]
+  },
+  {
+    "id": "essay-text-only-column-gap",
+    "type": "style",
+    "selector": ".sc-section-text-only .sc-section-copy",
+    "reason": "STYLE.md: Text-only prose uses the same 48px gutter as prose beside visuals.",
+    "severity": "error",
+    "optional": true,
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/harmony",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/lead-with-problems",
+      "writing/minimum-effective-dose",
+      "writing/socrates",
+      "writing/systems-that-remember"
+    ],
+    "viewports": [
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "property": "column-gap",
+    "allowed": [
+      "48px"
+    ]
+  },
+  {
+    "id": "essay-text-only-column-balance",
+    "type": "style",
+    "selector": ".sc-section-text-only .sc-section-copy",
+    "reason": "STYLE.md: Balance prose within each chapter without fixed heights or manual breaks.",
+    "severity": "error",
+    "optional": true,
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/harmony",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/lead-with-problems",
+      "writing/minimum-effective-dose",
+      "writing/socrates",
+      "writing/systems-that-remember"
+    ],
+    "viewports": [
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "property": "column-fill",
+    "allowed": [
+      "balance"
+    ]
+  },
+  {
+    "id": "essay-text-only-keep-blocks",
+    "type": "style",
+    "selector": ".sc-section-text-only .sc-section-copy > :is(p,blockquote,ul,ol,pre,figure)",
+    "reason": "STYLE.md: Keep paragraphs, callouts, lists, code, and figures together where they fit.",
+    "severity": "error",
+    "optional": true,
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/harmony",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/lead-with-problems",
+      "writing/minimum-effective-dose",
+      "writing/socrates",
+      "writing/systems-that-remember"
+    ],
+    "viewports": [
+      "laptop",
+      "desktop",
+      "4k"
+    ],
+    "property": "break-inside",
+    "allowed": [
+      "avoid-column"
+    ]
   }
 ]
