@@ -25,7 +25,7 @@ class SelectionTests(unittest.TestCase):
 
     def test_discovery_visual_dependencies(self):
         for name in ("item-visual", "writing-item-visual"):
-            self.assertEqual(affected_routes([f"layouts/partials/{name}.html"], self.routes), ["/", "/writing/"])
+            self.assertEqual(affected_routes([f"layouts/partials/{name}.html"], self.routes), ["/", "/writing/", "/writing/example/"])
         self.assertEqual(affected_routes(["content/writing/example/art.webp"], self.routes), ["/", "/writing/", "/writing/example/"])
 
     def test_page_specific_templates(self):
@@ -93,6 +93,16 @@ class SelectionTests(unittest.TestCase):
         self.assertEqual(rule_routes(json.dumps(old), json.dumps(new), names), {'/', '/writing/'})
         self.assertEqual(rule_routes('', json.dumps(old), names), {'/'})
         self.assertEqual(rule_routes(json.dumps(old), '[]', names), {'/'})
+
+    def test_optional_rule_uses_visible_selector_consumers(self):
+        names = {'home':'/', 'writing':'/writing/', 'about':'/about/'}
+        rule = {'id':'optional','selector':'.writing-grid','optional':True}
+        self.assertEqual(rule_routes('[]', json.dumps([rule]), names, self.documents), {'/writing/'})
+        self.assertEqual(rule_routes(json.dumps([rule]), '[]', names, self.documents), {'/writing/'})
+        changed = dict(rule, selector='.home-writing')
+        self.assertEqual(rule_routes(json.dumps([rule]), json.dumps([changed]), names, self.documents), {'/', '/writing/'})
+        for change in (dict(rule, optional=False), dict(rule, selector='h1'), dict(rule, selector='.runtime-only')):
+            self.assertEqual(rule_routes('[]', json.dumps([change]), names, self.documents), set(names.values()))
 
     def test_global_rule_change_selects_all(self):
         self.assertEqual(rule_routes('[]', '[{"id":"global"}]', {'home':'/', 'writing':'/writing/'}), {'/', '/writing/'})

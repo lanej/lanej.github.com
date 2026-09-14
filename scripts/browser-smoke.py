@@ -39,6 +39,14 @@ def main():
     with sync_playwright() as pw:
         launch = {'executable_path': args.chromium_path, 'args': ['--no-sandbox']} if args.chromium_path else {}
         browser = pw.chromium.launch(**launch)
+        essay_icons = {}
+        if any(route.startswith('/writing/') and route != '/writing/' for route, _ in routes):
+            archive = browser.new_page()
+            archive.goto(urljoin(args.url, '/writing/'), wait_until='networkidle')
+            essay_icons = dict(archive.locator('.writing-item').evaluate_all(
+                '(items) => items.map(item => [item.querySelector("h2 a").getAttribute("href"), item.querySelector(".item-visual svg").outerHTML])'
+            ))
+            archive.close()
         for width, height in VIEWPORTS:
             context = browser.new_context(
                 viewport={'width': width, 'height': height},
@@ -102,13 +110,17 @@ def main():
                     assert fonts and all(font == site_font for font in fonts), f'{route}: essay font differs from site'
                     assert page.locator('.sc-section-visuals [data-essay-diagram]').count() == page.locator('[data-essay-diagram]').count(), f'{route}: misplaced diagram'
 
+                    icon = page.locator('.sc-title .item-visual svg')
+                    assert icon.count() == 1, f'{route}: missing essay subject icon'
+                    if route in essay_icons:
+                        assert icon.evaluate('(svg) => svg.outerHTML') == essay_icons[route], f'{route}: essay icon differs from archive'
                     assert page.locator('.sc-hero-art').count() == 1, f'{route}: missing opening visual'
                     assert page.locator('.sc-hero-copy > .sc-accent').count() == 1, f'{route}: missing opening callout'
                     if label == 'close-the-loop':
                         assert page.locator('.sc-section-copy table').count() == 0, 'Table remains in the prose column'
                         assert page.locator('.sc-section-visuals table').count() >= 1, 'Missing supporting table'
                         page.locator('.sc-section').filter(has=page.locator('table')).first.screenshot(path=str(out / f'chapter-table-{width}.png'))
-                        page.locator('.sc-section-text-only').first.screenshot(path=str(out / f'chapter-centered-column-{width}.png'))
+                        page.locator('.sc-section-text-only').first.screenshot(path=str(out / f'chapter-reading-column-{width}.png'))
                     if label == 'socrates':
                         handoff = page.locator('#preserve-intent')
                         assert handoff.locator('[data-essay-diagram]').count() == 2, 'Handoff needs two diagrams'

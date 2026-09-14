@@ -53,13 +53,28 @@ Avoid excessive typographic emphasis inside prose. Bold, blockquotes, code, and 
 
 ## Measure and layout
 
-Every chapter uses a single, horizontally centered column capped at `--copy: 640px`, at every viewport width. The essay container overrides the general site reading measure; other page layouts keep the shared root token. Chapter numbers, headings, prose, diagrams, tables, endnotes, and the article footer align to that reading column. Center the container; keep prose left-aligned. Supporting visuals follow the chapter prose in their authored order, with the shared vertical spacing between multiple figures.
+Every essay shares one responsive column system for its opening and chapters.
+When the essay container has at least 64rem of readable width, use two equal
+columns with a 48px gutter: prose on the left and supporting visuals on the right.
+The 1240px essay shell caps each column at 596px. Chapters without a supporting
+visual keep their heading and prose in that same left column; do not center them
+or add illustrations merely to fill the other column. Endnotes and the footer
+align with the prose column.
 
-The 640px essay cap targets roughly 60–75 characters per full body-text line. In Chromium with DejaVu Sans at 16.8px, the decision essay measured a median of 71 characters and a 90th percentile of 75, excluding paragraph-final lines. This is a measured default, not a guarantee for every system font.
+Below that threshold, and with enlarged text or print, use one centered reading
+column capped at 640px. Container queries use rem units so enlarged text triggers
+the same reflow. Keep headings before prose and figures after prose in DOM order;
+stack opening art and supporting diagrams below their prose at narrow widths.
+Opening diagrams reflow into readable labeled nodes on phones; illustrations
+retain their aspect ratio. Keep text left-aligned and preserve natural word spacing.
+Never split running paragraphs into newspaper columns or shrink text to fit.
 
-Use the available width below the cap, with responsive side gutters. Keep one semantic copy of the text and a continuous top-to-bottom reading order. Do not split prose into newspaper columns or introduce a separate diagram column on wide screens. Keep subheadings with the following content; do not fix chapter heights or shrink type. Print uses the same single column, and full-text RSS retains authored order.
-
-The general site shell is capped at `--max: 1120px`. Essays retain the shared 1240px opening composition for their title, introduction, and accompanying art; the chapter reading column is centered within that shell.
+The general site shell is capped at `--max: 1120px`; essays use the shared 1240px
+shell. Titles and descriptions span the essay opening above the copy and art.
+The same subject symbol from the homepage/archive sits beside each essay title
+(40px desktop, 32px phone). Use the shared partial and symbol mapping, with no
+per-article copies of the SVG. Keep its decorative semantics and the title's
+accessible name. Printed essays omit this decorative symbol.
 
 The homepage keeps the compact introduction above a two-column destination grid:
 Writing on the left and Labs on the right. Each column needs at least 24rem, with a
@@ -83,9 +98,9 @@ Whitespace should separate ideas before borders or containers do. Prefer vertica
 Every essay uses `layouts/writing/single.html`, `layouts/partials/essay-content.html`, and `assets/css/essays.css`. No article-specific layout or stylesheet.
 
 - Writing link and calculated reading time appear above the title. Dates stay in metadata and RSS only.
-- The title and description span the full essay width above the opening columns. The accent callout and opening prose sit beside the relevant visual beneath them. The first introductory blockquote becomes the opening callout without duplicating it; RSS keeps the authored order. Use `essay_visual` for a shared vector diagram or `essay_image` for an existing illustration. Large illustrations fade into the background; opening visuals are omitted on small phones where the copy takes priority.
+- The title and description span the full essay width above the opening columns. The accent callout and opening prose sit beside the relevant visual beneath them. The first introductory blockquote becomes the opening callout without duplicating it; RSS keeps the authored order. Use `essay_visual` for a shared vector diagram or `essay_image` for an existing illustration. Large illustrations fade into the background; opening visuals stack below prose on phones. Print omits opening art.
 - Every Markdown H2 starts a chapter with a generated two-digit number, short accent rule, common heading size, and thin divider. H3 is an unnumbered subsection.
-- Chapters share the centered reading column described above. Headings precede prose; diagrams and tables follow it at every width. Heading and spacing treatments stay shared.
+- Chapters share the responsive columns described above. Headings precede prose; diagrams and tables follow it in DOM order and appear beside it on wide screens. Heading and spacing treatments stay shared.
 - All essays share the same archive/feed footer and citation behavior.
 
 Chapter numbers come from heading order, not handwritten numbers. Do not independently opt articles into a different contents menu, heading treatment, or metadata position.
@@ -137,7 +152,7 @@ Citations are contextual, not ornamental.
 
 The preferred article treatment is the existing subtle underline on the exact phrase or claim related to the source. Do not underline an entire paragraph when a phrase is sufficient. Do not restore large numeric footnote markers as the primary interaction.
 
-Citation interaction may reveal richer source detail, but the prose must remain readable without opening it. The fallback footnotes must remain available for non-interactive and print contexts. Endnotes use the same centered, maximum-width column as the chapters, on screen and in print. Keep each source together.
+Citation interaction may reveal richer source detail, but the prose must remain readable without opening it. The fallback footnotes must remain available for non-interactive and print contexts. Endnotes align with the chapter prose column, including when it centers in narrow layouts and print. Keep each source together.
 
 Citation styling must not make sourced prose visually louder than the argument itself.
 
@@ -187,7 +202,7 @@ Article images should preserve intrinsic aspect ratio, stay within their contain
 
 Inline code uses the shared dark surface and compact padding. Code blocks use the same surface with a thin site rule and horizontal scrolling when required.
 
-Chapter tables follow the prose alongside other supporting visuals, in their authored order and within the same centered reading column. They remain inline in full-text RSS. Tables may scroll horizontally on narrow screens. Do not shrink table text until it becomes unreadable merely to avoid scrolling.
+Chapter tables follow the prose in DOM order alongside other supporting visuals, using the right column on wide screens and stacking below prose at narrow widths. They remain inline in full-text RSS. Tables may scroll horizontally on narrow screens. Do not shrink table text until it becomes unreadable merely to avoid scrolling.
 
 Do not introduce syntax or table colors that compete with the site's accent unless a site-wide syntax system is adopted.
 
@@ -269,9 +284,10 @@ from the stylesheet being checked.
 | Homepage Writing and Labs share a row and shell edges on wide screens; stack in that order on phones and enlarged text, with Work below both | `home-destination-first-row`, `home-destination-left-edge`, `home-destination-right-edge`, `home-destinations-no-overlap`, `home-destinations-phone-order`, `home-destinations-enlarged-order`, `home-work-follows-destinations` |
 | Writing archive heading, introduction, and left-column entries share the shell left edge within 2px | `writing-index-shell-alignment` (`align`) |
 | Two archive columns on wide screens, one at narrow widths or enlarged text; entries remain separate and read across rows | `writing-grid-right-edge`, `writing-grid-first-row`, `writing-grid-no-overlap`, `writing-grid-phone-column`, `writing-grid-enlarged-column`, `writing-grid-reading-order` |
-| Fill the centered column, capped at 640px, within 2px rounding tolerance | `essay-reading-measure` (`reading-column`) |
-| Heading, prose, then optional supporting visuals in DOM and visible order | `essay-chapter-order` (`vertical-order`) |
+| Fill the centered 640px column when stacked; align all wide-screen prose columns | `essay-reading-measure`, `essay-reading-measure-print-enlarged`, `essay-wide-prose-left`, `essay-wide-prose-right`, `essay-wide-support-right`, `essay-wide-columns`, `essay-prose-local-measure` |
+| Heading before prose; supporting visuals alongside on wide screens and after prose when stacked | `essay-chapter-order`, `essay-support-order-narrow`, `essay-support-order-print-enlarged`, `essay-support-columns-no-overlap` |
 | Every authored chapter and visual container remains visible | `essay-chapters-visible`, `essay-visuals-visible` (`vertical-order`) |
+| Opening visuals follow prose when stacked and stay separate on wide screens; title icons remain visible | `essay-opening-order-narrow`, `essay-opening-order-enlarged`, `essay-opening-no-overlap`, `essay-title-icon-present` |
 | Sequential paragraphs without overlap or rearrangement | `essay-paragraph-order` (`vertical-order`) |
 | Left-aligned prose in one column | `essay-prose-alignment`, `essay-prose-direction`, `essay-prose-columns` (`style`) |
 | Text components do not truncate their own content | `site-text-not-clipped` (`no-clip`) |
@@ -285,8 +301,7 @@ justified prose fail. Print uses dark text on light surfaces through the shared
 print tokens, including code, tables, and diagram labels.
 
 Every selected essay runs at 320, 390, 768, 961, 1100, 1440, and 3840 CSS pixels.
-Socrates, Close the Loop, and the decision essay also run at 1440px in print media
-and at 200% root text. When selected, the homepage and Writing archive run at all seven widths, plus 200%
+Every essay also runs at 1440px in print media and at 200% root text. When selected, the homepage and Writing archive run at all seven widths, plus 200%
 root text at 320, 390, and 1440px. Other pages run at mobile, desktop, and 4K widths (404 at
 mobile and desktop). Change builds select affected routes; scheduled/manual audits
 cover all pages. Selection never removes states from an affected route. Full-page captures include overlapping native-scale details;
@@ -295,7 +310,7 @@ incomplete coverage fails rather than passing a resized overview.
 Essay selectors are optional on non-essay pages. Each essay's required readiness
 selector includes `.sc-article .sc-section`, and required chapter order groups
 ensure prose and headings cannot silently disappear. Supporting visuals remain
-optional in text-only chapters. Full-text RSS, chapter numbering, citation behavior,
+optional in text-only chapters, which retain the shared prose alignment. Full-text RSS, chapter numbering, citation behavior,
 and other functional checks remain in the website workflow.
 
 Run the commands in [Viewrule integration](docs/viewrule.md). The previous Python
