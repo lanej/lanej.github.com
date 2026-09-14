@@ -1,0 +1,91 @@
+name: Verify live essay columns after PR 65
+on:
+  push:
+    branches: [verify/essay-divider-65]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  live:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      EXPECTED_REVISION: "fb631cab8bbd85d9f0f0497182ec1f38b0f8d8de"
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: "fb631cab8bbd85d9f0f0497182ec1f38b0f8d8de"
+          persist-credentials: false
+      - name: Wait for deployment and fetch tested bundle
+        run: |
+          gh run watch 34891640634 --exit-status --interval 15
+          gh run download 34891640634 --name site-bundle --dir public
+      - name: Install verification dependencies
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install -r scripts/requirements.txt
+          echo "$PWD/.venv/bin" >> "$GITHUB_PATH"
+      - name: Verify published revision, bytes, and decoded images
+        run: |
+          python3 scripts/live-smoke.py
+          python3 - <<'PY'
+          import concurrent.futures, hashlib, io, json, os
+          from pathlib import Path
+          from urllib.request import Request, urlopen
+          from PIL import Image
+          expected=json.loads(Path('public/build.json').read_text())
+          assert expected['revision']==os.environ['EXPECTED_REVISION']
+          def get(path):
+              with urlopen(Request('https://lanej.io'+path,headers={'Cache-Control':'no-cache','User-Agent':'lanej-live-verification'}),timeout=30) as r:
+                  return r.read()
+          live=json.loads(get('/build.json'))
+          assert live==expected, 'Live manifest differs from deployment artifact'
+          def verify(item):
+              path,digest=item
+              data=get(path)
+              assert hashlib.sha256(data).hexdigest()==digest, path
+              if path.lower().endswith(('.png','.jpg','.jpeg','.webp','.gif','.ico')):
+                  with Image.open(io.BytesIO(data)) as im: im.load()
+                  return 1
+              return 0
+          with concurrent.futures.ThreadPoolExecutor(max_workers=6) as pool:
+              images=sum(pool.map(verify,expected['files'].items()))
+          Path('artifacts/live').mkdir(parents=True,exist_ok=True)
+          result={'revision':expected['revision'],'matched_files':len(expected['files']),'decoded_raster_images':images}
+          Path('artifacts/live/assets.json').write_text(json.dumps(result,indent=2))
+          print(json.dumps(result))
+          PY
+      - name: Check live navigation, citations, and essay behavior
+        run: |
+          chrome=$(command -v google-chrome)
+          python3 scripts/browser-smoke.py --url https://lanej.io/ --chromium-path "$chrome"
+      - name: Capture live article and header at phone and desktop sizes
+        run: |
+          python3 - <<'PY'
+          import os, shutil
+          from pathlib import Path
+          from playwright.sync_api import sync_playwright
+          out=Path('artifacts/live')
+          with sync_playwright() as p:
+              browser=p.chromium.launch(executable_path=shutil.which('google-chrome'),args=['--no-sandbox'])
+              for width in [390,1440]:
+                  page=browser.new_page(viewport={'width':width,'height':1000},color_scheme='dark',reduced_motion='reduce')
+                  for slug in ['how-you-do-it-is-part-of-the-decision','socrates','harmony']:
+                      page.goto('https://lanej.io/writing/'+slug+'/',wait_until='networkidle')
+                      assert page.locator('meta[name="site-revision"]').get_attribute('content')==os.environ['EXPECTED_REVISION']
+                      page.locator('img').evaluate_all('(imgs)=>Promise.all(imgs.map(img=>img.decode()))')
+                      page.screenshot(path=str(out/f'{slug}-{width}.png'),full_page=True)
+                      page.locator('.site-header').screenshot(path=str(out/f'{slug}-{width}-header.png'))
+                      for i,section in enumerate(page.locator('.sc-section').all()):
+                          section.screenshot(path=str(out/f'{slug}-{width}-chapter-{i+1}.png'))
+                  page.close()
+              browser.close()
+          PY
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: live-essay-divider
+          path: |
+            artifacts/live/
+            artifacts/smoke/
