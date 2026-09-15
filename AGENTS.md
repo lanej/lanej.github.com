@@ -5,6 +5,10 @@ small: Hugo, Markdown, hand-written templates and native CSS. No theme, frontend
 framework, external fonts, analytics, or decorative JavaScript without a concrete
 requirement. Never generate or retouch Josh’s photograph; use the supplied image.
 
+Keep README.md as a short entry point: purpose, quick start, and guide links.
+Put publishing workflows in docs/publishing.md and build/deployment details in
+docs/development.md. Do not append feature histories or test inventories to README.
+
 Edit the source, not `public/`. Keep one publishing path. Before merging, run the
 pinned Hugo build, source checks, and browser verification. Confirm the PR description
 contains current mobile and desktop screenshots of affected pages from the preview
