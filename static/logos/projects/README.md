@@ -1,4 +1,22 @@
-# GitHub project avatars
+# Project logos and GitHub avatars
+
+## Maintained projects
+
+`dotfiles.png` is the Nord terminal/mountain mark for
+[lanej/dotfiles](https://github.com/lanej/dotfiles). `viewrule.png` is the stacked-V
+mark for [lanej/viewrule](https://github.com/lanej/viewrule).
+
+Both are 512 × 512 transparent PNGs extracted from the approved “Nord Terminal
+and Layered V Icons” artwork created with OpenAI image generation on September 16,
+2026. The built-in image tool isolated each mark and cleaned its edges, then the
+exports were trimmed, centered, and downscaled. These files are identical to each
+repository's `docs/brand/*-logo.png` asset.
+
+The Open source page uses the existing 64px project-logo component. Preserve the
+alpha channel, original colors, proportions, and clear space; do not add an opaque
+background or tint the marks to match the site.
+
+## Contribution avatars
 
 GitHub repository-owner avatars retrieved September 11, 2026, at 96px.
 The PNG bytes are bundled unchanged and displayed with the same circular frame
