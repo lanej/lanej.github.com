@@ -1,0 +1,10 @@
+<div class="featured-project-header">
+  <img class="featured-project-logo" src="{{ .Get "src" | relURL }}" alt="{{ .Get "title" }} repository logo" width="64" height="64" loading="lazy" decoding="async">
+  <div class="featured-project-summary">
+    <div class="featured-project-title">
+      <h2 id="{{ .Get "id" }}">{{ .Get "title" }}</h2>
+      <span class="project-status">{{ .Get "status" }}</span>
+    </div>
+    <p class="featured-project-description">{{ .Get "description" }}</p>
+  </div>
+</div>

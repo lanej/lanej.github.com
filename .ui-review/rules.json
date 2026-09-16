@@ -1375,5 +1375,44 @@
       "DR-007"
     ],
     "reason": "STYLE.md: Each citation keeps its source, explanation, and return link together across columns and pages."
+  },
+  {
+    "id": "featured-project-header-no-overlap",
+    "type": "no-overlap",
+    "selector": ".featured-project-logo, .featured-project-title h2, .project-status, .featured-project-description",
+    "pages": [
+      "open-source"
+    ],
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "reason": "STYLE.md: Featured repository icons, titles, status pills, and descriptions remain separate as the header wraps."
+  },
+  {
+    "id": "featured-project-description-order",
+    "type": "vertical-order",
+    "selector": ".featured-project-summary",
+    "groups": [
+      {
+        "selector": ".featured-project-title",
+        "optional": false
+      },
+      {
+        "selector": ".featured-project-description",
+        "optional": false
+      }
+    ],
+    "pages": [
+      "open-source"
+    ],
+    "tolerance": 2,
+    "severity": "error",
+    "designRules": [
+      "DR-006",
+      "DR-007"
+    ],
+    "reason": "STYLE.md: Each featured repository keeps its title and status together above the short description, beside its transparent icon."
   }
 ]
