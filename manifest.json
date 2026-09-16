@@ -1,0 +1,22 @@
+{
+  "head_sha": "ca43e2523d1145ff6b00ab159e389944f9424aaa",
+  "build_sha": "84ae220f9fe6549d36fd4e647f7ebeb17c3026d8",
+  "pages": [
+    {
+      "route": "/open-source/",
+      "images": {
+        "mobile": {
+          "viewport": "open-source-mobile.png",
+          "full": "open-source-mobile-full.png",
+          "projects": "open-source-mobile-projects.png"
+        },
+        "desktop": {
+          "viewport": "open-source-desktop.png",
+          "full": "open-source-desktop-full.png",
+          "projects": "open-source-desktop-projects.png"
+        }
+      },
+      "title": "Open source"
+    }
+  ]
+}
