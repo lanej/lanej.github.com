@@ -121,11 +121,20 @@ stock icons, redraw logos, tint them to match the site, or hotlink remote favico
 Use a company's standalone brand mark when available, and its real wordmark
 otherwise. Sources and extraction notes live in `static/logos/companies/README.md`.
 
-Open-source project headings use locally bundled GitHub owner or organization
+Upstream contribution headings use locally bundled GitHub owner or organization
 avatars in the same 36px circular badge, with the same 5px padding and 12px gap.
 The shared `.work-logo` class keeps both treatments consistent. Keep project names
 beside the decorative avatars and align descriptions beneath the names. Avatar
 sources live in `static/logos/projects/README.md`.
+
+Featured repositories use their own transparent 64px marks beside a compact
+header: title and a small, non-interactive status pill, then a short description.
+Keep the icon beside the text; allow the title and status to wrap as needed on
+phones and with enlarged text. The heading retains its section anchor and the
+logo keeps its image description. Body paragraphs keep the full reading width below
+the header. Use site colors for the pill, with written status rather than color
+alone. The `featured-project-header-no-overlap` and
+`featured-project-description-order` rules protect these relationships.
 
 Speaking engagements use the same badge and alignment, with an official event
 icon beside the conference name and the talk details beneath it. Keep the event

@@ -33,9 +33,14 @@
 .speaking-header p{margin:0;font-size:.875rem;line-height:1.5}
 .contribution-detail,.speaking-detail{margin-left:48px}
 
-/* Featured repository marks are transparent artwork, not white-backed badges. */
-.featured-project-logo{margin:8px 0 14px}
-.featured-project-logo img{display:block;width:64px;height:64px;object-fit:contain}
+/* Group transparent repository marks with the title, status, and short description. */
+.featured-project-header{display:grid;grid-template-columns:64px minmax(0,1fr);align-items:start;gap:16px;margin:48px 0 20px;padding-top:24px;border-top:1px solid var(--line);break-inside:avoid}
+.featured-project-logo{display:block;width:64px;height:64px;object-fit:contain}
+.featured-project-summary{min-width:0}
+.featured-project-title{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.prose .featured-project-title h2{margin:0;padding:0;border:0}
+.project-status{display:inline-block;max-width:100%;padding:2px 9px;border:1px solid var(--line);border-radius:999px;background:var(--surface);color:var(--accent);font-size:.75rem;line-height:1.5;font-weight:550}
+.prose .featured-project-description{margin:4px 0 0;font-size:1rem;line-height:1.5}
 
 @media print{
   .work-content .prose h2::before,.work-logo,.career-roles-connected>li::before,.career-roles-connected>li::after{display:none}
