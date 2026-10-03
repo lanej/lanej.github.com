@@ -1,25 +1,39 @@
 +++
 title = "Cheap Construction Is Not Progress"
-description = "When AI makes candidate solutions cheaper, engineering becomes more about choosing the problem, exposing wrong answers, and changing what we optimize as we learn."
+description = "Cheaper output is not an outcome. Informative failure, meaningful success, and deliberate simplification help distinguish useful results from merely plausible artifacts."
 date = "2026-10-02"
 draft = true
 +++
 
 *Make it fail. Make it work. Make it simple. Make it fast.*
 
-The question I’m increasingly interested in is not how to get an AI to produce the right answer on its first attempt. It is how to build a process that can recognize a wrong answer and do something useful with the failure.
+In Statecraft, a working approval screen would not, by itself, establish that the infrastructure someone reviewed is what gets applied. Recording a decision is an output. The outcome I want is for a reviewer to understand a proposed change and trust that execution respects the decision.[^statecraft-product]
 
-Those are different engineering problems.
+That is the distinction I care about: output versus outcomes. Expensive construction does not establish progress either. Cheaper construction changes how many candidates I can afford to try, not what counts as a useful result.
 
-The first puts the burden on the generator. The second puts it on the relationship between a claim, an implementation, and the evidence we use to evaluate it.
+> **When output becomes cheaper, the ability to distinguish useful results from merely plausible artifacts becomes more consequential.**
 
-When producing a candidate solution is expensive, there is a strong incentive to reason carefully before committing to construction. When that cost falls, construction itself can become a way of reasoning. Build the smallest useful experiment, observe where it fails, and use the result to decide what to try next.
+When producing a candidate solution is expensive, there is a strong incentive to reason carefully before committing to construction. When that cost falls, construction itself can become a way of reasoning. Build the smallest useful experiment, observe what it establishes, and use the result to decide what to try next.
 
 That does not mean software costs only compute. Integration, review, migration, operations, and the consequences of mistakes still belong in the bill. The useful change is narrower: when a candidate is cheap enough to construct and safely discard, we can afford to use implementations as experiments.
 
-But more experiments do not automatically produce more learning.
+The extra attempts help only if we can distinguish evidence of progress from the appearance of it.
 
-> **Cheap construction without strong falsification does not produce progress. It produces more output.**
+## The murky middle
+
+The result I find hardest to evaluate is something that works well enough to keep investing in, but has not established that the investment is worthwhile. That is the murky middle.
+
+A working demo and a passing test suite can establish that particular behavior is possible without establishing that it improves the problem we intended to solve. The danger is treating evidence for that narrower claim as permission to invest in the whole approach. We add supporting infrastructure and polish the interface while the consequential assumption remains untested.
+
+For Statecraft, an experiment showing that an old approval can authorize a different plan would give me a specific reason to reject the current design. A convincing demo that never attempts that transition gives me less reason for confidence, even if it looks more successful.
+
+Clear, informative failure can be more useful than ambiguous success. It changes the next decision. Ambiguous success can instead let the original assumption survive without earning confidence.
+
+This is an argument for decisive evidence, not perfection. A read-only slice that demonstrably helps someone understand an infrastructure change could be a useful partial success, even without approval or execution. Its scope is limited; its value need not be ambiguous. The problem is not that a solution does only part of the job. It is that we cannot say whether the part it does matters.
+
+Failure is not the outcome, either. Learning counts as progress when it changes a consequential decision: which approach to pursue, what requirement to revise, or whether to continue. “We learned something” is not an indefinite substitute for improving the problem.
+
+The iteration I want moves us out of that ambiguity. Early attempts challenge the approach. A first meaningful success establishes something worth preserving. Simplification and performance work then improve how we deliver it.
 
 ## Make wrongness observable
 
@@ -65,7 +79,7 @@ Nor do I need to manufacture a failure. If a serious attempt to challenge the as
 
 ## Reach the first meaningful success
 
-Once an approach survives those initial challenges, the objective changes. I want one complete path that accomplishes the intended outcome under stated conditions.
+Once an approach survives those initial challenges, the objective changes. I want one complete path that demonstrably improves the problem under stated conditions. The outcome can be narrow; the evidence should make clear what it establishes.
 
 Not a collection of components that each look reasonable. Not a demonstration that succeeds only because the interesting behavior was mocked out. An end-to-end result, with an honest account of what it establishes and what remains untested.
 
@@ -85,7 +99,7 @@ The implementation may be disposable. The lesson should not be.
 
 After the first success, continuing to add machinery is not necessarily progress. The next useful question is often: **what can I remove while preserving the properties that matter?**
 
-This is where “make it good” becomes “make it simple.”
+This is where “make it good” becomes “make it simple.” If I can preserve the outcome while removing code, configuration, or layers, less output is progress.
 
 Conceptually:
 
@@ -150,15 +164,11 @@ In practice, I need an acceptable outcome within a finite budget. If the loop st
 
 ## The question before the construction
 
-This brings me back to why the problem matters.
-
 A system can converge beautifully on an irrelevant objective. A test suite can become entirely green while the user’s actual problem remains unsolved. Nothing about cheaper construction resolves that gap.
-
-For Statecraft, the point is not to produce an approval record. It is to help a reviewer understand an infrastructure change and preserve the connection between what was reviewed, what was authorized, and what happened. The product definition makes those distinct jobs, rather than treating a successful command as sufficient verification.[^statecraft-product]
 
 For Viewrule, the point is not to maximize visible rows or fill a viewport. It is to help someone use the interface to make a decision. Its measurements are bounded checks in support of that purpose, not a universal aesthetic score.[^viewrule]
 
-Those purposes determine what evidence is worth collecting. They also tell me when a technically successful experiment is answering the wrong question.
+That purpose determines what evidence is worth collecting. It also tells me when a technically successful experiment is answering the wrong question.
 
 This does not make implementation expertise obsolete. Understanding how systems work helps us choose revealing experiments, recognize incomplete evidence, and distinguish an essential constraint from an accidental limitation.
 
@@ -166,11 +176,7 @@ What changes is its leverage. When I can cheaply construct several candidates, k
 
 I need to know what problem I am solving, why it matters, what would invalidate my approach, and what evidence would justify the next investment.
 
-That is the iteration I care about: not repeated construction, but a sequence of attempts in which the evidence changes what happens next.
-
-Make it fail so the assumptions meet reality. Make it work so there is something demonstrated to preserve. Make it simple so the solution carries no more machinery than it needs. Make it fast where speed serves the purpose.
-
-**When construction is cheap, the scarce skill is knowing what is worth solving—and building a process that can tell you whether you are getting there.**
+I want each attempt to do one of two things: improve the outcome or improve a consequential decision about how to reach it. When it does neither, producing it faster is not progress.
 
 [^viewrule]: [Viewrule README](https://github.com/lanej/viewrule/blob/main/README.md), especially “What it detects,” “Define boundaries before building,” and the scope of composition measurements. The repository describes the tool as experimental.
 
