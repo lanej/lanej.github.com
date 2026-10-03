@@ -1,191 +1,118 @@
 +++
 title = "Cheap Construction Is Not Progress"
-description = "Cheaper output is not an outcome. Informative failure, meaningful success, and deliberate simplification help distinguish useful results from merely plausible artifacts."
+description = "When construction is cheap, progress depends on what each attempt establishes: a useful outcome, or a better-informed decision about how to reach it."
 date = "2026-10-02"
 draft = true
 +++
 
 *Make it fail. Make it work. Make it simple. Make it fast.*
 
-In Statecraft, a working approval screen would not, by itself, establish that the infrastructure someone reviewed is what gets applied. Recording a decision is an output. The outcome I want is for a reviewer to understand a proposed change and trust that execution respects the decision.[^statecraft-product]
+In Statecraft, the infrastructure-review workbench I’m building, an approval screen could be finished before the question behind it is answered: will execution apply the exact plan the reviewer approved? I want someone to understand a proposed change, make an informed decision, and have execution respect that decision. Recording an approval is only part of that outcome.[^statecraft-product]
 
-That is the distinction I care about: output versus outcomes. Expensive construction does not establish progress either. Cheaper construction changes how many candidates I can afford to try, not what counts as a useful result.
+I could keep improving the graph browser while leaving that guarantee unresolved. The artifact would become more convincing without answering the question that determines whether its approval workflow can be trusted. That is the murky middle: enough apparent success to invite more investment, without enough evidence to know what that investment is buying.
+
+An experiment that exposes why the guarantee fails would give me a better next decision than a demo that avoids testing it. An understood failure can be more valuable than an unexplained success—not because failure is preferable, but because it gives us a better basis for the next decision.
+
+There is a limit to that comparison. A solution that genuinely helps someone has value even before we can fully explain why it works. Not understanding why it works is different from not knowing whether it helps. During development, I need enough understanding to say what the result establishes, what remains uncertain, and what I should do differently because of it. A narrow result with demonstrated value is a success.
+
+When an agent makes candidate solutions cheaper to construct, I can afford more experiments. Integration, review, and the consequences of mistakes remain expensive; the useful change is that some implementations become cheap enough to build and safely discard. Expensive construction never established usefulness either.
 
 > **When output becomes cheaper, the ability to distinguish useful results from merely plausible artifacts becomes more consequential.**
 
-When producing a candidate solution is expensive, there is a strong incentive to reason carefully before committing to construction. When that cost falls, construction itself can become a way of reasoning. Build the smallest useful experiment, observe what it establishes, and use the result to decide what to try next.
-
-That does not mean software costs only compute. Integration, review, migration, operations, and the consequences of mistakes still belong in the bill. The useful change is narrower: when a candidate is cheap enough to construct and safely discard, we can afford to use implementations as experiments.
-
-The extra attempts help only if we can distinguish evidence of progress from the appearance of it.
-
-## The murky middle
-
-The result I find hardest to evaluate is something that works well enough to keep investing in, but has not established that the investment is worthwhile. That is the murky middle.
-
-A working demo and a passing test suite can establish that particular behavior is possible without establishing that it improves the problem we intended to solve. The danger is treating evidence for that narrower claim as permission to invest in the whole approach. We add supporting infrastructure and polish the interface while the consequential assumption remains untested.
-
-For Statecraft, an experiment showing that an old approval can authorize a different plan would give me a specific reason to reject the current design. A convincing demo that never attempts that transition gives me less reason for confidence, even if it looks more successful.
-
-Clear, informative failure can be more useful than ambiguous success. It changes the next decision. Ambiguous success can instead let the original assumption survive without earning confidence.
-
-This is an argument for decisive evidence, not perfection. A read-only slice that demonstrably helps someone understand an infrastructure change could be a useful partial success, even without approval or execution. Its scope is limited; its value need not be ambiguous. The problem is not that a solution does only part of the job. It is that we cannot say whether the part it does matters.
-
-Failure is not the outcome, either. Learning counts as progress when it changes a consequential decision: which approach to pursue, what requirement to revise, or whether to continue. “We learned something” is not an indefinite substitute for improving the problem.
-
-The iteration I want moves us out of that ambiguity. Early attempts challenge the approach. A first meaningful success establishes something worth preserving. Simplification and performance work then improve how we deliver it.
-
-## Make wrongness observable
-
-My shorthand for this has been:
-
-> I don’t need the model to know that it’s right. I need the system to know when it’s wrong.
-
-The second sentence needs a boundary. I am not assuming an evaluator that can recognize every possible failure. What I want is to make specific, consequential claims rejectable by evidence.
-
-“Build a good approval workflow” is an instruction. “An approval for one infrastructure plan must not authorize a different plan” is a property I can challenge.
-
-“Improve this layout” is an aspiration. “Keep the required alternatives visible and legible at this viewport” gives me something I can inspect.
-
-This is the practical meaning of falsifiability here: before accepting a claim, identify an observation that would force us to reject it. Tests are one way to do that. So are measurements, external responses, operational observations, and human review. Falsification is not a replacement for testing; it is a way of deciding what the tests should be capable of contradicting.
-
-Viewrule, a tool I’m building for design guidance and executable UI constraints, makes this distinction explicit. It checks rendered interfaces against declared requirements and reports evidence. It also separates executed checks from unassessed design requirements. A pass means the configured checks passed—not that the design has been proven good.[^viewrule]
-
-That limitation is useful. It lets me delegate a bounded claim without pretending I have delegated all judgment.
-
-It also makes failure useful to the next attempt. “The layout is bad” does not tell an agent much. “Only five of the eight required alternatives are fully visible” identifies a discrepancy it can investigate.
-
-Failure earns its cost when it informs the next decision. Repetition can help measure reliability. But repeating a known failure without changing our understanding or our approach is a loop that has not learned how to use its feedback.
+That changes what I ask of each attempt. Early on, I am trying to resolve an uncertainty. Once I have demonstrated a useful result, I can preserve it while questioning the machinery and cost of delivering it.
 
 ## Find the first useful failure
 
-Before I have a working solution, the most valuable question is often: **which assumption is most likely to make this approach unworkable?**
+For the approval workflow, the consequential assumption is that the execution boundary can preserve the identity of the reviewed plan. I want to challenge that before building everything around it.
 
-This is where a steel thread is useful: a narrow end-to-end path through the parts of a system needed for a real use case.[^steel-thread] I want that path to expose an important uncertainty before I invest in everything around it.
+The Statecraft mock workbench already invalidates earlier approvals when a new plan is created. Its evidence, decisions, and execution are simulated; it is not a live approval service.[^statecraft] That lets me investigate the intended behavior, but does not establish what the real execution system will do.
 
-For Statecraft, my experimental infrastructure-review workbench, the intended workflow includes approving the exact plan that will be applied. Its current prototype exercises that workflow with simulated evidence and execution; it is not a production approval service.[^statecraft]
+A proposed integration experiment would retain plan A, record an approval for A, produce plan B, and attempt to execute B using A’s approval. I would run it in an isolated environment and inspect both the decision and the artifact submitted for execution. The required result is rejection before B can execute.
 
-Consider the integration question behind that requirement: can the execution system apply the exact artifact the reviewer inspected, or does it produce something new at execution time?
+If B executes, the approval guarantee has failed. If the system rejects it because the approval belongs to A, the implementation has survived this check. A failure caused by missing credentials answers neither question. I want to expose a consequential mistaken assumption, not merely get an error as quickly as possible.
 
-That question should shape an early experiment. It should not wait behind a finished graph browser, a generalized integration framework, and a polished approval screen. If the execution boundary cannot preserve the required identity, an important part of the design has to change.
+This is the practical use of falsifiability: identify an observation that would force us to reject a specific claim. “Build a good approval workflow” leaves too much implicit. “An approval for one plan must not authorize another” gives the experiment something to contradict.
 
-The goal is not to make something fail arbitrarily. A missing semicolon is a fast failure, but it tells me little about whether the approach is viable. I am optimizing for the first *informative* failure: evidence that exposes a consequential mistaken assumption.
+A steel thread is a narrow end-to-end path through the parts needed for a real use case.[^steel-thread] It is useful here because the uncertainty crosses an integration boundary. Sometimes a single API call or contract inspection answers the question more cheaply. The experiment needs to reach the uncertainty; mocking that boundary cannot resolve it.
 
-Sometimes the cheapest experiment is a steel thread. Sometimes it is a single API call, a contract inspection, or a small disposable program. The experiment needs to cross the boundary where the uncertainty lives. Mocking that boundary can help test our own logic, but it cannot establish that the real dependency behaves as assumed.
+I want the result to retain the identities, observations, and failures needed to explain what happened. “Validation failed” tells an agent little. Evidence that approval A was accepted for plan B identifies a discrepancy the next attempt must address. An unknown execution outcome must remain unknown until reconciled, rather than becoming success because no error was observed.
 
-Nor do I need to manufacture a failure. If a serious attempt to challenge the assumption succeeds, that is useful evidence too.
+The agent can propose a change, run the experiment, and revise against that evidence. It is revising an implementation, not necessarily learning new model weights.[^reflexion] The value comes from feedback outside the agent’s own account of why its work should be accepted.
 
-“Make it fail” is shorthand for **give the idea an early opportunity to be disproved**. Do that in an environment where the cost of being wrong is bounded.
+An understood failure now changes the work. I might need an exact-artifact check at execution, a different integration path, or a narrower product commitment. More polishing would not resolve any of those decisions. Passing this experiment gives me a reason to continue, but it still leaves a separate question: does the resulting capability help a reviewer?
 
 ## Reach the first meaningful success
 
-Once an approach survives those initial challenges, the objective changes. I want one complete path that demonstrably improves the problem under stated conditions. The outcome can be narrow; the evidence should make clear what it establishes.
+Correct behavior is necessary for this workflow, but it is not sufficient evidence of its usefulness. A system could prevent stale approvals and still make changes harder to understand.
 
-Not a collection of components that each look reasonable. Not a demonstration that succeeds only because the interesting behavior was mocked out. An end-to-end result, with an honest account of what it establishes and what remains untested.
+I would evaluate that second claim with a bounded review task. Give reviewers representative changes and ask them to identify consequential effects, explain the evidence behind their conclusions, and decide what needs further investigation. Compare that with how they perform the same kind of work using their existing tools. Use different, comparable cases so simply remembering a change does not masquerade as an improvement.
 
-This is how I want to organize vertical slices. A slice should answer a user’s question or complete an action. “Build the persistence layer” is enabling work. “Record a review decision and retrieve it with its original evidence after a restart” is a result we can evaluate.
+Useful evidence might be a consequential change caught that the existing workflow missed, or a comparably sound decision reached with less effort. Faster approval alone would not establish improvement; it might mean the reviewer saw less. These are proposed evaluations for Statecraft, not results I have already demonstrated.
 
-In Statecraft’s simulated workflow, a new plan invalidates earlier approvals even when the commit has not changed. It also records agreement with the simulated resulting state separately from command success.[^statecraft]
+This is the distinction between testing a mechanism and evaluating an outcome. Both matter. The integration experiment tests whether execution respects the decision. The review task tests whether the workbench helps someone make that decision. Evidence for one cannot silently stand in for the other.
 
-Those distinctions make useful acceptance conditions. In a corresponding live slice, I would want to challenge them directly: approve one proposal, produce another, and attempt to use the old decision. The wrong transition should be rejected, with enough evidence to explain why.
+A read-only slice could therefore be a meaningful first success. It might help a reviewer understand changes without yet supporting approval or execution. That would not establish the complete product, but it could establish a useful result worth preserving. This is how I want to choose vertical slices: complete a bounded job, rather than finish a horizontal layer and assume its value will emerge later.
 
-A first success is not production readiness. One successful run does not establish reliability, security, or behavior under concurrency. But it gives us a demonstrated path and a body of evidence to extend.
+Viewrule, my tool for design guidance and executable UI constraints, illustrates why the evaluator must stay connected to that job. It checks rendered interfaces against declared requirements and separates executed checks from unassessed design requirements. A pass means the configured checks passed, not that the interface has been proven good.[^viewrule]
 
-That evidence is the important asset. Keep the inputs, the conditions, the result, and the checks that distinguish success from the failure we were worried about.
+Suppose I require eight alternatives to be visible together. An agent might satisfy the count while making the labels unreadable. The purpose was to help someone compare alternatives, not put eight rectangles on screen. The check needs scrutiny as well as the implementation: known-bad cases it rejects, useful cases it accepts, and an explicit account of what remains for human assessment. Changing a requirement should be a visible decision, not a way for the implementation to grade itself more generously.
 
-The implementation may be disposable. The lesson should not be.
+Understanding success does not require a complete causal explanation of every part of the system. It requires enough evidence about the task, conditions, and limits to use the result deliberately. One successful review does not establish reliability across all reviewers or changes. It gives us a starting point for repetition and variation.
+
+Keep the cases, observations, and checks that support that result. If a later revision looks cleaner but causes a reviewer to miss an important change, the earlier evidence gives us a reason to reject it. We have something more useful than a version we happen to like: we know what the next version needs to preserve.
 
 ## Remove what success does not require
 
-After the first success, continuing to add machinery is not necessarily progress. The next useful question is often: **what can I remove while preserving the properties that matter?**
+Once I have that baseline, I want to know how much of the implementation was necessary. A first success usually contains decisions made before I understood the problem this well.
 
-This is where “make it good” becomes “make it simple.” If I can preserve the outcome while removing code, configuration, or layers, less output is progress.
+This is where “make it good” often becomes “make it simple.” Remove machinery while preserving the useful result and its essential constraints. Less output can be progress.
 
-Conceptually:
+In the Statecraft approval slice, imagine that the application translates a planner response into a generic execution record, then translates it again into the proposal a reviewer sees. I would try removing the intermediate representation and mapping directly to the review model. That is a proposed simplification, not a description of a refactoring already completed.
 
-\[
-\min \operatorname{Complexity}(x)
-\quad\text{subject to the required behavior and constraints still holding.}
-\]
+The experiment has obligations: preserve plan identity and source evidence, keep stale-approval rejection intact, and retain the information reviewers need. If the direct mapping does that with fewer concepts to trace, the intermediate model may not earn its cost. If removing it spreads provider-specific behavior through the review logic or makes failures harder to reproduce, the layer may be doing useful work.
 
-That is not a claim that complexity has one objective numerical score. It is a direction for the next set of experiments. Remove a translation. Collapse a layer. Eliminate an unnecessary configuration option. Replace a generalized mechanism with the direct operation the workflow actually needs.
+This is the architectural question I care about here. A clean core is not enough if all the complexity has moved into translation around it. Nor does the shortest implementation necessarily make the whole system easier to change. The comparison has to include the complete workflow.
 
-Then challenge the result again.
+Passing the existing tests is evidence, not permission to delete anything they happen not to exercise. An authorization check may look unnecessary until an unauthorized caller arrives. Before removing a boundary, identify the property it is meant to protect and challenge the replacement on that property.
 
-This is also how I want to approach pragmatic hexagonal architecture. The useful question is not whether the core has been insulated from every named external system. It is whether the boundaries make the whole workflow easier to understand, change, and evaluate.
-
-In a Statecraft review-comment slice, I would be comfortable with an application workflow knowing that it is publishing to GitHub. The rule governing which plan the comment refers to does not need to know the GitHub API. Those are different responsibilities, but separating them does not require a universal abstraction for every possible discussion platform.
-
-The opposite mistake is deleting a useful boundary because the happy-path test still passes. An authorization check may look unnecessary until an unauthorized caller arrives. An adapter may earn its place by making a failure reproducible. A layer may contain a dependency that would otherwise spread throughout the application.
-
-So subtraction needs design judgment as well as tests. **The smallest implementation is not necessarily the simplest system to operate or change.** Nor do passing checks prove that a deletion is safe; they establish only that the deletion survived those checks.
-
-The exercise is to make each piece of machinery justify its cost against an actual requirement—not an imagined future need, and not an architectural slogan.
-
-If an abstraction exists to make substitution easier, try a representative substitution. If it exists to isolate failure, demonstrate that isolation. Inspect the orchestration and translation costs as well as the clean core.
-
-A boundary earns its place when it helps the whole system, not merely when it makes one part look better.
+Understanding the successful path makes this subtraction more deliberate. I can distinguish a requirement from a workaround and test whether something I thought was necessary was merely incidental. When a simplification fails, restore the behavior and retain the case that explains why. When it succeeds, the system delivers the same value with less machinery to maintain.
 
 ## Optimize what remains
 
-Once the behavior is established and avoidable complexity has been challenged, performance becomes a more focused problem.
+Now I have a useful result, evidence about its limits, and an implementation whose complexity I have questioned. Performance work has a clearer target.
 
-Now I can ask whether an implementation reduces latency, memory use, or operating cost while preserving the properties established earlier. I have a baseline to compare against and a clearer understanding of what cannot be traded away.
+Suppose reviewers can identify the relevant changes, but loading a large proposal takes long enough to interrupt the task. I can measure that delay and test a faster implementation against the same evidence. The objective is to reduce the cost of delivering the outcome, not improve a latency number by omitting part of the proposal. Faster execution cannot compensate for applying an unapproved plan, either; some requirements remain constraints rather than penalties to average away.
 
-This is a change in emphasis, not a waterfall. If the required latency determines whether the product is viable, latency belongs in the first experiment. If handling a particular volume is essential, a single-item demonstration is not a meaningful first success.
+These phases change the emphasis of the work, not the order in which all requirements are considered. If the required latency determines whether a task is viable, it belongs in the first experiment. Additional machinery can be justified when it buys a measured improvement that the simpler version cannot deliver.
 
-Likewise, the simplest implementation may not meet the performance requirement. Additional machinery can be justified. It should buy a measured benefit rather than satisfy a speculative concern.
+Each new slice can introduce uncertainty and send us back through the loop. Iteration does not guarantee convergence. When attempts stop changing our understanding or improving the result, I need to revisit the experiment, change the approach, or stop. Cheap compute does not remove the budget for time, attention, and consequences.
 
-The sequence is therefore not “ignore performance until the end.” It is **do not optimize an implementation before you know which properties make it worth keeping**.
+## What the next attempt is for
 
-Each new vertical slice can move through these phases again. A new dependency introduces uncertainty. A new behavior requires a first success. That success creates another opportunity to simplify.
+The approval screen is still an output. What matters is whether a reviewer can use it to make an informed decision and whether execution respects that decision. An understood failure helps by showing what must change. An understood success gives us a result we can preserve, repeat, and simplify with less guesswork.
 
-## We are changing the optimization problem
-
-I initially thought about this as driving error toward zero. That is useful, but incomplete. The objective changes as the work progresses.
-
-Early on, I care about reducing consequential uncertainty per unit of time and risk. Then I care about finding a feasible solution. After that, I care about reducing unnecessary complexity. Finally, I optimize operational properties within the constraints I have established.
-
-These are related optimization problems, not one fixed score that improves monotonically. A failed experiment may make the current implementation worse while improving the next decision. A simplification may leave every user-visible behavior unchanged and still reduce the burden of maintaining it.
-
-There is a family resemblance to model training. Reinforcement-learning fine-tuning uses feedback to update model parameters. An agent’s development loop can instead update the candidate implementation and retained context, without changing the model’s weights. Feedback-driven improvement without weight updates is also explored explicitly in work such as Reflexion.[^reward][^reflexion]
-
-The resemblance includes a failure mode: optimizing the measurement instead of the intended outcome. Research on reward-model overoptimization has demonstrated that, in a controlled synthetic setup, improving a proxy reward can eventually degrade the reference reward it was meant to represent.[^reward]
-
-For an engineering example, imagine requiring eight visible rows. An agent could satisfy a count while making the labels unreadable. The count was not the purpose. The purpose was to let someone compare eight alternatives.
-
-The evaluator therefore needs scrutiny too. I want known-bad cases that it rejects, representative good cases that it accepts, and explicit limits on what it assesses. When requirements change, that should be a visible decision—not an implementation quietly making its own test easier to pass.
-
-Some requirements should not be folded into a score at all. Faster execution cannot compensate for applying an unapproved infrastructure change. That is a constraint, not a penalty to average away.
-
-Falsifiability tells me how a claim can lose. It does not guarantee that the next attempt will be better, that the search will converge, or that the thing I am measuring is the thing I actually need.
-
-In practice, I need an acceptable outcome within a finite budget. If the loop stops producing useful evidence, I need to change the experiment, revisit the assumptions, or stop—not purchase more repetitions of the same mistake.
-
-## The question before the construction
-
-A system can converge beautifully on an irrelevant objective. A test suite can become entirely green while the user’s actual problem remains unsolved. Nothing about cheaper construction resolves that gap.
-
-For Viewrule, the point is not to maximize visible rows or fill a viewport. It is to help someone use the interface to make a decision. Its measurements are bounded checks in support of that purpose, not a universal aesthetic score.[^viewrule]
-
-That purpose determines what evidence is worth collecting. It also tells me when a technically successful experiment is answering the wrong question.
-
-This does not make implementation expertise obsolete. Understanding how systems work helps us choose revealing experiments, recognize incomplete evidence, and distinguish an essential constraint from an accidental limitation.
-
-What changes is its leverage. When I can cheaply construct several candidates, knowing how to build one is no longer enough to decide which deserves to survive.
-
-I need to know what problem I am solving, why it matters, what would invalidate my approach, and what evidence would justify the next investment.
+Neither understanding nor a passing check makes the problem worth solving. That judgment determines which outcomes and uncertainties deserve our attention in the first place. Cheaper construction gives it more leverage, not less.
 
 I want each attempt to do one of two things: improve the outcome or improve a consequential decision about how to reach it. When it does neither, producing it faster is not progress.
 
-[^viewrule]: [Viewrule README](https://github.com/lanej/viewrule/blob/main/README.md), especially “What it detects,” “Define boundaries before building,” and the scope of composition measurements. The repository describes the tool as experimental.
+[^statecraft-product]: **[Statecraft README](https://github.com/lanej/statecraft/blob/main/README.md)**
 
-[^steel-thread]: Jade Rubick, [“Steel threads are a technique that will make you a better engineer”](https://www.rubick.com/steel-threads/). Used here for the narrow end-to-end construction technique; the emphasis on seeking an informative failure is this article’s framing.
+    Product intent and the jobs of understanding a change, making a review decision, preserving approval identity, and verifying execution. These are intended capabilities; the repository identifies the workbench as an early prototype.
 
-[^statecraft]: [Statecraft mock review workbench](https://github.com/lanej/statecraft/blob/main/docs/steel-thread.md), especially “Evidence and decisions” and “Production work still required.” All execution and evidence in this workbench are simulated; it is not a deployable approval service.
+[^statecraft]: **[Statecraft mock review workbench](https://github.com/lanej/statecraft/blob/main/docs/steel-thread.md)**
 
-[^statecraft-product]: [Statecraft README](https://github.com/lanej/statecraft/blob/main/README.md), especially the product intent, lifecycle, and distinction between command success and verification.
+    “Evidence and decisions” describes invalidation after replanning. The workbench’s evidence, identities, decisions, and execution are simulated. The integration and reviewer evaluations in this essay are proposed experiments, not production guarantees or reported study results.
 
-[^reward]: Leo Gao, John Schulman, and Jacob Hilton, [“Scaling Laws for Reward Model Overoptimization”](https://proceedings.mlr.press/v202/gao23h.html), ICML 2023. The experimental reference reward is another model, not a direct measurement of real-world human outcomes.
+[^steel-thread]: **[Steel threads are a technique that will make you a better engineer](https://www.rubick.com/steel-threads/)**  
+    Jade Rubick
 
-[^reflexion]: Noah Shinn and colleagues, [“Reflexion: Language Agents with Verbal Reinforcement Learning”](https://arxiv.org/abs/2303.11366), 2023. The framework uses feedback and retained reflective text rather than updating model weights.
+    The narrow end-to-end construction technique. Using it to seek an informative failure is this essay’s framing, not a requirement that every steel thread must fail first.
+
+[^reflexion]: **[Reflexion: Language Agents with Verbal Reinforcement Learning](https://arxiv.org/abs/2303.11366)**  
+    Noah Shinn and colleagues · 2023
+
+    A related example of feedback-guided iteration using retained reflective text rather than changes to model weights. It does not establish the effectiveness of the proposed Statecraft experiments.
+
+[^viewrule]: **[Viewrule README](https://github.com/lanej/viewrule/blob/main/README.md)**
+
+    “Why it exists,” “Define boundaries before building,” and “What it detects” describe configured UI checks and their limits. The tool distinguishes executed checks from unassessed design requirements; measurements are not a universal aesthetic score.
