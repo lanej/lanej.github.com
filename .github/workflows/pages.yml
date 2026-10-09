@@ -43,7 +43,6 @@ jobs:
       - name: Build and validate
         run: bash scripts/build.sh
       - name: Build EasyUI PR #24 Storybook preview
-        if: github.event_name != 'pull_request'
         run: bash scripts/build-easy-ui-pr-preview.sh
       - name: Select affected pages
         run: |
