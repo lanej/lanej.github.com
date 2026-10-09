@@ -42,6 +42,8 @@ jobs:
           python3 scripts/github-activity.py
       - name: Build and validate
         run: bash scripts/build.sh
+      - name: Build EasyUI PR #24 Storybook preview
+        run: bash scripts/build-easy-ui-pr-preview.sh
       - name: Select affected pages
         run: |
           python3 scripts/test-affected-pages.py
