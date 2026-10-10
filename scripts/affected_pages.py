@@ -6,6 +6,7 @@ Unknown shared dependencies select all pages rather than silently dropping cover
 import difflib
 import json
 import subprocess
+import tomllib
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -45,6 +46,35 @@ def previous_text(root, base, path):
     result = subprocess.run(['git', 'show', f'{base}:{path}'], cwd=root,
                             text=True, capture_output=True)
     return result.stdout if result.returncode == 0 else ''
+
+
+
+def is_draft(text):
+    """Only explicit, valid TOML draft metadata can suppress production previews."""
+    if not text.startswith('+++\n'):
+        return False
+    front, separator, _ = text[4:].partition('\n+++\n')
+    if not separator:
+        return False
+    try:
+        return tomllib.loads(front).get('draft') is True
+    except tomllib.TOMLDecodeError:
+        return False  # Unknown metadata must not silently reduce coverage.
+
+
+def draft_only_change(root, base, path):
+    """Creation, editing, or deletion of a draft absent from both production states.
+
+    Check both revisions: publishing or withdrawing an article changes discovery
+    pages even when one revision is a draft. Without a baseline, keep coverage.
+    """
+    if root is None or base is None:
+        return False
+    source = Path(root) / path
+    current = source.read_text() if source.is_file() else ''
+    previous = previous_text(root, base, path)
+    return bool(current or previous) and all(
+        not text or is_draft(text) for text in (previous, current))
 
 
 def css_rules(text):
@@ -201,6 +231,10 @@ def affected_routes(paths, available, *, root=None, base=None, page_names=None):
             current = Path(root) / path
             routes.update(rule_routes(previous_text(root, base, path), current.read_text(), page_names or route_names(available), documents))
         elif path.startswith('content/writing/') and not path.endswith('.md'):
+            bundle = '/'.join(path.split('/')[:3])
+            route = '/' + bundle.removeprefix('content/') + '/'
+            if route not in available and draft_only_change(root, base, bundle + '/index.md'):
+                continue
             routes.update(essays | {'/', '/writing/'})
         elif path.startswith('content/') and path.endswith('.md'):
             relative = path.removeprefix('content/').removesuffix('.md')
@@ -208,9 +242,15 @@ def affected_routes(paths, available, *, root=None, base=None, page_names=None):
             if parts[-1] in ('index', '_index'):
                 parts.pop()
             route = '/' + '/'.join(parts) + '/' if parts else '/'
+            if route not in available and draft_only_change(root, base, path):
+                continue
             routes.add(route)
-            if route not in available and root is not None and (Path(root) / path).exists():
-                routes.update(available)  # An unfamiliar permalink/layout needs a conservative check.
+            if route not in available and root is not None and (Path(root) / path).is_file():
+                # An explicit draft explains an absent production route. Keep
+                # discovery coverage for published -> draft, but do not expand
+                # that known removal into an unrelated whole-site review.
+                if not is_draft((Path(root) / path).read_text()):
+                    routes.update(available)  # Unknown permalink/layout: conservative coverage.
             if relative.startswith('writing/'):
                 routes.update(('/', '/writing/'))
             if route == '/labs/':

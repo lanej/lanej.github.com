@@ -66,10 +66,33 @@ repositories should still declare their own icons explicitly.
 
 ## Deployment
 
-PR descriptions receive a **Page previews** section with affected pages at 390px
-mobile and 1440px desktop widths. Preserve its HTML markers when editing the
-description. Previews use immutable URLs on `pr-previews/<number>` branches, not
-website source. Fork PRs provide the `pr-page-previews` artifact instead.
+PR descriptions receive a **Page previews** section for meaningfully affected
+rendered pages at 390px mobile and 1440px desktop widths, not the entire website
+for every new article. Preserve its HTML markers when editing the description.
+Previews use immutable URLs on `pr-previews/<number>` branches, not website source.
+Fork PRs provide the `pr-page-previews` artifact instead.
+
+Page selection is shared with browser smoke checks and Viewrule. An article change
+selects its rendered route and discovery pages; a shared template or stylesheet can
+select its wider set of consumers. Unknown shared dependencies remain conservative,
+and scheduled/manual workflows still run full audits.
+
+A draft excluded from production does not require screenshots of unchanged pages.
+The selector reads explicit TOML `draft = true` in both revisions: creating,
+editing, or deleting a continuously unpublished draft is a visual no-op, while
+publishing or withdrawing one retains discovery-page checks. Malformed or unknown
+metadata does not suppress coverage. Draft-enabled preview builds may still review
+a draft's rendered route; normal production checks do not verify its appearance.
+Documentation and non-rendering tooling changes likewise require relevant tests,
+not unrelated screenshots.
+
+For an empty selection, capture writes an empty manifest without launching a
+browser; publication replaces stale screenshots with a short no-rendered-change
+notice without creating a preview commit. PR builds use the checked-in activity
+data instead of refreshing live GitHub activity and making `/open-source/` appear
+changed incidentally. Activity parser tests still run on PRs; non-PR builds retain
+the refresh. CI runs the page-selection, preview-format, and preview-scope regression
+tests before using the selection.
 
 Merging into `master` builds and tests one Pages artifact, deploys that exact
 artifact, then verifies `https://lanej.io/`. Production checks wait for the

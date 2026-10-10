@@ -24,8 +24,6 @@ def replace_section(body, section):
 
 
 def capture(args):
-    from playwright.sync_api import sync_playwright
-
     available = set()
     for path in Path('public').rglob('index.html'):
         relative = path.parent.relative_to('public').as_posix()
@@ -40,12 +38,17 @@ def capture(args):
         routes = affected_routes(changed_paths(root, base), available, root=root, base=base)
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)
+    # A reused output directory must not republish screenshots from an older selection.
+    for image in out.glob('*.png'):
+        image.unlink()
     manifest = {'head_sha': os.environ['PR_HEAD_SHA'],
                 'build_sha': os.environ['GITHUB_SHA'], 'pages': []}
     if not routes:
         (out / 'manifest.json').write_text(json.dumps(manifest, indent=2))
         print('No affected pages; skipping browser preview capture.')
         return
+    from playwright.sync_api import sync_playwright
+
     with sync_playwright() as pw:
         browser = pw.chromium.launch(executable_path=args.chromium_path or None)
         for route in routes:
@@ -147,6 +150,16 @@ def publish(args):
     current = api(f'pulls/{pr_number}')
     if current['head']['sha'] != expected or current['state'] != 'open':
         print('Skipping superseded or closed PR.')
+        return
+    if not manifest['pages']:
+        # Replace any earlier screenshots with a small no-change notice. Do not
+        # create empty preview commits or leave stale evidence in the PR body.
+        run_url = f'https://github.com/{repo}/actions/runs/{os.environ["GITHUB_RUN_ID"]}'
+        section = preview_section(manifest, '', run_url)
+        body = replace_section(current.get('body') or '', section)
+        if body != (current.get('body') or ''):
+            api(f'pulls/{pr_number}', {'body': body}, 'PATCH')
+        print(f'No rendered page changes for PR #{pr_number}; cleared stale previews.')
         return
     # Separate per-PR branches keep screenshots out of the website source/build.
     branch = f'pr-previews/{pr_number}'

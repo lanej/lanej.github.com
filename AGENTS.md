@@ -10,13 +10,29 @@ Put publishing workflows in docs/publishing.md and build/deployment details in
 docs/development.md. Do not append feature histories or test inventories to README.
 
 Edit the source, not `public/`. Keep one publishing path. Before merging, run the
-pinned Hugo build, source checks, and browser verification. Confirm the PR description
-contains current mobile and desktop screenshots of affected pages from the preview
-workflow. Preserve the automated preview markers when editing PR descriptions.
-Screenshots are kept on separate preview branches, not in source. After deployment,
-inspect screenshots captured from **https://lanej.io/** at mobile and desktop
-sizes. Confirm the expected revision and that the fetched image bytes decode and
-match the build. Never call a change verified solely because a deploy job passed.
+pinned Hugo build, source checks, and relevant browser verification. Require current
+mobile and desktop screenshots only for pages whose rendered content, layout,
+styling, responsive behavior, or interactions are meaningfully affected. A new
+article is not a reason to capture the entire website: review its rendered page
+and affected discovery pages, not unrelated pages. Shared layout/style changes can
+require broader coverage; retain scheduled/manual full audits and conservative
+coverage for unknown shared dependencies.
+
+Changes confined to unpublished drafts, documentation, or non-rendering tooling do
+not require screenshots of unchanged production pages. An absent draft route is
+not an unknown dependency. Check both revisions so publishing or withdrawing an
+article still checks affected discovery pages. Review the draft itself in an
+explicit draft-enabled preview before publication; production checks do not verify
+an excluded draft's appearance. The screenshot guidance below applies to affected
+UI, not every page in every PR.
+
+Preserve the automated preview markers when editing PR descriptions. Empty
+selections replace stale images with a short no-rendered-change notice. Screenshots
+are kept on separate preview branches, not in source. After deployment, inspect
+screenshots of affected pages captured from **https://lanej.io/** at mobile and
+desktop sizes. Confirm the expected revision and that the fetched image bytes
+decode and match the build. Never call a change verified solely because a deploy
+job passed.
 
 Writing is the primary destination. Put it first in navigation and directly after
 the compact homepage introduction, with titles, descriptions, dates, reading times,
