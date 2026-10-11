@@ -18,6 +18,18 @@ def pr(number, sha=SHA_A, repository='lanej/easy-ui'):
 
 
 class PreviewTests(unittest.TestCase):
+    def setUp(self):
+        # Selection fixtures must not change when another real PR is preserved.
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        root = Path(temporary.name)
+        (root / 'data').mkdir()
+        self.preserved = root / 'data/easy-ui-previews.json'
+        self.preserved.write_text(json.dumps([24, 29]))
+        root_patch = patch.object(previews, 'ROOT', root)
+        root_patch.start()
+        self.addCleanup(root_patch.stop)
+
     def test_trusted_head(self):
         self.assertEqual(previews.trusted_head(pr(29)), (29, SHA_A))
 
@@ -36,6 +48,15 @@ class PreviewTests(unittest.TestCase):
             return json.dumps(values).encode()
         with patch.object(previews, 'read', side_effect=read):
             self.assertEqual(previews.preview_heads(), [(24, SHA_A), (29, SHA_B)])
+
+    def test_additional_preserved_pr_is_fetched_by_number(self):
+        self.preserved.write_text(json.dumps([24, 29, 31]))
+        def read(url):
+            values = [pr(29, SHA_B)] if 'state=open' in url else pr(int(url.rsplit('/', 1)[-1]))
+            return json.dumps(values).encode()
+        with patch.object(previews, 'read', side_effect=read) as fetch:
+            self.assertEqual(previews.preview_heads(), [(24, SHA_A), (29, SHA_B), (31, SHA_A)])
+        self.assertEqual(fetch.call_count, 3)
 
     def test_follows_pagination(self):
         def read(url):
