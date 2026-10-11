@@ -168,7 +168,8 @@ def affected_routes(paths, available, *, root=None, base=None, page_names=None):
         'assets/css/work.css': {'/record/', '/open-source/'},
     }
     for path in paths:
-        if path == '.ui-review/.gitignore':
+        if path in ('.ui-review/.gitignore', 'data/easy-ui-previews.json'):
+            # The preview registry is consumed by the app-preview builder, not Hugo.
             continue
         if path == '.ui-review/site.json' and root is not None and base is not None:
             old = json.loads(previous_text(root, base, path) or '{}')
