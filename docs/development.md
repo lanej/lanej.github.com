@@ -66,6 +66,23 @@ repositories should still declare their own icons explicitly.
 
 ## Deployment
 
+### Easy UI pull request Storybooks
+
+Each open same-repository `lanej/easy-ui` PR is built at
+`https://lanej.io/previews/easy-ui/pr-<number>/storybook/`. Preserved PR numbers in
+`data/easy-ui-previews.json` keep selected previews available after closure. The
+builder pins each checkout to the fetched PR head SHA, builds package declarations
+before Storybook, and keeps each preview in its own directory.
+
+Previews refresh with the lanej.io Pages deployment, including a manual run of
+`pages.yml` on `master`. Before posting a link, confirm the preview's adjacent
+`revision.txt` matches the Easy UI PR head SHA. The workflow compares entry-point
+bytes with the tested bundle and captures each live preview at mobile and desktop
+widths. The `live-domain-verification` artifact retains those screenshots and
+the revision report.
+
+### Website deployment
+
 PR descriptions receive a **Page previews** section with affected pages at 390px
 mobile and 1440px desktop widths. Preserve its HTML markers when editing the
 description. Previews use immutable URLs on `pr-previews/<number>` branches, not

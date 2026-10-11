@@ -6,6 +6,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
+from unittest.mock import patch
 
 from affected_pages import (PageAnchors, affected_routes, change_base, changed_paths,
                             css_routes, rule_routes)
@@ -47,7 +48,8 @@ class SelectionTests(unittest.TestCase):
 
     def test_tooling_and_docs_do_not_render(self):
         self.assertEqual(affected_routes(['README.md', 'STYLE.md', '.github/workflows/pages.yml',
-                                         '.ui-review/.gitignore', 'scripts/viewrule.py'], self.routes), [])
+                                         '.ui-review/.gitignore', 'scripts/viewrule.py',
+                                         'data/easy-ui-previews.json'], self.routes), [])
 
     def test_css_small_edit_in_shared_file(self):
         old = '.prose{color:green}.writing-index{max-width:680px}.other{color:red}'
@@ -173,6 +175,16 @@ class RepositoryTests(unittest.TestCase):
                 'viewports':[{'name':'mobile'},{'name':'desktop'}],
                 'pages':[{'name':'home','path':'/'},{'name':'home-enlarged','path':'/','viewports':['desktop']},
                          {'name':'writing','path':'/writing/'}]}
+
+    def test_production_discovery_uses_validated_hugo_manifest(self):
+        self.write('public/index.html', '<main><h1>Home</h1></main>')
+        self.write('public/404.html', '<main><h1>Missing page</h1></main>')
+        self.write('public/previews/easy-ui/pr-29/storybook/index.html', '<div>Storybook</div>')
+        self.write('public/build.json', json.dumps({'revision':'test', 'files':{
+            '/index.html':'home-digest', '/404.html':'404-digest'}}))
+        with patch.object(wrapper, 'ROOT', self.root):
+            config = wrapper.prepare()
+        self.assertEqual([page['name'] for page in config['pages']], ['home','home-enlarged','404'])
 
     def test_scope_keeps_every_state_for_selected_route(self):
         self.write('layouts/home.html', 'changed')
