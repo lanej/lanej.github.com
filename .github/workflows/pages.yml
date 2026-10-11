@@ -161,7 +161,7 @@ jobs:
           .venv/bin/pip install -r scripts/requirements.txt
           chrome=$(command -v google-chrome || command -v google-chrome-stable)
           .venv/bin/python scripts/live-smoke.py
-          .venv/bin/python scripts/verify.py --url https://lanej.io/ --output artifacts/live/site --chromium-path "$chrome"
+          .venv/bin/python scripts/browser-smoke.py --url https://lanej.io/ --output artifacts/live/site --chromium-path "$chrome"
           .venv/bin/python scripts/easy-ui-previews.py verify --url https://lanej.io/ --output artifacts/live/easy-ui-previews --chromium-path "$chrome"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
