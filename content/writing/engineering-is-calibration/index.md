@@ -23,7 +23,7 @@ Relationship to the companion essay:
 Cheap Construction Is Not Progress applies this discipline to lower-cost software construction. Keep AI out of this capstone's central argument.
 
 Editorial boundaries:
-- Ground the personal lens in electrical/computer engineering labs, early QA, and mature business applications. Do not frame this as CS versus engineering.
+- Ground the personal lens in lab work for the electrical/computer engineering degree, professional QA involving hardware and software together, and mature business applications. Keep degree coursework distinct from employment. Do not frame this as CS versus engineering.
 - The lab anecdote is Josh's recollection. Preserve uncertainty about the project (possibly a counter); do not invent the wiggle-test procedure, measurements, chip type, or physical failure mode.
 - Use relationships to explain sustained engagement, evolving context, and reassessment, not an obligation to preserve every implementation.
 - Do not imply that difficulty or neglect establishes value, or make other engineers' supposed lack of perseverance the contrast.
@@ -34,7 +34,7 @@ Publication gate:
 Keep draft = true. Complete and refine all five drafts, conduct the corpus-level review, then finish and publish sequentially. Remove this working block before publication.
 -->
 
-In one of my electrical and computer engineering labs, I spent a long time trying to make a circuit work. I no longer remember exactly what we were building, possibly a counter. It seemed as though it should work, but it didn't.
+During lab work for my electrical and computer engineering degree, I spent a long time trying to make a circuit work. I no longer remember exactly what we were building, possibly a counter. It seemed as though it should work, but it didn't.
 
 The wiggle test exposed an assumption I hadn't realized I was making: that the chip supplied by the course was functioning. It wasn't.
 
@@ -46,7 +46,7 @@ The boundaries of the assignment were not necessarily the boundaries of the prob
 
 ## What counts as failure
 
-My first job in software was in quality assurance. That added an essential prerequisite: I needed to establish what I expected before a failure could tell me much. Saying that a system was broken was not enough. What should it have done? Under which conditions? What observation would distinguish the expected behavior from the behavior we had?
+My early quality-assurance work involved hardware and software together. That reinforced an essential prerequisite: I needed to establish what I expected the combined system to do before a failure could tell me much. Saying that a system was broken was not enough. What should it have done? Under which conditions? What observation would distinguish the expected behavior from the behavior we had?
 
 The circuit failing had told me that something was wrong. It had not told me that the chip was defective. Getting from one observation to the other required questioning the explanation I had been using. The same distinction mattered in QA: reproducing a failure gave me something to investigate, and a useful test helped distinguish possible explanations.
 
