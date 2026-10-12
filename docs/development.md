@@ -81,6 +81,9 @@ bytes with the tested bundle and captures each live preview at mobile and deskto
 widths. The `live-domain-verification` artifact retains those screenshots and
 the revision report.
 
+The Pages build allows 45 minutes for the retained Storybooks and site checks.
+Active publishing runs finish before the latest queued update starts.
+
 ### Website deployment
 
 PR descriptions receive a **Page previews** section with affected pages at 390px
