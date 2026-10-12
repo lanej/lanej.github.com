@@ -15,7 +15,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    # Retained Easy UI previews are rebuilt before site and browser checks.
+    timeout-minutes: 45
     env:
       VIEWRULE_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
       VIEWRULE_FULL: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
