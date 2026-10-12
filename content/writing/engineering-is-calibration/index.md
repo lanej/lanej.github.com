@@ -6,7 +6,7 @@ draft = true
 +++
 
 <!--
-Working document: first prose draft, not publication-ready.
+Working document: revised prose draft, not publication-ready.
 
 Series: Architecture Under Uncertainty (5/5)
 
@@ -24,6 +24,7 @@ Cheap Construction Is Not Progress applies this discipline to lower-cost softwar
 
 Editorial boundaries:
 - Ground the personal lens in electrical/computer engineering labs, early QA, and mature business applications. Do not frame this as CS versus engineering.
+- The lab anecdote is Josh's recollection. Preserve uncertainty about the project (possibly a counter); do not invent the wiggle-test procedure, measurements, chip type, or physical failure mode.
 - Use relationships to explain sustained engagement, evolving context, and reassessment, not an obligation to preserve every implementation.
 - Do not imply that difficulty or neglect establishes value, or make other engineers' supposed lack of perseverance the contrast.
 - The transaction/retry example is hypothetical, not a claim about an employer or a particular incident.
@@ -33,29 +34,37 @@ Publication gate:
 Keep draft = true. Complete and refine all five drafts, conduct the corpus-level review, then finish and publish sequentially. Remove this working block before publication.
 -->
 
-In electrical and computer engineering labs, I would build something, measure its behavior, change something, and measure again. When the result disagreed with my expectations, I had something to investigate. The circuit did not become more cooperative because I preferred the theory.
+In one of my electrical and computer engineering labs, I spent a long time trying to make a circuit work. I no longer remember exactly what we were building, possibly a counter. It seemed as though it should work, but it didn't.
 
-My first job in software was in quality assurance. That sharpened a prerequisite I had not fully appreciated: before a failure can teach you anything, you need to establish what you expected to happen.
+The wiggle test exposed an assumption I hadn't realized I was making: that the chip supplied by the course was functioning. It wasn't.
 
-I brought those habits into large business applications, including aging Rails codebases. The difficult parts were rarely isolated algorithms. They were business rules interacting with other business rules, assumptions spread across components, and years of decisions whose reasons were no longer immediately visible. Much of the work was careful observation, engineering hygiene, and iteration.
+I had let where the component came from stand in for evidence about how it behaved. The chip was part of the system, but I had treated its condition as something already settled.
 
-I had not arrived expecting the problems to take one particular form. They were the systems in front of me, and they needed to change while continuing to serve the businesses that depended on them.
+I learned a great deal in the time it took to find that defect. Looking back, the durable lesson was about what belonged in the investigation. When observation contradicts expectation, the assumptions behind that expectation need to be examined too. Some concern the thing I built. Others concern things I was given and had no reason to expect I would need to question.
+
+The boundaries of the assignment were not necessarily the boundaries of the problem.
 
 ## What counts as failure
 
-QA gave me a way to turn an impression into a question I could investigate. Saying that a system was broken was not enough. What should it have done? Under which conditions? What observation would distinguish the expected behavior from the behavior we had?
+My first job in software was in quality assurance. That added an essential prerequisite: I needed to establish what I expected before a failure could tell me much. Saying that a system was broken was not enough. What should it have done? Under which conditions? What observation would distinguish the expected behavior from the behavior we had?
 
-That also matters when the implementation is unfamiliar. Existing behavior tells you what the system does; it does not, by itself, settle what the system should do. Some behavior is a requirement nobody wrote down. Some is a workaround. Some is a bug that another component has learned to accommodate. Before changing it, you need to understand which distinction matters to the people relying on it.
+The circuit failing had told me that something was wrong. It had not told me that the chip was defective. Getting from one observation to the other required questioning the explanation I had been using. The same distinction mattered in QA: reproducing a failure gave me something to investigate, and a useful test helped distinguish possible explanations.
+
+That is what made mistakes useful. Repeating an unexplained failure could consume a great deal of time. Learning required a result that changed what I understood or what I would try next.
+
+I brought those habits into large business applications, including aging Rails codebases. The difficult parts were rarely isolated algorithms. They were business rules interacting with other business rules, assumptions spread across components, and years of decisions whose reasons were no longer immediately visible. Much of the work was careful observation, engineering hygiene, and iteration. I needed to understand the systems in front of me well enough to change them while they continued serving the business.
+
+Existing behavior tells you what a system does; it does not, by itself, settle what the system should do. Some behavior is a requirement nobody wrote down. Some is a workaround. Some is a bug that another component has learned to accommodate. Before changing it, you need to understand which distinction matters to the people relying on it.
 
 Consider a hypothetical checkout operation that updates an order in a database and asks a separate payment service to charge the customer. The payment succeeds, but the local operation fails before it records the result. A database rollback cannot undo a charge the payment service has already accepted.
 
-The local code might look straightforward. Understanding the failure requires a larger view: which system owns the payment state, what the caller knows, what a retry will do, and how an uncertain result gets reconciled. Concurrent requests can make the same uncertainty visible in another way. Counting changed lines tells you little about that exposure.
+The local code might look straightforward. Understanding the failure requires a larger view: which system owns the payment state, what the caller knows, what a retry will do, and how an uncertain result gets reconciled. Calling the operation a transaction does not tell us which effects are actually inside its boundary.
 
 A useful test might arrange for the payment to succeed while its reply is lost, then check whether recovery produces one charge and a consistent order state. The expected behavior makes the failure interpretable. Without it, a green test could mean only that the method returned without raising an exception.
 
-This is why transactional reasoning is such a useful test of engineering judgment. It requires you to follow state and effects across time, ownership, and failure boundaries rather than stop at the edge of the function you are editing.
+This is why I find transactional reasoning useful when assessing engineering judgment. It requires following state and effects across time, ownership, and failure boundaries rather than stopping at the edge of the function being edited.
 
-I think of calibration as improving the correspondence between those expectations and what actually happens. It includes knowing where my understanding is weak enough that I should narrow the change or gather more evidence first.
+I think of calibration as bringing my explanations and predictions closer to the system's actual behavior. The requirement might remain one charge per order; what changes is my understanding of what must be controlled to achieve it. That includes recognizing where my understanding is weak enough that I should narrow the change or gather more evidence first.
 
 ## Systems do not stay solved
 
@@ -107,6 +116,6 @@ Keep the destination revisable, but make a real commitment to the next useful st
 
 The first essay begins with reasonable local choices that compose into a system nobody intended. The response cannot simply be a better set of permanent rules. A boundary that is worth maintaining now may have been needless expense earlier. Two representations that look redundant may keep unrelated responsibilities from becoming coupled. A replacement that appears necessary may become smaller once its actual constraints are understood.
 
-The series follows those decisions through their consequences. Calibration is what lets us return to them with better information: revise an abstraction, recognize that the economics have changed, or choose the next part of a migration. It also helps us recognize that the requested change is not the change the system needs.
+The chip was already defective while I was treating it as a given. My understanding had to change before I could address the problem in front of me. Calibration is how I bring that same attention to architectural decisions. Their assumptions remain open to investigation even after the decisions have become familiar.
 
 Engineering is the discipline of making progress on problems we do not yet fully understand. Maturity means taking responsibility not just for a proposed solution, but for discovering what actually needs to change and developing a way to make progress.
