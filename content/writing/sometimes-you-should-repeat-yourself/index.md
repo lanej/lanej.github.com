@@ -14,7 +14,7 @@ Complete thought:
 DRY optimizes the number of representations; architecture often needs to optimize the dependency graph. Two similar representations can be desirable when they isolate boundaries. Functional core / imperative shell, a thin canonical model, and consumer-owned interfaces provide a more useful way to decide what should be shared.
 
 Role in the progression:
-Reframe. Replace concept reduction with dependency reduction as the primary architectural lens.
+Reframe. Replace concept reduction with dependency reduction as the primary architectural lens. Neither DRY nor dependency minimization is an end in itself; both must be evaluated against the ability to deliver and change business behavior.
 
 Relationship to the next piece:
 When Simplicity Stops Being Cheap adds the missing timing dimension: these boundaries are valuable, but often premature at the beginning.
@@ -27,12 +27,14 @@ DRY optimizes the number of representations; architecture often needs to optimiz
 ## The wrong graph
 
 - Contrast minimizing representations with minimizing dependencies.
+- Treat DRY and architectural purity as candidate means, not independent success criteria. Ask which structure makes a consequential change safer and more affordable.
 - Use OrderRecord, DomainOrder, CarrierOrder, and OrderPayload as an example where duplication buys isolation.
 
 ## Sometimes duplication is the price of decoupling
 
 - Explain why explicit translation can be cheaper than a universal shared object.
 - DRY is a useful local optimization, not an architectural law.
+- Do not replace one purity rule with another. A deliberate duplicate may be cheaper than a shared dependency, but the added translation also has a cost.
 
 ## Functional core, imperative shell
 
