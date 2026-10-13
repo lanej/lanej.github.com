@@ -2,12 +2,13 @@
 import argparse
 import hashlib
 import json
+import os
 import re
 import subprocess
 import tempfile
 import time
 from pathlib import Path
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlsplit
 from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -16,6 +17,12 @@ REPOSITORY = 'lanej/easy-ui'
 
 def read(url):
     request = Request(url, headers={'User-Agent': 'lanej-storybook-preview', 'Cache-Control': 'no-cache'})
+    parts = urlsplit(url)
+    if parts.scheme == 'https' and parts.netloc == 'api.github.com':
+        token = os.getenv('GH_TOKEN') or os.getenv('GITHUB_TOKEN')
+        if token:
+            # Do not forward GitHub credentials through redirects or public-site reads.
+            request.add_unredirected_header('Authorization', f'Bearer {token}')
     with urlopen(request, timeout=30) as response:
         return response.read()
 
@@ -53,22 +60,24 @@ def preview_heads():
 
 def build(root):
     heads = preview_heads()
+    environment = {key: value for key, value in os.environ.items()
+                   if key not in ('GH_TOKEN', 'GITHUB_TOKEN')}
     destination = root / 'previews/easy-ui'
     destination.mkdir(parents=True, exist_ok=True)
     previews = []
     with tempfile.TemporaryDirectory(prefix='easy-ui-previews-') as temporary:
         checkout = Path(temporary) / 'easy-ui'
         subprocess.run(['git', 'clone', '--quiet', '--no-checkout', '--filter=blob:none',
-                        f'https://github.com/{REPOSITORY}.git', str(checkout)], check=True)
+                        f'https://github.com/{REPOSITORY}.git', str(checkout)], check=True, env=environment)
         for number, sha in heads:
-            subprocess.run(['git', '-C', str(checkout), 'fetch', '--quiet', '--depth=1', 'origin', sha], check=True)
-            subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', sha], check=True)
+            subprocess.run(['git', '-C', str(checkout), 'fetch', '--quiet', '--depth=1', 'origin', sha], check=True, env=environment)
+            subprocess.run(['git', '-C', str(checkout), 'checkout', '--quiet', '--detach', sha], check=True, env=environment)
             output = destination / f'pr-{number}'
-            subprocess.run(['npm', 'ci', '--no-audit', '--no-fund'], cwd=checkout, check=True)
+            subprocess.run(['npm', 'ci', '--no-audit', '--no-fund'], cwd=checkout, check=True, env=environment)
             # Docgen follows project references into dist; build declarations first.
-            subprocess.run(['npm', 'run', 'build'], cwd=checkout, check=True)
+            subprocess.run(['npm', 'run', 'build'], cwd=checkout, check=True, env=environment)
             subprocess.run(['npm', 'run', 'build:storybook', '--', '--output-dir',
-                            str(output / 'storybook')], cwd=checkout, check=True)
+                            str(output / 'storybook')], cwd=checkout, check=True, env=environment)
             files = ['index.html', 'iframe.html', 'index.json']
             digests = {name: hashlib.sha256((output / 'storybook' / name).read_bytes()).hexdigest()
                        for name in files}

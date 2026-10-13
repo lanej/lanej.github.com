@@ -5,6 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from urllib.request import HTTPRedirectHandler
 
 spec = importlib.util.spec_from_file_location('previews', Path(__file__).with_name('easy-ui-previews.py'))
 previews = importlib.util.module_from_spec(spec)
@@ -29,6 +30,26 @@ class PreviewTests(unittest.TestCase):
         root_patch = patch.object(previews, 'ROOT', root)
         root_patch.start()
         self.addCleanup(root_patch.stop)
+
+    def test_api_token_is_not_sent_to_public_sites_or_redirects(self):
+        with patch.dict(previews.os.environ, {'GH_TOKEN': 'test-read-only-token'}, clear=True), patch.object(previews, 'urlopen') as fetch:
+            for url in ['https://api.github.com/repos/lanej/easy-ui/pulls',
+                        'https://lanej.io/previews/easy-ui/pr-38/revision.txt',
+                        'https://api.github.com.example.test/pulls']:
+                previews.read(url)
+                request = fetch.call_args.args[0]
+                expected = 'Bearer test-read-only-token' if url.startswith('https://api.github.com/') else None
+                self.assertEqual(request.get_header('Authorization'), expected)
+                redirected = HTTPRedirectHandler().redirect_request(
+                    request, None, 302, '', {}, 'https://example.test/redirect')
+                self.assertIsNone(redirected.get_header('Authorization'))
+
+    def test_github_token_fallback_and_unauthenticated_local_reads(self):
+        with patch.object(previews, 'urlopen') as fetch:
+            for environment, expected in [({'GITHUB_TOKEN': 'test-fallback'}, 'Bearer test-fallback'), ({}, None)]:
+                with patch.dict(previews.os.environ, environment, clear=True):
+                    previews.read('https://api.github.com/repos/lanej/easy-ui/pulls')
+                    self.assertEqual(fetch.call_args.args[0].get_header('Authorization'), expected)
 
     def test_trusted_head(self):
         self.assertEqual(previews.trusted_head(pr(29)), (29, SHA_A))
@@ -69,6 +90,8 @@ class PreviewTests(unittest.TestCase):
         commands = []
         def run(command, **kwargs):
             commands.append(command)
+            self.assertNotIn('GH_TOKEN', kwargs['env'])
+            self.assertNotIn('GITHUB_TOKEN', kwargs['env'])
             if command[:2] == ['git', 'clone']:
                 Path(command[-1]).mkdir()
             if command[:3] == ['npm', 'run', 'build:storybook']:
@@ -78,7 +101,7 @@ class PreviewTests(unittest.TestCase):
                     (storybook / name).write_text(name)
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
-            with patch.object(previews, 'preview_heads', return_value=[(24, SHA_A), (29, SHA_B)]), patch.object(previews.subprocess, 'run', side_effect=run):
+            with patch.dict(previews.os.environ, {'GH_TOKEN': 'test-read-only-token', 'GITHUB_TOKEN': 'test-fallback'}), patch.object(previews, 'preview_heads', return_value=[(24, SHA_A), (29, SHA_B)]), patch.object(previews.subprocess, 'run', side_effect=run):
                 previews.build(root)
             records = json.loads((root / 'previews/easy-ui/manifest.json').read_text())['previews']
             self.assertEqual([record['path'] for record in records], ['previews/easy-ui/pr-24/', 'previews/easy-ui/pr-29/'])
