@@ -14,7 +14,7 @@ Complete thought:
 Messy Rails applications are often the predictable result of several locally reasonable forces composing badly: object-oriented behavior placement, ActiveRecord collapsing persistence and domain identity, loose message coupling, fat-model guidance, and DRY. Nobody has to make an obviously bad decision for the global architecture to become hard to change.
 
 Role in the progression:
-Diagnosis. Establish that architecture can degrade through locally reasonable choices, which creates the need to reconsider what we are optimizing.
+Diagnosis. Establish that architecture can degrade through locally reasonable choices, which creates the need to reconsider what we are optimizing. A legacy codebase can become a convenient common enemy; that is not a diagnosis or a goal.
 
 Relationship to the next piece:
 Sometimes You Should Repeat Yourself asks whether minimizing duplicated concepts is the wrong architectural objective.
@@ -46,6 +46,8 @@ Messy Rails applications are often the predictable result of several locally rea
 
 - Do not argue that Rails developers were careless or that Rails was the wrong startup choice.
 - The point is that good local rules do not necessarily compose into good global architecture.
+- Shared frustration with the monolith can create solidarity without identifying a shared outcome. Define the actual costs (change latency, reliability, business capability) before treating preservation or replacement as the objective.
+- The inherited implementation is evidence of prior tradeoffs, not proof of a permanent constraint.
 
 ## Hand-off
 
