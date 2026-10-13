@@ -6,6 +6,7 @@ Unknown shared dependencies select all pages rather than silently dropping cover
 import difflib
 import json
 import subprocess
+import tomllib
 from html.parser import HTMLParser
 from pathlib import Path
 
@@ -45,6 +46,14 @@ def previous_text(root, base, path):
     result = subprocess.run(['git', 'show', f'{base}:{path}'], cwd=root,
                             text=True, capture_output=True)
     return result.stdout if result.returncode == 0 else ''
+
+
+def offline_draft(text):
+    """Hugo excludes TOML-front-matter drafts from the production build."""
+    if not text.startswith('+++\n'):
+        return False
+    _, front, _ = text.split('+++', 2)
+    return tomllib.loads(front).get('draft') is True
 
 
 def css_rules(text):
@@ -204,13 +213,19 @@ def affected_routes(paths, available, *, root=None, base=None, page_names=None):
         elif path.startswith('content/writing/') and not path.endswith('.md'):
             routes.update(essays | {'/', '/writing/'})
         elif path.startswith('content/') and path.endswith('.md'):
+            current = Path(root) / path if root is not None else None
+            draft = current is not None and current.exists() and offline_draft(current.read_text())
+            if draft and base is not None:
+                before = previous_text(root, base, path)
+                if not before or offline_draft(before):
+                    continue  # New/edited offline drafts change no production pages.
             relative = path.removeprefix('content/').removesuffix('.md')
             parts = relative.split('/')
             if parts[-1] in ('index', '_index'):
                 parts.pop()
             route = '/' + '/'.join(parts) + '/' if parts else '/'
             routes.add(route)
-            if route not in available and root is not None and (Path(root) / path).exists():
+            if route not in available and current is not None and current.exists() and not draft:
                 routes.update(available)  # An unfamiliar permalink/layout needs a conservative check.
             if relative.startswith('writing/'):
                 routes.update(('/', '/writing/'))

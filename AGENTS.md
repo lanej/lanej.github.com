@@ -12,7 +12,9 @@ docs/development.md. Do not append feature histories or test inventories to READ
 Edit the source, not `public/`. Keep one publishing path. Before merging, run the
 pinned Hugo build, source checks, and browser verification. Confirm the PR description
 contains current mobile and desktop screenshots of affected pages from the preview
-workflow. Preserve the automated preview markers when editing PR descriptions.
+workflow when rendered pages change. Draft-only and tooling-only edits need no
+screenshots. Embed at most three affected pages, collapsed by default; use the CI
+artifact for broader coverage. Preserve the automated preview markers when editing PR descriptions.
 Screenshots are kept on separate preview branches, not in source. After deployment,
 inspect screenshots captured from **https://lanej.io/** at mobile and desktop
 sizes. Confirm the expected revision and that the fetched image bytes decode and

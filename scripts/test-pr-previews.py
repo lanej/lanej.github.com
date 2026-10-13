@@ -50,6 +50,23 @@ class PreviewTests(unittest.TestCase):
     def test_empty_body(self):
         self.assertIn(previews.START, previews.replace_section('', previews.START + previews.END))
 
+    def test_broad_changes_have_bounded_collapsed_images_and_artifact_link(self):
+        pages = [{'title': f'Page {i}', 'route': f'/page-{i}/',
+                  'images': {label: {'viewport': f'{i}-{label}.png', 'full': f'{i}-{label}-full.png'}
+                             for label in ('mobile', 'desktop')}} for i in range(8)]
+        section = previews.preview_section({'head_sha': 'a' * 40, 'pages': pages},
+                                           'https://images.invalid', 'https://ci.invalid/run')
+        self.assertEqual(section.count('<details>'), 3)
+        self.assertEqual(section.count('<img '), 6)
+        self.assertNotIn('<details open>', section)
+        self.assertIn('Showing 3 of 8 affected pages', section)
+        self.assertIn('https://ci.invalid/run#artifacts', section)
+
+    def test_no_rendered_changes_embed_no_images(self):
+        section = previews.preview_section({'head_sha': 'a' * 40, 'pages': []}, '', 'https://ci.invalid')
+        self.assertIn('No rendered page changes detected.', section)
+        self.assertNotIn('<img ', section)
+
 
 if __name__ == '__main__':
     unittest.main()
