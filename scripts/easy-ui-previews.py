@@ -102,18 +102,32 @@ def verify(root, base, output, chromium_path):
                 story = next((name for name in ('components-linechart--default', 'components-chart--time-series') if name in entries), None)
                 assert story, 'Missing chart story'
                 for label, width in [('mobile', 390), ('desktop', 1440)]:
-                    page = browser.new_page(viewport={'width': width, 'height': 900})
-                    errors = []
-                    page.on('pageerror', lambda error: errors.append(str(error)))
-                    response = page.goto(url + 'storybook/iframe.html?id=' + story + '&viewMode=story', wait_until='networkidle')
-                    assert response and response.ok
-                    page.locator('#storybook-root [data-chart-state="ready"] svg').first.wait_for()
-                    page.evaluate('document.fonts.ready')
-                    assert not errors, errors
-                    assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), 'Preview overflows horizontally'
-                    assert not page.locator('.sb-errordisplay').is_visible(), 'Story failed'
-                    page.screenshot(path=str(output / f'pr-{preview["number"]}-{label}.png'), full_page=True)
-                    page.close()
+                    # Browser boot can race Pages/CDN propagation after the byte checks.
+                    # Retry a fresh page; every successful attempt must pass all checks.
+                    for attempt in range(3):
+                        page = browser.new_page(viewport={'width': width, 'height': 900})
+                        errors = []
+                        page.on('pageerror', lambda error: errors.append(str(error)))
+                        try:
+                            response = page.goto(
+                                url + 'storybook/iframe.html?id=' + story +
+                                '&viewMode=story&revision=' + preview['sha'],
+                                wait_until='networkidle')
+                            assert response and response.ok
+                            page.locator('#storybook-root [data-chart-state="ready"] svg').first.wait_for(timeout=60000)
+                            page.evaluate('document.fonts.ready')
+                            assert not errors, errors
+                            assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), 'Preview overflows horizontally'
+                            assert not page.locator('.sb-errordisplay').is_visible(), 'Story failed'
+                            page.screenshot(path=str(output / f'pr-{preview["number"]}-{label}.png'), full_page=True)
+                            break
+                        except Exception:
+                            page.screenshot(path=str(output / f'pr-{preview["number"]}-{label}-attempt-{attempt + 1}.png'), full_page=True)
+                            if attempt == 2:
+                                raise
+                            time.sleep(2)
+                        finally:
+                            page.close()
                 report['previews'].append({'number': preview['number'], 'sha': preview['sha'], 'url': url + 'storybook/', 'story': story})
         finally:
             browser.close()
