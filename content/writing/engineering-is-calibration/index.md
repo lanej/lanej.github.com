@@ -13,6 +13,9 @@ Series: Architecture Under Uncertainty (5/5)
 Shared thesis:
 Engineering is the discipline of making progress on problems we don't yet fully understand.
 
+Series principle:
+An inherited solution is evidence of a past decision, not proof of a present constraint. Goals, observed facts, and chosen means must remain distinguishable.
+
 Complete thought:
 Engineering maturity means taking responsibility not just for a proposed solution, but for discovering what actually needs to change and developing a way to make progress. Problem selection and problem solving are one continuous engagement with an evolving system. Calibration joins that judgment to a realistic model of systemic exposure: what a change can affect, how failure will present, and which next commitment is useful and affordable.
 
@@ -26,6 +29,9 @@ Editorial boundaries:
 - Ground the personal lens in lab work for the electrical/computer engineering degree, professional QA involving hardware and software together, and mature business applications. Keep degree coursework distinct from employment. Do not frame this as CS versus engineering.
 - The lab anecdote is Josh's recollection. Preserve uncertainty about the project (possibly a counter); do not invent the wiggle-test procedure, measurements, chip type, or physical failure mode.
 - Use relationships to explain sustained engagement, evolving context, and reassessment, not an obligation to preserve every implementation.
+- Treat shared frustration with legacy systems and attachment to architectural purity as symmetrical ways means can displace ends; do not impute motives to specific people.
+- Separate disagreement about outcomes, beliefs about reality, and proposed means. Refer to the published Lead With Problems essay without reproducing it.
+- Preserve the distinction between genuine constraints and assumptions inherited from a previous solution; show how bounded mess can be a rational price of progress.
 - Do not imply that difficulty or neglect establishes value, or make other engineers' supposed lack of perseverance the contrast.
 - The transaction/retry example is hypothetical, not a claim about an employer or a particular incident.
 - Review overlap with article 4: migration mechanisms belong there; this piece explains how to choose and evaluate an intervention.
@@ -38,9 +44,9 @@ During lab work for my electrical and computer engineering degree, I spent a lon
 
 The wiggle test exposed an assumption I hadn't realized I was making: that the chip supplied by the course was functioning. It wasn't.
 
-I had let where the component came from stand in for evidence about how it behaved. The chip was part of the system, but I had treated its condition as something already settled.
+I had let where the component came from stand in for evidence about how it behaved. The chip was part of the system, but I had treated its condition as something already settled. I needed the circuit to behave as specified. The fact that the course supplied the chip did not establish that it worked, yet I had allowed that assumption to limit which explanations I would consider.
 
-I learned a great deal in the time it took to find that defect. Looking back, the durable lesson was about what belonged in the investigation. When observation contradicts expectation, the assumptions behind that expectation need to be examined too. Some concern the thing I built. Others concern things I was given and had no reason to expect I would need to question.
+I learned a great deal in the time it took to find that defect. Looking back, the durable lesson was about what belonged in the investigation. When observation contradicts expectation, the assumptions behind that expectation need to be examined too. Some concern the thing I built. Others concern things I was given and had no reason to expect I would need to question. The defective chip was not an explanation I had eliminated with evidence. I had excluded it by assumption.
 
 The boundaries of the assignment were not necessarily the boundaries of the problem.
 
@@ -76,6 +82,10 @@ That is why I think of a mature codebase as an ongoing relationship. You develop
 
 The relationship can also stagnate. Familiarity makes it easier to navigate a constraint without questioning it. A release requiring coordination across several teams can become routine. So can a manual reconciliation step that everyone knows how to perform. The organization gets better at living with the problem, which can make the problem less visible.
 
+An aging codebase can become a convenient common enemy. Complaining about it gives a team something to agree on, but shared frustration does not establish a shared goal. "Get rid of the monolith" may sound decisive while saying very little about which business outcome will improve, or at what cost.
+
+The opposite attachment is just as limiting. An architecture can become so associated with the people who created it that preserving its consistency starts to look like success in its own right. I do not need to speculate about anyone's motives to recognize the danger: both hostility to the old system and devotion to a purer replacement can turn the implementation into the objective.
+
 Cultivating the system means revisiting those arrangements as the business changes. It includes leaving working parts alone when changing them would buy little. Sometimes it requires replacing or retiring an implementation. The commitment is to the business's ability to function and change, not to preserving a particular body of code.
 
 There is no final architecture that releases us from that attention. There can be finished projects, removed dependencies, and retired systems. The surrounding business still presents new questions.
@@ -89,6 +99,10 @@ The stated problem concerns retry handling. The more consequential problem may b
 You do not need a complete map of the business to discover this. You need enough context to follow the operation beyond the point where the local explanation stops accounting for its behavior. The investigation may justify routing one class of operation through an explicit owner before trying to replace the rest of the payment flow. It may instead show that the existing owner is adequate and one caller is violating its contract. Those findings call for different work.
 
 Sometimes understanding the larger system reveals that a small change will solve most of the practical problem. Sometimes a small investigation exposes a larger constraint. Neither direction can be prescribed in advance. The problem is what it is, not what would fit most comfortably into the solution I already know how to build.
+
+I find it useful to separate three kinds of disagreement before arguing about architecture. Do we disagree about the outcome? Do we disagree about the facts of the system, including which constraints are real? Or do we agree on those things but differ about the means? The second kind invites investigation and a test. The third invites comparison of tradeoffs. Neither will resolve a disagreement about the goal that nobody has acknowledged.
+
+This is an extension of what I argued in [Lead With Problems](/writing/lead-with-problems/). A team asked to replace a monolith has already been given a solution. Before committing to that solution, we should establish what must improve and which constraints actually bind us. An inherited implementation is evidence of a past decision, not proof of a permanent constraint.
 
 This is where problem selection and problem solving become inseparable. Engaging with a problem changes my understanding of its importance, and attempting a bounded improvement tests whether I have identified the right cause. New evidence can justify expanding the work, narrowing it, or stopping.
 
@@ -104,6 +118,8 @@ In the checkout example, reproducing an ambiguous payment outcome with a control
 
 The size of the code change is secondary. What matters is the scope of its possible effects, whether you can detect a bad result, and what recovery would require. Reverting code does not necessarily reverse what it has already done. A useful risk budget has to account for that difference.
 
+Progress often leaves some mess behind. A temporary adapter might be awkward and still be preferable to a clean replacement that delays the benefit for a year. Equally, a quick fix can create a dependency that costs more than it saves. The judgment is not whether the result looks pure; it is whether the compromise improves the outcome without consuming more future options than it buys.
+
 Small interventions make learning affordable when they bound those consequences. They are not automatically informative. A change that cannot distinguish competing explanations may consume time without improving the next decision. Nor does learning require deliberately causing every possible failure. Existing incidents, operational knowledge, and careful reasoning can eliminate experiments we do not need to run.
 
 Code review, controlled tests, shadow execution, and progressive delivery can each contribute different evidence. None removes the need to say what uncertainty it is meant to reduce. The migration techniques in the preceding essay put that discipline into practice; choosing among them depends on what we still need to understand.
@@ -116,6 +132,6 @@ Keep the destination revisable, but make a real commitment to the next useful st
 
 The first essay begins with reasonable local choices that compose into a system nobody intended. The response cannot simply be a better set of permanent rules. A boundary that is worth maintaining now may have been needless expense earlier. Two representations that look redundant may keep unrelated responsibilities from becoming coupled. A replacement that appears necessary may become smaller once its actual constraints are understood.
 
-The chip was already defective while I was treating it as a given. My understanding had to change before I could address the problem in front of me. Calibration is how I bring that same attention to architectural decisions. Their assumptions remain open to investigation even after the decisions have become familiar.
+The chip was already defective while I was treating it as a given. My understanding had to change before I could address the problem in front of me. Calibration is how I bring that same attention to architectural decisions. Their assumptions remain open to investigation even after the decisions have become familiar. I do not need to defend an inherited implementation or replace it on principle. I need to know whether it still serves the outcome, and what evidence would change my mind.
 
 Engineering is the discipline of making progress on problems we do not yet fully understand. Maturity means taking responsibility not just for a proposed solution, but for discovering what actually needs to change and developing a way to make progress.
