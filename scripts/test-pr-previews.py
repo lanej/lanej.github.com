@@ -1,6 +1,8 @@
 """Check preview scope and preservation of human-authored PR text."""
 import importlib.util
+import json
 from pathlib import Path
+import tempfile
 import unittest
 
 spec = importlib.util.spec_from_file_location('previews', Path(__file__).with_name('pr-previews.py'))
@@ -50,17 +52,63 @@ class PreviewTests(unittest.TestCase):
     def test_empty_body(self):
         self.assertIn(previews.START, previews.replace_section('', previews.START + previews.END))
 
-    def test_broad_changes_have_bounded_collapsed_images_and_artifact_link(self):
+    def test_no_changed_pages_remove_stale_gallery_and_preserve_human_text(self):
+        body = 'Human introduction\n\n' + previews.START + '\nOld gallery\n' + previews.END + '\n\nHuman notes'
+        self.assertEqual(previews.replace_section(body, ''), 'Human introduction\n\n\n\nHuman notes')
+        self.assertEqual(previews.replace_section('Human notes', ''), 'Human notes')
+
+    def test_every_changed_page_is_shown_without_unrelated_page_padding(self):
         pages = [{'title': f'Page {i}', 'route': f'/page-{i}/',
                   'images': {label: {'viewport': f'{i}-{label}.png', 'full': f'{i}-{label}-full.png'}
                              for label in ('mobile', 'desktop')}} for i in range(8)]
         section = previews.preview_section({'head_sha': 'a' * 40, 'pages': pages},
                                            'https://images.invalid', 'https://ci.invalid/run')
-        self.assertEqual(section.count('<details>'), 3)
-        self.assertEqual(section.count('<img '), 6)
+        self.assertEqual(section.count('<details>'), 8)
+        self.assertEqual(section.count('<img '), 16)
         self.assertNotIn('<details open>', section)
-        self.assertIn('Showing 3 of 8 affected pages', section)
-        self.assertIn('https://ci.invalid/run#artifacts', section)
+        self.assertNotIn('Showing 3 of', section)
+        self.assertIn('/page-7/', section)
+
+    def test_rendered_filter_keeps_only_changed_and_new_pages(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            current, baseline = root / 'current', root / 'baseline'
+            for directory in (current, baseline):
+                directory.mkdir()
+                (directory / 'index.html').write_text('<h1>Same homepage</h1>')
+                (directory / 'about').mkdir()
+                (directory / 'about/index.html').write_text('<h1>Old biography</h1>')
+            (current / 'about/index.html').write_text('<h1>Revised biography</h1>')
+            (current / 'new').mkdir()
+            (current / 'new/index.html').write_text('<h1>New page</h1>')
+            self.assertEqual(previews.rendered_changes(['/', '/about/', '/new/'], current, baseline),
+                             ['/about/', '/new/'])
+
+    def test_unchanged_asset_url_with_changed_image_is_a_page_change(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            current, baseline = root / 'current', root / 'baseline'
+            for directory, image in ((current, b'new image'), (baseline, b'old image')):
+                directory.mkdir()
+                (directory / 'index.html').write_text('<img src="/portrait.png?v=1">')
+                (directory / 'portrait.png').write_bytes(image)
+            self.assertEqual(previews.rendered_changes(['/'], current, baseline), ['/'])
+            (baseline / 'portrait.png').write_bytes(b'new image')
+            self.assertEqual(previews.rendered_changes(['/'], current, baseline), [])
+
+    def test_srcset_assets_are_compared(self):
+        self.assertEqual(previews.PageAssets('<img srcset="/small.png 1x, /large.png 2x">').paths,
+                         {'/small.png', '/large.png'})
+
+    def test_preview_inventory_excludes_embedded_storybooks(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            public = Path(temporary)
+            (public / 'build.json').write_text(json.dumps({'files': {
+                '/index.html': 'home', '/about/index.html': 'about', '/404.html': 'missing'}}))
+            storybook = public / 'previews/easy-ui/pr-1/storybook'
+            storybook.mkdir(parents=True)
+            (storybook / 'index.html').write_text('App preview')
+            self.assertEqual(previews.available_routes(public), {'/', '/about/', '/404.html'})
 
     def test_no_rendered_changes_embed_no_images(self):
         section = previews.preview_section({'head_sha': 'a' * 40, 'pages': []}, '', 'https://ci.invalid')

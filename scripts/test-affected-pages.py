@@ -158,6 +158,22 @@ class RepositoryTests(unittest.TestCase):
         self.assertEqual(set(changed_paths(self.root, self.base)), {
             'content/labs.md','layouts/home.html','content/about.md','assets/css/editorial.css','content/new.md'})
 
+    def test_committed_selection_excludes_ci_refreshes_and_untracked_files(self):
+        self.write('content/about.md', 'authored edit')
+        self.git('add', '.')
+        self.commit('authored change')
+        self.write('data/github_activity.json', 'routine refresh')
+        self.write('assets/css/editorial.css', 'staged generated change')
+        self.git('add', 'assets/css/editorial.css')
+        self.assertEqual(changed_paths(self.root, self.base, committed_only=True), ['content/about.md'])
+
+    def test_committed_activity_change_still_selects_its_page(self):
+        self.write('data/github_activity.json', 'intentional activity edit')
+        self.git('add', '.')
+        self.commit('activity edit')
+        paths = changed_paths(self.root, self.base, committed_only=True)
+        self.assertEqual(affected_routes(paths, {'/', '/open-source/', '/about/'}), ['/open-source/'])
+
     def test_rename_detects_deleted_and_new_content_paths(self):
         self.write('content/writing/old.md', 'essay')
         self.git('add', '.')

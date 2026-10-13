@@ -69,7 +69,7 @@ jobs:
           python3 scripts/browser-smoke.py --selection .ui-review/selection.json --chromium-path "$chrome"
           VIEWRULE_BROWSER_PATH="$chrome" python3 scripts/viewrule.py check
           python3 scripts/easy-ui-previews.py verify --chromium-path "$chrome"
-      - name: Capture affected pages for PR description
+      - name: Capture changed pages for PR description
         if: github.event_name == 'pull_request'
         env:
           PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
@@ -78,7 +78,7 @@ jobs:
           python3 -m http.server 8765 --directory public >/tmp/preview-server.log 2>&1 &
           server=$!
           trap 'kill "$server"' EXIT
-          python3 scripts/pr-previews.py capture --selection .ui-review/selection.json --chromium-path "$chrome"
+          python3 scripts/pr-previews.py capture --base "$VIEWRULE_BASE" --chromium-path "$chrome"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: github.event_name == 'pull_request'
         with:

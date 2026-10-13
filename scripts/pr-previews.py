@@ -1,19 +1,94 @@
-"""Capture affected pages and maintain a bounded preview section in PR bodies."""
+"""Capture rendered changes from a PR, excluding unchanged verification pages."""
 import argparse
 import base64
 import html
 import json
 import os
+from html.parser import HTMLParser
 from pathlib import Path
+import shutil
 import subprocess
+import tempfile
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
+from urllib.parse import unquote, urlsplit
 
 from affected_pages import affected_routes, changed_paths, change_base
 
 START = '<!-- page-previews:start -->'
 END = '<!-- page-previews:end -->'
-MAX_INLINE_PAGES = 3
+
+
+class PageAssets(HTMLParser):
+    def __init__(self, text):
+        super().__init__()
+        self.paths = set()
+        self.feed(text)
+
+    def handle_starttag(self, tag, attrs):
+        attrs = dict(attrs)
+        urls = []
+        if tag in ('img', 'script', 'source', 'video', 'audio'):
+            urls.extend(attrs.get(name, '') for name in ('src', 'poster'))
+            urls.extend(item.strip().split()[0] for item in attrs.get('srcset', '').split(',') if item.strip())
+        if tag == 'link' and attrs.get('rel') in ('stylesheet', 'icon', 'apple-touch-icon'):
+            urls.append(attrs.get('href', ''))
+        for url in urls:
+            parsed = urlsplit(url)
+            if not parsed.scheme and not parsed.netloc and parsed.path:
+                self.paths.add(unquote(parsed.path))
+
+
+def rendered_changes(routes, current, baseline):
+    """Do not mistake verification scope or unchanged asset URLs for page changes."""
+    selected = []
+    for route in routes:
+        relative = route.lstrip('/') + 'index.html' if route.endswith('/') else route.lstrip('/')
+        new, old = current / relative, baseline / relative
+        if not new.is_file():
+            continue
+        if not old.is_file() or new.read_bytes() != old.read_bytes():
+            selected.append(route)
+            continue
+        for asset in PageAssets(new.read_text()).paths:
+            relative_asset = asset.lstrip('/') if asset.startswith('/') else str(Path(relative).parent / asset)
+            new_asset, old_asset = current / relative_asset, baseline / relative_asset
+            if new_asset.is_file() and (not old_asset.is_file() or new_asset.read_bytes() != old_asset.read_bytes()):
+                selected.append(route)
+                break
+    return selected
+
+
+def changed_preview_routes(root, base, available):
+    paths = changed_paths(root, base, committed_only=True)
+    candidates = affected_routes(paths, available, root=root, base=base)
+    if not candidates:
+        return []
+    with tempfile.TemporaryDirectory(prefix='pr-preview-base-') as temporary:
+        source = Path(temporary) / 'source'
+        subprocess.run(['git', 'worktree', 'add', '--detach', str(source), base], cwd=root, check=True)
+        try:
+            # CI refreshes activity for deployment; it is not an authored PR change.
+            activity = 'data/github_activity.json'
+            if activity not in paths and (root / activity).is_file():
+                shutil.copyfile(root / activity, source / activity)
+            public = Path(temporary) / 'public'
+            hugo = Path(os.environ.get('HUGO_BIN', str(root / '.tools/hugo'))).resolve()
+            subprocess.run([str(hugo), '--source', str(source), '--destination', str(public),
+                            '--gc', '--minify', '--cleanDestinationDir', '--panicOnWarning'],
+                           cwd=root, env=dict(os.environ, HUGO_PARAMS_REVISION=os.environ['GITHUB_SHA']), check=True)
+            return rendered_changes(candidates, root / 'public', public)
+        finally:
+            subprocess.run(['git', 'worktree', 'remove', '--force', str(source)], cwd=root, check=True)
+
+
+def available_routes(public):
+    # App previews are added after Hugo's validated manifest and have their own CI.
+    files = json.loads((public / 'build.json').read_text())['files']
+    routes = {name.removesuffix('index.html') for name in files if name.endswith('/index.html')}
+    if '/404.html' in files:
+        routes.add('/404.html')
+    return routes
 
 
 def replace_section(body, section):
@@ -21,24 +96,18 @@ def replace_section(body, section):
         before, rest = body.split(START, 1)
         _, after = rest.split(END, 1)
         return before + section + after
+    if not section:
+        return body
     return body.rstrip() + '\n\n' + section + '\n'
 
 
 def capture(args):
     from playwright.sync_api import sync_playwright
 
-    available = set()
-    for path in Path('public').rglob('index.html'):
-        relative = path.parent.relative_to('public').as_posix()
-        available.add('/' if relative == '.' else '/' + relative + '/')
-    if Path('public/404.html').is_file():
-        available.add('/404.html')
-    if args.selection:
-        routes = sorted(set(json.loads(Path(args.selection).read_text())['routes']) & available)
-    else:
-        root = Path.cwd()
-        base = change_base(root, args.base)
-        routes = affected_routes(changed_paths(root, base), available, root=root, base=base)
+    available = available_routes(Path('public'))
+    root = Path.cwd()
+    base = change_base(root, args.base)
+    routes = changed_preview_routes(root, base, available)
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)
     manifest = {'head_sha': os.environ['PR_HEAD_SHA'],
@@ -91,14 +160,11 @@ def capture(args):
 
 
 def preview_section(manifest, image_root, run_url):
-    lines = [START, '## Page previews',
+    lines = [START, '## Changed pages',
              f'PR revision `{manifest["head_sha"][:12]}` · [CI build]({run_url})', '']
     if not manifest['pages']:
         lines.append('No rendered page changes detected.')
-    if len(manifest['pages']) > MAX_INLINE_PAGES:
-        lines += [f'Showing {MAX_INLINE_PAGES} of {len(manifest["pages"])} affected pages. '
-                  f'[All screenshots are in the pr-page-previews artifact]({run_url}#artifacts).', '']
-    for page in manifest['pages'][:MAX_INLINE_PAGES]:
+    for page in manifest['pages']:
         title = html.escape(page['title'])
         lines += [f'<details><summary>{title} — {html.escape(page["route"])}</summary>', '',
                   '| Mobile · 390px | Desktop · 1440px |', '| --- | --- |']
@@ -109,7 +175,7 @@ def preview_section(manifest, image_root, run_url):
             full = image_root + '/' + images['full']
             cells.append(f'<a href="{full}"><img src="{src}" width="{width}" alt="{title}: {label} preview"></a>')
         lines += ['| ' + ' | '.join(cells) + ' |', '',
-                  'Select an image to open the full-page screenshot.', '', '</details>', '']
+                  'Select an image to open the full-page screenshot.', '']
         for key, heading, alt in (('detail', 'EasyPost: roles and descriptions', 'EasyPost career details'),
                                   ('projects', 'Open-source projects', 'Open-source projects'),
                                   ('speaking', 'Speaking engagements', 'Speaking engagement')):
@@ -122,6 +188,7 @@ def preview_section(manifest, image_root, run_url):
                 src = image_root + '/' + page['images'][label][key]
                 details.append(f'<img src="{src}" width="{width}" alt="{alt}: {label}">')
             lines += ['| ' + ' | '.join(details) + ' |', '']
+        lines += ['</details>', '']
     lines.append(END)
     return '\n'.join(lines)
 
@@ -151,6 +218,13 @@ def publish(args):
     current = api(f'pulls/{pr_number}')
     if current['head']['sha'] != expected or current['state'] != 'open':
         print('Skipping superseded or closed PR.')
+        return
+    if not manifest['pages']:
+        body = current.get('body') or ''
+        updated = replace_section(body, '')
+        if updated != body:
+            api(f'pulls/{pr_number}', {'body': updated}, 'PATCH')
+        print(f'PR #{pr_number} has no changed pages; removed stale previews.')
         return
     # Separate per-PR branches keep screenshots out of the website source/build.
     branch = f'pr-previews/{pr_number}'
@@ -190,9 +264,8 @@ if __name__ == '__main__':
     parser.add_argument('command', choices=['capture', 'publish'])
     parser.add_argument('--output', default='artifacts/pr-previews')
     parser.add_argument('--base')
-    parser.add_argument('--selection', help='Reuse the visual suite page selection.')
     parser.add_argument('--chromium-path', default='')
     arguments = parser.parse_args()
-    if arguments.command == 'capture' and not (arguments.base or arguments.selection):
-        parser.error('capture requires --base or --selection')
+    if arguments.command == 'capture' and not arguments.base:
+        parser.error('capture requires --base')
     {'capture': capture, 'publish': publish}[arguments.command](arguments)

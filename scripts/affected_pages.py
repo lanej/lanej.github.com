@@ -36,9 +36,11 @@ def change_base(root, explicit=None):
     return git(root, 'merge-base', 'HEAD', 'origin/master')
 
 
-def changed_paths(root, base):
-    paths = git(root, 'diff', '--name-only', '--no-renames', '-z', base, '--').split('\0')
-    paths += git(root, 'ls-files', '--others', '--exclude-standard', '-z').split('\0')
+def changed_paths(root, base, *, committed_only=False):
+    revision = [base, 'HEAD'] if committed_only else [base]
+    paths = git(root, 'diff', '--name-only', '--no-renames', '-z', *revision, '--').split('\0')
+    if not committed_only:
+        paths += git(root, 'ls-files', '--others', '--exclude-standard', '-z').split('\0')
     return sorted(set(filter(None, paths)))
 
 
