@@ -27,6 +27,7 @@ A mature application rewrite should be run like a live migration, not a construc
 ## The system cannot stop
 
 - The old application is usually important precisely because replacing it is difficult.
+- It has earned trust by carrying real customer behavior this far; treat that value as something the migration must preserve rather than an embarrassment to discard.
 - Define the outcome before accepting the rewrite as the assignment: which capabilities, failure rates, lead times, or costs must improve?
 - A complete specification rarely exists; production behavior carries undocumented rules, ordering, retries, bugs, and assumptions.
 
