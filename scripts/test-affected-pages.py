@@ -166,6 +166,33 @@ class RepositoryTests(unittest.TestCase):
         self.git('mv', 'content/writing/old.md', 'content/writing/new.md')
         self.assertEqual(set(changed_paths(self.root, base)), {'content/writing/old.md','content/writing/new.md'})
 
+    def test_offline_drafts_do_not_select_production_pages(self):
+        path = 'content/writing/draft/index.md'
+        self.write(path, '+++\ntitle = "Draft"\ndraft = true\n+++\nFirst draft')
+        routes = {'/', '/writing/', '/about/'}
+        self.assertEqual(affected_routes([path], routes, root=self.root, base=self.base), [])
+        self.git('add', '.')
+        self.commit('add offline draft')
+        base = self.git('rev-parse', 'HEAD')
+        self.write(path, '+++\ntitle = "Draft"\ndraft = true\n+++\nRevised draft')
+        self.assertEqual(affected_routes([path], routes, root=self.root, base=base), [])
+
+    def test_retiring_published_article_keeps_discovery_checks(self):
+        path = 'content/writing/example/index.md'
+        self.write(path, '+++\ndraft = false\n+++\nPublished')
+        self.git('add', '.')
+        self.commit('published article')
+        base = self.git('rev-parse', 'HEAD')
+        self.write(path, '+++\ndraft = true\n+++\nOffline')
+        self.assertEqual(affected_routes([path], {'/', '/writing/', '/about/'},
+                                        root=self.root, base=base), ['/', '/writing/'])
+
+    def test_unfamiliar_public_permalink_still_selects_all(self):
+        path = 'content/writing/example/index.md'
+        self.write(path, '+++\nurl = "/custom/"\n+++\nPublic')
+        routes = {'/', '/writing/', '/custom/', '/about/'}
+        self.assertEqual(affected_routes([path], routes, root=self.root, base=self.base), sorted(routes))
+
     def test_bad_baseline_fails_instead_of_skipping(self):
         with self.assertRaises(subprocess.CalledProcessError):
             change_base(self.root, 'missing-ref')

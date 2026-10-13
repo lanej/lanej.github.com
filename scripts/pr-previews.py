@@ -13,6 +13,7 @@ from affected_pages import affected_routes, changed_paths, change_base
 
 START = '<!-- page-previews:start -->'
 END = '<!-- page-previews:end -->'
+MAX_INLINE_PAGES = 3
 
 
 def replace_section(body, section):
@@ -94,9 +95,12 @@ def preview_section(manifest, image_root, run_url):
              f'PR revision `{manifest["head_sha"][:12]}` · [CI build]({run_url})', '']
     if not manifest['pages']:
         lines.append('No rendered page changes detected.')
-    for page in manifest['pages']:
+    if len(manifest['pages']) > MAX_INLINE_PAGES:
+        lines += [f'Showing {MAX_INLINE_PAGES} of {len(manifest["pages"])} affected pages. '
+                  f'[All screenshots are in the pr-page-previews artifact]({run_url}#artifacts).', '']
+    for page in manifest['pages'][:MAX_INLINE_PAGES]:
         title = html.escape(page['title'])
-        lines += [f'<details open><summary>{title} — {html.escape(page["route"])}</summary>', '',
+        lines += [f'<details><summary>{title} — {html.escape(page["route"])}</summary>', '',
                   '| Mobile · 390px | Desktop · 1440px |', '| --- | --- |']
         cells = []
         for label, width in [('mobile', 240), ('desktop', 600)]:
