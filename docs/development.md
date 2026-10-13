@@ -87,9 +87,11 @@ Active publishing runs finish before the latest queued update starts.
 ### Website deployment
 
 PR descriptions receive a **Page previews** section with affected pages at 390px
-mobile and 1440px desktop widths, with at most three collapsed page pairs.
-Broader changes link to the complete `pr-page-previews` CI artifact. Offline
-draft-only edits do not select production pages. Preserve its HTML markers when editing the
+mobile and 1440px desktop widths, collapsed by default. Only pages whose rendered
+HTML or referenced assets differ from the PR base are included. Source dependency
+selection uses committed changes; routine CI activity refreshes and unchanged
+pages selected for verification do not add previews. Offline draft-only edits
+need no screenshots. Preserve its HTML markers when editing the
 description. Previews use immutable URLs on `pr-previews/<number>` branches, not
 website source. Fork PRs provide the `pr-page-previews` artifact instead.
 

@@ -13,8 +13,9 @@ Edit the source, not `public/`. Keep one publishing path. Before merging, run th
 pinned Hugo build, source checks, and browser verification. Confirm the PR description
 contains current mobile and desktop screenshots of affected pages from the preview
 workflow when rendered pages change. Draft-only and tooling-only edits need no
-screenshots. Embed at most three affected pages, collapsed by default; use the CI
-artifact for broader coverage. Preserve the automated preview markers when editing PR descriptions.
+screenshots. Preview only pages whose rendered output or referenced assets changed
+in the committed PR diff, collapsed by default. Exclude routine CI refreshes and
+unchanged pages selected for verification. Preserve the automated preview markers when editing PR descriptions.
 Screenshots are kept on separate preview branches, not in source. After deployment,
 inspect screenshots captured from **https://lanej.io/** at mobile and desktop
 sizes. Confirm the expected revision and that the fetched image bytes decode and
@@ -87,7 +88,8 @@ STYLE.md. Keep expectations independent of the CSS under test. Update the rules,
 their explanation, and shared CSS together for intentional changes. Run
 `python3 scripts/viewrule.py check` against the production preview. This checks
 affected pages with all their configured states; use `--all` for a full audit.
-Keep selection shared with browser checks and PR previews, and inspect
+Keep source dependency selection shared with browser checks; PR previews further
+filter it to changed rendered pages. Inspect
 native-scale detail tiles, including 4K, print, and enlarged-text captures.
 New measurements and their regression coverage belong in the Viewrule repository;
 do not recreate a Python chapter detector or another local layout suite. Keep
