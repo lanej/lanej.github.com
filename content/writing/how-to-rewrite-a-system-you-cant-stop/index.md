@@ -14,7 +14,7 @@ Complete thought:
 A mature application rewrite should be run like a live migration, not a construction project. Move capability and state ownership incrementally, keep one authoritative writer, use strangler/delegation patterns, replay and shadow real behavior, and structure the work so each increment is net-positive even if the migration stops before completion.
 
 Role in the progression:
-Practice. Show how to act after the timing problem has already been missed, without requiring a heroic stop-the-world rewrite.
+Practice. Show how to act after the timing problem has already been missed, without requiring a heroic stop-the-world rewrite. The rewrite is a means; preserving customer outcomes and improving change economics are the ends.
 
 Relationship to the next piece:
 Engineering Is Calibration generalizes the migration discipline into a model for individual and organizational decision-making under uncertainty.
@@ -27,6 +27,7 @@ A mature application rewrite should be run like a live migration, not a construc
 ## The system cannot stop
 
 - The old application is usually important precisely because replacing it is difficult.
+- Define the outcome before accepting the rewrite as the assignment: which capabilities, failure rates, lead times, or costs must improve?
 - A complete specification rarely exists; production behavior carries undocumented rules, ordering, retries, bugs, and assumptions.
 
 ## Strangler with delegation
@@ -51,6 +52,8 @@ A mature application rewrite should be run like a live migration, not a construc
 
 - Useful milestones are safer deployments, replay capability, clearer ownership, independent rollback, or a removed dependency—not percent complete.
 - If stopping halfway leaves only two systems instead of one, the migration was structured badly.
+- Accept bounded, temporary mess when it enables measurable progress; do not pursue architectural purity at the expense of customer outcomes.
+- A rewrite is not success by itself. If an increment does not improve the system's economics or reduce consequential risk, reconsider the plan.
 
 ## Hand-off
 
