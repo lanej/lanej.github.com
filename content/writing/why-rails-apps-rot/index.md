@@ -45,6 +45,8 @@ Messy Rails applications are often the predictable result of several locally rea
 ## Why this is not a blame story
 
 - Do not argue that Rails developers were careless or that Rails was the wrong startup choice.
+- Acknowledge the horse that brought the business this far: a messy monolith may have enabled product discovery and survival. Its present limitations are not evidence that it was a bad earlier choice.
+- Respect the history without converting it into a permanent constraint. Neither nostalgia nor shared dislike establishes the right next step.
 - The point is that good local rules do not necessarily compose into good global architecture.
 - Shared frustration with the monolith can create solidarity without identifying a shared outcome. Define the actual costs (change latency, reliability, business capability) before treating preservation or replacement as the objective.
 - The inherited implementation is evidence of prior tradeoffs, not proof of a permanent constraint.
