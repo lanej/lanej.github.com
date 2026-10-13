@@ -28,6 +28,7 @@ Simple, collapsed architectures are often correct when product uncertainty is hi
 
 - Early startups should optimize for learning and collapse distinctions that have not earned permanence.
 - Do not retroactively condemn the architecture that enabled product discovery.
+- The horse that carried the company through discovery may not be the right one for the next stage. Appreciate what the early architecture made possible; judge continued use against present economics, not gratitude or disdain.
 
 ## Success changes the optimization function
 
