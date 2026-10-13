@@ -30,6 +30,8 @@ Editorial boundaries:
 - The lab anecdote is Josh's recollection. Preserve uncertainty about the project (possibly a counter); do not invent the wiggle-test procedure, measurements, chip type, or physical failure mode.
 - Use relationships to explain sustained engagement, evolving context, and reassessment, not an obligation to preserve every implementation.
 - Treat shared frustration with legacy systems and attachment to architectural purity as symmetrical ways means can displace ends; do not impute motives to specific people.
+- Respect the legacy architecture as a historically useful adaptation without assuming it remains the right tool. The horse that got us here may need care or replacement; appreciation is not permanent obligation.
+- Brontes and Engine Yard anecdotes are grounded in the Career Canon; avoid claiming precise technical mechanisms or outcomes beyond the recorded account.
 - Separate disagreement about outcomes, beliefs about reality, and proposed means. Refer to the published Lead With Problems essay without reproducing it.
 - Preserve the distinction between genuine constraints and assumptions inherited from a previous solution; show how bounded mess can be a rational price of progress.
 - Do not imply that difficulty or neglect establishes value, or make other engineers' supposed lack of perseverance the contrast.
@@ -58,7 +60,11 @@ The circuit failing had told me that something was wrong. It had not told me tha
 
 That is what made mistakes useful. Repeating an unexplained failure could consume a great deal of time. Learning required a result that changed what I understood or what I would try next.
 
-I brought those habits into large business applications, including aging Rails codebases. The difficult parts were rarely isolated algorithms. They were business rules interacting with other business rules, assumptions spread across components, and years of decisions whose reasons were no longer immediately visible. Much of the work was careful observation, engineering hygiene, and iteration. I needed to understand the systems in front of me well enough to change them while they continued serving the business.
+At Brontes, the validation cycle took roughly two days. Much of the delay came from reconstructing the state that tests depended on. I built orchestration that modeled those dependencies and automated the setup and recovery work, reducing the cycle to about twenty minutes. I had been hired into QA, but the higher-leverage problem was the cost of getting feedback. Shortening that loop made it possible to learn much faster.
+
+I brought those habits into large business applications, including aging Rails codebases. At Engine Yard, I encountered an unstable monolith that few people wanted to work on. I did not start by proposing a replacement. I worked from its edges inward, using local repairs to understand more of its behavior and constraints. That eventually supported changes across reliability, persistence, and the surrounding platform.
+
+The difficult parts of systems like these were rarely isolated algorithms. They were business rules interacting with other business rules, assumptions spread across components, and years of decisions whose reasons were no longer immediately visible. I needed to understand the system in front of me well enough to change it while it continued serving the business.
 
 Existing behavior tells you what a system does; it does not, by itself, settle what the system should do. Some behavior is a requirement nobody wrote down. Some is a workaround. Some is a bug that another component has learned to accommodate. Before changing it, you need to understand which distinction matters to the people relying on it.
 
@@ -77,6 +83,8 @@ I think of calibration as bringing my explanations and predictions closer to the
 A homework problem normally supplies a question and some boundary on what counts as completion. A company keeps changing both.
 
 New customers arrive with different requirements. A process that used to be manual becomes automated. Two teams acquire separate responsibilities for behavior that once lived comfortably together. An assumption can stop being useful without ever having been unreasonable.
+
+I try to appreciate the horse that brought us here. It might be dirty and thin, but it got us this far. The monolith that now slows the business may once have been exactly what allowed it to find customers and survive. That history deserves respect. It does not oblige us to keep riding the same horse indefinitely, and it does not make every decision along the way correct. It means judging the old system against the circumstances in which it was built as well as the outcomes we need now.
 
 That is why I think of a mature codebase as an ongoing relationship. You develop context through sustained attention: what it does reliably, where it surprises you, what its users depend on, and which compromises have outlived their purpose. You can get frustrated with it without treating frustration as evidence that the whole thing should be discarded.
 
