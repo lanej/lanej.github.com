@@ -14,7 +14,7 @@ Complete thought:
 Simple, collapsed architectures are often correct when product uncertainty is high. The failure is not starting simple; it is missing the inflection point where durable business behavior, integrations, and organizational scale make dependency reduction worth the cost. Architectural investment is asymmetric: too early wastes options, too late makes them expensive to buy.
 
 Role in the progression:
-Timing. Explain why both premature architecture and indefinitely deferred architecture are mistakes, and why startups systematically miss the transition.
+Timing. Explain why both premature architecture and indefinitely deferred architecture are mistakes, and why startups systematically miss the transition. The architecture that once produced success can become mistaken for a constraint on what success must look like next.
 
 Relationship to the next piece:
 How to Rewrite a System You Can't Stop starts from the common case where the inflection point was missed and the migration must happen under load.
@@ -45,12 +45,15 @@ Simple, collapsed architectures are often correct when product uncertainty is hi
 - Delivery pressure remains visible while architectural ROI is deferred.
 - Ownership is often ambiguous and infrastructure is undercapitalized.
 - "Not yet" can be locally defensible every quarter and globally disastrous over years.
+- The inventor's dilemma: a design that helped the company succeed can become bound up with the identity or authority of its creators. Preserving it can then become a proxy for success. Describe the incentive and decision failure, not alleged motives.
+- Separate disagreement about desired outcomes, beliefs about current constraints, and preferred means. Otherwise architectural debates may never address what actually changed.
 
 ## A practical phase model
 
 - Discovery: optimize for learning.
 - Evidence: buy boundaries around concepts that have become real.
 - Scale: extend boundaries rather than excavating them from a mature system.
+- At each phase, recheck which constraints are inherent and which are consequences of the solution previously chosen.
 
 ## Hand-off
 
