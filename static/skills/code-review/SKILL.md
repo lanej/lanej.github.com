@@ -10,10 +10,8 @@ metadata:
 
 # Code review
 
-Apply the embedded standard and guidelines to the actual change. Favor progress
+Apply the standard and guidelines to the actual change. Favor progress
 once the approval threshold is met; do not invent findings to fill a review.
-This file is self-contained. Source links explain the guidance and are not
-prerequisites for using it.
 
 ## Scope and authority
 
@@ -67,10 +65,6 @@ manufacture nits, speculate about hypothetical requirements, or demand every
 possible test. Distinguish a code-quality recommendation from confirmed merge
 eligibility and from an approval action actually submitted. AI recommendations
 do not count as required human review.
-
-## Embedded guidance
-
-The following sections are generated verbatim from the published guide.
 
 ## Code Review Standard
 

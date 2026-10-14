@@ -1,6 +1,6 @@
 +++
 title = "Code review: standards and guidelines"
-description = "A practical review standard, human review guidelines, and approval policy, with a curl-installable agent skill."
+description = "A practical review standard, human review guidelines, and approval policy."
 date = 2026-10-13T00:00:00-07:00
 draft = false
 +++
