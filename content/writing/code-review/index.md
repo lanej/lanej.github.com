@@ -3,6 +3,8 @@ title = "Code review: standards and guidelines"
 description = "A practical review standard, human review guidelines, and approval policy."
 date = 2026-10-13T00:00:00-07:00
 draft = false
+essay_visual = "harmony"
+callout = "The goal of code review is continuous improvement, not perfect code."
 +++
 
 A reviewer asking for "more tests" should be able to name the behavior those tests need to establish. A reviewer withholding approval should be able to explain what must change. When the remaining comments are preferences, the change should move forward.
