@@ -109,6 +109,10 @@ def main():
                     site_font = page.locator('body').evaluate('(el) => getComputedStyle(el).fontFamily')
                     assert fonts and all(font == site_font for font in fonts), f'{route}: essay font differs from site'
                     assert page.locator('.sc-section-visuals [data-essay-diagram]').count() == page.locator('[data-essay-diagram]').count(), f'{route}: misplaced diagram'
+                    assert page.locator('.sc-section-copy .essay-table table').count() == page.locator('.sc-section table').count(), f'{route}: table moved away from its prose'
+                    for chapter in page.locator('.sc-section').filter(has=page.locator('table')).all():
+                        if not chapter.locator('[data-essay-diagram]').count():
+                            assert 'sc-section-text-only' in chapter.get_attribute('class'), f'{route}: table reserves an empty visual column'
 
                     icon = page.locator('.sc-title .item-visual svg')
                     assert icon.count() == 1, f'{route}: missing essay subject icon'
@@ -117,8 +121,7 @@ def main():
                     assert page.locator('.sc-hero-art').count() == 1, f'{route}: missing opening visual'
                     assert page.locator('.sc-hero-copy > .sc-accent').count() == 1, f'{route}: missing opening callout'
                     if label == 'close-the-loop':
-                        assert page.locator('.sc-section-copy table').count() == 0, 'Table remains in the prose column'
-                        assert page.locator('.sc-section-visuals table').count() >= 1, 'Missing supporting table'
+                        assert page.locator('.sc-section-copy table').count() >= 1, 'Missing inline table'
                         page.locator('.sc-section').filter(has=page.locator('table')).first.screenshot(path=str(out / f'chapter-table-{width}.png'))
                         page.locator('.sc-section-text-only').first.screenshot(path=str(out / f'chapter-reading-column-{width}.png'))
                     if label == 'socrates':

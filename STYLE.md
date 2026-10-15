@@ -61,8 +61,9 @@ columns. When a chapter has supporting visuals, prose occupies the left column
 and visuals the right. Without visuals, prose flows down the left column and
 then the right, balanced separately within each chapter. A 1px muted rule in the
 gutter separates the two prose columns beneath the heading. Use the site line
-color; omit the rule in stacked layouts and between prose and supporting visuals. Keep paragraphs,
-callouts, lists, code blocks, and figures together where they fit; keep subsection
+color; omit the rule in stacked layouts and between prose and supporting visuals. Tables remain
+in the prose flow and do not reserve a supporting visual column. Keep paragraphs,
+callouts, lists, code blocks, tables, and figures together where they fit; keep subsection
 headings with the following text. Do not add illustrations just to fill space.
 Endnotes use the same two balanced columns, 48px gutter, and muted divider across
 the full essay width. Each numbered citation stays together, reading down the
@@ -107,7 +108,7 @@ Every essay uses `layouts/writing/single.html`, `layouts/partials/essay-content.
 - Writing link and calculated reading time appear above the title. Dates stay in metadata and RSS only.
 - The title and description span the full essay width above the opening columns. The accent callout and opening prose sit beside the relevant visual beneath them. The first introductory blockquote becomes the opening callout without duplicating it; RSS keeps the authored order. Use `essay_visual` for a shared vector diagram or `essay_image` for an existing illustration. Large illustrations fade into the background; opening visuals stack below prose on phones. Print omits opening art.
 - Every Markdown H2 starts a chapter with a generated two-digit number, short accent rule, common heading size, and thin divider. H3 is an unnumbered subsection.
-- Chapters share the responsive columns described above. Headings precede prose; diagrams and tables follow it in DOM order and appear beside it on wide screens. Heading and spacing treatments stay shared.
+- Chapters share the responsive columns described above. Headings precede prose; supporting diagrams follow it in DOM order and appear beside it on wide screens. Tables retain their authored position within prose. Heading and spacing treatments stay shared.
 - All essays share the same archive/feed footer and citation behavior.
 
 Chapter numbers come from heading order, not handwritten numbers. Do not independently opt articles into a different contents menu, heading treatment, or metadata position.
@@ -218,7 +219,12 @@ Article images should preserve intrinsic aspect ratio, stay within their contain
 
 Inline code uses the shared dark surface and compact padding. Code blocks use the same surface with a thin site rule and horizontal scrolling when required.
 
-Chapter tables follow the prose in DOM order alongside other supporting visuals, using the right column on wide screens and stacking below prose at narrow widths. They remain inline in full-text RSS. Tables may scroll horizontally on narrow screens. Do not shrink table text until it becomes unreadable merely to avoid scrolling.
+Chapter tables retain their authored position beside the text and subsection heading
+that introduce them. A table alone does not count as a supporting visual: without a
+diagram, the chapter still flows through both balanced prose columns on wide screens.
+Keep each table together where it fits, with a local horizontal scroll container for
+narrow screens. Preserve the same content order in the page and full-text RSS. Do not
+shrink table text until it becomes unreadable merely to avoid scrolling.
 
 Do not introduce syntax or table colors that compete with the site's accent unless a site-wide syntax system is adopted.
 
