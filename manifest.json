@@ -1,0 +1,118 @@
+{
+  "head_sha": "27159b93bcab91d128a546e71306b7993a117e11",
+  "build_sha": "b2936ddfdfe337ea5f73fe10d197af8b53267521",
+  "pages": [
+    {
+      "route": "/writing/close-the-loop/",
+      "images": {
+        "mobile": {
+          "viewport": "writing-close-the-loop-mobile.png",
+          "full": "writing-close-the-loop-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "writing-close-the-loop-desktop.png",
+          "full": "writing-close-the-loop-desktop-full.png"
+        }
+      },
+      "title": "Close the Loop"
+    },
+    {
+      "route": "/writing/code-review/",
+      "images": {
+        "mobile": {
+          "viewport": "writing-code-review-mobile.png",
+          "full": "writing-code-review-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "writing-code-review-desktop.png",
+          "full": "writing-code-review-desktop-full.png"
+        }
+      },
+      "title": "Code review: standards and guidelines"
+    },
+    {
+      "route": "/writing/harmony/",
+      "images": {
+        "mobile": {
+          "viewport": "writing-harmony-mobile.png",
+          "full": "writing-harmony-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "writing-harmony-desktop.png",
+          "full": "writing-harmony-desktop-full.png"
+        }
+      },
+      "title": "Harmony"
+    },
+    {
+      "route": "/writing/how-you-do-it-is-part-of-the-decision/",
+      "images": {
+        "mobile": {
+          "viewport": "writing-how-you-do-it-is-part-of-the-decision-mobile.png",
+          "full": "writing-how-you-do-it-is-part-of-the-decision-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "writing-how-you-do-it-is-part-of-the-decision-desktop.png",
+          "full": "writing-how-you-do-it-is-part-of-the-decision-desktop-full.png"
+        }
+      },
+      "title": "How You Do It Is Part of the Decision"
+    },
+    {
+      "route": "/writing/lead-with-problems/",
+      "images": {
+        "mobile": {
+          "viewport": "writing-lead-with-problems-mobile.png",
+          "full": "writing-lead-with-problems-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "writing-lead-with-problems-desktop.png",
+          "full": "writing-lead-with-problems-desktop-full.png"
+        }
+      },
+      "title": "Lead With Problems"
+    },
+    {
+      "route": "/writing/minimum-effective-dose/",
+      "images": {
+        "mobile": {
+          "viewport": "writing-minimum-effective-dose-mobile.png",
+          "full": "writing-minimum-effective-dose-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "writing-minimum-effective-dose-desktop.png",
+          "full": "writing-minimum-effective-dose-desktop-full.png"
+        }
+      },
+      "title": "Minimum Effective Dose"
+    },
+    {
+      "route": "/writing/socrates/",
+      "images": {
+        "mobile": {
+          "viewport": "writing-socrates-mobile.png",
+          "full": "writing-socrates-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "writing-socrates-desktop.png",
+          "full": "writing-socrates-desktop-full.png"
+        }
+      },
+      "title": "Socrates: Before I Say \u2018Go Build It\u2019"
+    },
+    {
+      "route": "/writing/systems-that-remember/",
+      "images": {
+        "mobile": {
+          "viewport": "writing-systems-that-remember-mobile.png",
+          "full": "writing-systems-that-remember-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "writing-systems-that-remember-desktop.png",
+          "full": "writing-systems-that-remember-desktop-full.png"
+        }
+      },
+      "title": "Systems That Remember"
+    }
+  ]
+}
