@@ -996,10 +996,11 @@
     ],
     "id": "essay-wide-support-right",
     "type": "align",
-    "selector": ".sc-article, .sc-section-visuals",
+    "selector": ".sc-article:has(.sc-section-visuals), .sc-section-visuals",
+    "optional": true,
     "edge": "right",
     "tolerance": 2,
-    "reason": "STYLE.md: Supporting chapter figures occupy the right essay column and share the shell right edge."
+    "reason": "STYLE.md: When present, supporting chapter figures occupy the right essay column and share the shell right edge. Chapters without diagrams use balanced prose columns."
   },
   {
     "id": "essay-paragraph-order-narrow",
