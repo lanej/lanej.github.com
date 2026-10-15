@@ -36,10 +36,11 @@
 {{ $heading := index (findRE `(?s)^\s*<h2\b[^>]*>.*?</h2>` $chapter 1) 0 }}
 {{ $anchor := replaceRE `(?s).*id="([^"]+)".*` "$1" $heading }}
 {{ $copy := replace $chapter $heading "" 1 }}
-{{/* Generated diagrams and chapter tables follow the prose in DOM order and occupy
-     the supporting column on wide screens. Ordinary images retain authored order. */}}
-{{ $visuals := findRE `(?s)<figure\b[^>]*data-essay-diagram="[^"]+"[^>]*>.*?</figure>|<table\b[^>]*>.*?</table>` $copy }}
+{{/* Only supporting diagrams reserve the visual column. Tables stay beside their
+     related prose so a small table cannot strand a whole chapter in one column. */}}
+{{ $visuals := findRE `(?s)<figure\b[^>]*data-essay-diagram="[^"]+"[^>]*>.*?</figure>` $copy }}
 {{ range $visuals }}{{ $copy = replace $copy . "" 1 }}{{ end }}
+{{ $copy = replaceRE `(?s)(<table\b[^>]*>.*?</table>)` `<div class="essay-table">${1}</div>` $copy }}
 <section class="sc-section{{ if not $visuals }} sc-section-text-only{{ end }}" aria-labelledby="{{ $anchor }}"{{ if strings.HasSuffix $anchor "-title" }} id="{{ strings.TrimSuffix "-title" $anchor }}"{{ end }}>
 <header class="sc-section-header">
 <div class="sc-section-no" aria-hidden="true">{{ printf "%02d" (add $index 1) }}</div>
@@ -48,7 +49,7 @@
 <div class="sc-section-text">
 <div class="sc-section-copy">{{ $copy | safeHTML }}</div>
 </div>
-{{ with $visuals }}<div class="sc-section-visuals{{ if gt (len .) 1 }} sc-section-visuals-spread{{ end }}">{{ range . }}{{ if strings.HasPrefix . "<table" }}<div class="essay-table">{{ . | safeHTML }}</div>{{ else }}{{ . | safeHTML }}{{ end }}{{ end }}</div>{{ end }}
+{{ with $visuals }}<div class="sc-section-visuals{{ if gt (len .) 1 }} sc-section-visuals-spread{{ end }}">{{ range . }}{{ . | safeHTML }}{{ end }}</div>{{ end }}
 </section>
 {{ end }}
 {{ if gt (len $parts) 1 }}{{ printf "<div class=\"footnotes\"%s" (delimit (after 1 $parts) "<div class=\"footnotes\"") | safeHTML }}{{ end }}

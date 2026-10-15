@@ -50,8 +50,8 @@
 .sc-section-copy :where(h3,h4){break-after:avoid}
 .sc-article .sc-section-no{font:.75rem/1.5 var(--mono);margin-bottom:12px}
 .sc-section-visuals{min-width:0;display:grid;gap:24px;align-self:center}
-.sc-section-visuals .essay-table{min-width:0;overflow-x:auto;color:var(--soft)}
-.sc-section-visuals table{display:table;width:100%;margin:0}
+.sc-article .essay-table{min-width:0;max-width:100%;overflow-x:auto;margin:1.75em 0;color:var(--soft)}
+.sc-article .essay-table table{display:table;width:100%;margin:0}
 .sc-article .sc-accent,.sc-article .sc-section-copy blockquote,.sc-article .sc-intro blockquote{border-left:4px solid var(--accent);background:var(--surface);padding:18px 22px;margin:22px 0;color:var(--text);font:1.05rem/1.7 var(--sans)}
 .sc-article blockquote p:last-child{margin-bottom:0}
 .sc-article .sc-figure{margin:0}
@@ -142,7 +142,7 @@
   .sc-section-text{grid-column:1}
   .sc-section-text-only .sc-section-text{grid-column:1/-1}
   .sc-section-text-only .sc-section-copy,.sc-article .footnotes>ol{column-count:2;column-gap:48px;column-fill:balance;column-rule:1px solid var(--line)}
-  .sc-section-text-only .sc-section-copy>:where(p,blockquote,ul,ol,pre,figure){break-inside:avoid-column}
+  .sc-section-text-only .sc-section-copy>:where(p,blockquote,ul,ol,pre,figure,.essay-table){break-inside:avoid-column}
   .sc-section-visuals{grid-column:2}
   .sc-hero-copy,.sc-section-header,.sc-section-text,.sc-section-visuals{max-width:none}
   .sc-article .footnotes{max-width:none}

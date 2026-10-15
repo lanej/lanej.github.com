@@ -54,6 +54,7 @@
     ],
     "pages": [
       "writing/close-the-loop",
+      "writing/code-review",
       "writing/harmony",
       "writing/how-you-do-it-is-part-of-the-decision",
       "writing/lead-with-problems",
@@ -629,7 +630,9 @@
     ],
     "pages": [
       "writing/close-the-loop-print",
+      "writing/code-review-print",
       "writing/close-the-loop-enlarged",
+      "writing/code-review-enlarged",
       "writing/harmony-print",
       "writing/harmony-enlarged",
       "writing/how-you-do-it-is-part-of-the-decision-print",
@@ -657,6 +660,7 @@
     "tolerance": 2,
     "pages": [
       "writing/close-the-loop",
+      "writing/code-review",
       "writing/harmony",
       "writing/how-you-do-it-is-part-of-the-decision",
       "writing/lead-with-problems",
@@ -684,6 +688,7 @@
     "tolerance": 2,
     "pages": [
       "writing/close-the-loop",
+      "writing/code-review",
       "writing/harmony",
       "writing/how-you-do-it-is-part-of-the-decision",
       "writing/lead-with-problems",
@@ -747,6 +752,7 @@
     "tolerance": 2,
     "pages": [
       "writing/close-the-loop",
+      "writing/code-review",
       "writing/harmony",
       "writing/how-you-do-it-is-part-of-the-decision",
       "writing/lead-with-problems",
@@ -784,7 +790,9 @@
     "tolerance": 2,
     "pages": [
       "writing/close-the-loop-print",
+      "writing/code-review-print",
       "writing/close-the-loop-enlarged",
+      "writing/code-review-enlarged",
       "writing/harmony-print",
       "writing/harmony-enlarged",
       "writing/how-you-do-it-is-part-of-the-decision-print",
@@ -811,6 +819,7 @@
     "selector": ".sc-title .item-visual",
     "pages": [
       "writing/close-the-loop",
+      "writing/code-review",
       "writing/harmony",
       "writing/how-you-do-it-is-part-of-the-decision",
       "writing/lead-with-problems",
@@ -818,6 +827,7 @@
       "writing/socrates",
       "writing/systems-that-remember",
       "writing/close-the-loop-enlarged",
+      "writing/code-review-enlarged",
       "writing/harmony-enlarged",
       "writing/how-you-do-it-is-part-of-the-decision-enlarged",
       "writing/lead-with-problems-enlarged",
@@ -856,6 +866,7 @@
     "id": "essay-opening-order-narrow",
     "pages": [
       "writing/close-the-loop",
+      "writing/code-review",
       "writing/harmony",
       "writing/how-you-do-it-is-part-of-the-decision",
       "writing/lead-with-problems",
@@ -897,6 +908,7 @@
     "id": "essay-opening-order-enlarged",
     "pages": [
       "writing/close-the-loop-enlarged",
+      "writing/code-review-enlarged",
       "writing/harmony-enlarged",
       "writing/how-you-do-it-is-part-of-the-decision-enlarged",
       "writing/lead-with-problems-enlarged",
@@ -938,6 +950,7 @@
     ],
     "pages": [
       "writing/close-the-loop",
+      "writing/code-review",
       "writing/harmony",
       "writing/how-you-do-it-is-part-of-the-decision",
       "writing/lead-with-problems",
@@ -968,6 +981,7 @@
     ],
     "pages": [
       "writing/close-the-loop",
+      "writing/code-review",
       "writing/harmony",
       "writing/how-you-do-it-is-part-of-the-decision",
       "writing/lead-with-problems",
@@ -1007,6 +1021,7 @@
     ],
     "pages": [
       "writing/close-the-loop",
+      "writing/code-review",
       "writing/harmony",
       "writing/how-you-do-it-is-part-of-the-decision",
       "writing/lead-with-problems",
@@ -1041,7 +1056,9 @@
     ],
     "pages": [
       "writing/close-the-loop-print",
+      "writing/code-review-print",
       "writing/close-the-loop-enlarged",
+      "writing/code-review-enlarged",
       "writing/harmony-print",
       "writing/harmony-enlarged",
       "writing/how-you-do-it-is-part-of-the-decision-print",
@@ -1074,6 +1091,7 @@
     ],
     "pages": [
       "writing/close-the-loop",
+      "writing/code-review",
       "writing/harmony",
       "writing/how-you-do-it-is-part-of-the-decision",
       "writing/lead-with-problems",
@@ -1106,7 +1124,9 @@
     ],
     "pages": [
       "writing/close-the-loop-print",
+      "writing/code-review-print",
       "writing/close-the-loop-enlarged",
+      "writing/code-review-enlarged",
       "writing/harmony-print",
       "writing/harmony-enlarged",
       "writing/how-you-do-it-is-part-of-the-decision-print",
@@ -1137,6 +1157,7 @@
     "reason": "STYLE.md: Text-only chapters return to one sequential reading column at narrow widths, enlarged text, and print.",
     "pages": [
       "writing/close-the-loop",
+      "writing/code-review",
       "writing/harmony",
       "writing/how-you-do-it-is-part-of-the-decision",
       "writing/lead-with-problems",
@@ -1167,7 +1188,9 @@
     "reason": "STYLE.md: Text-only chapters return to one sequential reading column at narrow widths, enlarged text, and print.",
     "pages": [
       "writing/close-the-loop-print",
+      "writing/code-review-print",
       "writing/close-the-loop-enlarged",
+      "writing/code-review-enlarged",
       "writing/harmony-print",
       "writing/harmony-enlarged",
       "writing/how-you-do-it-is-part-of-the-decision-print",
@@ -1195,6 +1218,7 @@
     ],
     "pages": [
       "writing/close-the-loop",
+      "writing/code-review",
       "writing/harmony",
       "writing/how-you-do-it-is-part-of-the-decision",
       "writing/lead-with-problems",
@@ -1223,6 +1247,7 @@
     ],
     "pages": [
       "writing/close-the-loop",
+      "writing/code-review",
       "writing/harmony",
       "writing/how-you-do-it-is-part-of-the-decision",
       "writing/lead-with-problems",
@@ -1253,6 +1278,7 @@
     ],
     "pages": [
       "writing/close-the-loop",
+      "writing/code-review",
       "writing/harmony",
       "writing/how-you-do-it-is-part-of-the-decision",
       "writing/lead-with-problems",
@@ -1283,6 +1309,7 @@
     ],
     "pages": [
       "writing/close-the-loop",
+      "writing/code-review",
       "writing/harmony",
       "writing/how-you-do-it-is-part-of-the-decision",
       "writing/lead-with-problems",
@@ -1313,6 +1340,7 @@
     ],
     "pages": [
       "writing/close-the-loop",
+      "writing/code-review",
       "writing/harmony",
       "writing/how-you-do-it-is-part-of-the-decision",
       "writing/lead-with-problems",
@@ -1333,8 +1361,8 @@
   {
     "id": "essay-text-only-keep-blocks",
     "type": "style",
-    "selector": ".sc-section-text-only .sc-section-copy > :is(p,blockquote,ul,ol,pre,figure)",
-    "reason": "STYLE.md: Keep paragraphs, callouts, lists, code, and figures together where they fit.",
+    "selector": ".sc-section-text-only .sc-section-copy > :is(p,blockquote,ul,ol,pre,figure,.essay-table)",
+    "reason": "STYLE.md: Keep paragraphs, callouts, lists, code, tables, and figures together where they fit.",
     "severity": "error",
     "optional": true,
     "designRules": [
@@ -1343,6 +1371,7 @@
     ],
     "pages": [
       "writing/close-the-loop",
+      "writing/code-review",
       "writing/harmony",
       "writing/how-you-do-it-is-part-of-the-decision",
       "writing/lead-with-problems",
