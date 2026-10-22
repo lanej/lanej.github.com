@@ -45,7 +45,7 @@
     - url: https://github.com/ogen-go/ogen/pulls?q=is%3Apr+author%3Alanej+is%3Amerged
       label: Contribution history
 - project: umya-spreadsheet
-  logo: /logos/projects/umya-spreadsheet-github.png
+  logo: /logos/projects/umya-spreadsheet-github.jpg
   date: '2025-11-09'
   summary: Made the defined-name setter public so dependent Rust crates can create and rename Excel-style named ranges.
   url: https://github.com/MathNya/umya-spreadsheet/pull/298
