@@ -1,10 +1,35 @@
-# Selected merged upstream contributions; dates are merge dates, not claims of ongoing maintenance.
+# Selected upstream contributions; dates record when changes landed, not ongoing maintenance.
+- project: Paseo
+  logo: /logos/projects/paseo-github.png
+  date: '2026-10-22'
+  summary: Contributed transcript streaming, shared reads, and cached import metadata so listing Claude sessions no longer loads whole histories into memory. The merged follow-up carried my commits forward and preserved support for large records.
+  url: https://github.com/getpaseo/paseo/pull/7626
+  label: Claude session-listing memory fix
+  related:
+    - url: https://github.com/getpaseo/paseo/pull/5934
+      label: Original contribution (superseded)
+- project: bqls
+  logo: /logos/projects/bqls-github.png
+  date: '2026-10-12'
+  summary: Added type details to completions and richer field and table hovers in this BigQuery language server. Fixed completion panics on unfinished queries and false diagnostics for timestamp parameters in snapshot queries.
+  url: https://github.com/kitagry/bqls/pull/366
+  label: Typed completions and query diagnostics
 - project: hotreload.nvim
   logo: /logos/projects/hotreload-github.png
   date: '2026-02-11'
   summary: Replaced interval polling with filesystem-event watchers and limited watching to visible buffers in this Neovim plugin.
   url: https://github.com/diogo464/hotreload.nvim/pull/1
   label: File-watching improvements
+- project: focus.nvim
+  logo: /logos/projects/focus-github.png
+  date: '2026-01-09'
+  status: Applied upstream
+  summary: Added terminal-size thresholds that choose equal-sized Neovim splits on larger terminals and give the focused window more space on smaller ones. The maintainer applied the change directly with my authorship preserved; the pull request was closed rather than merged.
+  url: https://github.com/nvim-focus/focus.nvim/commit/1b82a33f317a7a29bc0742802a93a9b222c9ae8a
+  label: Adaptive split sizing
+  related:
+    - url: https://github.com/nvim-focus/focus.nvim/pull/175
+      label: Original pull request
 - project: ogen
   logo: /logos/projects/ogen-github.png
   date: '2025-11-27'
@@ -19,6 +44,18 @@
       label: JSON media types
     - url: https://github.com/ogen-go/ogen/pulls?q=is%3Apr+author%3Alanej+is%3Amerged
       label: Contribution history
+- project: umya-spreadsheet
+  logo: /logos/projects/umya-spreadsheet-github.jpg
+  date: '2025-11-09'
+  summary: Made the defined-name setter public so dependent Rust crates can create and rename Excel-style named ranges.
+  url: https://github.com/MathNya/umya-spreadsheet/pull/298
+  label: Public named-range API
+- project: copilot-api
+  logo: /logos/projects/copilot-api-github.png
+  date: '2025-07-26'
+  summary: Preserved Anthropic thinking content as text when translating messages to the OpenAI-compatible API, fixing malformed requests that returned HTTP 400 errors.
+  url: https://github.com/ericc-ch/copilot-api/pull/72
+  label: Thinking-block translation fix
 - project: jnv
   logo: /logos/projects/jnv-github.png
   date: '2025-02-28'
