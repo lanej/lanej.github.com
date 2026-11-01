@@ -41,7 +41,7 @@ Wirelit generates an API reference that documents the typed RPC contract and its
 
 The output is ordinary MDX for Astro Starlight. Generated reference pages sit alongside authored application guides, sharing navigation, search, and styling. Wirelit's own documentation demonstrates this with a complex sample schema and executable curl, TypeScript, and Go examples.
 
-This is an early release. All four streaming shapes have reference pages; runnable examples currently cover unary and server-streaming methods.
+All four RPC shapes have reference pages; runnable examples currently cover unary and server-streaming methods.
 
 [Documentation and live example](https://lanej.io/wirelit/) · [Source and installation](https://github.com/lanej/wirelit) · [Sample schema](https://github.com/lanej/wirelit/blob/main/examples/proto/shipping/v1/shipping.proto)
 

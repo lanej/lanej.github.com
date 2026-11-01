@@ -43,12 +43,12 @@ jobs:
           python3 scripts/github-activity.py
       - name: Build and validate
         run: bash scripts/build.sh
-      - name: Build pinned Wirelit documentation
-        run: bash scripts/build-wirelit.sh
-      - name: Use Easy UI's Node version
+      - name: Use Node 24 for project documentation and previews
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: "24"
+      - name: Build pinned Wirelit documentation
+        run: bash scripts/build-wirelit.sh
       - name: Build Easy UI PR Storybook previews
         env:
           GH_TOKEN: ${{ github.token }}

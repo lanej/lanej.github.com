@@ -70,7 +70,7 @@ repositories should still declare their own icons explicitly.
 
 The same Pages bundle serves Wirelit's Starlight documentation at
 `https://lanej.io/wirelit/`. After `bash scripts/build.sh`, run
-`bash scripts/build-wirelit.sh` to assemble it locally. Node 22.12+ is required.
+`bash scripts/build-wirelit.sh` to assemble it locally using Node 24.
 The builder fetches the exact commit in `.wirelit-version`, installs its locked
 dependencies, compiles the complex sample, and runs the built Wirelit CLI to
 generate the reference before building Starlight. Astro receives the custom
