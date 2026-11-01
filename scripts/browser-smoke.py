@@ -152,7 +152,8 @@ def main():
                     assert page.get_by_role('link', name='Open the experiment', exact=True).get_attribute('href') == 'https://lanej.io/delivery-time-estimate-viz/'
                 if route == '/open-source/':
                     assert page.locator('.contributions .contribution').count() > 0
-                    assert page.locator('#dotfiles, #viewrule, .github-activity').count() == 3
+                    assert page.locator('#dotfiles, #viewrule, #wirelit, .github-activity').count() == 4
+                    assert page.get_by_role('link', name='Documentation and live example', exact=True).get_attribute('href') == 'https://lanej.io/wirelit/'
                     days = page.locator('.activity-calendar:visible rect').count()
                     assert 85 <= days <= 91 if width <= 700 else 365 <= days <= 371
                     page.locator('.activity-counts summary').click()

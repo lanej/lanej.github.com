@@ -14,6 +14,7 @@ from urllib.request import Request, urlopen
 from urllib.parse import unquote, urlsplit
 
 from affected_pages import affected_routes, changed_paths, change_base
+from wirelit_docs import PREVIEW_ROUTES
 
 START = '<!-- page-previews:start -->'
 END = '<!-- page-previews:end -->'
@@ -62,8 +63,10 @@ def rendered_changes(routes, current, baseline):
 def changed_preview_routes(root, base, available):
     paths = changed_paths(root, base, committed_only=True)
     candidates = affected_routes(paths, available, root=root, base=base)
+    # Project docs have a separate build and no Hugo header/geometry contract.
+    projects = list(PREVIEW_ROUTES) if '.wirelit-version' in paths else []
     if not candidates:
-        return []
+        return projects
     with tempfile.TemporaryDirectory(prefix='pr-preview-base-') as temporary:
         source = Path(temporary) / 'source'
         subprocess.run(['git', 'worktree', 'add', '--detach', str(source), base], cwd=root, check=True)
@@ -77,7 +80,7 @@ def changed_preview_routes(root, base, available):
             subprocess.run([str(hugo), '--source', str(source), '--destination', str(public),
                             '--gc', '--minify', '--cleanDestinationDir', '--panicOnWarning'],
                            cwd=root, env=dict(os.environ, HUGO_PARAMS_REVISION=os.environ['GITHUB_SHA']), check=True)
-            return rendered_changes(candidates, root / 'public', public)
+            return rendered_changes(candidates, root / 'public', public) + projects
         finally:
             subprocess.run(['git', 'worktree', 'remove', '--force', str(source)], cwd=root, check=True)
 
@@ -134,7 +137,11 @@ def capture(args):
                     assert page.locator('.project-logo img').count() == page.locator('.contribution').count(), 'Every project needs a GitHub avatar'
                     assert page.locator('.event-logo img').count() == page.locator('.speaking-engagement').count(), 'Every speaking engagement needs its event logo'
                 assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), route
-                assert page.locator('meta[name="site-revision"]').get_attribute('content') == manifest['build_sha']
+                if route.startswith('/wirelit/'):
+                    revision = page.request.get('http://127.0.0.1:8765/wirelit/build.json').json()['revision']
+                    assert revision == Path('.wirelit-version').read_text().strip()
+                else:
+                    assert page.locator('meta[name="site-revision"]').get_attribute('content') == manifest['build_sha']
                 item['title'] = page.locator('h1').inner_text()
                 filenames = {'viewport': f'{slug}-{label}.png', 'full': f'{slug}-{label}-full.png'}
                 page.screenshot(path=str(out / filenames['viewport']), animations='disabled')

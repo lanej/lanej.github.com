@@ -22,15 +22,17 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--url', default='https://lanej.io/')
     parser.add_argument('--root', default='public')
+    parser.add_argument('--manifest', default='build.json')
+    parser.add_argument('--bundle-only', action='store_true', help='Verify an independently built project without Hugo-specific assertions.')
     args = parser.parse_args()
 
-    manifest = json.loads((Path(args.root) / 'build.json').read_text())
+    manifest = json.loads((Path(args.root) / args.manifest).read_text())
     expected = manifest['revision']
     base = args.url.rstrip('/')
 
     for attempt in range(18):
         try:
-            live = json.loads(get(f'{base}/build.json?revision={expected}'))
+            live = json.loads(get(f'{base}/{args.manifest}?revision={expected}'))
             if live.get('revision') == expected:
                 break
         except Exception:
@@ -53,6 +55,10 @@ def main():
         if path.endswith(('.jpg', '.jpeg', '.webp', '.png', '.gif', '.ico')):
             with Image.open(io.BytesIO(content)) as image:
                 image.load()
+
+    if args.bundle_only:
+        print(json.dumps({'status': 'passed', 'revision': expected, 'hashed_files': len(manifest['files'])}))
+        return
 
     home = get(f'{base}/').decode()
     writing = get(f'{base}/writing/').decode()

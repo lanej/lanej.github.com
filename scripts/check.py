@@ -100,8 +100,9 @@ def main(root):
                 parts=urlparse(url)
                 if not url or parts.scheme not in ('','https') or (parts.netloc and parts.netloc != 'lanej.io'):
                     continue
-                # A separate GitHub Pages repository owns this project mount.
-                if url == 'https://lanej.io/delivery-time-estimate-viz/':
+                # Project mounts have independent builds and verification. Wirelit
+                # is assembled after this Hugo check by build-wirelit.sh.
+                if url in ('https://lanej.io/delivery-time-estimate-viz/', 'https://lanej.io/wirelit/'):
                     continue
                 target=root/unquote(parts.path.lstrip('/')) if parts.path.startswith('/') else path.parent/unquote(parts.path)
                 if not parts.path: target=path

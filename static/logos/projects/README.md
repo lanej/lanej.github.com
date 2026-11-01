@@ -16,6 +16,10 @@ The Open source page uses the existing 64px project-logo component. Preserve the
 alpha channel, original colors, proportions, and clear space; do not add an opaque
 background or tint the marks to match the site.
 
+`wirelit.svg` is the original 32 × 32 SVG mark from
+`lanej/wirelit/examples/site/src/assets/wirelit.svg` at commit
+`26723a19fadd88b5d4fc5b384921e3fdf1be17ca`, bundled unchanged.
+
 ## Contribution avatars
 
 GitHub repository-owner avatars requested at 96px. The original five were
