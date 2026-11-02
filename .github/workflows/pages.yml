@@ -133,7 +133,9 @@ jobs:
       - name: Embed durable screenshots in PR description
         env:
           GH_TOKEN: ${{ github.token }}
-        run: python3 scripts/pr-previews.py publish
+        run: |
+          python3 -S scripts/test-pr-previews.py
+          python3 scripts/pr-previews.py publish
   deploy:
     needs: build
     if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'

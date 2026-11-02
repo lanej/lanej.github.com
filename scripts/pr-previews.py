@@ -14,7 +14,6 @@ from urllib.request import Request, urlopen
 from urllib.parse import unquote, urlsplit
 
 from affected_pages import affected_routes, changed_paths, change_base
-from wirelit_docs import PREVIEW_ROUTES
 
 START = '<!-- page-previews:start -->'
 END = '<!-- page-previews:end -->'
@@ -61,6 +60,10 @@ def rendered_changes(routes, current, baseline):
 
 
 def changed_preview_routes(root, base, available):
+    # Only capture needs the documentation validator and its build dependencies.
+    # The separate publishing job intentionally uses the standard library only.
+    from wirelit_docs import PREVIEW_ROUTES
+
     paths = changed_paths(root, base, committed_only=True)
     candidates = affected_routes(paths, available, root=root, base=base)
     # Project docs have a separate build and no Hugo header/geometry contract.
