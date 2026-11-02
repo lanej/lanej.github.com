@@ -6,6 +6,8 @@ sections:
     id: dotfiles
   - title: Viewrule
     id: viewrule
+  - title: Wirelit
+    id: wirelit
   - title: GitHub activity
     id: github-activity
   - title: Contributions
@@ -32,6 +34,16 @@ Viewrule combines written design rules with executable browser checks for layout
 It includes a CLI and a Claude Code plugin. This website uses it to check its rendered pages. Passing those checks means the configured constraints passed; it does not establish that a design is good or automate every accessibility judgment.
 
 [Source and installation](https://github.com/lanej/viewrule) · [Releases](https://github.com/lanej/viewrule/releases) · [Why feedback matters](/writing/close-the-loop/)
+
+{{< project-header id="wirelit" title="Wirelit" src="/logos/projects/wirelit.svg" status="Early release" description="Connect API documentation from Protobuf" >}}
+
+Wirelit generates an API reference that documents the typed RPC contract and its HTTP/JSON representation together. Protobuf descriptors supply the service signatures, linked message types, field details, and comments; curated examples show the actual wire format.
+
+The output is ordinary MDX for Astro Starlight. Generated reference pages sit alongside authored application guides, sharing navigation, search, and styling. Wirelit's own documentation demonstrates this with a complex sample schema and executable curl, TypeScript, and Go examples.
+
+All four RPC shapes have reference pages; runnable examples currently cover unary and server-streaming methods.
+
+[Documentation and live example](https://lanej.io/wirelit/) · [Source and installation](https://github.com/lanej/wirelit) · [Sample schema](https://github.com/lanej/wirelit/blob/main/examples/proto/shipping/v1/shipping.proto)
 
 ## GitHub activity {#github-activity}
 

@@ -2,7 +2,7 @@
 
 `content/labs.md` holds experiments. State the question, the artifact's state,
 and its limits. Use synthetic data explicitly. `content/open-source.md` holds
-maintained tools (including dotfiles and Viewrule), with upstream contributions
+maintained tools (including dotfiles, Viewrule, and Wirelit), with upstream contributions
 from `data/contributions.yaml`. Career and speaking remain on Work.
 
 The delivery preview is a screenshot of the real public demo at 1120 × 1020,

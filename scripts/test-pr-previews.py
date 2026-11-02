@@ -1,7 +1,10 @@
 """Check preview scope and preservation of human-authored PR text."""
 import importlib.util
 import json
+import os
 from pathlib import Path
+import subprocess
+import sys
 import tempfile
 import unittest
 
@@ -12,6 +15,50 @@ spec.loader.exec_module(previews)
 
 class PreviewTests(unittest.TestCase):
     routes = {'/', '/record/', '/labs/', '/open-source/', '/about/', '/writing/', '/writing/example/'}
+
+    def test_publish_works_without_installed_build_dependencies(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            out = Path(temporary)
+            head, build = 'a' * 40, 'b' * 40
+            event = {'pull_request': {'number': 85, 'head': {
+                'sha': head, 'repo': {'full_name': 'owner/site'}}}}
+            (out / 'event.json').write_text(json.dumps(event))
+            images = {label: {'viewport': 'preview.png', 'full': 'preview.png'}
+                      for label in ('mobile', 'desktop')}
+            (out / 'manifest.json').write_text(json.dumps({
+                'head_sha': head, 'build_sha': build, 'pages': [
+                    {'route': '/wirelit/', 'title': 'Wirelit', 'images': images}]}))
+            (out / 'preview.png').write_bytes(b'fixture image bytes')
+            # Execute the real CLI with site-packages disabled, as on the
+            # publishing runner. Only the GitHub transport is replaced.
+            runner = '''
+import io, json, runpy, sys
+from pathlib import Path
+from unittest.mock import patch
+script, output = sys.argv[1:]
+sys.path.insert(0, str(Path(script).parent))
+sys.argv = [script, 'publish', '--output', output]
+pr = {'head': {'sha': 'a' * 40}, 'state': 'open', 'body': 'Human notes'}
+responses = [pr, {'object': {'sha': 'parent'}}, {'sha': 'blob'},
+             {'sha': 'tree'}, {'sha': 'images-commit'}, {}, pr, {}]
+with patch('urllib.request.urlopen', side_effect=[io.StringIO(json.dumps(r)) for r in responses]) as transport:
+    runpy.run_path(script, run_name='__main__')
+assert transport.call_count == len(responses)
+last = transport.call_args.args[0]
+assert last.get_method() == 'PATCH' and last.full_url.endswith('/pulls/85')
+body = json.loads(last.data)['body']
+assert body.startswith('Human notes')
+assert '<!-- page-previews:start -->' in body
+assert 'https://raw.githubusercontent.com/owner/site/images-commit/preview.png' in body
+'''
+            env = dict(os.environ, PYTHONPATH='', GITHUB_REPOSITORY='owner/site',
+                       GITHUB_EVENT_PATH=str(out / 'event.json'), GITHUB_SHA=build,
+                       GITHUB_RUN_ID='123', GH_TOKEN='fixture-token')
+            result = subprocess.run([sys.executable, '-S', '-c', runner,
+                                     str(Path(__file__).with_name('pr-previews.py').resolve()), str(out)],
+                                    env=env, text=True, capture_output=True)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+            self.assertIn('Updated PR #85 with 1 page previews.', result.stdout)
 
     def test_company_icons_affect_work(self):
         self.assertEqual(previews.affected_routes(
