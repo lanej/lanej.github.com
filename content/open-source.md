@@ -23,7 +23,7 @@ I keep improving the small things that shape a working day: finding information,
 
 This is an opinionated personal environment. Read the installation steps and scripts before applying it to your own machine.
 
-[Browse the dotfiles](https://github.com/lanej/dotfiles) · [Setup and documentation](https://github.com/lanej/dotfiles#readme)
+[Documentation](https://lanej.github.io/dotfiles/) · [Installation guide](https://lanej.github.io/dotfiles/reference/install/) · [Source on GitHub](https://github.com/lanej/dotfiles)
 
 {{< project-header id="viewrule" title="Viewrule" src="/logos/projects/viewrule.png" status="Experimental" description="Used on this website" >}}
 
