@@ -151,6 +151,8 @@ def main():
                     assert page.locator('#delivery-time, #design-constraints').count() == 2
                     assert page.get_by_role('link', name='Open the experiment', exact=True).get_attribute('href') == 'https://lanej.io/delivery-time-estimate-viz/'
                 if route == '/open-source/':
+                    assert page.get_by_role('link', name='Documentation', exact=True).get_attribute('href') == 'https://lanej.github.io/dotfiles/'
+                    assert page.get_by_role('link', name='Installation guide', exact=True).get_attribute('href') == 'https://lanej.github.io/dotfiles/reference/install/'
                     assert page.locator('.contributions .contribution').count() > 0
                     assert page.locator('#dotfiles, #viewrule, #wirelit, .github-activity').count() == 4
                     assert page.get_by_role('link', name='Documentation and live example', exact=True).get_attribute('href') == 'https://lanej.io/wirelit/'
