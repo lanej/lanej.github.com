@@ -1,51 +1,34 @@
 +++
 title = "Pragmatic Hexagonal Architecture"
-description = "A small Rust reference: pure decisions, explicit effects, a thin internal model, and boundaries that justify their cost."
+description = "A small Rust reference showing where rules and effects separate, and how that separation contains change as requirements grow."
 date = "2026-11-05T12:00:00-08:00"
 draft = false
 unlisted = true
 essay_visual = "architecture"
 +++
 
-A reviewer leaves feedback on an infrastructure plan. We need to decide whether that feedback still applies, then publish it as a GitHub comment identifying the exact plan.
+A reviewer leaves feedback on an infrastructure plan. One function could check whether the feedback still applies, format it, and post a GitHub comment. That is enough for the first request.
 
-The rule and the publication call have different reasons to change. A review policy can change while GitHub's API stays the same. GitHub can change while the policy remains valid. I want a reader to find either responsibility without understanding the other first.
+Now add another eligibility rule, a second way to submit reviews, a GitHub client upgrade, and delivery that survives a restart. If the rules, input formats, HTTP calls, and retry decisions all live together, understanding any one change requires understanding the others.
 
-> Keep decisions easy to challenge, effects explicit, and each boundary accountable for the complexity it adds.
+> As requirements accumulate, keep the amount of code needed to understand one change small.
 
-I call this **pragmatic hexagonal architecture**: functional core, imperative shell, a thin internal model, and selective ports and adapters. It combines existing ideas with a judgment about how much separation the problem needs.
+The [runnable Rust reference](https://github.com/lanej/lanej.github.com/tree/48ece975c221442a3bd0d8e79d81a200d64f8e78/examples/review-publication) uses a hypothetical slice of Statecraft's infrastructure-review workflow. It demonstrates a functional core, an imperative shell, and a selective port to GitHub. I call the combination **pragmatic hexagonal architecture**. The useful property is that these responsibilities can grow for different reasons.
 
-The [runnable Rust reference](https://github.com/lanej/lanej.github.com/tree/master/examples/review-publication) uses a hypothetical slice of Statecraft's infrastructure-review workflow. It is a teaching example, separate from Statecraft's implementation. Start with `policy.rs` and `workflow.rs`; the durable-delivery extension can wait until those boundaries are clear.
+## Give the rule its own inputs and outputs
 
-## Give the rule a home
+The rule needs a review and the identity of the current plan. A review contains its identity, the exact plan artifact it concerns, and its text. It needs no HTTP request, database connection, or GitHub SDK object.
 
-The application owns a few values. A review identifies an immutable plan artifact. A commit alone is insufficient: two plans produced from the same commit may differ.
+The application owns those values and the possible decisions:
 
 ```text
-pub struct Review {
-    pub id: String,
-    pub plan_id: String,
-    pub text: String,
-}
-
-pub struct Publication {
-    pub review_id: String,
-    pub plan_id: String,
-    pub body: String,
-}
-
-pub enum SkipReason {
-    StalePlan,
-    EmptyReview,
-}
-
 pub enum Decision {
     Skip(SkipReason),
     Publish(Publication),
 }
 ```
 
-The rule skips feedback for another plan, skips empty feedback, and otherwise prepares a publication naming the reviewed artifact:
+`Publication` contains the review identity, plan identity, and formatted body. It describes an intended effect; creating it sends nothing.
 
 ```text
 pub fn decide(current_plan: &str, review: &Review) -> Decision {
@@ -59,17 +42,17 @@ pub fn decide(current_plan: &str, review: &Review) -> Decision {
 }
 ```
 
-`format_review` is another ordinary pure function. It returns the review identity, plan identity, and a body beginning with `Review of plan ...`.
+This is the **functional core**: values in, a decision out. The same inputs produce the same decision. A test for stale feedback needs two plan identities and a review, with no server or mocks.
 
-These functions receive values and return values. They perform no I/O or mutation outside themselves. The same inputs produce the same decision. If a rule needs the time, pass the relevant timestamp in; reading the clock is an effect too.
+The **imperative shell** obtains those facts and acts on the result. It performs input parsing, loading, network calls, and persistence. Gary Bernhardt's *Functional Core, Imperative Shell* supplies this separation.[^functional-core] Calling a database through a trait would still be an effect.
 
-Gary Bernhardt's *Functional Core, Imperative Shell* describes this separation between functional decisions and interaction with the world.[^functional-core] Here, a stale-plan test needs two identifiers and a review. It needs no server, database, or mocks.
+The boundary limits what the rule must know. GitHub's representation of a comment cannot spread through the policy because it never enters it. These few application-owned types form a thin internal model; there is no need to reproduce the provider's entire schema.
 
-Rust does not enforce purity. The small module makes its absence of I/O inspectable. Its enums give us a different guarantee: a `match` must handle every variant. The reference also rejects wildcard enum arms in Clippy, so adding a decision forces its consumers to be considered.
+Rust does not enforce purity. Keeping I/O out of this small module makes the property inspectable. Its enums provide a separate guarantee: exhaustive consumers must account for a new variant. The reference rejects wildcard enum arms in Clippy.
 
-## Let the shell perform the effects
+## Put effects behind a contract
 
-The basic shell is short:
+The basic workflow translates a decision into an attempt:
 
 ```text
 pub async fn publish_once(
@@ -89,38 +72,42 @@ pub async fn publish_once(
 }
 ```
 
-The shell selects the consequence of a decision and executes it. Authentication, input parsing, and obtaining an authoritative current-plan snapshot belong to its caller. The policy stays independent of those mechanisms.
+Its caller authenticates the request, supplies an authoritative current-plan snapshot, and chooses the destination. The workflow coordinates the rule and the effect. The GitHub adapter handles credentials, endpoint requests, pagination, and SDK responses.
 
-The application owns `Review`, `Publication`, and `Decision`. The GitHub integration owns its API response types. It translates a provider response into a small application outcome. That is the thin internal model: preserve the concepts our rules need, while containing representations we do not control.
-
-The workflow can know that it publishes GitHub issue or pull-request conversation comments. The rule deciding which plan a review concerns has no reason to know the GitHub API. Creating a universal `Message` abstraction for GitHub, chat threads, and email would add promises this capability does not need.
-
-Hexagonal architecture supplies the broader inside/outside boundary. Alistair Cockburn's account emphasizes running an application independently of its external devices through ports and adapters.[^hexagonal] A pure core is a further choice: calling a database through a trait still performs I/O.
-
-## Invert the dependency that matters
-
-The consuming workflow defines `GitHubComments`. Its `create` operation returns a typed `WriteOutcome`; its `find` operation supports the recovery extension. The GitHub adapter implements that contract.
-
-At runtime, the workflow calls the adapter. In source, the adapter imports the workflow's contract. Those directions are different.
+The workflow owns the `GitHubComments` contract it consumes. The adapter implements it and translates provider responses into application outcomes. In the reference, that adapter uses **octorust**, generated from GitHub's OpenAPI description.[^octorust]
 
 {{< review-boundaries >}}
 
-The boundary earns its cost by making provider behavior reproducible, including a write accepted by the provider whose response never arrives. The real adapter uses **octorust**, generated from GitHub's OpenAPI description.[^octorust] SDK types, request construction, and pagination stay inside that integration.
+At runtime the workflow calls the adapter. In source, the adapter depends on the workflow's contract. This inversion lets the application describe the operation it needs without importing the SDK.
 
-The journal remains a concrete SQLite implementation. The function deriving a publication key remains a function. Neither gets a trait for symmetry. A storage migration or a demonstrated isolation need could justify another boundary later.
+That inside/outside relationship comes from Alistair Cockburn's hexagonal architecture.[^hexagonal] Functional core, imperative shell addresses the separation of decisions from effects; ports and adapters addresses dependencies across the application's external boundaries. A port does not make effectful code pure.
 
-Composition is ordinary Rust constructing collaborators and passing references. Static dispatch needs no dependency-injection container. The modules live together under `review-publication`, so reading the capability does not require visiting application-wide directories for every architectural layer.
+This boundary has a cost: a contract, response mapping, and tests that keep the mapping honest. It earns that cost here because provider failures must be reproducible without calling GitHub. It does not require a universal `Message` interface spanning email, chat, and issue comments.
 
-| Change | Where it belongs | What stays independent |
+## Watch requirements accumulate
+
+Start with the stale-plan check. Adding the empty-review guard changes the policy and its tests. The existing `Publish(Publication)` contract still carries a body to GitHub. The adapter needs no knowledge of the new eligibility rule. A caller displaying each skip reason must handle `EmptyReview`; the enum makes that obligation visible.
+
+Next, suppose reviews can arrive through a webhook as well as the demonstration's command-line entry point. The new entry point would authenticate and parse its payload, obtain the current plan, construct a `Review`, and call the same workflow. It would reuse the eligibility rule instead of copying it into a controller. This is an extension the boundaries permit; the reference does not implement a webhook server.
+
+A GitHub client upgrade has a different scope. When request or response shapes change, the adapter's mapping changes. As long as it preserves the application's contract, neither entry point nor the eligibility rule needs the SDK's new representation.
+
+| Requirement | Work introduced | Knowledge kept local |
 | --- | --- | --- |
-| Review eligibility changes | Pure policy | GitHub requests and storage |
-| A provider response changes | GitHub integration | Review rules |
-| Delivery must survive restart | Recovery and journal | The pure decision |
-| A small formatting rule changes | A function | No new interface is required |
+| Skip empty feedback | Policy guard, skip reason, tests | Eligibility rules |
+| Accept webhook submissions | Entry point and composition | Transport, authentication, input shape |
+| Change GitHub response handling | Adapter mapping and fixture tests | Provider protocol and SDK types |
+| Survive a restart | Recovery coordinator and journal | Attempt history and delivery uncertainty |
 
-## Extend delivery when the promise requires it
+Each addition has a place because each boundary hides a different decision. This follows Parnas's criterion of organizing modules around design decisions that other modules should not need to know.[^modularity]
 
-`publish_once` makes one attempt. It has no restart or retry guarantee. Its outcome model preserves the distinction we need before adding either:
+The benefit is visible in the work a change avoids: a new input path does not duplicate the rule, and a provider change does not require reviewing the rule for accidental edits. Rule tests stay small even when the surrounding integrations grow.
+
+The contracts can still change. If feedback must expire after an hour, the core needs timestamps and the shell must supply them. That requirement crosses the boundary because the rule needs a new fact. Explicit inputs make the coordination visible; they cannot eliminate it.
+
+## Add coordination for a stronger delivery promise
+
+`publish_once` makes one attempt. Restart-safe delivery introduces additional states and ordering constraints. The adapter preserves the information that coordination needs:
 
 ```text
 pub enum WriteOutcome {
@@ -130,46 +117,51 @@ pub enum WriteOutcome {
 }
 ```
 
-A confirmed authentication rejection and a lost response describe different knowledge. Treating both as `false` or swallowing both into `unknown` loses information the caller needs.
+An authentication rejection and a write whose response was lost permit different next actions. A boolean would erase that distinction.
 
-The optional `recovery.rs` extension adds a durable journal. It canonicalizes the destination, checks for an existing receipt before applying current eligibility rules, and reserves an attempt before calling GitHub. A previously published review remains published when a newer plan appears. Reusing its identity with different content is rejected.
+The included `recovery.rs` extension adds a concrete SQLite journal. It records an attempt before calling GitHub, preserves confirmed receipts when a newer plan appears, and rejects reuse of an identity with different content. It reuses the same pure decision and GitHub contract.
 
-An unconfirmed write stays unknown across restart. Repeating the request does not issue another create. Reconciliation reads all comment pages and checks the publishing account and entire expected body. A marker helps correlate evidence; it is not a provider-enforced idempotency key.[^github]
+An unknown attempt remains unknown across restart. Reconciliation looks for the publishing account and complete expected body across comment pages. A marker helps correlate evidence; GitHub does not enforce it as an idempotency key.[^github] An unsuccessful search never authorizes a second create. A definite rejection permits an explicit retry after correction. The SDK's default retry middleware is disabled.
 
-A definite rejection retains its cause and permits an explicit retry after the problem is corrected. An unknown write requires evidence. Absence from a read never authorizes another create.
+This policy has a cost: a crash after reservation but before sending can leave an unsent comment unknown indefinitely. Workers must share the journal, and losing its records loses that protection. The extension trades automatic eventual delivery for avoiding another create through that journal.
 
-There is a cost: a crash after reservation but before sending can leave an unsent comment unknown indefinitely. This extension gives up automatic eventual delivery to avoid issuing a second create through the same journal. Workers must share that journal, and losing its records loses that protection.
+The extra complexity follows from a stronger delivery requirement. It lives in a coordinator and persistence module, where its state transitions and failure cases can be examined together. Adding it does not make the stale-plan predicate harder to read.
 
-That delivery promise justifies the extra machinery. The pure-core boundary alone does not provide it.
+## Keep the system understandable in parts
 
-## Challenge the promises at their boundaries
+As the application gains other capabilities, give each its own nearby rules, workflow, and integrations. Plan approval need not join one application-wide policy module just because review publication already has a core. Group code by the capability a reader is changing; separate responsibilities within it.
 
-Pure tests challenge stale-plan rejection, empty feedback, and the identity in the publication. Workflow tests check which effects occur. Recovery tests reopen SQLite, race independent connections, advance the current plan between requests, and distinguish rejection from uncertainty.
+Keep a contract narrow enough to preserve its meaning. Renaming GitHub comments to generic messages would create a broader promise without resolving a current source of coupling. The journal can remain concrete SQLite until an actual replacement or isolation requirement justifies another port. Composition is ordinary Rust constructing collaborators and passing references; static dispatch needs no dependency-injection container.
 
-Adapter tests run the generated client against a local HTTP fixture. They exercise request mapping, pagination, author matching, definite authentication rejection, and response loss without an automatic second POST. The dependency disables its default retry middleware.
+Tests follow the same knowledge boundaries. Pure tests challenge the decisions. Workflow tests check which effects are requested. Adapter tests exercise the generated client against a local HTTP fixture. Recovery tests reopen SQLite, race independent connections, and distinguish rejection from uncertainty. They establish bounded properties, including response loss without an automatic second POST; they do not establish live GitHub behavior or durability under a real disk failure.
 
-Those tests establish bounded properties. They do not establish live GitHub behavior, authorization correctness, or durability under a real disk failure. The current-plan value is a snapshot; publishing feedback about an artifact does not authorize applying it. Applying infrastructure would require binding authorization to the exact artifact at execution.
+These boundaries organize source and reasoning inside one application. They do not by themselves increase throughput or make deployment independent. The current plan is also a snapshot: publishing feedback about an artifact does not authorize applying it. Executing infrastructure would need authorization bound to the exact artifact at execution.
 
-For an existing Rails application, the first useful change might be extracting one decision from an ActiveRecord callback into a function over explicit values. Keep loading and saving in the caller. Add an integration module when provider details spread. Add durable outcome handling when a side effect requires it.
+In an existing Rails application, the first step could be extracting one decision from an ActiveRecord callback into a function over explicit values. Leave loading and saving in the caller. Add a provider boundary when provider details spread, and durable coordination when an effect requires it.
 
-Each boundary should make an actual rule, change, or failure easier to reason about. Stop adding boundaries when they stop doing that.
+Review the result against actual changes. If one eligibility rule repeatedly requires edits in controllers and adapters, its knowledge is leaking. If a boundary adds mapping and navigation without containing change or isolating a meaningful failure, simplify it.
 
 [^functional-core]: **[Functional Core, Imperative Shell](https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell)**\
     Gary Bernhardt · 2012
 
-    Describes a functional core surrounded by imperative code handling input, output, database, and network interaction. The recovery policy here is a separate application choice.
+    Separates functional decisions from code handling interaction with the world. The delivery policy in this reference is a separate application choice.
 
 [^hexagonal]: **[Hexagonal Architecture](https://alistair.cockburn.us/hexagonal-architecture/)**\
     Alistair Cockburn · 2005
 
-    Explains the inside/outside boundary, ports and adapters, and running an application independently of external devices. It does not require every internal function to be pure or every dependency to receive an interface.
+    Describes ports and adapters at the inside/outside boundary. It does not require every internal function to be pure or every dependency to receive an interface.
+
+[^modularity]: **[On the Criteria To Be Used in Decomposing Systems into Modules](https://doi.org/10.1145/361598.361623)**\
+    D. L. Parnas · 1972
+
+    Compares decompositions by how changes propagate and how independently modules can be understood. The staged review-publication example here is my application of that criterion.
 
 [^octorust]: **[octorust](https://docs.rs/octorust/0.10.0/octorust/)**\
     Oxide Computer · Client documentation
 
-    A client generated from GitHub's OpenAPI description. The reference pins its version and disables default middleware, which otherwise includes retries. It uses generated endpoint methods and pagination rather than a handwritten HTTP client.
+    The reference pins this generated client and disables default middleware, which otherwise includes retries. Request construction and pagination stay inside the adapter.
 
 [^github]: **[REST API endpoints for issue comments](https://docs.github.com/en/rest/issues/comments)**\
     GitHub documentation
 
-    Documents creation and listing of issue and pull-request conversation comments. Inline pull-request review comments use a different API. The journal and recovery policy are application choices, not delivery guarantees supplied by this documentation.
+    Documents creation and listing of issue and pull-request conversation comments. The journal and conservative recovery policy are application choices.

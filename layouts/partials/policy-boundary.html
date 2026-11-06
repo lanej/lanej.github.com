@@ -1,0 +1,19 @@
+<figure class="sc-hero-art sc-figure" aria-labelledby="policy-boundary-title policy-boundary-caption">
+<p class="sc-figure-title" id="policy-boundary-title">Rules and effects have separate homes</p>
+<div class="carry-path">
+<span class="carry-direction">Imperative shell</span>
+<strong class="sc-node-label">Load facts</strong>
+<p>Review + current plan ID</p>
+<div class="sc-flow-connector" aria-hidden="true"></div>
+<div class="sc-node"><div>
+<span class="carry-direction">Functional core · policy.rs</span>
+<strong class="sc-node-label">Decide whether to publish</strong>
+<span class="sc-node-detail">Values in · Decision out</span>
+<span class="sc-node-detail">No SDK, network, storage, or clock</span>
+</div></div>
+<div class="sc-flow-connector" aria-hidden="true"></div>
+<strong class="sc-node-label">Skip or Publish</strong>
+<p class="carry-result">The workflow acts on the decision.<br>GitHub details stay in the adapter.</p>
+</div>
+<figcaption class="sc-caption" id="policy-boundary-caption">The shell supplies facts and performs effects. The core receives and returns application-owned values.</figcaption>
+</figure>

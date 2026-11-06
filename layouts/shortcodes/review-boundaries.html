@@ -1,9 +1,9 @@
 {{ $id := printf "review-boundaries-%d" .Ordinal }}
 <figure class="sc-figure" data-essay-diagram="review-boundaries" aria-labelledby="{{ $id }}-title {{ $id }}-caption">
-<p class="sc-figure-title" id="{{ $id }}-title">Source dependencies</p>
+<p class="sc-figure-title" id="{{ $id }}-title">Imports point toward application-owned definitions</p>
 <div class="carry-paths" role="group" aria-label="Workflow imports policy; GitHub integration imports its consuming workflow's contract">
-<div class="carry-path"><span class="carry-direction">Rule boundary</span><div class="sc-node">Workflow</div><div class="sc-flow-connector" aria-hidden="true"></div><div class="sc-node">Pure policy</div><p class="carry-result">The policy imports no I/O code.</p></div>
-<div class="carry-path"><span class="carry-direction">Inverted dependency</span><div class="sc-node">GitHub integration</div><div class="sc-flow-connector" aria-hidden="true"></div><div class="sc-node">Workflow's GitHubComments contract</div><p class="carry-result">The consuming workflow owns the contract.</p></div>
+<div class="carry-path"><span class="carry-direction">Rules</span><div class="sc-node">workflow.rs</div><div class="sc-flow-connector" aria-hidden="true"></div><div class="sc-node"><div><strong class="sc-node-label">policy.rs</strong><span class="sc-node-detail">Review · Decision</span></div></div><p class="carry-result">Changing eligibility needs no knowledge of GitHub requests.</p></div>
+<div class="carry-path"><span class="carry-direction">Provider boundary</span><div class="sc-node">github.rs · SDK and HTTP</div><div class="sc-flow-connector" aria-hidden="true"></div><div class="sc-node"><div><strong class="sc-node-label">workflow.rs</strong><span class="sc-node-detail">GitHubComments · WriteOutcome</span></div></div><p class="carry-result">Provider details are translated into the contract the workflow needs.</p></div>
 </div>
-<figcaption class="sc-caption" id="{{ $id }}-caption">Arrows show source imports. At runtime the workflow calls the GitHub integration; the integration depends on the workflow's contract.</figcaption>
+<figcaption class="sc-caption" id="{{ $id }}-caption">Arrows mean “imports,” not execution order. At runtime the workflow calls the adapter. The adapter implements the workflow's contract, so the SDK stays outside it.</figcaption>
 </figure>
