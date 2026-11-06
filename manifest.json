@@ -1,6 +1,6 @@
 {
-  "head_sha": "48ece975c221442a3bd0d8e79d81a200d64f8e78",
-  "build_sha": "3e12a14049f26b7fff3b9974ae2bc40669d7d98f",
+  "head_sha": "c0a63e64462d25553106eded3e028e39d2fa31b9",
+  "build_sha": "db99fa72ac9f33b64a68db7da64ecac4b2ab70ce",
   "pages": [
     {
       "route": "/writing/close-the-loop/",
