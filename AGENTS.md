@@ -11,6 +11,10 @@ docs/development.md. Do not append feature histories or test inventories to READ
 
 Edit the source, not `public/`. Keep one publishing path. Before merging, run the
 pinned Hugo build, source checks, and browser verification. Confirm the PR description
+links directly to the rendered GitHub Pages preview, including the affected essay
+when appropriate. Publish the link only after verifying the deployed preview's
+revision and bytes. A link to the GitHub PR page is not a website preview.
+Confirm the description
 contains current mobile and desktop screenshots of affected pages from the preview
 workflow when rendered pages change. Draft-only and tooling-only edits need no
 screenshots. Preview only pages whose rendered output or referenced assets changed
