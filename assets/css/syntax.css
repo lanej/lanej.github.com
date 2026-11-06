@@ -1,0 +1,8 @@
+/* Token colors come from data/syntax/palette.json and are included inline for RSS. */
+.rust-highlight pre{tab-size:4;-webkit-text-size-adjust:none}
+.rust-highlight .syn-keyword{font-weight:600}
+.rust-highlight .syn-comment{font-style:italic}
+@media print{
+  .rust-highlight pre{background:white!important;color:black!important}
+  .rust-highlight .syn{color:inherit!important}
+}

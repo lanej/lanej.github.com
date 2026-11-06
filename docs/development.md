@@ -33,6 +33,26 @@ disposable fixtures, never deployed content. For UI changes, follow the
 measurement limits; use `check --all` for a full audit. Inspect screenshots as
 well as check results.
 
+## Rust highlighting
+
+Rust fences use the pinned Tree-sitter Rust grammar at build time. Types,
+constructors, calls, parameters, and fields get distinct roles; this does not
+resolve names like a compiler. The palette lives in
+`data/syntax/palette.json` and the shared code styles in `assets/css/syntax.css`.
+
+After editing Rust snippets or the palette, run:
+
+```sh
+python3 scripts/rust-highlighting.py --write
+bash scripts/build.sh
+```
+
+Commit `data/syntax/rust.json` with the source change. The build verifies this
+generated cache, and the render hook refuses a missing snippet. That keeps the
+normal build and trusted Hugo-only PR previews consistent. No highlighting
+JavaScript or parser is delivered to readers. Inline token colors preserve RSS;
+the shared stylesheet supplies print and keyboard-scroll behavior.
+
 ## Source map
 
 | Location | Purpose |
