@@ -1,3 +1,0 @@
-{{ $diagram := .Get 0 }}
-{{ if not (in (slice "method" "comparison" "layers" "record" "workflow") $diagram) }}{{ errorf "Unknown Socrates diagram: %s" $diagram }}{{ end }}
-{{ partial (printf "socrates/%s.html" $diagram) .Page }}
