@@ -1,0 +1,12 @@
+{
+  "name": "review-publication-reference",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24.12" },
+  "scripts": {
+    "test": "tsc --noEmit && node --test reference.test.ts",
+    "demo": "node demo.ts"
+  },
+  "dependencies": { "@octokit/rest": "22.0.1" },
+  "devDependencies": { "@types/node": "^24.0.0", "typescript": "7.0.2" }
+}

@@ -1,6 +1,6 @@
-{{ $captions := dict "feedback" "Close the loop against reality." "harmony" "The parts must preserve the same promise." "ownership" "Own the problem. Test the outcome." "dose" "Enough intervention to learn what matters." "memory" "Learning becomes part of the system." }}
+{{ $captions := dict "feedback" "Close the loop against reality." "harmony" "The parts must preserve the same promise." "ownership" "Own the problem. Test the outcome." "dose" "Enough intervention to learn what matters." "memory" "Learning becomes part of the system." "architecture" "The workflow calls policy and integrations. The policy performs no I/O." }}
 {{ if not (isset $captions .) }}{{ errorf "Unknown essay visual: %s" . }}{{ end }}
-{{ $steps := dict "feedback" (slice "Intent" "Action" "Reality" "Feedback") "harmony" (slice "Requirements" "Constraints" "Verification") "ownership" (slice "Problem" "Owner + authority" "Outcome") "dose" (slice "Uncertainty" "One complete path" "Evidence") "memory" (slice "Experience" "Encoded learning" "Behavior") }}
+{{ $steps := dict "feedback" (slice "Intent" "Action" "Reality" "Feedback") "harmony" (slice "Requirements" "Constraints" "Verification") "ownership" (slice "Problem" "Owner + authority" "Outcome") "dose" (slice "Uncertainty" "One complete path" "Evidence") "memory" (slice "Experience" "Encoded learning" "Behavior") "architecture" (slice "Composition" "Review workflow" "Separate policy and integrations") }}
 <figure class="sc-hero-art sc-hero-symbol">
 <svg viewBox="0 0 420 400" aria-hidden="true" focusable="false">
 {{ if eq . "feedback" }}
@@ -38,10 +38,17 @@
 <rect class="art-line art-soft" x="104" y="169" width="200" height="60" rx="8"/>
 <rect class="art-node" x="110" y="175" width="200" height="60" rx="8"/><text class="art-label" x="210" y="211">Encoded learning</text>
 <rect class="art-node" x="110" y="295" width="200" height="60" rx="8"/><text class="art-label" x="210" y="331">Behavior</text>
+{{ else if eq . "architecture" }}
+<circle class="art-line art-soft" cx="210" cy="200" r="170"/>
+<path class="art-line" d="M210 100V145M203 133l7 10 7-10M210 210V245M100 280V245H320V280M93 268l7 10 7-10M313 268l7 10 7-10"/>
+<rect class="art-node" x="105" y="40" width="210" height="60" rx="8"/><text class="art-label" x="210" y="76">Composition</text>
+<rect class="art-node" x="90" y="145" width="240" height="65" rx="8"/><text class="art-label" x="210" y="184">Review workflow</text>
+<rect class="art-node" x="10" y="280" width="180" height="65" rx="8"/><text class="art-label" x="100" y="319">Pure policy</text>
+<rect class="art-node" x="230" y="280" width="180" height="65" rx="8"/><text class="art-label" x="320" y="319">Integrations</text>
 {{ end }}
 </svg>
 {{/* Reflow labeled diagrams on phones instead of scaling their SVG text down. */}}
-<div class="sc-hero-mobile-diagram{{ if eq . "harmony" }} sc-hero-promise{{ else if ne . "dose" }} sc-hero-cycle{{ end }}" aria-hidden="true">
+<div class="sc-hero-mobile-diagram{{ if eq . "harmony" }} sc-hero-promise{{ else if and (ne . "dose") (ne . "architecture") }} sc-hero-cycle{{ end }}" aria-hidden="true">
 {{ if eq . "harmony" }}<div class="sc-hero-promise-label">Promise</div>{{ end }}
 <div class="sc-hero-steps">{{ range index $steps . }}<span class="sc-hero-step">{{ . }}</span>{{ end }}</div>
 </div>
