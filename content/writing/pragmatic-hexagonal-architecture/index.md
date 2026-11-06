@@ -21,7 +21,7 @@ The rule needs a review and the identity of the current plan. A review contains 
 
 The application owns those values and the possible decisions:
 
-```text
+```rust
 pub enum Decision {
     Skip(SkipReason),
     Publish(Publication),
@@ -30,7 +30,7 @@ pub enum Decision {
 
 `Publication` contains the review identity, plan identity, and formatted body. It describes an intended effect; creating it sends nothing.
 
-```text
+```rust
 pub fn decide(current_plan: &str, review: &Review) -> Decision {
     if review.plan_id != current_plan {
         return Decision::Skip(SkipReason::StalePlan);
@@ -54,7 +54,7 @@ Rust does not enforce purity. Keeping I/O out of this small module makes the pro
 
 The basic workflow translates a decision into an attempt:
 
-```text
+```rust
 pub async fn publish_once(
     current_plan: &str,
     review: &Review,
@@ -109,7 +109,7 @@ The contracts can still change. If feedback must expire after an hour, the core 
 
 `publish_once` makes one attempt. Restart-safe delivery introduces additional states and ordering constraints. The adapter preserves the information that coordination needs:
 
-```text
+```rust
 pub enum WriteOutcome {
     Published(NonZeroU64),
     Rejected { reason: String },
