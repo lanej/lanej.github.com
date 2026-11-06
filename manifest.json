@@ -1,0 +1,7 @@
+{
+  "source_commit": "12155263ff66c4c92093d2b646a01c8de22fbea9",
+  "route": "/writing/pragmatic-hexagonal-architecture/",
+  "mobile_width": 390,
+  "desktop_width": 1440,
+  "verification": "Rust reference: 14 tests, formatting and Clippy; pinned Hugo build; normal unlisted selection; shared citation, geometry and accessibility checks passed."
+}
