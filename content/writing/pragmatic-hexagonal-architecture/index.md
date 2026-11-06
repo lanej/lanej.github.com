@@ -92,12 +92,12 @@ Next, suppose reviews can arrive through a webhook as well as the demonstration'
 
 A GitHub client upgrade has a different scope. When request or response shapes change, the adapter's mapping changes. As long as it preserves the application's contract, neither entry point nor the eligibility rule needs the SDK's new representation.
 
-| Requirement | Work introduced | Knowledge kept local |
-| --- | --- | --- |
-| Skip empty feedback | Policy guard, skip reason, tests | Eligibility rules |
-| Accept webhook submissions | Entry point and composition | Transport, authentication, input shape |
-| Change GitHub response handling | Adapter mapping and fixture tests | Provider protocol and SDK types |
-| Survive a restart | Recovery coordinator and journal | Attempt history and delivery uncertainty |
+| New requirement | Where its complexity belongs |
+| --- | --- |
+| Skip empty feedback | Core: eligibility rule, skip reason, tests |
+| Accept webhook input | Entry point: authentication, input mapping, composition |
+| Update the GitHub client | Adapter: SDK mapping and protocol tests |
+| Survive a restart | Recovery and journal: attempt history and uncertainty |
 
 Each addition has a place because each boundary hides a different decision. This follows Parnas's criterion of organizing modules around design decisions that other modules should not need to know.[^modularity]
 
