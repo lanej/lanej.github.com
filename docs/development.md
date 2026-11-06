@@ -103,6 +103,26 @@ Active publishing runs finish before the latest queued update starts.
 
 ### Website deployment
 
+Website PRs have browsable GitHub Pages snapshots under
+`https://lanej.io/previews/site/pr-<number>/`. The description links directly to
+the changed essay or page after deployment verification. These are complete Hugo
+snapshots with relative navigation, isolated assets, a source revision marker,
+and `noindex, nofollow`; the canonical website and its discovery surfaces retain
+their published content.
+
+Owned PR changes request a refresh from the trusted default-branch workflow.
+Preview-only refreshes reuse the currently published, hash-verified site bundle
+instead of rebuilding Wirelit and Easy UI Storybooks. Ordinary website changes
+still run the complete build. Both modes use the same serialized Pages publisher.
+The retained production artifact lasts 14 days; if no usable artifact remains,
+refresh planning falls back to the full build. Each preview is pinned to its PR
+head, and a broken unrelated draft is isolated. Forks are excluded.
+
+The publisher uses pinned Hugo without executing PR scripts or forwarding Actions
+credentials to the preview build. It verifies deployed bytes and mobile/desktop
+rendering before updating the `site-preview` block in each PR description. Preserve
+that block and the separate screenshot-preview markers during description edits.
+
 PR descriptions receive a **Page previews** section with affected pages at 390px
 mobile and 1440px desktop widths, collapsed by default. Only pages whose rendered
 HTML or referenced assets differ from the PR base are included. Source dependency
