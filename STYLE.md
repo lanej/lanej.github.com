@@ -220,6 +220,9 @@ Inline code uses the shared dark surface and compact padding. Code blocks use th
 
 Chapter tables follow the prose in DOM order alongside other supporting visuals, using the right column on wide screens and stacking below prose at narrow widths. They remain inline in full-text RSS. Tables may scroll horizontally on narrow screens. Do not shrink table text until it becomes unreadable merely to avoid scrolling.
 
+Keep code identifiers and file paths whole in tables; use horizontal scrolling
+when required instead of splitting their spelling across lines.
+
 Rust blocks use one shared syntax palette across the site. Types are blue, enum
 constructors violet, functions gold, parameter declarations peach, fields mint,
 and keywords rose. Punctuation stays quieter than names. Use the Rust grammar's
@@ -229,6 +232,12 @@ The palette in `data/syntax/palette.json` uses the normal code surface and keeps
 token contrast at least 4.5:1. Highlighting remains static and copyable, including
 in RSS; print uses black text with bold keywords. Code retains the shared font,
 reading columns, and horizontal scrolling. Do not add per-article code themes.
+
+When a Rust block is an excerpt from a reference project, give its fence a
+`filename` attribute. The shared caption shows the path and an Excerpt label;
+the page's optional `code_source` URL links it to the complete source at a pinned
+revision. Keep captions outside the copyable code and attached to their block
+in responsive columns and print.
 
 ## Responsive behavior
 

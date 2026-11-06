@@ -1,8 +1,21 @@
 {{- if in (slice "rust" "rs") (lower .Type) -}}
+  {{- $block := . -}}
   {{- $key := crypto.SHA256 .Inner -}}
   {{- with index hugo.Data.syntax.rust.snippets $key -}}
     {{- $palette := hugo.Data.syntax.palette -}}
-    <div class="highlight rust-highlight"><pre tabindex="0" style="background-color:{{ $palette.background | safeCSS }};color:{{ $palette.foreground | safeCSS }}"><code class="language-rust" data-lang="rust">{{ .html | safeHTML }}</code></pre></div>
+    <figure class="highlight rust-highlight">
+      {{- with $block.Attributes.filename -}}
+        <figcaption class="code-filename">
+          {{- if $block.Page.Params.code_source -}}
+            <a href="{{ printf "%s/%s" (strings.TrimSuffix "/" $block.Page.Params.code_source) . }}">{{ . }}</a>
+          {{- else -}}
+            <span>{{ . }}</span>
+          {{- end -}}
+          <span class="code-excerpt">Excerpt</span>
+        </figcaption>
+      {{- end -}}
+      <pre tabindex="0" style="background-color:{{ $palette.background | safeCSS }};color:{{ $palette.foreground | safeCSS }}"><code class="language-rust" data-lang="rust">{{ .html | safeHTML }}</code></pre>
+    </figure>
   {{- else -}}
     {{- errorf "Missing Rust highlighting in %s (block %d, hash %s). Run python3 scripts/rust-highlighting.py --write" .Page.RelPermalink .Ordinal $key -}}
   {{- end -}}

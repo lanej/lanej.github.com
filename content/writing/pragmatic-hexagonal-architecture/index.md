@@ -5,6 +5,7 @@ date = "2026-11-05T12:00:00-08:00"
 draft = false
 unlisted = true
 essay_visual = "architecture"
+code_source = "https://github.com/lanej/lanej.github.com/blob/8e1df4b21fd7587c31b5ea84fba6237b07f9305b/examples/review-publication"
 +++
 
 A reviewer leaves feedback on an infrastructure plan. One function could check whether the feedback still applies, format it, and post a GitHub comment. That is enough for the first request.
@@ -13,7 +14,7 @@ Now add another eligibility rule, a second way to submit reviews, a GitHub clien
 
 > As requirements accumulate, keep the amount of code needed to understand one change small.
 
-The [runnable Rust reference](https://github.com/lanej/lanej.github.com/tree/48ece975c221442a3bd0d8e79d81a200d64f8e78/examples/review-publication) uses a hypothetical slice of Statecraft's infrastructure-review workflow. It demonstrates a functional core, an imperative shell, and a selective port to GitHub. I call the combination **pragmatic hexagonal architecture**. The useful property is that these responsibilities can grow for different reasons.
+The [runnable Rust reference](https://github.com/lanej/lanej.github.com/tree/8e1df4b21fd7587c31b5ea84fba6237b07f9305b/examples/review-publication) uses a hypothetical slice of Statecraft's infrastructure-review workflow. It demonstrates a functional core, an imperative shell, and a selective port to GitHub. I call the combination **pragmatic hexagonal architecture**. The useful property is that these responsibilities can grow for different reasons.
 
 ## Give the rule its own inputs and outputs
 
@@ -21,7 +22,7 @@ The rule needs a review and the identity of the current plan. A review contains 
 
 The application owns those values and the possible decisions:
 
-```rust
+```rust {filename="src/policy.rs"}
 pub enum Decision {
     Skip(SkipReason),
     Publish(Publication),
@@ -30,7 +31,7 @@ pub enum Decision {
 
 `Publication` contains the review identity, plan identity, and formatted body. It describes an intended effect; creating it sends nothing.
 
-```rust
+```rust {filename="src/policy.rs"}
 pub fn decide(current_plan: &str, review: &Review) -> Decision {
     if review.plan_id != current_plan {
         return Decision::Skip(SkipReason::StalePlan);
@@ -54,7 +55,7 @@ Rust does not enforce purity. Keeping I/O out of this small module makes the pro
 
 The basic workflow translates a decision into an attempt:
 
-```rust
+```rust {filename="src/workflow.rs"}
 pub async fn publish_once(
     current_plan: &str,
     review: &Review,
@@ -109,7 +110,7 @@ The contracts can still change. If feedback must expire after an hour, the core 
 
 `publish_once` makes one attempt. Restart-safe delivery introduces additional states and ordering constraints. The adapter preserves the information that coordination needs:
 
-```rust
+```rust {filename="src/workflow.rs"}
 pub enum WriteOutcome {
     Published(NonZeroU64),
     Rejected { reason: String },
@@ -130,6 +131,19 @@ The extra complexity follows from a stronger delivery requirement. It lives in a
 ## Keep the system understandable in parts
 
 As the application gains other capabilities, give each its own nearby rules, workflow, and integrations. Plan approval need not join one application-wide policy module just because review publication already has a core. Group code by the capability a reader is changing; separate responsibilities within it.
+
+The reference keeps these files together under `examples/review-publication/src/`. The filenames above each excerpt link to the complete source:
+
+| File | Responsibility |
+| --- | --- |
+| [`policy.rs`](https://github.com/lanej/lanej.github.com/blob/8e1df4b21fd7587c31b5ea84fba6237b07f9305b/examples/review-publication/src/policy.rs) | Review values, eligibility decisions, and formatting; no I/O |
+| [`workflow.rs`](https://github.com/lanej/lanej.github.com/blob/8e1df4b21fd7587c31b5ea84fba6237b07f9305b/examples/review-publication/src/workflow.rs) | One publishing attempt; owns the GitHub contract and write outcomes |
+| [`github.rs`](https://github.com/lanej/lanej.github.com/blob/8e1df4b21fd7587c31b5ea84fba6237b07f9305b/examples/review-publication/src/github.rs) | Implements that contract using octorust; translates requests and responses |
+| [`main.rs`](https://github.com/lanej/lanej.github.com/blob/8e1df4b21fd7587c31b5ea84fba6237b07f9305b/examples/review-publication/src/main.rs) | Wires the runnable demonstration with an offline GitHub adapter |
+| [`recovery.rs`](https://github.com/lanej/lanej.github.com/blob/8e1df4b21fd7587c31b5ea84fba6237b07f9305b/examples/review-publication/src/recovery.rs) | Adds attempt coordination and reconciliation when restart safety is required |
+| [`journal.rs`](https://github.com/lanej/lanej.github.com/blob/8e1df4b21fd7587c31b5ea84fba6237b07f9305b/examples/review-publication/src/journal.rs) | Stores the recovery state in SQLite |
+
+The last two files serve the stronger delivery promise. Another capability gets its own nearby group of rules, workflow, and integrations.
 
 Keep a contract narrow enough to preserve its meaning. Renaming GitHub comments to generic messages would create a broader promise without resolving a current source of coupling. The journal can remain concrete SQLite until an actual replacement or isolation requirement justifies another port. Composition is ordinary Rust constructing collaborators and passing references; static dispatch needs no dependency-injection container.
 
