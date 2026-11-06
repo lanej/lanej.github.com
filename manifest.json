@@ -1,0 +1,62 @@
+{
+  "head_sha": "48ece975c221442a3bd0d8e79d81a200d64f8e78",
+  "build_sha": "3e12a14049f26b7fff3b9974ae2bc40669d7d98f",
+  "pages": [
+    {
+      "route": "/writing/close-the-loop/",
+      "images": {
+        "mobile": {
+          "viewport": "writing-close-the-loop-mobile.png",
+          "full": "writing-close-the-loop-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "writing-close-the-loop-desktop.png",
+          "full": "writing-close-the-loop-desktop-full.png"
+        }
+      },
+      "title": "Close the Loop"
+    },
+    {
+      "route": "/writing/code-review/",
+      "images": {
+        "mobile": {
+          "viewport": "writing-code-review-mobile.png",
+          "full": "writing-code-review-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "writing-code-review-desktop.png",
+          "full": "writing-code-review-desktop-full.png"
+        }
+      },
+      "title": "Code review: standards and guidelines"
+    },
+    {
+      "route": "/writing/pragmatic-hexagonal-architecture/",
+      "images": {
+        "mobile": {
+          "viewport": "writing-pragmatic-hexagonal-architecture-mobile.png",
+          "full": "writing-pragmatic-hexagonal-architecture-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "writing-pragmatic-hexagonal-architecture-desktop.png",
+          "full": "writing-pragmatic-hexagonal-architecture-desktop-full.png"
+        }
+      },
+      "title": "Pragmatic Hexagonal Architecture"
+    },
+    {
+      "route": "/writing/systems-that-remember/",
+      "images": {
+        "mobile": {
+          "viewport": "writing-systems-that-remember-mobile.png",
+          "full": "writing-systems-that-remember-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "writing-systems-that-remember-desktop.png",
+          "full": "writing-systems-that-remember-desktop-full.png"
+        }
+      },
+      "title": "Systems That Remember"
+    }
+  ]
+}
