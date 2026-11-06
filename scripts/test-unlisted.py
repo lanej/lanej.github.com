@@ -11,6 +11,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 from check import Document
+from verification_pages import html_pages
 
 ROOT = Path(__file__).resolve().parent.parent
 SLUG = 'unlisted-review-fixture'
@@ -56,6 +57,7 @@ def main():
         assert 'noindex' in doc.select('meta', name='robots')[0]['content']
         assert doc.select('span', **{'class': 'sc-preview-state'}), 'Missing unlisted draft label'
         assert (article.parent / 'review-note.txt').exists(), 'Review resources must remain available'
+        assert ROUTE + 'index.html' in html_pages(public), 'Unlisted essay missing from local verification'
         for name in public_surfaces:
             assert SLUG not in (public / name).read_text(), f'Unlisted URL exposed by {name}'
 

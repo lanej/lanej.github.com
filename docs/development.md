@@ -112,6 +112,11 @@ need no screenshots. Preserve its HTML markers when editing the
 description. Previews use immutable URLs on `pr-previews/<number>` branches, not
 website source. Fork PRs provide the `pr-page-previews` artifact instead.
 
+Local verification and PR previews include rendered unlisted essay bundles through
+`scripts/verification_pages.py`. This inventory stays separate from the public
+build manifest, feeds, and discovery surfaces. Shared essay geometry rules must
+include new essays and their print/enlarged states.
+
 Merging into `master` builds and tests one Pages artifact, deploys that exact
 artifact, then verifies `https://lanej.io/`. Production checks wait for the
 expected revision, compare response hashes with the tested artifact, decode

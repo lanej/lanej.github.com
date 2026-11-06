@@ -235,6 +235,24 @@ class RepositoryTests(unittest.TestCase):
         self.assertEqual([p['name'] for p in pages], ['home','home-enlarged'])
         self.assertEqual(selection['viewport_states'], 3)
 
+    def test_unlisted_essay_is_verified_without_public_discovery(self):
+        self.write('public/index.html', '<main><h1>Home</h1></main>')
+        self.write('public/build.json', json.dumps({'revision':'test', 'files':{'/index.html':'digest'}}))
+        self.write('public/writing/review-copy/index.html',
+                   '<meta name="site-revision" content="test">'
+                   '<meta property="article:published_time" content="2026-11-05">'
+                   '<article class="sc-article" data-visibility="unlisted"></article>')
+        with patch.object(wrapper, 'ROOT', self.root):
+            config = wrapper.prepare()
+        names = {page['name'] for page in config['pages']}
+        self.assertTrue({'writing/review-copy', 'writing/review-copy-print',
+                         'writing/review-copy-enlarged'}.issubset(names))
+        self.assertNotIn('review-copy', (self.root / 'public/build.json').read_text())
+
+    def test_verification_inventory_change_selects_all_routes(self):
+        routes = {'/', '/writing/', '/writing/example/', '/404.html'}
+        self.assertEqual(affected_routes(['scripts/verification_pages.py'], routes), sorted(routes))
+
     def test_docs_only_skips_and_full_or_initial_push_keeps_all(self):
         self.write('README.md', 'updated')
         pages, result = wrapper.scope(self.config(), base=self.base, root=self.root)
