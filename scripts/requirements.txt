@@ -1,8 +1,0 @@
-# Build verification only; the published website has no runtime dependencies.
-Pillow==12.3.0
-playwright==1.57.0
-
-tinycss2==1.4.0
-tree-sitter==0.26.0
-tree-sitter-rust==0.24.2
-markdown-it-py==4.0.0
