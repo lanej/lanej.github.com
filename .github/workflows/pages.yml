@@ -7,13 +7,75 @@ on:
   schedule:
     - cron: "23 9 * * 1"
   workflow_dispatch:
+    inputs:
+      preview_refresh:
+        description: Refresh website PR previews using the verified production bundle
+        type: boolean
+        default: false
 permissions:
   contents: read
 concurrency:
   group: lanej-pages-${{ github.ref }}
   cancel-in-progress: false
 jobs:
+  mode:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      preview_refresh: ${{ steps.mode.outputs.preview_refresh }}
+      production_artifact: ${{ steps.mode.outputs.production_artifact }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - id: mode
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/site-pr-previews.py mode >> "$GITHUB_OUTPUT"
+  preview-refresh:
+    needs: mode
+    if: needs.mode.outputs.preview_refresh == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Install pinned Hugo
+        run: bash scripts/install-hugo.sh
+      - name: Restore verified production and render website previews
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PRODUCTION_ARTIFACT: ${{ needs.mode.outputs.production_artifact }}
+        run: |
+          python3 scripts/test-site-pr-previews.py
+          python3 scripts/site-pr-previews.py restore --artifact-id "$PRODUCTION_ARTIFACT"
+          python3 scripts/site-pr-previews.py build
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: site-bundle
+          path: public/
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: error
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: site-pr-previews
+          path: artifacts/site-pr-previews.json
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+        with:
+          path: public/
   build:
+    needs: mode
+    if: needs.mode.outputs.preview_refresh != 'true'
     runs-on: ubuntu-24.04
     # Retained Easy UI previews are rebuilt before site and browser checks.
     timeout-minutes: 45
@@ -55,6 +117,13 @@ jobs:
         run: |
           python3 scripts/test-easy-ui-previews.py
           bash scripts/build-easy-ui-pr-preview.sh
+      - name: Build rendered website PR previews
+        if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/test-site-pr-previews.py
+          python3 scripts/site-pr-previews.py build
       - name: Select affected pages
         run: |
           python3 scripts/test-affected-pages.py
@@ -108,8 +177,13 @@ jobs:
           name: site-bundle
           path: public/
           include-hidden-files: true
-          retention-days: 2
+          retention-days: 14
           if-no-files-found: error
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+        with:
+          name: site-pr-previews
+          path: artifacts/site-pr-previews.json
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
         with:
@@ -137,8 +211,8 @@ jobs:
           python3 -S scripts/test-pr-previews.py
           python3 scripts/pr-previews.py publish
   deploy:
-    needs: build
-    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    needs: [build, preview-refresh]
+    if: always() && github.ref == 'refs/heads/master' && github.event_name != 'pull_request' && (needs.build.result == 'success' || needs.preview-refresh.result == 'success')
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
@@ -146,6 +220,8 @@ jobs:
       actions: read
       pages: write
       id-token: write
+      issues: write
+      pull-requests: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -157,6 +233,10 @@ jobs:
         with:
           name: site-bundle
           path: public/
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: site-pr-previews
+          path: artifacts/
       - name: Check Pages configuration and avoid overlapping publishers
         env:
           GH_TOKEN: ${{ github.token }}
@@ -174,6 +254,12 @@ jobs:
           .venv/bin/python scripts/browser-smoke.py --url https://lanej.io/ --output artifacts/live/site --chromium-path "$chrome"
           .venv/bin/python scripts/wirelit-browser.py --url https://lanej.io/ --output artifacts/live/wirelit --chromium-path "$chrome"
           .venv/bin/python scripts/easy-ui-previews.py verify --url https://lanej.io/ --output artifacts/live/easy-ui-previews --chromium-path "$chrome"
+      - name: Verify rendered previews and publish their URLs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          chrome=$(command -v google-chrome || command -v google-chrome-stable)
+          .venv/bin/python scripts/site-pr-previews.py verify --url https://lanej.io --chromium-path "$chrome" --publish
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
