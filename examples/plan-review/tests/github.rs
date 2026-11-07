@@ -1,7 +1,7 @@
 #![cfg(feature = "github")]
 
 use octorust::{Client, auth::Credentials};
-use review_publication::{
+use plan_review::publish_review::{
     github::GitHub,
     workflow::{GitHubComments, GitHubTarget, WriteOutcome},
 };

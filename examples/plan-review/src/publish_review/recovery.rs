@@ -1,7 +1,7 @@
 //! Optional durable delivery extension; the basic shell is in workflow.rs.
 use sha2::{Digest, Sha256};
 
-use crate::{
+use super::{
     journal::{Error, PublicationJournal, Request},
     policy::{Decision, Review, decide, format_review},
     workflow::{GitHubComments, GitHubTarget, Outcome, WriteOutcome},

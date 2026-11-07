@@ -2,12 +2,12 @@ name: Verify reference architecture
 on:
   pull_request:
     paths:
-      - 'examples/review-publication/**'
+      - 'examples/plan-review/**'
       - '.github/workflows/reference-architecture.yml'
   push:
     branches: [master]
     paths:
-      - 'examples/review-publication/**'
+      - 'examples/plan-review/**'
       - '.github/workflows/reference-architecture.yml'
 permissions:
   contents: read
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-24.04
     defaults:
       run:
-        working-directory: examples/review-publication
+        working-directory: examples/plan-review
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
       - run: cargo fmt --all --check

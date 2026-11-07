@@ -1,13 +1,21 @@
-use review_publication::{
+use plan_review::publish_review::{
     journal::{Error, PublicationJournal, Request},
     policy::{Decision, Review, SkipReason, decide},
     recovery,
     workflow::{GitHubComments, GitHubTarget, Outcome, WriteOutcome, publish_once},
 };
+use plan_review::{approve_plan::policy::Plan, memory::MemoryStore};
 use std::{
     num::NonZeroU64,
     sync::{Arc, Barrier, Mutex},
 };
+
+fn plans(id: &str) -> MemoryStore {
+    MemoryStore::new(Plan {
+        id: id.into(),
+        author: "sam".into(),
+    })
+}
 
 fn review() -> Review {
     Review {
@@ -89,15 +97,19 @@ fn pure_rule_rejects_stale_and_empty_reviews_and_names_the_artifact() {
 }
 
 #[tokio::test]
-async fn basic_shell_skips_without_io_and_returns_a_typed_write_outcome() {
+async fn basic_shell_skips_without_publishing_and_returns_a_typed_write_outcome() {
     let github = FakeGitHub::new(published());
     assert_eq!(
-        publish_once("plan-b", &review(), &target(), &github).await,
+        publish_once(&review(), &target(), &plans("plan-b"), &github)
+            .await
+            .unwrap(),
         Outcome::Skipped(SkipReason::StalePlan)
     );
     assert_eq!(*github.writes.lock().unwrap(), 0);
     assert_eq!(
-        publish_once("plan-a", &review(), &target(), &github).await,
+        publish_once(&review(), &target(), &plans("plan-a"), &github)
+            .await
+            .unwrap(),
         Outcome::Attempted(published())
     );
     assert_eq!(*github.writes.lock().unwrap(), 1);

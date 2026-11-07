@@ -967,7 +967,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "review-publication"
+name = "plan-review"
 version = "0.1.0"
 dependencies = [
  "octorust",

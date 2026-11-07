@@ -2,7 +2,12 @@ use std::{future::Future, num::NonZeroU64};
 
 use serde::{Deserialize, Serialize};
 
-use crate::policy::{Decision, Review, SkipReason, decide};
+use super::policy::{Decision, Review, SkipReason, decide};
+
+/// Publication needs only an artifact ID, not the approval slice's Plan type.
+pub trait CurrentPlan {
+    fn current_plan_id(&self) -> Result<String, String>;
+}
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct GitHubTarget {
@@ -50,15 +55,16 @@ pub trait GitHubComments: Sync {
 
 /// One attempt, with no automatic retry or durability promise.
 pub async fn publish_once(
-    current_plan: &str,
     review: &Review,
     target: &GitHubTarget,
+    plans: &impl CurrentPlan,
     github: &impl GitHubComments,
-) -> Outcome {
-    match decide(current_plan, review) {
-        Decision::Skip(reason) => Outcome::Skipped(reason),
-        Decision::Publish(publication) => {
-            Outcome::Attempted(github.create(target, &publication.body).await)
-        }
+) -> Result<Outcome, String> {
+    let current_plan = plans.current_plan_id()?;
+    match decide(&current_plan, review) {
+        Decision::Skip(reason) => Ok(Outcome::Skipped(reason)),
+        Decision::Publish(publication) => Ok(Outcome::Attempted(
+            github.create(target, &publication.body).await,
+        )),
     }
 }

@@ -1,5 +1,5 @@
 //! Adapter over octorust, generated from GitHub's OpenAPI description.
-use crate::workflow::{GitHubComments, GitHubTarget, WriteOutcome};
+use super::workflow::{GitHubComments, GitHubTarget, WriteOutcome};
 use octorust::{Client, ClientError, auth::Credentials, types::PullsUpdateReviewRequest};
 use std::{num::NonZeroU64, time::Duration};
 

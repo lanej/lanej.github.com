@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use std::{path::Path, time::Duration};
 use thiserror::Error;
 
-use crate::workflow::{GitHubTarget, WriteOutcome};
+use super::workflow::{GitHubTarget, WriteOutcome};
 
 #[derive(Debug, Error)]
 pub enum Error {

@@ -1,4 +1,4 @@
-use review_publication::{
+use plan_review::publish_review::{
     journal::PublicationJournal,
     policy::Review,
     recovery,
