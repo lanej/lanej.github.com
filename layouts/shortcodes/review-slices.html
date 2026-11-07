@@ -1,0 +1,24 @@
+{{ $id := printf "review-slices-%d" .Ordinal }}
+<figure class="sc-figure" data-essay-diagram="review-slices" aria-labelledby="{{ $id }}-title {{ $id }}-caption">
+<p class="sc-figure-title" id="{{ $id }}-title">Two slices own different rules and contracts</p>
+<div class="carry-paths" role="group" aria-label="Publication and approval own separate policies and effect contracts">
+<section class="carry-path" aria-label="Publish review slice">
+<span class="carry-direction">publish_review/</span>
+<div class="sc-node"><div><strong class="sc-node-label">Pure policy</strong><span class="sc-node-detail">Skip stale or empty feedback</span></div></div>
+<p>Its workflow owns:</p>
+<div class="sc-node"><div><strong class="sc-node-label">CurrentPlan</strong><span class="sc-node-detail">Current artifact ID</span></div></div>
+<div class="sc-node"><div><strong class="sc-node-label">ReviewPublisher</strong><span class="sc-node-detail">Publish review feedback</span></div></div>
+<p class="carry-result">GitHubPublisher or GitLabPublisher implements the same publication port.</p>
+</section>
+<section class="carry-path" aria-label="Approve plan slice">
+<span class="carry-direction">approve_plan/</span>
+<div class="sc-node"><div><strong class="sc-node-label">Pure policy</strong><span class="sc-node-detail">Reject stale or self approval</span></div></div>
+<p>Its workflow owns:</p>
+<div class="sc-node"><div><strong class="sc-node-label">ApprovalRecords</strong><span class="sc-node-detail">Artifact and author; record approval</span></div></div>
+<p class="carry-result">Approval imports no publication rules or code-host types.</p>
+</section>
+</div>
+<p class="sc-kicker">Shared storage implementations</p>
+<div class="sc-node"><div><strong class="sc-node-label">SqliteStore or MemoryStore</strong><span class="sc-node-detail">Each implements CurrentPlan and ApprovalRecords</span></div></div>
+<figcaption class="sc-caption" id="{{ $id }}-caption">Each column is one capability. The shared storage adapter implements both consumers' contracts; their policies remain separate.</figcaption>
+</figure>

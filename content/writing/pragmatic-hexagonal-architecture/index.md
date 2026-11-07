@@ -1,37 +1,26 @@
 +++
 title = "Pragmatic Hexagonal Architecture"
-description = "A small Rust reference showing where rules and effects separate, and how that separation contains change as requirements grow."
+description = "Two Rust slices, interchangeable GitHub and GitLab publishers, and storage ports that keep provider changes separate from business rules."
 date = "2026-11-05T12:00:00-08:00"
 draft = false
 unlisted = true
 essay_visual = "architecture"
-code_source = "https://github.com/lanej/lanej.github.com/blob/8e1df4b21fd7587c31b5ea84fba6237b07f9305b/examples/review-publication"
+code_source = "https://github.com/lanej/lanej.github.com/blob/a14575118a9eb2bcbe15fe5360e52549882bca4b/examples/plan-review"
 +++
 
-A reviewer leaves feedback on an infrastructure plan. One function could check whether the feedback still applies, format it, and post a GitHub comment. That is enough for the first request.
+A reviewer leaves feedback on an infrastructure plan. The application checks that the review concerns the current artifact, formats the text, and publishes it to a code-review thread. One function can handle the first request.
 
-Now add another eligibility rule, a second way to submit reviews, a GitHub client upgrade, and delivery that survives a restart. If the rules, input formats, HTTP calls, and retry decisions all live together, understanding any one change requires understanding the others.
+Then the application needs plan approval. Authors must not approve their own work. Approval belongs to an exact artifact and must be recorded, while feedback goes to GitHub or GitLab. These capabilities share storage, but their rules and effects differ. A GitHub outage should not prevent an otherwise valid approval.
 
 > As requirements accumulate, keep the amount of code needed to understand one change small.
 
-The [runnable Rust reference](https://github.com/lanej/lanej.github.com/tree/8e1df4b21fd7587c31b5ea84fba6237b07f9305b/examples/review-publication) uses a hypothetical slice of Statecraft's infrastructure-review workflow. It demonstrates a functional core, an imperative shell, and a selective port to GitHub. I call the combination **pragmatic hexagonal architecture**. The useful property is that these responsibilities can grow for different reasons.
+The [runnable Rust reference](https://github.com/lanej/lanej.github.com/tree/a14575118a9eb2bcbe15fe5360e52549882bca4b/examples/plan-review) implements both capabilities in a hypothetical Statecraft application. GitHub and GitLab implement one publication port; SQLite and memory implement the storage contracts. Tests exercise these choices through the same application workflows. I call this combination of a functional core, an imperative shell, and selective ports **pragmatic hexagonal architecture**.
 
-## Give the rule its own inputs and outputs
+## Give a decision its own inputs and outputs
 
-The rule needs a review and the identity of the current plan. A review contains its identity, the exact plan artifact it concerns, and its text. It needs no HTTP request, database connection, or GitHub SDK object.
+Start with publication. `Review` contains the review identity, the exact plan artifact it concerns, and its text. The rule receives those values and the current artifact ID. It returns `Decision::Skip(reason)` or `Decision::Publish(publication)`:
 
-The application owns those values and the possible decisions:
-
-```rust {filename="src/policy.rs"}
-pub enum Decision {
-    Skip(SkipReason),
-    Publish(Publication),
-}
-```
-
-`Publication` contains the review identity, plan identity, and formatted body. It describes an intended effect; creating it sends nothing.
-
-```rust {filename="src/policy.rs"}
+```rust {filename="src/publish_review/policy.rs"}
 pub fn decide(current_plan: &str, review: &Review) -> Decision {
     if review.plan_id != current_plan {
         return Decision::Skip(SkipReason::StalePlan);
@@ -43,117 +32,182 @@ pub fn decide(current_plan: &str, review: &Review) -> Decision {
 }
 ```
 
-This is the **functional core**: values in, a decision out. The same inputs produce the same decision. A test for stale feedback needs two plan identities and a review, with no server or mocks.
+`Publication` contains the review identity, plan identity, and formatted body. It describes an intended effect; constructing it sends nothing. Stale-plan and empty-feedback tests need ordinary values, with no server or mocks.
 
-The **imperative shell** obtains those facts and acts on the result. It performs input parsing, loading, network calls, and persistence. Gary Bernhardt's *Functional Core, Imperative Shell* supplies this separation.[^functional-core] Calling a database through a trait would still be an effect.
+This is the **functional core**: the same inputs produce the same decision. The **imperative shell** obtains facts and acts on the result, handling loading, network calls, and persistence. Gary Bernhardt's *Functional Core, Imperative Shell* supplies this separation.[^functional-core]
 
-The boundary limits what the rule must know. GitHub's representation of a comment cannot spread through the policy because it never enters it. These few application-owned types form a thin internal model; there is no need to reproduce the provider's entire schema.
+The core imports no SDK or database types. A provider's representation cannot spread through a rule it never enters. Rust does not enforce purity; keeping I/O out of this small module makes the property inspectable. Its enums provide a different guarantee: exhaustive consumers must account for a new variant. The reference rejects wildcard enum match arms in Clippy.
 
-Rust does not enforce purity. Keeping I/O out of this small module makes the property inspectable. Its enums provide a separate guarantee: exhaustive consumers must account for a new variant. The reference rejects wildcard enum arms in Clippy.
+## Give one port two real adapters
 
-## Put effects behind a contract
+Publication needs the current artifact and a way to publish review feedback. `CurrentPlan` supplies the artifact ID. `ReviewPublisher` describes the delivery conversation:
 
-The basic workflow translates a decision into an attempt:
+```rust {filename="src/publish_review/workflow.rs"}
+pub trait ReviewPublisher: Sync {
+    fn publish(&self, publication: &Publication) -> impl Future<Output = WriteOutcome> + Send;
+}
+```
 
-```rust {filename="src/workflow.rs"}
+The destination belongs to adapter configuration. A GitHub adapter knows an owner, repository, and pull-request number; a GitLab adapter knows a project ID and merge-request IID. Those identifiers never enter this workflow:
+
+```rust {filename="src/publish_review/workflow.rs"}
 pub async fn publish_once(
-    current_plan: &str,
     review: &Review,
-    target: &GitHubTarget,
-    github: &impl GitHubComments,
-) -> Outcome {
-    match decide(current_plan, review) {
-        Decision::Skip(reason) => Outcome::Skipped(reason),
+    plans: &impl CurrentPlan,
+    publisher: &impl ReviewPublisher,
+) -> Result<Outcome, String> {
+    let current_plan = plans.current_plan_id()?;
+    match decide(&current_plan, review) {
+        Decision::Skip(reason) => Ok(Outcome::Skipped(reason)),
         Decision::Publish(publication) => {
-            Outcome::Attempted(
-                github.create(target, &publication.body).await,
-            )
+            Ok(Outcome::Attempted(publisher.publish(&publication).await))
         }
     }
 }
 ```
 
-Its caller authenticates the request, supplies an authoritative current-plan snapshot, and chooses the destination. The workflow coordinates the rule and the effect. The GitHub adapter handles credentials, endpoint requests, pagination, and SDK responses.
+Both providers implement the same port. GitHub delegates to the generated **octorust** client behind its adapter:[^octorust]
 
-The workflow owns the `GitHubComments` contract it consumes. The adapter implements it and translates provider responses into application outcomes. In the reference, that adapter uses **octorust**, generated from GitHub's OpenAPI description.[^octorust]
-
-{{< review-boundaries >}}
-
-At runtime the workflow calls the adapter. In source, the adapter depends on the workflow's contract. This inversion lets the application describe the operation it needs without importing the SDK.
-
-That inside/outside relationship comes from Alistair Cockburn's hexagonal architecture.[^hexagonal] Functional core, imperative shell addresses the separation of decisions from effects; ports and adapters addresses dependencies across the application's external boundaries. A port does not make effectful code pure.
-
-This boundary has a cost: a contract, response mapping, and tests that keep the mapping honest. It earns that cost here because provider failures must be reproducible without calling GitHub. It does not require a universal `Message` interface spanning email, chat, and issue comments.
-
-## Watch requirements accumulate
-
-Start with the stale-plan check. Adding the empty-review guard changes the policy and its tests. The existing `Publish(Publication)` contract still carries a body to GitHub. The adapter needs no knowledge of the new eligibility rule. A caller displaying each skip reason must handle `EmptyReview`; the enum makes that obligation visible.
-
-Next, suppose reviews can arrive through a webhook as well as the demonstration's command-line entry point. The new entry point would authenticate and parse its payload, obtain the current plan, construct a `Review`, and call the same workflow. It would reuse the eligibility rule instead of copying it into a controller. This is an extension the boundaries permit; the reference does not implement a webhook server.
-
-A GitHub client upgrade has a different scope. When request or response shapes change, the adapter's mapping changes. As long as it preserves the application's contract, neither entry point nor the eligibility rule needs the SDK's new representation.
-
-| New requirement | Where its complexity belongs |
-| --- | --- |
-| Skip empty feedback | Core: eligibility rule, skip reason, tests |
-| Accept webhook input | Entry point: authentication, input mapping, composition |
-| Update the GitHub client | Adapter: SDK mapping and protocol tests |
-| Survive a restart | Recovery and journal: attempt history and uncertainty |
-
-Each addition has a place because each boundary hides a different decision. This follows Parnas's criterion of organizing modules around design decisions that other modules should not need to know.[^modularity]
-
-The benefit is visible in the work a change avoids: a new input path does not duplicate the rule, and a provider change does not require reviewing the rule for accidental edits. Rule tests stay small even when the surrounding integrations grow.
-
-The contracts can still change. If feedback must expire after an hour, the core needs timestamps and the shell must supply them. That requirement crosses the boundary because the rule needs a new fact. Explicit inputs make the coordination visible; they cannot eliminate it.
-
-## Add coordination for a stronger delivery promise
-
-`publish_once` makes one attempt. Restart-safe delivery introduces additional states and ordering constraints. The adapter preserves the information that coordination needs:
-
-```rust {filename="src/workflow.rs"}
-pub enum WriteOutcome {
-    Published(NonZeroU64),
-    Rejected { reason: String },
-    Unknown { reason: String },
+```rust {filename="src/publish_review/github.rs"}
+impl ReviewPublisher for GitHubPublisher {
+    async fn publish(&self, publication: &Publication) -> WriteOutcome {
+        self.github.create(&self.target, &publication.body).await
+    }
 }
 ```
 
-An authentication rejection and a write whose response was lost permit different next actions. A boolean would erase that distinction.
+GitLab delegates to its implementation of the merge-request Notes API, using the existing HTTP dependency:[^gitlab]
 
-The included `recovery.rs` extension adds a concrete SQLite journal. It records an attempt before calling GitHub, preserves confirmed receipts when a newer plan appears, and rejects reuse of an identity with different content. It reuses the same pure decision and GitHub contract.
+```rust {filename="src/publish_review/gitlab.rs"}
+impl ReviewPublisher for GitLabPublisher {
+    async fn publish(&self, publication: &Publication) -> WriteOutcome {
+        self.create_note(&publication.body).await
+    }
+}
+```
 
-An unknown attempt remains unknown across restart. Reconciliation looks for the publishing account and complete expected body across comment pages. A marker helps correlate evidence; GitHub does not enforce it as an idempotency key.[^github] An unsuccessful search never authorizes a second create. A definite rejection permits an explicit retry after correction. The SDK's default retry middleware is disabled.
+These adapters have the same application purpose. Changing code hosts changes construction and provider mapping; the workflow still loads an artifact, makes the same decision, and passes the same `Publication` to its publisher. The port is specific to publishing plan-review feedback. It does not promise a universal interface for email, chat, and every kind of message.
 
-This policy has a cost: a crash after reservation but before sending can leave an unsent comment unknown indefinitely. Workers must share the journal, and losing its records loses that protection. The extension trades automatic eventual delivery for avoiding another create through that journal.
+A lookup remains an effect even behind a trait. A failed lookup returns before publication; a decision to skip also sends nothing. The pure decision and the external contract solve different problems: one separates rules from effects, while the other contains knowledge of external systems.
 
-The extra complexity follows from a stronger delivery requirement. It lives in a coordinator and persistence module, where its state transitions and failure cases can be examined together. Adding it does not make the stale-plan predicate harder to read.
+{{< review-boundaries >}}
 
-## Keep the system understandable in parts
+At runtime the workflow calls its publisher. In source, each adapter imports and implements the consuming workflow's contract. That inside/outside relationship comes from Alistair Cockburn's ports and adapters architecture.[^hexagonal]
 
-As the application gains other capabilities, give each its own nearby rules, workflow, and integrations. Plan approval need not join one application-wide policy module just because review publication already has a core. Group code by the capability a reader is changing; separate responsibilities within it.
+The callable workflow is also an input boundary. The offline CLI and tests drive the same function. An HTTP handler could call it after authentication and input mapping; this reference does not include a webhook server. An input boundary can be an ordinary function.
 
-The reference keeps these files together under `examples/review-publication/src/`. The filenames above each excerpt link to the complete source:
+## Add a slice with a different reason to change
 
-| File | Responsibility |
+Plan approval has its own request, decision, workflow, and port under `approve_plan/`. Its rule needs an artifact's author as well as its identity:
+
+```rust {filename="src/approve_plan/policy.rs"}
+pub fn decide(plan: &Plan, request: &Request) -> Decision {
+    if request.plan_id != plan.id {
+        return Decision::Reject(Rejection::StalePlan);
+    }
+    if request.approver == plan.author {
+        return Decision::Reject(Rejection::SelfApproval);
+    }
+    Decision::Record(Approval {
+        plan_id: request.plan_id.clone(),
+        approver: request.approver.clone(),
+    })
+}
+```
+
+This rule has no reason to know how review text is formatted or how GitHub represents a comment. Publication has no reason to import approval's `Plan` type or self-approval rule.
+
+Approval owns a different storage conversation:
+
+```rust {filename="src/approve_plan/workflow.rs"}
+pub trait ApprovalRecords {
+    fn current_plan(&self) -> Result<Plan, String>;
+    fn record(&self, approval: &Approval) -> Result<RecordOutcome, String>;
+}
+```
+
+The adapter supplies the context and records a prepared approval. Its record operation must atomically check that the artifact is still current, because the plan can change after the read. The workflow preserves that distinction:
+
+```rust {filename="src/approve_plan/workflow.rs"}
+pub fn approve(request: &Request, records: &impl ApprovalRecords) -> Result<Outcome, String> {
+    let plan = records.current_plan()?;
+    match decide(&plan, request) {
+        Decision::Reject(reason) => Ok(Outcome::Rejected(reason)),
+        Decision::Record(approval) => match records.record(&approval)? {
+            RecordOutcome::Recorded => Ok(Outcome::Recorded(approval)),
+            RecordOutcome::PlanChanged => Ok(Outcome::Rejected(Rejection::StalePlan)),
+        },
+    }
+}
+```
+
+Each directory is a **vertical slice**: the code for one capability, with its own functional core and imperative shell. Neither slice imports the other. Both storage adapters implement `CurrentPlan` and `ApprovalRecords`, translating their stored representation into the different values each consumer needs.
+
+{{< review-slices >}}
+
+This is where sharing has a concrete purpose. GitHub and GitLab are alternatives for one port. SQLite has a different relationship: one adapter serves two narrow storage contracts. Neither capability has to accept a common repository interface or a shared ORM entity to use it. The code-host adapters serve publication alone.
+
+## Make the benefit observable
+
+The offline demonstration constructs the collaborators in `main.rs`. It passes the same store through the two different storage contracts, then swaps SQLite for memory:
+
+```rust {filename="src/main.rs"}
+let sqlite = SqliteStore::open(":memory:")?;
+sqlite.replace_plan(&plan)?;
+exercise("SQLite", &sqlite, &sqlite, &MemoryPublisher::default()).await?;
+let memory = MemoryStore::new(plan);
+exercise("Memory", &memory, &memory, &MemoryPublisher::default()).await?;
+```
+
+`exercise` calls both application workflows. With either store, publication succeeds, the author's approval is rejected, and another person's approval is recorded. `MemoryPublisher` keeps the demonstration offline; both real code-host adapters implement the same publisher port.
+
+The useful evidence is the work each change avoids:
+
+| Change or failure | Work it requires | Work it avoids |
+| --- | --- | --- |
+| Add the self-approval rule | Approval policy and its tests | Editing publication rules or GitHub mapping |
+| Use GitLab instead of GitHub | Construct a different publisher | Changing the workflow, eligibility rule, or approval slice |
+| Use memory instead of SQLite | Construct a different adapter | Changing either workflow or decision |
+| Upgrade the GitHub client | Adapter mapping and HTTP-fixture tests | Importing SDK types into either rule |
+| GitHub becomes unavailable | Publication reports an uncertain write | Preventing approval from recording |
+| Current plan changes during approval | Storage reports `PlanChanged` | Recording approval against an obsolete current artifact |
+
+The [slice tests](https://github.com/lanej/lanej.github.com/blob/a14575118a9eb2bcbe15fe5360e52549882bca4b/examples/plan-review/tests/slices.rs) run the same use cases against both stores. They show an approval succeeding after publication encounters an unavailable GitHub provider, verify that failed plan lookup sends nothing, and preserve storage failures as errors. The provider fixtures drive that same workflow through both real HTTP implementations, checking their different request paths and payloads, successful receipts, definite rejection, and response loss without another POST.
+
+The rules and workflows stay the same when adapters change because they express the application's needs in its own values. Organizing modules around decisions that other modules should not need to know follows Parnas's criterion.[^modularity]
+
+Shared storage remains a shared dependency. A schema change can require updating both SQLite projections, and a storage outage can stop both slices. If a new rule needs another fact, the relevant contract and adapters must supply it. Boundaries make that coordination visible; they cannot remove the dependency.
+
+## Keep the files near the capability
+
+The reference is one crate under `examples/plan-review/`. Read across a capability before following its adapters. The filenames above each excerpt link to complete source files:
+
+| Location under `src/` | What belongs there |
 | --- | --- |
-| [`policy.rs`](https://github.com/lanej/lanej.github.com/blob/8e1df4b21fd7587c31b5ea84fba6237b07f9305b/examples/review-publication/src/policy.rs) | Review values, eligibility decisions, and formatting; no I/O |
-| [`workflow.rs`](https://github.com/lanej/lanej.github.com/blob/8e1df4b21fd7587c31b5ea84fba6237b07f9305b/examples/review-publication/src/workflow.rs) | One publishing attempt; owns the GitHub contract and write outcomes |
-| [`github.rs`](https://github.com/lanej/lanej.github.com/blob/8e1df4b21fd7587c31b5ea84fba6237b07f9305b/examples/review-publication/src/github.rs) | Implements that contract using octorust; translates requests and responses |
-| [`main.rs`](https://github.com/lanej/lanej.github.com/blob/8e1df4b21fd7587c31b5ea84fba6237b07f9305b/examples/review-publication/src/main.rs) | Wires the runnable demonstration with an offline GitHub adapter |
-| [`recovery.rs`](https://github.com/lanej/lanej.github.com/blob/8e1df4b21fd7587c31b5ea84fba6237b07f9305b/examples/review-publication/src/recovery.rs) | Adds attempt coordination and reconciliation when restart safety is required |
-| [`journal.rs`](https://github.com/lanej/lanej.github.com/blob/8e1df4b21fd7587c31b5ea84fba6237b07f9305b/examples/review-publication/src/journal.rs) | Stores the recovery state in SQLite |
+| [`publish_review/`](https://github.com/lanej/lanej.github.com/tree/a14575118a9eb2bcbe15fe5360e52549882bca4b/examples/plan-review/src/publish_review) | Publication's rule, workflow, GitHub and GitLab adapters, and optional recovery extension |
+| [`approve_plan/`](https://github.com/lanej/lanej.github.com/tree/a14575118a9eb2bcbe15fe5360e52549882bca4b/examples/plan-review/src/approve_plan) | Approval's rule, workflow, values, and storage contract |
+| [`sqlite.rs`](https://github.com/lanej/lanej.github.com/blob/a14575118a9eb2bcbe15fe5360e52549882bca4b/examples/plan-review/src/sqlite.rs), [`memory.rs`](https://github.com/lanej/lanej.github.com/blob/a14575118a9eb2bcbe15fe5360e52549882bca4b/examples/plan-review/src/memory.rs) | Adapters implementing both slices' storage contracts |
+| [`main.rs`](https://github.com/lanej/lanej.github.com/blob/a14575118a9eb2bcbe15fe5360e52549882bca4b/examples/plan-review/src/main.rs) | Construction and wiring for the offline demonstration |
 
-The last two files serve the stronger delivery promise. Another capability gets its own nearby group of rules, workflow, and integrations.
+A new capability gets nearby rules and workflow code. A shared adapter earns its shared location by serving existing consumers. Keep common code tied to an actual shared responsibility; a general `domain/`, `services/`, or `repositories/` directory would spread these two capabilities across the tree.
 
-Keep a contract narrow enough to preserve its meaning. Renaming GitHub comments to generic messages would create a broader promise without resolving a current source of coupling. The journal can remain concrete SQLite until an actual replacement or isolation requirement justifies another port. Composition is ordinary Rust constructing collaborators and passing references; static dispatch needs no dependency-injection container.
+Composition is ordinary Rust constructing collaborators and passing references. Static dispatch needs no dependency-injection container. The application remains one process; these boundaries organize source and reasoning without promising independent deployment or more throughput.
 
-Tests follow the same knowledge boundaries. Pure tests challenge the decisions. Workflow tests check which effects are requested. Adapter tests exercise the generated client against a local HTTP fixture. Recovery tests reopen SQLite, race independent connections, and distinguish rejection from uncertainty. They establish bounded properties, including response loss without an automatic second POST; they do not establish live GitHub behavior or durability under a real disk failure.
+## Add coordination when the delivery promise requires it
 
-These boundaries organize source and reasoning inside one application. They do not by themselves increase throughput or make deployment independent. The current plan is also a snapshot: publishing feedback about an artifact does not authorize applying it. Executing infrastructure would need authorization bound to the exact artifact at execution.
+The basic publication workflow makes one attempt. Its contract preserves what the caller knows about the write:
 
-In an existing Rails application, the first step could be extracting one decision from an ActiveRecord callback into a function over explicit values. Leave loading and saving in the caller. Add a provider boundary when provider details spread, and durable coordination when an effect requires it.
+`Published(id)`, `Rejected { reason }`, and `Unknown { reason }` remain distinct. Receipt IDs are scoped to the configured code host and destination.
 
-Review the result against actual changes. If one eligibility rule repeatedly requires edits in controllers and adapters, its knowledge is leaking. If a boundary adds mapping and navigation without containing change or isolating a meaningful failure, simplify it.
+An authentication rejection and a write whose response was lost permit different next actions. A boolean would erase that distinction. The SDK's default retry middleware is disabled.
+
+The optional GitHub-specific [delivery extension](https://github.com/lanej/lanej.github.com/blob/a14575118a9eb2bcbe15fe5360e52549882bca4b/examples/plan-review/docs/delivery.md) adds a SQLite journal and recovery inside the publication slice. It records an attempt before sending, retains receipts across restart, and reconciles uncertain writes using the publishing account and complete expected body. A marker helps correlate evidence; GitHub does not enforce it as an idempotency key.[^github] Missing evidence never authorizes another create. A crash before sending can therefore leave an unsent attempt unknown indefinitely.
+
+That state machine pays for a stronger delivery requirement. It reuses the publication decision and adds a GitHub-specific read-back contract; approval's rule stays separate. GitLab implements the portable one-attempt publisher without that recovery promise. Tests reopen SQLite and race connections, establishing bounded behavior rather than live GitHub or real disk-failure guarantees.
+
+The host still authenticates users and supplies trusted artifact and principal identities. Recording an approval does not execute infrastructure; applying a plan needs authorization bound to the exact artifact at execution.
+
+For an existing application, begin with one decision that is difficult to test or change. Extract its explicit values, then add an external contract where provider knowledge spreads. Review the result against actual changes: if a boundary adds navigation without containing change or isolating a meaningful failure, simplify it.
 
 [^functional-core]: **[Functional Core, Imperative Shell](https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell)**\
     Gary Bernhardt · 2012
@@ -168,7 +222,7 @@ Review the result against actual changes. If one eligibility rule repeatedly req
 [^modularity]: **[On the Criteria To Be Used in Decomposing Systems into Modules](https://doi.org/10.1145/361598.361623)**\
     D. L. Parnas · 1972
 
-    Compares decompositions by how changes propagate and how independently modules can be understood. The staged review-publication example here is my application of that criterion.
+    Compares decompositions by how changes propagate and how independently modules can be understood. The two-slice example here is my application of that criterion.
 
 [^octorust]: **[octorust](https://docs.rs/octorust/0.10.0/octorust/)**\
     Oxide Computer · Client documentation
@@ -179,3 +233,8 @@ Review the result against actual changes. If one eligibility rule repeatedly req
     GitHub documentation
 
     Documents creation and listing of issue and pull-request conversation comments. The journal and conservative recovery policy are application choices.
+
+[^gitlab]: **[Merge-request Notes API](https://docs.gitlab.com/api/notes/#create-a-merge-request-note)**\
+    GitLab documentation
+
+    Documents the project ID, merge-request IID, authentication, and request body used by the second publisher adapter. Its quick-action behavior is handled inside that adapter; the application port only publishes feedback.

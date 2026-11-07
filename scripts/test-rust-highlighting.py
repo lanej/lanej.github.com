@@ -48,12 +48,11 @@ def render(source):
 class HighlightingTests(unittest.TestCase):
     def test_workflow_has_distinct_roles(self):
         snippets = list(rust.rust_blocks((ROOT / "content/writing/pragmatic-hexagonal-architecture/index.md").read_text()))
-        result = render(snippets[2])
-        self.assertTrue({"Review", "GitHubTarget", "GitHubComments", "Outcome", "Decision"} <= result.names("type"))
+        result = render(next(source for source in snippets if source.startswith("pub async fn publish_once(")))
+        self.assertTrue({"Review", "CurrentPlan", "ReviewPublisher", "Outcome", "Decision"} <= result.names("type"))
         self.assertTrue({"Skip", "Publish", "Skipped", "Attempted"} <= result.names("constructor"))
-        self.assertTrue({"publish_once", "decide", "create"} <= result.names("function"))
-        self.assertTrue({"current_plan", "review", "target", "github"} <= result.names("parameter"))
-        self.assertIn("body", result.names("property"))
+        self.assertTrue({"publish_once", "decide", "publish"} <= result.names("function"))
+        self.assertTrue({"plans", "review", "publisher"} <= result.names("parameter"))
         self.assertTrue({"impl", "async", "await", "match"} <= result.names("keyword"))
 
     def test_method_calls_win_over_field_capture(self):
