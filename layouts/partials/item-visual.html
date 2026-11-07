@@ -15,6 +15,8 @@
 <path d="M32 12 12 48h40ZM32 12v25M12 48l20-11 20 11"/><circle cx="32" cy="12" r="5" fill="var(--bg)"/><circle cx="12" cy="48" r="5" fill="var(--bg)"/><circle cx="52" cy="48" r="5" fill="var(--bg)"/><circle cx="32" cy="37" r="5" fill="var(--bg)"/>
 {{ else if eq .symbol "feedback" }}
 <path d="M49 23A19 19 0 0 0 15 18l-4 8m0-12v12h12M15 41a19 19 0 0 0 34 5l4-8m0 12V38H41"/><circle cx="32" cy="32" r="4"/>
+{{ else if eq .symbol "architecture" }}
+<rect x="22" y="6" width="20" height="12" rx="2"/><rect x="22" y="27" width="20" height="12" rx="2"/><path d="M32 18v9M32 39v7M15 50v-4h34v4"/><rect x="6" y="50" width="18" height="10" rx="2"/><rect x="40" y="50" width="18" height="10" rx="2"/>
 {{ else if eq .symbol "delivery-time" }}
 <path opacity=".4" d="m10 7 4 50M29 7l4 50M48 7l4 50M6 17l50-4M7 35l50-4M8 53l50-4"/><path d="m16 44 16-1-2-18 14-1"/><circle cx="16" cy="44" r="4" fill="var(--bg)"/><path d="M51 17c0 6-7 12-7 12s-7-6-7-12a7 7 0 1 1 14 0Z"/><circle cx="44" cy="17" r="2"/>
 {{ else if eq .symbol "design-constraints" }}

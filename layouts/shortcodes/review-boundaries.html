@@ -1,0 +1,9 @@
+{{ $id := printf "review-boundaries-%d" .Ordinal }}
+<figure class="sc-figure" data-essay-diagram="review-boundaries" aria-labelledby="{{ $id }}-title {{ $id }}-caption">
+<p class="sc-figure-title" id="{{ $id }}-title">Imports point toward application-owned definitions</p>
+<div class="carry-paths" role="group" aria-label="Workflow imports policy; Code-host adapters import its consuming workflow's contract">
+<div class="carry-path"><span class="carry-direction">Rules · publish_review/</span><div class="sc-node">workflow.rs</div><div class="sc-flow-connector" aria-hidden="true"></div><div class="sc-node"><div><strong class="sc-node-label">policy.rs</strong><span class="sc-node-detail">Review · Decision</span></div></div><p class="carry-result">Changing eligibility needs no knowledge of provider requests.</p></div>
+<div class="carry-path"><span class="carry-direction">Provider boundary</span><div class="sc-node">github.rs or gitlab.rs</div><div class="sc-flow-connector" aria-hidden="true"></div><div class="sc-node"><div><strong class="sc-node-label">workflow.rs</strong><span class="sc-node-detail">ReviewPublisher · WriteOutcome</span></div></div><p class="carry-result">Provider details are translated into the contract the workflow needs.</p></div>
+</div>
+<figcaption class="sc-caption" id="{{ $id }}-caption">Arrows mean “imports,” not execution order. At runtime the workflow calls the adapter. The adapter implements the workflow's contract, so the SDK stays outside it.</figcaption>
+</figure>

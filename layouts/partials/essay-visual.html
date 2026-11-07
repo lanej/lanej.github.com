@@ -1,3 +1,6 @@
+{{ if eq . "architecture" }}
+{{ partial "policy-boundary.html" . }}
+{{ else }}
 {{ $captions := dict "feedback" "Close the loop against reality." "harmony" "The parts must preserve the same promise." "ownership" "Own the problem. Test the outcome." "dose" "Enough intervention to learn what matters." "memory" "Learning becomes part of the system." }}
 {{ if not (isset $captions .) }}{{ errorf "Unknown essay visual: %s" . }}{{ end }}
 {{ $steps := dict "feedback" (slice "Intent" "Action" "Reality" "Feedback") "harmony" (slice "Requirements" "Constraints" "Verification") "ownership" (slice "Problem" "Owner + authority" "Outcome") "dose" (slice "Uncertainty" "One complete path" "Evidence") "memory" (slice "Experience" "Encoded learning" "Behavior") }}
@@ -47,3 +50,4 @@
 </div>
 <figcaption class="sc-caption">{{ index $captions . }}</figcaption>
 </figure>
+{{ end }}

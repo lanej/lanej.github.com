@@ -33,6 +33,26 @@ disposable fixtures, never deployed content. For UI changes, follow the
 measurement limits; use `check --all` for a full audit. Inspect screenshots as
 well as check results.
 
+## Rust highlighting
+
+Rust fences use the pinned Tree-sitter Rust grammar at build time. Types,
+constructors, calls, parameters, and fields get distinct roles; this does not
+resolve names like a compiler. The palette lives in
+`data/syntax/palette.json` and the shared code styles in `assets/css/syntax.css`.
+
+After editing Rust snippets or the palette, run:
+
+```sh
+python3 scripts/rust-highlighting.py --write
+bash scripts/build.sh
+```
+
+Commit `data/syntax/rust.json` with the source change. The build verifies this
+generated cache, and the render hook refuses a missing snippet. That keeps the
+normal build and trusted Hugo-only PR previews consistent. No highlighting
+JavaScript or parser is delivered to readers. Inline token colors preserve RSS;
+the shared stylesheet supplies print and keyboard-scroll behavior.
+
 ## Source map
 
 | Location | Purpose |
@@ -131,6 +151,11 @@ pages selected for verification do not add previews. Offline draft-only edits
 need no screenshots. Preserve its HTML markers when editing the
 description. Previews use immutable URLs on `pr-previews/<number>` branches, not
 website source. Fork PRs provide the `pr-page-previews` artifact instead.
+
+Local verification and PR previews include rendered unlisted essay bundles through
+`scripts/verification_pages.py`. This inventory stays separate from the public
+build manifest, feeds, and discovery surfaces. Shared essay geometry rules must
+include new essays and their print/enlarged states.
 
 Merging into `master` builds and tests one Pages artifact, deploys that exact
 artifact, then verifies `https://lanej.io/`. Production checks wait for the

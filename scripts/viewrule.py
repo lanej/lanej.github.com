@@ -10,6 +10,7 @@ import subprocess
 import sys
 
 from affected_pages import affected_routes, change_base, changed_paths
+from verification_pages import html_pages
 
 ROOT = Path(__file__).resolve().parent.parent
 CLI = ROOT / '.tools/viewrule/node_modules/.bin/viewrule'
@@ -34,11 +35,10 @@ def prepare():
     if not (public / 'build.json').is_file():
         raise ValueError('Build and validate public/ with bash scripts/build.sh first.')
     config = json.loads((ROOT / '.ui-review/site.json').read_text())
-    manifest = json.loads((public / 'build.json').read_text())
     pages = []
     # Embedded app previews are added after Hugo's validated build manifest.
     # Their own browser suite handles them; website rules require Hugo markup.
-    for name in sorted(manifest['files']):
+    for name in html_pages(public):
         if not name.endswith('/index.html'):
             continue
         path = public / name.lstrip('/')
@@ -65,7 +65,7 @@ def prepare():
             ])
     if not any(page['name'] == 'home' for page in pages):
         raise ValueError('The production build has no homepage.')
-    if '/404.html' in manifest['files']:
+    if '/404.html' in html_pages(public):
         pages.append({'name': '404', 'path': '/404.html', 'ready': 'main h1', 'viewports': ['mobile', 'desktop']})
     config['pages'] = pages
     (ROOT / '.ui-review/config.json').write_text(json.dumps(config, indent=2) + '\n')

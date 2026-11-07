@@ -162,6 +162,17 @@ assert 'https://raw.githubusercontent.com/owner/site/images-commit/preview.png' 
         self.assertIn('No rendered page changes detected.', section)
         self.assertNotIn('<img ', section)
 
+    def test_unlisted_essay_has_pr_previews_without_public_discovery(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            public = Path(temporary)
+            (public / 'build.json').write_text(json.dumps({'files': {'/index.html': 'home'}}))
+            article = public / 'writing/review-copy/index.html'
+            article.parent.mkdir(parents=True)
+            article.write_text('<meta name="site-revision" content="test">'
+                               '<article class="sc-article" data-visibility="unlisted"></article>')
+            self.assertEqual(previews.available_routes(public), {'/', '/writing/review-copy/'})
+            self.assertNotIn('review-copy', (public / 'build.json').read_text())
+
 
 if __name__ == '__main__':
     unittest.main()

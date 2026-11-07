@@ -233,6 +233,6 @@ def affected_routes(paths, available, *, root=None, base=None, page_names=None):
                 routes.update(('/', '/writing/'))
             if route == '/labs/':
                 routes.add('/')  # Homepage featured experiments live in Labs front matter.
-        elif path.startswith(('layouts/', 'assets/', 'static/', 'data/', '.ui-review/')) or path in ('hugo.toml', '.hugo-version', 'scripts/install-viewrule.sh'):
+        elif path.startswith(('layouts/', 'assets/', 'static/', 'data/', '.ui-review/')) or path in ('hugo.toml', '.hugo-version', 'scripts/install-viewrule.sh', 'scripts/verification_pages.py'):
             routes.update(available)
     return sorted(routes & available)
