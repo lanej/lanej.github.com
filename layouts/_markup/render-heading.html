@@ -1,2 +1,0 @@
-{{- if and (eq .Page.Section "writing") (eq .Level 2) -}}{{ "<!--essay-chapter-->" | safeHTML }}{{- end -}}
-<h{{ .Level }} id="{{ .Anchor | safeURL }}">{{ .Text | safeHTML }}</h{{ .Level }}>

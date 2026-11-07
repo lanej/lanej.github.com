@@ -1,6 +1,0 @@
-{{- $url := .Destination | absURL -}}
-{{- $image := .Page.Resources.GetMatch .Destination -}}
-{{- with $image -}}{{- $url = .Permalink -}}{{- end -}}
-{{- if .IsBlock -}}<figure class="article-figure">{{- end -}}
-<img src="{{ $url }}" alt="{{ .PlainText }}"{{ if not .IsBlock }}{{ with .Title }} title="{{ . }}"{{ end }}{{ end }}{{ with $image }}{{ if eq .ResourceType "image" }}{{ if ne .MediaType.SubType "svg+xml" }} width="{{ .Width }}" height="{{ .Height }}"{{ end }}{{ end }}{{ end }} loading="lazy" decoding="async">
-{{- if .IsBlock -}}{{- with .Title -}}<figcaption>{{ . }}</figcaption>{{- end -}}</figure>{{- end -}}
