@@ -2,9 +2,10 @@
 use sha2::{Digest, Sha256};
 
 use super::{
+    comments::{GitHubComments, GitHubTarget},
     journal::{Error, PublicationJournal, Request},
     policy::{Decision, Review, decide, format_review},
-    workflow::{GitHubComments, GitHubTarget, Outcome, WriteOutcome},
+    workflow::{Outcome, WriteOutcome},
 };
 
 pub fn publication_key(target: &GitHubTarget, review_id: &str) -> String {

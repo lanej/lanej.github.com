@@ -1,8 +1,9 @@
 use plan_review::publish_review::{
+    comments::{GitHubComments, GitHubTarget},
     journal::PublicationJournal,
     policy::Review,
     recovery,
-    workflow::{GitHubComments, GitHubTarget, WriteOutcome},
+    workflow::WriteOutcome,
 };
 use std::{num::NonZeroU64, sync::Mutex};
 

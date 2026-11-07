@@ -1,4 +1,8 @@
-# Optional durable review delivery
+# Optional durable GitHub review delivery
+
+This extension uses the GitHub-specific read-back contract in
+`src/publish_review/comments.rs`. GitLab implements the portable one-attempt
+publisher, without this recovery promise.
 
 The basic two-slice example is described in [the README](../README.md).
 Run this separate, offline failure demonstration with:

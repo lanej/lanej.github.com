@@ -5,9 +5,9 @@ use plan_review::{
     },
     memory::MemoryStore,
     publish_review::{
-        memory::MemoryComments,
+        memory::MemoryPublisher,
         policy::Review,
-        workflow::{CurrentPlan, GitHubComments, GitHubTarget, publish_once},
+        workflow::{CurrentPlan, ReviewPublisher, publish_once},
     },
     sqlite::SqliteStore,
 };
@@ -16,21 +16,16 @@ async fn exercise(
     label: &str,
     plans: &impl CurrentPlan,
     approvals: &impl ApprovalRecords,
-    github: &impl GitHubComments,
+    publisher: &impl ReviewPublisher,
 ) -> Result<(), String> {
     let review = Review {
         id: "review-7".into(),
         plan_id: "plan-a".into(),
         text: "Keep the backup.".into(),
     };
-    let target = GitHubTarget {
-        owner: "example".into(),
-        repo: "infrastructure".into(),
-        issue_number: 42,
-    };
     println!(
         "{label} / publish review: {:?}",
-        publish_once(&review, &target, plans, github).await?
+        publish_once(&review, plans, publisher).await?
     );
     for approver in ["sam", "alex"] {
         let request = Request {
@@ -53,8 +48,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
     let sqlite = SqliteStore::open(":memory:")?;
     sqlite.replace_plan(&plan)?;
-    exercise("SQLite", &sqlite, &sqlite, &MemoryComments::default()).await?;
+    exercise("SQLite", &sqlite, &sqlite, &MemoryPublisher::default()).await?;
     let memory = MemoryStore::new(plan);
-    exercise("Memory", &memory, &memory, &MemoryComments::default()).await?;
+    exercise("Memory", &memory, &memory, &MemoryPublisher::default()).await?;
     Ok(())
 }

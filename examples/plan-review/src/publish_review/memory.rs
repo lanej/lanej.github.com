@@ -1,36 +1,23 @@
+use super::{
+    policy::Publication,
+    workflow::{ReviewPublisher, WriteOutcome},
+};
 use std::{num::NonZeroU64, sync::Mutex};
 
-use super::workflow::{GitHubComments, GitHubTarget, WriteOutcome};
-
-/// An offline comment adapter. The generated GitHub client implements the same port.
+/// Offline substitute for either code-host adapter.
 #[derive(Default)]
-pub struct MemoryComments(Mutex<Vec<(GitHubTarget, String)>>);
+pub struct MemoryPublisher(Mutex<Vec<Publication>>);
 
-impl MemoryComments {
+impl MemoryPublisher {
     pub fn count(&self) -> usize {
         self.0.lock().unwrap().len()
     }
 }
 
-impl GitHubComments for MemoryComments {
-    async fn create(&self, target: &GitHubTarget, body: &str) -> WriteOutcome {
-        let mut comments = self.0.lock().unwrap();
-        comments.push((target.canonical(), body.into()));
-        WriteOutcome::Published(NonZeroU64::new(comments.len() as u64).unwrap())
-    }
-
-    async fn find(&self, target: &GitHubTarget, body: &str) -> Result<Option<NonZeroU64>, String> {
-        let comments = self.0.lock().map_err(|e| e.to_string())?;
-        let matches: Vec<_> = comments
-            .iter()
-            .enumerate()
-            .filter(|(_, (t, text))| *t == target.canonical() && text == body)
-            .map(|(index, _)| NonZeroU64::new(index as u64 + 1).unwrap())
-            .collect();
-        match matches.as_slice() {
-            [] => Ok(None),
-            [id] => Ok(Some(*id)),
-            _ => Err("multiple matching comments; inspect manually".into()),
-        }
+impl ReviewPublisher for MemoryPublisher {
+    async fn publish(&self, publication: &Publication) -> WriteOutcome {
+        let mut publications = self.0.lock().unwrap();
+        publications.push(publication.clone());
+        WriteOutcome::Published(NonZeroU64::new(publications.len() as u64).unwrap())
     }
 }

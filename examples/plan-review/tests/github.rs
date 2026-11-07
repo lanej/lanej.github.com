@@ -2,90 +2,16 @@
 
 use octorust::{Client, auth::Credentials};
 use plan_review::publish_review::{
-    github::GitHub,
-    workflow::{GitHubComments, GitHubTarget, WriteOutcome},
+    comments::{GitHubComments, GitHubTarget},
+    github::{GitHub, GitHubPublisher},
+    workflow::WriteOutcome,
 };
-use std::{
-    io::{Read, Write},
-    net::TcpListener,
-    sync::{
-        Arc,
-        atomic::{AtomicBool, AtomicUsize, Ordering},
-    },
-    time::Duration,
-};
+use std::{sync::atomic::Ordering, time::Duration};
 
-struct Server {
-    base: String,
-    requests: Arc<AtomicUsize>,
-    stop: Arc<AtomicBool>,
-    thread: Option<std::thread::JoinHandle<()>>,
-}
+mod support;
+use support::Server;
 
 impl Server {
-    fn new(
-        handler: impl Fn(&str, &str, usize) -> Option<(u16, serde_json::Value, Option<String>)>
-        + Send
-        + 'static,
-    ) -> Self {
-        let listener = TcpListener::bind("127.0.0.1:0").unwrap();
-        listener.set_nonblocking(true).unwrap();
-        let base = format!("http://{}", listener.local_addr().unwrap());
-        let requests = Arc::new(AtomicUsize::new(0));
-        let stop = Arc::new(AtomicBool::new(false));
-        let counter = requests.clone();
-        let stopping = stop.clone();
-        let thread = std::thread::spawn(move || {
-            while !stopping.load(Ordering::SeqCst) {
-                match listener.accept() {
-                    Ok((mut stream, _)) => {
-                        stream
-                            .set_read_timeout(Some(Duration::from_secs(2)))
-                            .unwrap();
-                        let mut input = Vec::new();
-                        let mut byte = [0u8; 1];
-                        while !input.ends_with(b"\r\n\r\n") {
-                            if stream.read(&mut byte).unwrap_or(0) == 0 {
-                                break;
-                            }
-                            input.push(byte[0]);
-                        }
-                        let header = String::from_utf8(input).unwrap();
-                        let length = header
-                            .lines()
-                            .find_map(|line| {
-                                let (name, value) = line.split_once(':')?;
-                                name.eq_ignore_ascii_case("content-length")
-                                    .then(|| value.trim().parse::<usize>().unwrap())
-                            })
-                            .unwrap_or(0);
-                        let mut body = vec![0; length];
-                        stream.read_exact(&mut body).unwrap();
-                        let count = counter.fetch_add(1, Ordering::SeqCst);
-                        if let Some((status, value, link)) =
-                            handler(&header, std::str::from_utf8(&body).unwrap(), count)
-                        {
-                            let body = value.to_string();
-                            let link = link
-                                .map(|value| format!("Link: {value}\r\n"))
-                                .unwrap_or_default();
-                            write!(stream, "HTTP/1.1 {status} Test\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n{link}\r\n{body}", body.len()).unwrap();
-                        }
-                    }
-                    Err(error) if error.kind() == std::io::ErrorKind::WouldBlock => {
-                        std::thread::sleep(Duration::from_millis(2))
-                    }
-                    Err(error) => panic!("fixture accept failed: {error}"),
-                }
-            }
-        });
-        Self {
-            base,
-            requests,
-            stop,
-            thread: Some(thread),
-        }
-    }
     fn github(&self) -> GitHub {
         let http = reqwest::Client::builder()
             .no_proxy()
@@ -99,12 +25,6 @@ impl Server {
         );
         client.with_host_override(&self.base);
         GitHub::with_client(client, 123)
-    }
-}
-impl Drop for Server {
-    fn drop(&mut self) {
-        self.stop.store(true, Ordering::SeqCst);
-        self.thread.take().unwrap().join().unwrap();
     }
 }
 fn target() -> GitHubTarget {
@@ -204,4 +124,18 @@ async fn multiple_matching_comments_require_inspection() {
             .unwrap_err()
             .contains("multiple matching")
     );
+}
+
+#[tokio::test]
+async fn the_same_publication_workflow_accepts_the_github_adapter() {
+    let server = Server::new(|header, body, _| {
+        assert!(header.starts_with("POST /repos/example/infrastructure/issues/42/comments "));
+        assert_eq!(
+            serde_json::from_str::<serde_json::Value>(body).unwrap()["body"],
+            "Review of plan `plan-a`:\n\nKeep the backup."
+        );
+        Some((201, comment(301, 123), None))
+    });
+    support::assert_publication(&GitHubPublisher::new(server.github(), target())).await;
+    assert_eq!(server.requests.load(Ordering::SeqCst), 1);
 }

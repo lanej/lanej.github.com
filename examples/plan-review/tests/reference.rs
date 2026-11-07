@@ -1,8 +1,9 @@
 use plan_review::publish_review::{
+    comments::{GitHubComments, GitHubTarget},
     journal::{Error, PublicationJournal, Request},
-    policy::{Decision, Review, SkipReason, decide},
+    policy::{Decision, Publication, Review, SkipReason, decide},
     recovery,
-    workflow::{GitHubComments, GitHubTarget, Outcome, WriteOutcome, publish_once},
+    workflow::{Outcome, ReviewPublisher, WriteOutcome, publish_once},
 };
 use plan_review::{approve_plan::policy::Plan, memory::MemoryStore};
 use std::{
@@ -72,6 +73,12 @@ impl GitHubComments for FakeGitHub {
     }
 }
 
+impl ReviewPublisher for FakeGitHub {
+    async fn publish(&self, publication: &Publication) -> WriteOutcome {
+        self.create(&target(), &publication.body).await
+    }
+}
+
 #[test]
 fn pure_rule_rejects_stale_and_empty_reviews_and_names_the_artifact() {
     assert_eq!(
@@ -100,14 +107,14 @@ fn pure_rule_rejects_stale_and_empty_reviews_and_names_the_artifact() {
 async fn basic_shell_skips_without_publishing_and_returns_a_typed_write_outcome() {
     let github = FakeGitHub::new(published());
     assert_eq!(
-        publish_once(&review(), &target(), &plans("plan-b"), &github)
+        publish_once(&review(), &plans("plan-b"), &github)
             .await
             .unwrap(),
         Outcome::Skipped(SkipReason::StalePlan)
     );
     assert_eq!(*github.writes.lock().unwrap(), 0);
     assert_eq!(
-        publish_once(&review(), &target(), &plans("plan-a"), &github)
+        publish_once(&review(), &plans("plan-a"), &github)
             .await
             .unwrap(),
         Outcome::Attempted(published())

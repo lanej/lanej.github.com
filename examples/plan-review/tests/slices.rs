@@ -5,9 +5,9 @@ use plan_review::{
     },
     memory::MemoryStore,
     publish_review::{
-        memory::MemoryComments,
-        policy::{Review, SkipReason},
-        workflow::{self as publication, CurrentPlan, GitHubComments, GitHubTarget, WriteOutcome},
+        memory::MemoryPublisher,
+        policy::{Publication, Review, SkipReason},
+        workflow::{self as publication, CurrentPlan, ReviewPublisher, WriteOutcome},
     },
     sqlite::SqliteStore,
 };
@@ -35,14 +35,6 @@ fn review() -> Review {
     }
 }
 
-fn target() -> GitHubTarget {
-    GitHubTarget {
-        owner: "example".into(),
-        repo: "infrastructure".into(),
-        issue_number: 42,
-    }
-}
-
 #[test]
 fn approval_rule_uses_ordinary_values_and_has_its_own_rejections() {
     assert_eq!(
@@ -65,18 +57,18 @@ fn approval_rule_uses_ordinary_values_and_has_its_own_rejections() {
 }
 
 async fn exercise_both_slices(store: &(impl CurrentPlan + ApprovalRecords)) {
-    let comments = MemoryComments::default();
+    let comments = MemoryPublisher::default();
     let mut stale = review();
     stale.plan_id = "plan-previous".into();
     assert_eq!(
-        publication::publish_once(&stale, &target(), store, &comments)
+        publication::publish_once(&stale, store, &comments)
             .await
             .unwrap(),
         publication::Outcome::Skipped(SkipReason::StalePlan)
     );
     assert_eq!(comments.count(), 0);
     assert_eq!(
-        publication::publish_once(&review(), &target(), store, &comments)
+        publication::publish_once(&review(), store, &comments)
             .await
             .unwrap(),
         publication::Outcome::Attempted(WriteOutcome::Published(NonZeroU64::new(1).unwrap()))
@@ -111,29 +103,22 @@ async fn the_same_workflows_run_with_memory_and_sqlite_without_an_sdk() {
     assert_eq!(sqlite.approval_count().unwrap(), 1);
 }
 
-struct UnavailableGitHub;
+struct UnavailablePublisher;
 
-impl GitHubComments for UnavailableGitHub {
-    async fn create(&self, _target: &GitHubTarget, _body: &str) -> WriteOutcome {
+impl ReviewPublisher for UnavailablePublisher {
+    async fn publish(&self, _publication: &Publication) -> WriteOutcome {
         WriteOutcome::Unknown {
             reason: "provider unavailable".into(),
         }
     }
-    async fn find(
-        &self,
-        _target: &GitHubTarget,
-        _body: &str,
-    ) -> Result<Option<NonZeroU64>, String> {
-        Err("provider unavailable".into())
-    }
 }
 
 #[tokio::test]
-async fn a_github_failure_does_not_prevent_an_approval() {
+async fn a_publication_provider_failure_does_not_prevent_an_approval() {
     let sqlite = SqliteStore::open(":memory:").unwrap();
     sqlite.replace_plan(&plan()).unwrap();
     assert!(matches!(
-        publication::publish_once(&review(), &target(), &sqlite, &UnavailableGitHub)
+        publication::publish_once(&review(), &sqlite, &UnavailablePublisher)
             .await
             .unwrap(),
         publication::Outcome::Attempted(WriteOutcome::Unknown { .. })
@@ -155,9 +140,9 @@ impl CurrentPlan for UnavailablePlans {
 
 #[tokio::test]
 async fn a_plan_lookup_failure_does_not_send_a_comment() {
-    let comments = MemoryComments::default();
+    let comments = MemoryPublisher::default();
     assert_eq!(
-        publication::publish_once(&review(), &target(), &UnavailablePlans, &comments).await,
+        publication::publish_once(&review(), &UnavailablePlans, &comments).await,
         Err("plan lookup unavailable".into())
     );
     assert_eq!(comments.count(), 0);

@@ -1,5 +1,9 @@
 //! Adapter over octorust, generated from GitHub's OpenAPI description.
-use super::workflow::{GitHubComments, GitHubTarget, WriteOutcome};
+use super::{
+    comments::{GitHubComments, GitHubTarget},
+    policy::Publication,
+    workflow::{ReviewPublisher, WriteOutcome},
+};
 use octorust::{Client, ClientError, auth::Credentials, types::PullsUpdateReviewRequest};
 use std::{num::NonZeroU64, time::Duration};
 
@@ -102,5 +106,23 @@ impl GitHubComments for GitHub {
                 .ok_or_else(|| "matching comment has an invalid ID".into()),
             _ => Err("multiple matching comments; inspect manually".into()),
         }
+    }
+}
+
+/// The destination belongs to adapter configuration, not the publication policy.
+pub struct GitHubPublisher {
+    github: GitHub,
+    target: GitHubTarget,
+}
+
+impl GitHubPublisher {
+    pub fn new(github: GitHub, target: GitHubTarget) -> Self {
+        Self { github, target }
+    }
+}
+
+impl ReviewPublisher for GitHubPublisher {
+    async fn publish(&self, publication: &Publication) -> WriteOutcome {
+        self.github.create(&self.target, &publication.body).await
     }
 }
