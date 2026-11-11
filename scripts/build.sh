@@ -3,6 +3,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 HUGO_BIN=${HUGO_BIN:-.tools/hugo}
 export HUGO_PARAMS_REVISION=${GITHUB_SHA:-${HUGO_PARAMS_REVISION:-local}}
+python3 scripts/test-rust-highlighting.py
+python3 scripts/rust-highlighting.py --check
 python3 scripts/test-code-review-skill.py
 python3 scripts/code-review-skill.py --check
 "$HUGO_BIN" --gc --minify --cleanDestinationDir --panicOnWarning

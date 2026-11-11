@@ -1,0 +1,14 @@
+/* Token colors come from data/syntax/palette.json and are included inline for RSS. */
+.rust-highlight pre{tab-size:4;-webkit-text-size-adjust:none}
+.rust-highlight .code-filename{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);border-radius:4px 4px 0 0;background:var(--surface);color:var(--text);font:.8rem/1.5 var(--mono)}
+.code-filename>:first-child{display:flex;align-items:center;min-width:0;min-height:44px;padding:8px 16px;overflow-wrap:anywhere}
+.code-filename .code-excerpt{padding-right:16px;color:var(--muted);font:.75rem/1.5 var(--sans)}
+.rust-highlight .code-filename+pre{margin-top:0;border-top:0;border-radius:0 0 4px 4px}
+.rust-highlight .syn-keyword{font-weight:600}
+.rust-highlight .syn-comment{font-style:italic}
+@media print{
+  .rust-highlight .code-filename{background:white;color:black}
+  .rust-highlight .code-filename a,.rust-highlight .code-excerpt{color:black}
+  .rust-highlight pre{background:white!important;color:black!important}
+  .rust-highlight .syn{color:inherit!important}
+}

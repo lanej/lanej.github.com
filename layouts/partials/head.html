@@ -11,6 +11,7 @@
 {{ if in (slice "/record/" "/open-source/") .RelPermalink }}{{ $styles = $styles | append (resources.Get "css/work.css") }}{{ $bundle = "css/work-combined.css" }}{{ end }}
 {{ if in (slice "/labs/" "/open-source/") .RelPermalink }}{{ $styles = $styles | append (resources.Get "css/projects.css") }}{{ $bundle = printf "css/%s-combined.css" .File.ContentBaseName }}{{ end }}
 {{ if $article }}{{ $styles = $styles | append (resources.Get "css/diagrams.css") (resources.Get "css/essays.css") }}{{ $bundle = "css/essays-combined.css" }}{{ end }}
+{{ if strings.Contains .Content "rust-highlight" }}{{ $styles = $styles | append (resources.Get "css/syntax.css") }}{{ $bundle = printf "css/rust-%s" (path.Base $bundle) }}{{ end }}
 {{ $css := $styles | resources.Concat $bundle | minify | fingerprint }}
 <title>{{ $title }}</title>
 <meta name="description" content="{{ $description }}">

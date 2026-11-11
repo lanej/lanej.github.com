@@ -14,6 +14,7 @@ from urllib.request import Request, urlopen
 from urllib.parse import unquote, urlsplit
 
 from affected_pages import affected_routes, changed_paths, change_base
+from verification_pages import html_pages
 
 START = '<!-- page-previews:start -->'
 END = '<!-- page-previews:end -->'
@@ -93,7 +94,7 @@ def changed_preview_routes(root, base, available):
 
 def available_routes(public):
     # App previews are added after Hugo's validated manifest and have their own CI.
-    files = json.loads((public / 'build.json').read_text())['files']
+    files = html_pages(public)
     routes = {name.removesuffix('index.html') for name in files if name.endswith('/index.html')}
     if '/404.html' in files:
         routes.add('/404.html')

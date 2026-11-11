@@ -1,0 +1,31 @@
+[package]
+name = "plan-review"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.99"
+publish = false
+default-run = "plan-review"
+
+[features]
+default = []
+github = ["dep:octorust", "dep:reqwest"]
+gitlab = ["dep:reqwest"]
+
+[dependencies]
+octorust = { version = "=0.10.0", optional = true, default-features = false, features = ["rustls-tls"] }
+reqwest = { version = "0.12", optional = true, default-features = false, features = ["rustls-tls", "json"] }
+rusqlite = { version = "0.38", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sha2 = "0.10"
+thiserror = "2"
+tokio = { version = "1", features = ["macros", "rt"] }
+
+[dev-dependencies]
+tempfile = "3"
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+wildcard_enum_match_arm = "deny"
