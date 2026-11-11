@@ -63,11 +63,14 @@ def changed_preview_routes(root, base, available):
     # Only capture needs the documentation validator and its build dependencies.
     # The separate publishing job intentionally uses the standard library only.
     from wirelit_docs import PREVIEW_ROUTES
+    from zellij_client_docs import PREVIEW_ROUTES as ZELLIJ_ROUTES
 
     paths = changed_paths(root, base, committed_only=True)
     candidates = affected_routes(paths, available, root=root, base=base)
     # Project docs have a separate build and no Hugo header/geometry contract.
     projects = list(PREVIEW_ROUTES) if '.wirelit-version' in paths else []
+    if '.zellij-client-version' in paths:
+        projects.extend(ZELLIJ_ROUTES)
     if not candidates:
         return projects
     with tempfile.TemporaryDirectory(prefix='pr-preview-base-') as temporary:
@@ -140,9 +143,11 @@ def capture(args):
                     assert page.locator('.project-logo img').count() == page.locator('.contribution').count(), 'Every project needs a GitHub avatar'
                     assert page.locator('.event-logo img').count() == page.locator('.speaking-engagement').count(), 'Every speaking engagement needs its event logo'
                 assert page.evaluate('document.documentElement.scrollWidth <= innerWidth'), route
-                if route.startswith('/wirelit/'):
-                    revision = page.request.get('http://127.0.0.1:8765/wirelit/build.json').json()['revision']
-                    assert revision == Path('.wirelit-version').read_text().strip()
+                if route.startswith(('/wirelit/', '/zellij-client.nvim/')):
+                    project = route.split('/')[1]
+                    pin = '.wirelit-version' if project == 'wirelit' else '.zellij-client-version'
+                    revision = page.request.get(f'http://127.0.0.1:8765/{project}/build.json').json()['revision']
+                    assert revision == Path(pin).read_text().strip()
                 else:
                     assert page.locator('meta[name="site-revision"]').get_attribute('content') == manifest['build_sha']
                 item['title'] = page.locator('h1').inner_text()

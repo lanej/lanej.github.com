@@ -111,6 +111,10 @@ jobs:
           node-version: "24"
       - name: Build pinned Wirelit documentation
         run: bash scripts/build-wirelit.sh
+      - name: Build pinned Zellij client documentation
+        run: |
+          python3 scripts/test-project-docs.py
+          bash scripts/build-zellij-client.sh
       - name: Build Easy UI PR Storybook previews
         env:
           GH_TOKEN: ${{ github.token }}
@@ -139,6 +143,7 @@ jobs:
           trap 'kill "$server"' EXIT
           python3 scripts/browser-smoke.py --selection .ui-review/selection.json --chromium-path "$chrome"
           python3 scripts/wirelit-browser.py --chromium-path "$chrome"
+          python3 scripts/zellij-client-browser.py --chromium-path "$chrome"
           VIEWRULE_BROWSER_PATH="$chrome" python3 scripts/viewrule.py check
           python3 scripts/easy-ui-previews.py verify --chromium-path "$chrome"
       - name: Capture changed pages for PR description
@@ -167,6 +172,7 @@ jobs:
             artifacts/local/citation-phrases.json
             artifacts/easy-ui-previews/
             artifacts/wirelit-docs/
+            artifacts/zellij-client-docs/
             .ui-review/runs/
             .ui-review/affected/.ui-review/runs/
             .ui-review/selection.json
@@ -251,8 +257,10 @@ jobs:
           chrome=$(command -v google-chrome || command -v google-chrome-stable)
           .venv/bin/python scripts/live-smoke.py
           .venv/bin/python scripts/live-smoke.py --manifest wirelit/build.json --bundle-only
+          .venv/bin/python scripts/live-smoke.py --manifest zellij-client.nvim/build.json --bundle-only
           .venv/bin/python scripts/browser-smoke.py --url https://lanej.io/ --output artifacts/live/site --chromium-path "$chrome"
           .venv/bin/python scripts/wirelit-browser.py --url https://lanej.io/ --output artifacts/live/wirelit --chromium-path "$chrome"
+          .venv/bin/python scripts/zellij-client-browser.py --url https://lanej.io/ --output artifacts/live/zellij-client --chromium-path "$chrome"
           .venv/bin/python scripts/easy-ui-previews.py verify --url https://lanej.io/ --output artifacts/live/easy-ui-previews --chromium-path "$chrome"
       - name: Verify rendered previews and publish their URLs
         env:

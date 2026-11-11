@@ -4,6 +4,8 @@ description: The tools I build and use, my public GitHub activity, and selected 
 sections:
   - title: Dotfiles
     id: dotfiles
+  - title: zellij-client.nvim
+    id: zellij-client
   - title: Viewrule
     id: viewrule
   - title: Wirelit
@@ -24,6 +26,14 @@ I keep improving the small things that shape a working day: finding information,
 This is an opinionated personal environment. Read the installation steps and scripts before applying it to your own machine.
 
 [Documentation](https://lanej.github.io/dotfiles/) · [Installation guide](https://lanej.github.io/dotfiles/reference/install/) · [Source on GitHub](https://github.com/lanej/dotfiles)
+
+{{< project-header id="zellij-client" title="zellij-client.nvim" src="/logos/projects/zellij-client.svg" status="Early release" description="Native Zellij actions from Neovim" >}}
+
+A Lua client for sending Zellij actions over Unix sockets, with the full generated protobuf contract. I extracted it from my dotfiles so other Neovim integrations can reuse the transport while keeping their own session discovery and navigation policy.
+
+Requests are asynchronous and do not start a process for each action. Cancellation and timeouts preserve uncertain outcomes; the client never automatically replays a mutation. Compatibility is pinned to the Zellij runtime revision documented by the package.
+
+[Client documentation](https://lanej.io/zellij-client.nvim/) · [Source and installation](https://github.com/lanej/zellij-client.nvim)
 
 {{< project-header id="viewrule" title="Viewrule" src="/logos/projects/viewrule.png" status="Experimental" description="Used on this website" >}}
 
