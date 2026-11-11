@@ -1,0 +1,50 @@
+{
+  "head_sha": "9be7db53b2749eebce35ba287d7ac517e97b40d1",
+  "build_sha": "9747c9487be06309378ae663b655ec438eb18127",
+  "pages": [
+    {
+      "route": "/open-source/",
+      "images": {
+        "mobile": {
+          "viewport": "open-source-mobile.png",
+          "full": "open-source-mobile-full.png",
+          "projects": "open-source-mobile-projects.png"
+        },
+        "desktop": {
+          "viewport": "open-source-desktop.png",
+          "full": "open-source-desktop-full.png",
+          "projects": "open-source-desktop-projects.png"
+        }
+      },
+      "title": "Open source"
+    },
+    {
+      "route": "/zellij-client.nvim/",
+      "images": {
+        "mobile": {
+          "viewport": "zellij-client.nvim-mobile.png",
+          "full": "zellij-client.nvim-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "zellij-client.nvim-desktop.png",
+          "full": "zellij-client.nvim-desktop-full.png"
+        }
+      },
+      "title": "zellij-client.nvim"
+    },
+    {
+      "route": "/zellij-client.nvim/reference/client/",
+      "images": {
+        "mobile": {
+          "viewport": "zellij-client.nvim-reference-client-mobile.png",
+          "full": "zellij-client.nvim-reference-client-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "zellij-client.nvim-reference-client-desktop.png",
+          "full": "zellij-client.nvim-reference-client-desktop-full.png"
+        }
+      },
+      "title": "Client API"
+    }
+  ]
+}
