@@ -40,4 +40,3 @@ def validate(root, prefix, revision, required=()):
              for path in root.rglob('*') if path.is_file() and path.name != 'build.json'}
     (root / 'build.json').write_text(json.dumps({'revision': revision, 'files': files}, sort_keys=True) + '\n')
     print(f'{prefix}: validated {len(pages)} pages, canonical URLs, local assets, anchors, and {len(files)} file hashes.')
-
