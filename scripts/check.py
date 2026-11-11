@@ -102,7 +102,7 @@ def main(root):
                     continue
                 # Project mounts have independent builds and verification. Wirelit
                 # is assembled after this Hugo check by build-wirelit.sh.
-                if url in ('https://lanej.io/delivery-time-estimate-viz/', 'https://lanej.io/wirelit/'):
+                if url in ('https://lanej.io/delivery-time-estimate-viz/', 'https://lanej.io/wirelit/', 'https://lanej.io/zellij-client.nvim/'):
                     continue
                 target=root/unquote(parts.path.lstrip('/')) if parts.path.startswith('/') else path.parent/unquote(parts.path)
                 if not parts.path: target=path

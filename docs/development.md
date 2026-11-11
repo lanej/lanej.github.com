@@ -83,6 +83,12 @@ replace `.wirelit-version` with a reviewed full commit SHA and open a website PR
 The website remains the only publisher; no separate Wirelit Pages setting is
 required. Hugo's clean build removes the old mount before it is reassembled.
 
+### Zellij client documentation
+
+The same GitHub Pages bundle serves [zellij-client.nvim](https://lanej.io/zellij-client.nvim/). Its Starlight source lives in the library repository. `.zellij-client-version` pins the full source commit; `bash scripts/build-zellij-client.sh` fetches that commit, installs the website lockfile and assembles its built output after the Hugo build. It validates the base path, canonical URLs, local assets, anchors and search before recording file hashes in `public/zellij-client.nvim/build.json`.
+
+Update the pin through a website PR after reviewing a documentation revision. The existing preview workflow captures the overview and client API at mobile and desktop sizes. Deployment verifies every project file against the tested manifest and checks the rendered pages on lanej.io. The website remains the only Pages publisher; the library's docs workflow checks its build without deploying separately.
+
 ### Easy UI pull request Storybooks
 
 Each open same-repository `lanej/easy-ui` PR is built at
