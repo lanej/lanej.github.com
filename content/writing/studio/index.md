@@ -10,6 +10,8 @@ An agent can produce a patch that passes tests. The harder part begins when the 
 
 Those aren't all the same problem. Giving one agent authority over every part of the process would hide the distinctions I need to see.
 
+> A patch is only one artifact. The decision behind it, the evidence that it works, and the feedback that follows still need owners.
+
 I've been turning my coding-agent customizations into a small collection of tools. **Studio** is where we work together. The other names describe jobs around it: Producer, Stagehand, Copydesk, and Publisher.
 
 ## One workflow, separate jobs
