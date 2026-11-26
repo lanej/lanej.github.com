@@ -155,3 +155,161 @@
   .sc-title{display:block}
   .sc-title .item-visual{display:none}
 }
+
+
+/* A reusable workflow diagram: primary authority on the left, supporting tools on
+   the right. Relationships reflow rather than shrinking labels on narrow screens. */
+.sc-section-visuals .studio-system {
+  display:block;
+  margin:0;
+  min-width:0;
+  padding:clamp(16px,3vw,26px);
+  background:var(--surface);
+  border:1px solid var(--accent-muted);
+  border-radius:6px;
+}
+.studio-system .studio-system-intro {margin-bottom:22px}
+.studio-system .diagram-label {
+  color:var(--accent);
+  font:650 .74rem/1.5 var(--sans);
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  margin:0 0 5px;
+}
+.studio-system .diagram-description {
+  color:var(--muted);
+  font:.92rem/1.5 var(--sans);
+  margin:0;
+}
+.studio-system-stages {
+  display:grid;
+  gap:0;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+.studio-system-stage {
+  display:grid;
+  grid-template-columns:minmax(0,1.22fr) minmax(0,.88fr);
+  column-gap:clamp(14px,3vw,24px);
+  align-items:center;
+  min-width:0;
+}
+.studio-system-core {
+  display:grid;
+  grid-template-columns:30px minmax(0,1fr);
+  gap:10px;
+  align-items:start;
+  min-width:0;
+  padding:16px 14px;
+  background:var(--surface-raised);
+  border:1px solid var(--accent-muted);
+  border-left:3px solid var(--accent);
+  border-radius:4px;
+}
+.studio-system-number {
+  color:var(--accent);
+  font:600 .8rem/1.5 var(--mono);
+  padding-top:2px;
+}
+.studio-system-kicker {
+  display:block;
+  color:var(--muted);
+  font:650 .65rem/1.5 var(--mono);
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+.studio-system-core strong {
+  display:block;
+  margin:3px 0 5px;
+  color:var(--text);
+  font:650 1.3rem/1.25 var(--sans);
+  letter-spacing:-.025em;
+}
+.studio-system-core p {
+  color:var(--muted);
+  font:.82rem/1.5 var(--sans);
+  margin:0;
+}
+.studio-system-companion {
+  display:grid;
+  grid-template-columns:12px minmax(0,1fr);
+  align-items:start;
+  gap:9px;
+  min-width:0;
+}
+.studio-system-companion-line {
+  height:1px;
+  background:var(--accent-muted);
+  margin-top:24px;
+}
+.studio-system-companion strong {
+  display:block;
+  color:var(--text);
+  margin:3px 0;
+  font:600 1.06rem/1.35 var(--sans);
+}
+.studio-system-companion p {
+  color:var(--muted);
+  font:.77rem/1.55 var(--sans);
+  margin:0;
+}
+.studio-system-handoff {
+  grid-column:1;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  padding:13px 0 13px 24px;
+  color:var(--accent);
+  font:550 .74rem/1.4 var(--mono);
+}
+.studio-system-handoff span {
+  font-size:1.1rem;
+  line-height:1;
+}
+.studio-system-return {
+  display:grid;
+  grid-template-columns:27px minmax(0,1fr);
+  gap:10px;
+  margin-top:21px;
+  padding:16px 0 0;
+  border-top:1px solid var(--line);
+  align-items:start;
+}
+.studio-system-return-arrow {
+  color:var(--accent);
+  font:500 1.7rem/1 var(--sans);
+}
+.studio-system-return strong {
+  display:block;
+  color:var(--text);
+  font:600 .92rem/1.4 var(--sans);
+}
+.studio-system-return p {margin:0}
+.studio-system-return p span {
+  display:block;
+  margin-top:3px;
+  color:var(--muted);
+  font:.81rem/1.55 var(--sans);
+}
+.studio-system figcaption {
+  color:var(--muted);
+  font:.85rem/1.6 var(--sans);
+  margin-top:19px;
+}
+.studio-system figcaption span {color:var(--text)}
+@container essay-diagram (max-width:30rem) {
+  .studio-system-stage {grid-template-columns:minmax(0,1fr);gap:0}
+  .studio-system-core {grid-template-columns:28px minmax(0,1fr);gap:8px;padding:12px}
+  .studio-system-companion {margin:12px 0 0 20px;grid-template-columns:10px minmax(0,1fr)}
+  .studio-system-companion-line {margin-top:20px}
+  .studio-system-companion p {font-size:.81rem}
+  .studio-system-handoff {padding:12px 0 12px 20px}
+}
+@media print {
+  .sc-section-visuals .studio-system {background:white;border-color:#888}
+  .studio-system-core {background:white;border-color:#999;border-left-color:#154b2a}
+  .studio-system-core strong,.studio-system-companion strong,.studio-system-return strong {color:black}
+  .studio-system-number,.studio-system-handoff,.studio-system-return-arrow {color:#154b2a}
+  .studio-system .diagram-description,.studio-system-core p,.studio-system-companion p,.studio-system-return p span,.studio-system figcaption {color:#333}
+}
