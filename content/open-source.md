@@ -27,6 +27,8 @@ This is an opinionated personal environment. Read the installation steps and scr
 
 [Documentation](https://lanej.github.io/dotfiles/) · [Installation guide](https://lanej.github.io/dotfiles/reference/install/) · [Source on GitHub](https://github.com/lanej/dotfiles)
 
+[How my Studio tools fit together](/writing/studio/) explains the roles behind planning, agent execution, Neovim editing, worktrees, and GitHub review.
+
 {{< project-header id="zellij-client" title="zellij-client.nvim" src="/logos/projects/zellij-client.svg" status="Early release" description="Native Zellij actions from Neovim" >}}
 
 A Lua client for sending Zellij actions over Unix sockets, with the full generated protobuf contract. I extracted it from my dotfiles so other Neovim integrations can reuse the transport while keeping their own session discovery and navigation policy.

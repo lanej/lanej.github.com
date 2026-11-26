@@ -1,6 +1,6 @@
-{{ $captions := dict "feedback" "Close the loop against reality." "harmony" "The parts must preserve the same promise." "ownership" "Own the problem. Test the outcome." "dose" "Enough intervention to learn what matters." "memory" "Learning becomes part of the system." }}
+{{ $captions := dict "feedback" "Close the loop against reality." "harmony" "The parts must preserve the same promise." "ownership" "Own the problem. Test the outcome." "dose" "Enough intervention to learn what matters." "memory" "Learning becomes part of the system." "studio" "Decisions and delivery are linked by a return path." }}
 {{ if not (isset $captions .) }}{{ errorf "Unknown essay visual: %s" . }}{{ end }}
-{{ $steps := dict "feedback" (slice "Intent" "Action" "Reality" "Feedback") "harmony" (slice "Requirements" "Constraints" "Verification") "ownership" (slice "Problem" "Owner + authority" "Outcome") "dose" (slice "Uncertainty" "One complete path" "Evidence") "memory" (slice "Experience" "Encoded learning" "Behavior") }}
+{{ $steps := dict "feedback" (slice "Intent" "Action" "Reality" "Feedback") "harmony" (slice "Requirements" "Constraints" "Verification") "ownership" (slice "Problem" "Owner + authority" "Outcome") "dose" (slice "Uncertainty" "One complete path" "Evidence") "memory" (slice "Experience" "Encoded learning" "Behavior") "studio" (slice "Studio" "Producer" "Publisher") }}
 <figure class="sc-hero-art sc-hero-symbol">
 <svg viewBox="0 0 420 400" aria-hidden="true" focusable="false">
 {{ if eq . "feedback" }}
@@ -38,6 +38,16 @@
 <rect class="art-line art-soft" x="104" y="169" width="200" height="60" rx="8"/>
 <rect class="art-node" x="110" y="175" width="200" height="60" rx="8"/><text class="art-label" x="210" y="211">Encoded learning</text>
 <rect class="art-node" x="110" y="295" width="200" height="60" rx="8"/><text class="art-label" x="210" y="331">Behavior</text>
+{{ else if eq . "studio" }}
+<circle class="art-line art-soft" cx="210" cy="200" r="170"/>
+<path class="art-line" d="M210 122v33m-7-8 7 8 7-8M210 232v33m-7-8 7 8 7-8"/>
+<path class="art-line" d="M309 311h42q12 0 12-12V93q0-12-12-12h-42m10-8-10 8 10 8"/>
+<rect class="art-node" x="110" y="54" width="200" height="68" rx="8"/>
+<text class="art-label" x="210" y="94">Studio</text>
+<rect class="art-node" x="110" y="164" width="200" height="68" rx="8"/>
+<text class="art-label" x="210" y="204">Producer</text>
+<rect class="art-node" x="110" y="274" width="200" height="68" rx="8"/>
+<text class="art-label" x="210" y="314">Publisher</text>
 {{ end }}
 </svg>
 {{/* Reflow labeled diagrams on phones instead of scaling their SVG text down. */}}
