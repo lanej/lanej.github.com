@@ -1,0 +1,25 @@
+{{- $name := .Get "file" -}}
+{{- $id := .Get "id" -}}
+{{- $title := .Get "title" -}}
+{{- $alt := .Get "alt" -}}
+{{- $caption := .Get "caption" -}}
+{{- $number := .Get "number" -}}
+{{- $asset := .Page.Resources.GetMatch $name -}}
+{{- if not $asset -}}{{ errorf "Missing UI capture %q in %s" $name .Page.File.Path }}{{- end -}}
+{{- if or (not $id) (not $alt) (not $caption) -}}{{ errorf "UI capture requires id, alt, and caption: %s" .Page.File.Path }}{{- end -}}
+<figure class="sc-ui-capture" data-essay-wide="ui-capture" aria-labelledby="capture-{{ $id }}-caption">
+  <header class="sc-ui-capture-heading">
+    <span class="sc-ui-capture-no">{{ $number }}</span>
+    <strong>{{ $title }}</strong>
+    <span class="sc-ui-capture-type">Terminal capture</span>
+  </header>
+  <div class="sc-ui-capture-scroll" role="region" tabindex="0" aria-label="{{ $title }} screenshot; scroll horizontally on narrow screens">
+    <a href="{{ $asset.RelPermalink }}" aria-label="View original screenshot: {{ $title }}">
+      <img src="{{ $asset.RelPermalink }}" alt="{{ $alt }}" width="{{ $asset.Width }}" height="{{ $asset.Height }}" loading="lazy" decoding="async">
+    </a>
+  </div>
+  <figcaption id="capture-{{ $id }}-caption">
+    <span>{{ $caption }}</span>
+    <a href="{{ $asset.RelPermalink }}">Full-size image <span aria-hidden="true">↗</span></a>
+  </figcaption>
+</figure>
