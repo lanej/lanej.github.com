@@ -60,7 +60,7 @@ With the editor bridge, Studio keeps document authority while Neovim handles the
 
 That boundary is also useful beyond Studio. The editor integration doesn't need to know how the host schedules tasks, stores approvals, or runs its model.
 
-{{< ui-capture id="copydesk-neovim" file="copydesk-neovim.png" number="05 / Copydesk" title="A document remains a document" alt="Studio terminal conversation at left and Neovim specification buffer at right, with revised requirements and an answered comment reflected across both views." caption="Feedback returns to Studio while the full specification stays editable in Neovim. This is an actual integration acceptance capture, not a simulated mockup." >}}
+{{< ui-capture id="copydesk-neovim" file="copydesk-neovim.png" number="05 / Copydesk" title="Comment directly on a selection" alt="Neovim specification buffer with two selected lines and an adjacent comment prompt asking whether the selected wording is wanted, with Enter to send and Escape to cancel." caption="Selection feedback, including unsaved text, can be composed beside the relevant lines and sent back to Studio. Captured from the native editor integration." >}}
 
 ## Passing is not the final pass
 
