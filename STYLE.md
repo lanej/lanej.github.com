@@ -17,14 +17,19 @@ When a new page needs a new treatment, extend the system deliberately. Do not cr
 
 ## Canonical tokens
 
-The canonical site tokens currently live in `assets/css/site.css`:
+Shared site tokens live in `assets/css/site.css`. Accent colors come from Sage Midnight.
 
 ```css
 :root {
   --bg: #0d1513;
+  --surface-raised: #17231e;
   --text: #eef1ee;
   --muted: #afbbb4;
   --accent: #acc8b7;
+  --blue: #95b5d3;
+  --amber: #e8c88b;
+  --copper: #dda783;
+  --rose: #f18c96;
   --line: #2b3a34;
   --max: 1120px;
   --copy: 680px;
@@ -33,7 +38,7 @@ The canonical site tokens currently live in `assets/css/site.css`:
 
 Use these variables rather than introducing nearby colors or widths locally. A specialized component may need an additional surface or interaction color, but it should derive from the same palette and be reusable if the pattern recurs.
 
-Do not introduce a second accent color for an individual article.
+Sage green anchors links and navigation. Amber identifies Writing, essay subjects, and chapter markers. Copper identifies Labs headings, experiment symbols, and prototype labels. Rose marks the homepage Work heading and the rule on essay opening quotes. Labels and shapes carry the same meaning in print.
 
 ## Typography
 
@@ -194,9 +199,27 @@ All diagrams should:
 - include an accessible label or equivalent textual explanation;
 - avoid decorative complexity that does not encode information.
 
-A diagram may be visually distinctive. It should not look imported from another brand.
+Use the Midnight canvas for shared live diagram panels and the raised surface for nodes in HTML and SVG. Use sage for ordinary flow, blue for verification and evidence, amber for constraints and unverified output, copper for items that need attention, and rose for a broken guarantee. Pair each color with visible text or a distinct shape or line pattern that communicates the same meaning in grayscale and print. Illustrations, screenshots, brand marks, and data visualizations retain their own colors.
 
 Prefer CSS/HTML diagrams when they need to reflow with content. Prefer static images only when the visual cannot reasonably be represented responsively in the site system.
+
+Diagram text should meet 4.5:1 contrast against its rendered background, or 3:1 for WCAG large text. Essential borders, arrows, and connectors should meet 3:1 against the colors they touch. Check the rendered result when opacity or overlapping paint changes the contrast. Quiet dividers can be lower contrast when readers can understand the diagram without them.
+
+### Diagram emphasis
+
+Give the reader one clear place to look for the diagram's main point. Use the semantic outline for secondary cues and add ink to the key label when it needs more emphasis. In a sequence that leads to evidence, set the evidence step's label in blue as well as its outline. Check the result at 390 CSS pixels and in grayscale. Labels, arrowheads, and grouping should communicate the same relationship in both views.
+
+### Shared diagram components
+
+The [diagram gallery](/design-system/) renders the production partials in a dedicated page. Use it to compare tokens, node roles, and the same sequence at different container widths.
+
+The palette in `assets/css/site.css` supplies color values. The semantic tokens in `assets/css/diagrams.css` give those values jobs such as canvas, node fill, ordinary flow, evidence, caution, attention, and mismatch. Diagram styles consume those roles. Viewrule checks the rendered result for the current palette.
+
+- **Atoms** in `layouts/partials/diagrams/atoms/` render a single labeled node or direction arrow. A node accepts a label, optional detail, and role. Roles are `neutral` (the default), `accent` for ordinary emphasis, `evidence`, `caution`, `attention`, and `mismatch`. Use a right or down arrow when adjacent text and diagram structure already convey the direction.
+- **Patterns** in `layouts/partials/diagrams/patterns/` compose atoms into a readable structure. The sequence takes a diagram ID, a page-unique caption ID, a panel label and description, a figure number and caption, and ordered steps. Each step supplies node fields and a note.
+- **Essay shortcodes** supply wording, order, and semantic roles. A branching diagram can compose the same atoms with its own accessible structure.
+
+Add an atom when the same element recurs across diagrams. Add a pattern when several figures share the same structure and responsive behavior.
 
 ## Accent bars and rules
 
@@ -220,7 +243,7 @@ Inline code uses the shared dark surface and compact padding. Code blocks use th
 
 Chapter tables follow the prose in DOM order alongside other supporting visuals, using the right column on wide screens and stacking below prose at narrow widths. They remain inline in full-text RSS. Tables may scroll horizontally on narrow screens. Do not shrink table text until it becomes unreadable merely to avoid scrolling.
 
-Do not introduce syntax or table colors that compete with the site's accent unless a site-wide syntax system is adopted.
+Fenced code uses Sage Midnight syntax colors through shared Chroma classes in `assets/css/editorial.css`. In print, code inherits the document ink color.
 
 ## Responsive behavior
 
@@ -310,6 +333,10 @@ from the stylesheet being checked.
 | Shared gutter, balanced columns, intact blocks where possible | `essay-text-only-column-gap`, `essay-text-only-column-balance`, `essay-text-only-column-rule`, `essay-text-only-keep-blocks` (`style`) |
 | Text components do not truncate their own content | `site-text-not-clipped` (`no-clip`) |
 | Visible captions on shared diagrams | `site-diagram-context` (`context`) |
+| Midnight panels and raised nodes in shared HTML and SVG diagrams | `midnight-diagram-panel-color`, `midnight-diagram-node-color` (`style`), `midnight-opening-diagram-svg-fill` |
+| Semantic outlines use the approved palette | `midnight-diagram-evidence-outline`, `midnight-diagram-caution-outline`, `midnight-diagram-attention-outline`, `midnight-diagram-mismatch-outline`, `midnight-opening-diagram-evidence-stroke` |
+| The evidence step in a sequence uses blue label ink on screen | `sequence-evidence-label-ink` (`style`) |
+| Blue evidence ink and connector on screen, with visible label and direction in print | `feedback-return-ink`, `feedback-return-line` (`style`), `feedback-return-context` (`context`) |
 | At least 16px home introduction text | `site-introduction-text` (`min-font-size`) |
 | Page overflow and confirmed WCAG A/AA accessibility violations, including text contrast | Built-in Viewrule checks |
 

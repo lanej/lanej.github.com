@@ -34,6 +34,15 @@ class SelectionTests(unittest.TestCase):
         self.assertEqual(affected_routes(['layouts/writing/list.html'], self.routes), ['/writing/'])
         self.assertEqual(affected_routes(['layouts/labs.html'], self.routes), ['/labs/'])
 
+    def test_design_gallery_renders_shared_diagram_changes(self):
+        routes = self.routes | {'/design-system/'}
+        for path in ('assets/css/diagrams.css', 'assets/css/essays.css', 'layouts/partials/diagrams/atoms/node.html'):
+            with self.subTest(path=path):
+                self.assertEqual(affected_routes([path], routes), ['/design-system/', '/writing/example/'])
+        for path in ('layouts/design-system.html', 'assets/css/design-gallery.css'):
+            with self.subTest(path=path):
+                self.assertEqual(affected_routes([path], routes), ['/design-system/'])
+
     def test_labs_content_updates_home_teasers(self):
         self.assertEqual(affected_routes(['content/labs.md'], self.routes), ['/', '/labs/'])
         self.assertEqual(affected_routes(['content/labs/_index.md'], self.routes), ['/', '/labs/'])

@@ -3,6 +3,7 @@
 {{ $description := .Description | default site.Params.description }}
 {{ $title := cond .IsHome "Josh Lane · Writing on software, AI, and organizations" (printf "%s · Josh Lane" .Title) }}
 {{ $article := and .IsPage (eq .Section "writing") }}
+{{ $gallery := eq .Layout "design-system" }}
 {{ $social := partial "social-image.html" . }}
 {{ $image := $social.image }}
 {{ $styles := slice (resources.Get "css/site.css") (resources.Get "css/editorial.css") }}
@@ -10,7 +11,8 @@
 {{ if .IsHome }}{{ $styles = $styles | append (resources.Get "css/home.css") }}{{ $bundle = "css/home-combined.css" }}{{ end }}
 {{ if in (slice "/record/" "/open-source/") .RelPermalink }}{{ $styles = $styles | append (resources.Get "css/work.css") }}{{ $bundle = "css/work-combined.css" }}{{ end }}
 {{ if in (slice "/labs/" "/open-source/") .RelPermalink }}{{ $styles = $styles | append (resources.Get "css/projects.css") }}{{ $bundle = printf "css/%s-combined.css" .File.ContentBaseName }}{{ end }}
-{{ if $article }}{{ $styles = $styles | append (resources.Get "css/diagrams.css") (resources.Get "css/essays.css") }}{{ $bundle = "css/essays-combined.css" }}{{ end }}
+{{ if or $article $gallery }}{{ $styles = $styles | append (resources.Get "css/diagrams.css") (resources.Get "css/essays.css") }}{{ $bundle = "css/essays-combined.css" }}{{ end }}
+{{ if $gallery }}{{ $styles = $styles | append (resources.Get "css/design-gallery.css") }}{{ $bundle = "css/design-gallery-combined.css" }}{{ end }}
 {{ $css := $styles | resources.Concat $bundle | minify | fingerprint }}
 <title>{{ $title }}</title>
 <meta name="description" content="{{ $description }}">

@@ -5,6 +5,8 @@ small: Hugo, Markdown, hand-written templates and native CSS. No theme, frontend
 framework, external fonts, analytics, or decorative JavaScript without a concrete
 requirement. Never generate or retouch Josh’s photograph; use the supplied image.
 
+Place reusable diagram atoms in `layouts/partials/diagrams/atoms/` and compositions in `layouts/partials/diagrams/patterns/`. Essay shortcodes supply content and semantic roles. Map the palette to diagram roles in `assets/css/diagrams.css` and follow the shared diagram component guidance in [STYLE.md](STYLE.md#shared-diagram-components).
+
 Keep README.md as a short entry point: purpose, quick start, and guide links.
 Put publishing workflows in docs/publishing.md and build/deployment details in
 docs/development.md. Do not append feature histories or test inventories to README.

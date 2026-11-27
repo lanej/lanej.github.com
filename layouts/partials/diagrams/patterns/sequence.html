@@ -1,0 +1,12 @@
+<figure class="essay-diagram" data-essay-diagram="{{ .id }}" aria-labelledby="{{ .captionID }}">
+  <div class="formalization-panel">
+    <p class="diagram-label">{{ .label }}</p>
+    <p class="diagram-description">{{ .description }}</p>
+    <ol class="formalization-steps">
+      {{ range .steps }}
+        <li>{{ partial "diagrams/atoms/node.html" . }}<p>{{ .note }}</p></li>
+      {{ end }}
+    </ol>
+  </div>
+  <figcaption id="{{ .captionID }}"><span>Figure {{ .number }}.</span> {{ .caption }}</figcaption>
+</figure>

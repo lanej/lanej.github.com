@@ -8,7 +8,9 @@ from playwright.sync_api import sync_playwright
 from header_checks import verify_header
 
 
-ROUTES = (('/', 'home'), ('/writing/', 'writing'), ('/labs/', 'labs'), ('/open-source/', 'open-source'), ('/record/', 'work'), ('/about/', 'about')) + tuple(
+ROUTES = (
+    ('/', 'home'), ('/writing/', 'writing'), ('/labs/', 'labs'), ('/design-system/', 'design-system'), ('/open-source/', 'open-source'), ('/record/', 'work'), ('/about/', 'about'),
+) + tuple(
     (f'/writing/{path.parent.name}/', path.parent.name)
     for path in sorted(Path('public/writing').glob('*/index.html'))
 )
@@ -66,6 +68,10 @@ def main():
                 assert not errors, f'{route}: browser errors: {errors}'
 
                 verify_header(page, width)
+                if route == '/design-system/':
+                    nodes = page.locator('.gallery-node-list .flow-node-with-detail')
+                    assert nodes.count() > 0, 'Gallery has no detailed nodes'
+                    assert nodes.evaluate_all("(items) => items.every(el => getComputedStyle(el).flexDirection === 'column')"), 'Gallery node labels and details must stack'
                 page.evaluate('document.activeElement?.blur()')
                 page.keyboard.press('Tab')
                 assert page.locator('.skip-link').evaluate('(a) => a === document.activeElement'), f'{route}: skip link not first focus target'
