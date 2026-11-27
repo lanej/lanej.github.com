@@ -14,6 +14,8 @@ description: Small experiments in delivery uncertainty, visualization, and inter
 ---
 Working experiments: a way to explore an idea, see what it does, and refine it. Tools I maintain and use live on [Open source](/open-source/).
 
+The [diagram design system](/design-system/) collects the live tokens, atoms, and patterns used across the essays.
+
 ## Delivery-time uncertainty {#delivery-time}
 
 **Interactive prototype · Synthetic deliveries over real Oakland streets**

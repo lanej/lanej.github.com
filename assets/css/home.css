@@ -9,6 +9,11 @@
 .home-writing,.home-labs{min-width:0;padding-block:24px 28px}
 .home-writing .section-heading,.home-labs .section-heading{margin-bottom:8px}
 .home-writing .section-heading h2,.home-labs .section-heading h2,.background-section h2{margin:0;color:var(--muted);font-size:1rem;line-height:1.5;letter-spacing:0;font-weight:550}
+@media screen{
+  .home-writing .section-heading h2{color:var(--amber)}
+  .home-labs .section-heading h2,.home-labs .lab-item .lab-meta{color:var(--copper)}
+  .background-section h2{color:var(--rose)}
+}
 .home-writing .essay-list{max-width:820px;min-width:0}
 .home-writing .writing-item,.home-labs .lab-item{max-width:none;padding-block:18px}
 .home-writing .writing-item:last-child,.home-labs .lab-item:last-of-type{border-bottom:0}

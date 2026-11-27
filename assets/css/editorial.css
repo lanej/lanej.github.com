@@ -15,6 +15,29 @@
 .item-heading{display:grid;grid-template-columns:32px minmax(0,1fr);grid-template-areas:"visual title";column-gap:10px;align-items:center;margin-bottom:6px}
 .item-heading h2,.item-heading h3{grid-area:title;min-width:0;margin:0}
 .item-visual{grid-area:visual;width:32px;height:32px;color:var(--accent)}
+@media screen{
+  .item-visual{color:var(--amber)}
+  .lab-item .item-visual{color:var(--copper)}
+}
 .item-visual svg{display:block;width:100%;height:100%}
 .item-copy{width:100%}
 @media(max-width:700px){.discovery-item{padding-block:16px}}
+
+/* Chroma emits token classes so fenced code uses the site palette on screen. */
+.chroma .line{display:flex}
+.chroma :is(.ln,.lnt){padding-inline:.4em;user-select:none}
+.chroma .lnlinks{color:inherit;text-decoration:none}
+.chroma :is(.lntable,.lntd){margin:0;padding:0;border:0;vertical-align:top;min-width:0}
+@media screen{
+  .chroma{color:var(--text);background:var(--surface)}
+  .chroma .hl{background:var(--surface-hover)}
+  .chroma :is(.ln,.lnt,.c,.ch,.cm,.c1,.cs){color:var(--muted)}
+  .chroma :is(.k,.kc,.kd,.kn,.kp,.kr,.o,.ow,.or){color:var(--blue)}
+  .chroma :is(.kt,.nc,.nn){color:#b7bde3}
+  .chroma :is(.nf,.fm){color:#8cc5cc}
+  .chroma :is(.s,.sa,.sb,.sc,.dl,.sd,.s2,.sh,.si,.sx,.sr,.s1,.gi){color:#b7cb91}
+  .chroma :is(.m,.mb,.mf,.mh,.mi,.il,.mo){color:#c4b2d9}
+  .chroma :is(.cp,.cpf,.se,.ss){color:var(--amber)}
+  .chroma :is(.na,.nb,.bp){color:var(--copper)}
+  .chroma :is(.err,.ne,.gd,.gr,.gt){color:var(--rose)}
+}

@@ -1,0 +1,9 @@
+{{- $arrows := dict "right" "→" "down" "↓" -}}
+{{- if not (isset $arrows .) -}}
+  {{- errorf "Unknown diagram arrow direction %q" . -}}
+{{- end -}}
+{{- if eq . "down" -}}
+<div class="flow-arrow" aria-hidden="true">{{ index $arrows . }}</div>
+{{- else -}}
+<span class="flow-arrow" aria-hidden="true">{{ index $arrows . }}</span>
+{{- end -}}

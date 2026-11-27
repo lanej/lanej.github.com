@@ -1,5 +1,21 @@
 [
   {
+    "id": "design-gallery-context",
+    "type": "context",
+    "selector": ".design-gallery",
+    "required": [
+      "#tokens h2",
+      "#atoms h2",
+      "#patterns h2",
+      "#patterns figcaption"
+    ],
+    "pages": [
+      "design-system"
+    ],
+    "severity": "error",
+    "reason": "The diagram gallery gives its tokens, atoms, and patterns visible headings and explains the composition example."
+  },
+  {
     "id": "site-introduction-text",
     "type": "min-font-size",
     "selector": ".home-intro .intro",
@@ -37,6 +53,325 @@
       "DR-003"
     ],
     "reason": "STYLE.md: Diagrams. When a shared diagram is present, keep a visible caption beside it. This detects missing context, not the accuracy of its explanation."
+  },
+  {
+    "id": "midnight-diagram-panel-color",
+    "type": "style",
+    "selector": ":is(.sc-figure, .studio-system)[data-essay-diagram], [data-essay-diagram] :is(.diagram-panel, .formalization-panel)",
+    "property": "background-color",
+    "allowed": [
+      "rgb(13, 21, 19)"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/close-the-loop-enlarged",
+      "writing/code-review",
+      "writing/code-review-enlarged",
+      "writing/harmony",
+      "writing/harmony-enlarged",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/how-you-do-it-is-part-of-the-decision-enlarged",
+      "writing/lead-with-problems",
+      "writing/lead-with-problems-enlarged",
+      "writing/minimum-effective-dose",
+      "writing/minimum-effective-dose-enlarged",
+      "writing/socrates",
+      "writing/socrates-enlarged",
+      "writing/studio",
+      "writing/studio-enlarged",
+      "writing/systems-that-remember",
+      "writing/systems-that-remember-enlarged"
+    ],
+    "severity": "error",
+    "reason": "STYLE.md: Diagrams. Use Midnight for live diagram panels on screen.",
+    "optional": true
+  },
+  {
+    "id": "midnight-diagram-node-color",
+    "type": "style",
+    "selector": "[data-essay-diagram] :is(.sc-node, .sc-cycle-node, .sc-step, .carry-path, .studio-system-core), [data-essay-diagram]:not(.studio-system) .flow-node, .sc-hero-step",
+    "property": "background-color",
+    "allowed": [
+      "rgb(23, 35, 30)"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/close-the-loop-enlarged",
+      "writing/code-review",
+      "writing/code-review-enlarged",
+      "writing/harmony",
+      "writing/harmony-enlarged",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/how-you-do-it-is-part-of-the-decision-enlarged",
+      "writing/lead-with-problems",
+      "writing/lead-with-problems-enlarged",
+      "writing/minimum-effective-dose",
+      "writing/minimum-effective-dose-enlarged",
+      "writing/socrates",
+      "writing/socrates-enlarged",
+      "writing/studio",
+      "writing/studio-enlarged",
+      "writing/systems-that-remember",
+      "writing/systems-that-remember-enlarged"
+    ],
+    "severity": "error",
+    "reason": "STYLE.md: Diagrams. Keep a raised green fill for structural nodes and opening diagram steps.",
+    "optional": true
+  },
+  {
+    "id": "midnight-opening-diagram-svg-fill",
+    "type": "style",
+    "selector": ".sc-hero-symbol .art-node",
+    "property": "fill",
+    "allowed": [
+      "rgb(23, 35, 30)"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/close-the-loop-enlarged",
+      "writing/code-review",
+      "writing/code-review-enlarged",
+      "writing/harmony",
+      "writing/harmony-enlarged",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/how-you-do-it-is-part-of-the-decision-enlarged",
+      "writing/lead-with-problems",
+      "writing/lead-with-problems-enlarged",
+      "writing/minimum-effective-dose",
+      "writing/minimum-effective-dose-enlarged",
+      "writing/socrates",
+      "writing/socrates-enlarged",
+      "writing/studio",
+      "writing/studio-enlarged",
+      "writing/systems-that-remember",
+      "writing/systems-that-remember-enlarged"
+    ],
+    "optional": true,
+    "severity": "error",
+    "reason": "STYLE.md: Diagrams. SVG opening diagrams share the same raised node fill as their responsive text versions."
+  },
+  {
+    "id": "midnight-opening-diagram-evidence-stroke",
+    "type": "style",
+    "selector": ".sc-hero-symbol :is(.art-node, .art-line).diagram-evidence",
+    "property": "stroke",
+    "allowed": [
+      "rgb(149, 181, 211)"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/close-the-loop-enlarged",
+      "writing/code-review",
+      "writing/code-review-enlarged",
+      "writing/harmony",
+      "writing/harmony-enlarged",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/how-you-do-it-is-part-of-the-decision-enlarged",
+      "writing/lead-with-problems",
+      "writing/lead-with-problems-enlarged",
+      "writing/minimum-effective-dose",
+      "writing/minimum-effective-dose-enlarged",
+      "writing/socrates",
+      "writing/socrates-enlarged",
+      "writing/studio",
+      "writing/studio-enlarged",
+      "writing/systems-that-remember",
+      "writing/systems-that-remember-enlarged"
+    ],
+    "optional": true,
+    "severity": "error",
+    "reason": "STYLE.md: Diagrams. Use blue for evidence nodes and return paths in SVG opening diagrams."
+  },
+  {
+    "id": "midnight-diagram-evidence-outline",
+    "type": "style",
+    "selector": ":is([data-essay-diagram] :is(.flow-node, .sc-node, .sc-cycle-node, .sc-step), .sc-hero-step).diagram-evidence",
+    "property": "border-top-color",
+    "allowed": [
+      "rgb(149, 181, 211)"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/close-the-loop-enlarged",
+      "writing/code-review",
+      "writing/code-review-enlarged",
+      "writing/harmony",
+      "writing/harmony-enlarged",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/how-you-do-it-is-part-of-the-decision-enlarged",
+      "writing/lead-with-problems",
+      "writing/lead-with-problems-enlarged",
+      "writing/minimum-effective-dose",
+      "writing/minimum-effective-dose-enlarged",
+      "writing/socrates",
+      "writing/socrates-enlarged",
+      "writing/studio",
+      "writing/studio-enlarged",
+      "writing/systems-that-remember",
+      "writing/systems-that-remember-enlarged"
+    ],
+    "optional": true,
+    "severity": "error",
+    "reason": "STYLE.md: Diagrams. Use the named palette outline for verification and evidence."
+  },
+  {
+    "id": "midnight-diagram-caution-outline",
+    "type": "style",
+    "selector": ":is([data-essay-diagram] :is(.flow-node, .sc-node, .sc-cycle-node, .sc-step), .sc-hero-step).diagram-caution",
+    "property": "border-top-color",
+    "allowed": [
+      "rgb(232, 200, 139)"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/close-the-loop-enlarged",
+      "writing/code-review",
+      "writing/code-review-enlarged",
+      "writing/harmony",
+      "writing/harmony-enlarged",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/how-you-do-it-is-part-of-the-decision-enlarged",
+      "writing/lead-with-problems",
+      "writing/lead-with-problems-enlarged",
+      "writing/minimum-effective-dose",
+      "writing/minimum-effective-dose-enlarged",
+      "writing/socrates",
+      "writing/socrates-enlarged",
+      "writing/studio",
+      "writing/studio-enlarged",
+      "writing/systems-that-remember",
+      "writing/systems-that-remember-enlarged"
+    ],
+    "optional": true,
+    "severity": "error",
+    "reason": "STYLE.md: Diagrams. Use the named palette outline for constraints or uncertainty."
+  },
+  {
+    "id": "midnight-diagram-attention-outline",
+    "type": "style",
+    "selector": ":is([data-essay-diagram] :is(.flow-node, .sc-node, .sc-cycle-node, .sc-step), .sc-hero-step).diagram-attention",
+    "property": "border-top-color",
+    "allowed": [
+      "rgb(221, 167, 131)"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/close-the-loop-enlarged",
+      "writing/code-review",
+      "writing/code-review-enlarged",
+      "writing/harmony",
+      "writing/harmony-enlarged",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/how-you-do-it-is-part-of-the-decision-enlarged",
+      "writing/lead-with-problems",
+      "writing/lead-with-problems-enlarged",
+      "writing/minimum-effective-dose",
+      "writing/minimum-effective-dose-enlarged",
+      "writing/socrates",
+      "writing/socrates-enlarged",
+      "writing/studio",
+      "writing/studio-enlarged",
+      "writing/systems-that-remember",
+      "writing/systems-that-remember-enlarged"
+    ],
+    "optional": true,
+    "severity": "error",
+    "reason": "STYLE.md: Diagrams. Use the named palette outline for an item that needs attention."
+  },
+  {
+    "id": "midnight-diagram-mismatch-outline",
+    "type": "style",
+    "selector": ":is([data-essay-diagram] :is(.flow-node, .sc-node, .sc-cycle-node, .sc-step), .sc-hero-step).diagram-mismatch",
+    "property": "border-top-color",
+    "allowed": [
+      "rgb(241, 140, 150)"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/close-the-loop-enlarged",
+      "writing/code-review",
+      "writing/code-review-enlarged",
+      "writing/harmony",
+      "writing/harmony-enlarged",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/how-you-do-it-is-part-of-the-decision-enlarged",
+      "writing/lead-with-problems",
+      "writing/lead-with-problems-enlarged",
+      "writing/minimum-effective-dose",
+      "writing/minimum-effective-dose-enlarged",
+      "writing/socrates",
+      "writing/socrates-enlarged",
+      "writing/studio",
+      "writing/studio-enlarged",
+      "writing/systems-that-remember",
+      "writing/systems-that-remember-enlarged"
+    ],
+    "optional": true,
+    "severity": "error",
+    "reason": "STYLE.md: Diagrams. Use the named palette outline for a broken guarantee."
+  },
+  {
+    "id": "sequence-evidence-label-ink",
+    "type": "style",
+    "selector": "[data-essay-diagram] .formalization-steps .diagram-evidence > strong",
+    "property": "color",
+    "allowed": [
+      "rgb(149, 181, 211)"
+    ],
+    "pages": [
+      "writing/harmony",
+      "writing/harmony-enlarged",
+      "writing/minimum-effective-dose",
+      "writing/minimum-effective-dose-enlarged"
+    ],
+    "severity": "error",
+    "reason": "STYLE.md: Diagram emphasis. The label and outline together identify the Evidence step at reading width."
+  },
+  {
+    "id": "feedback-return-ink",
+    "type": "style",
+    "selector": "[data-essay-diagram=\"feedback-loop\"] .feedback-label, [data-essay-diagram=\"feedback-loop\"] .return-arrow",
+    "property": "color",
+    "allowed": [
+      "rgb(149, 181, 211)"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/close-the-loop-enlarged"
+    ],
+    "severity": "error",
+    "reason": "STYLE.md: Diagrams. Evidence and its return arrows share the blue ink on screen."
+  },
+  {
+    "id": "feedback-return-line",
+    "type": "style",
+    "selector": "[data-essay-diagram=\"feedback-loop\"] .feedback-return",
+    "property": "border-bottom-color",
+    "allowed": [
+      "rgb(149, 181, 211)"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/close-the-loop-enlarged"
+    ],
+    "severity": "error",
+    "reason": "STYLE.md: Diagrams. The blue connector traces the evidence return path."
+  },
+  {
+    "id": "feedback-return-context",
+    "type": "context",
+    "selector": "[data-essay-diagram=\"feedback-loop\"] .feedback-return",
+    "required": [
+      ".feedback-label",
+      ".return-arrow"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/close-the-loop-enlarged",
+      "writing/close-the-loop-print"
+    ],
+    "severity": "error",
+    "reason": "STYLE.md: Diagrams. Keep visible evidence text and a directional cue in screen and print views."
   },
   {
     "id": "essay-reading-measure",

@@ -162,6 +162,8 @@ def affected_routes(paths, available, *, root=None, base=None, page_names=None):
     available = set(available)
     routes = set()
     essays = {r for r in available if r.startswith('/writing/') and r != '/writing/'}
+    gallery = {'/design-system/'}
+    live_diagrams = essays | gallery
     documents = None
     direct = {
         'layouts/home.html': {'/'}, 'assets/css/home.css': {'/'},
@@ -171,7 +173,8 @@ def affected_routes(paths, available, *, root=None, base=None, page_names=None):
         'layouts/partials/essay-visual.html': essays,
         'layouts/writing/single.html': essays,
         'layouts/partials/essay-content.html': essays,
-        'assets/css/essays.css': essays, 'assets/css/diagrams.css': essays,
+        'assets/css/essays.css': live_diagrams, 'assets/css/diagrams.css': live_diagrams,
+        'layouts/design-system.html': gallery, 'assets/css/design-gallery.css': gallery,
         'assets/css/citations.css': essays, 'assets/js/citations.js': essays,
         'layouts/labs.html': {'/labs/'}, 'assets/js/labs.js': {'/labs/'},
         'data/github_activity.json': {'/open-source/'},
@@ -192,6 +195,8 @@ def affected_routes(paths, available, *, root=None, base=None, page_names=None):
                 routes.update(available)
         elif path in direct:
             routes.update(direct[path])
+        elif path.startswith('layouts/partials/diagrams/'):
+            routes.update(live_diagrams)
         elif path in ('data/contributions.yaml', 'layouts/partials/contributions.html') or path.startswith('static/logos/projects/'):
             routes.add('/open-source/')
         elif path in ('data/career.yaml', 'layouts/shortcodes/career-timeline.html', 'layouts/shortcodes/work-role.html', 'layouts/shortcodes/speaking-engagement.html') or path.startswith(('static/logos/companies/', 'static/logos/events/', 'static/icons/heroicons/')):

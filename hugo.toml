@@ -22,7 +22,7 @@ buildExpired = false
 [markup.goldmark.parser]
   wrapStandAloneImageWithinParagraph = false
 [markup.highlight]
-  style = 'evergarden'
+  noClasses = false
   guessSyntax = false
 [markup.tableOfContents]
   startLevel = 2

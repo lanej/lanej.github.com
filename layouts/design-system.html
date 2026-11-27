@@ -1,0 +1,81 @@
+{{ define "main" }}
+{{ $palette := slice
+  (dict "name" "Canvas" "token" "--diagram-canvas" "use" "Panel backgrounds")
+  (dict "name" "Node fill" "token" "--diagram-node-fill" "use" "Raised node surfaces")
+  (dict "name" "Flow" "token" "--diagram-flow" "use" "Ordinary links between steps")
+  (dict "name" "Evidence" "token" "--diagram-evidence-ink" "use" "Checks and feedback")
+  (dict "name" "Caution" "token" "--diagram-caution-ink" "use" "Uncertainty or a constraint")
+  (dict "name" "Attention" "token" "--diagram-attention-ink" "use" "A decision or escalation")
+  (dict "name" "Mismatch" "token" "--diagram-mismatch-ink" "use" "A broken guarantee")
+}}
+{{ $nodes := slice
+  (dict "label" "Test" "detail" "Run the smallest credible check")
+  (dict "label" "Question" "detail" "What remains uncertain?" "role" "caution")
+  (dict "label" "Evidence" "detail" "What actually happened?" "role" "evidence")
+  (dict "label" "Escalate" "detail" "Ask the person with authority" "role" "attention")
+  (dict "label" "Mismatch" "detail" "The result broke the promise" "role" "mismatch")
+  (dict "label" "Decision" "detail" "Choose the next step" "role" "accent")
+}}
+{{ $steps := slice
+  (dict "label" "Question" "detail" "Will the report change a decision?" "note" "Name the uncertainty before building." "role" "caution")
+  (dict "label" "Test" "detail" "Deliver one report on time." "note" "Observe what the reader does with it.")
+  (dict "label" "Evidence" "detail" "The reader changed the plan." "note" "Record the outcome and its limits." "role" "evidence")
+}}
+<article class="shell design-gallery">
+  <header class="gallery-header">
+    <p class="gallery-theme">Sage Midnight</p>
+    <h1>{{ .Title }}</h1>
+    <p>{{ .Description }}</p>
+    <nav class="gallery-index" aria-label="On this page">
+      <a href="#tokens">Tokens</a>
+      <a href="#atoms">Atoms</a>
+      <a href="#patterns">Patterns</a>
+    </nav>
+  </header>
+
+  <section class="gallery-section" id="tokens" aria-labelledby="tokens-title">
+    <header><h2 id="tokens-title">Semantic tokens</h2><p>Each token has a job. Keep that meaning when the palette changes.</p></header>
+    <ul class="gallery-token-list">
+      {{ range $palette }}
+        <li>
+          <div class="gallery-swatch" style="{{ printf "--gallery-swatch:var(%s)" .token | safeCSS }}" aria-hidden="true"></div>
+          <div class="gallery-token-copy"><strong>{{ .name }}</strong><code>{{ .token }}</code><span>{{ .use }}</span></div>
+        </li>
+      {{ end }}
+    </ul>
+  </section>
+
+  <section class="gallery-section" id="atoms" aria-labelledby="atoms-title">
+    <header><h2 id="atoms-title">Atoms</h2><p>Use a node for a labeled step and an arrow when the nearby text already explains the direction.</p></header>
+    <div class="gallery-atoms">
+      <div class="gallery-panel">
+        <h3>Node roles</h3>
+        <div class="gallery-node-list sc-section-visuals">
+          {{ range $nodes }}{{ partial "diagrams/atoms/node.html" . }}{{ end }}
+        </div>
+      </div>
+      <div class="gallery-panel">
+        <h3>Direction</h3>
+        <div class="gallery-arrow-list">
+          <div>{{ partial "diagrams/atoms/arrow.html" "right" }}<span>Right</span></div>
+          <div>{{ partial "diagrams/atoms/arrow.html" "down" }}<span>Down</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gallery-section" id="patterns" aria-labelledby="patterns-title">
+    <header><h2 id="patterns-title">Sequence</h2><p>Use a sequence for one ordered path. Compare the same component at two container widths.</p></header>
+    <div class="gallery-patterns">
+      {{ range slice (dict "id" "sequence-wide" "label" "Wide container") (dict "id" "sequence-phone" "label" "Phone container") }}
+        <div class="gallery-pattern gallery-{{ .id }}">
+          <h3>{{ .label }}</h3>
+          <div class="sc-section-visuals article-body">
+            {{ partial "diagrams/patterns/sequence.html" (dict "id" .id "captionID" (printf "%s-caption" .id) "label" "From question to evidence" "description" "A small test makes the next decision easier." "number" 1 "caption" "The label and outline identify the evidence step. The order remains visible in grayscale." "steps" $steps) }}
+          </div>
+        </div>
+      {{ end }}
+    </div>
+  </section>
+</article>
+{{ end }}

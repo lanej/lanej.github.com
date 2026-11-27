@@ -6,6 +6,10 @@
 .lab-demo figcaption,.github-activity figcaption{font-size:.875rem;margin-block:12px;color:var(--muted)}
 .live-demo{margin-top:20px;border-block:1px solid var(--line)}
 .live-demo summary,.activity-counts summary{cursor:pointer;min-height:44px;padding-block:10px;color:var(--accent)}
+@media screen{
+  .lab-page .prose h2{color:var(--copper)}
+  .live-demo summary:hover,.live-demo[open] summary{color:var(--amber)}
+}
 .live-demo p{margin-block:12px;max-width:var(--copy)}
 .live-demo iframe{display:block;width:100%;height:740px;border:1px solid var(--line);margin-block:16px}
 .live-demo:not([open]) iframe{display:none}

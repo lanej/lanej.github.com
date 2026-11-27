@@ -105,6 +105,8 @@ readiness and chapter groups prevent absent essay structure from silently passin
 Required order groups also reject partially hidden content; authored chapters,
 paragraphs, and visual containers cannot disappear merely to fit the layout.
 
+For shared live essay diagrams, explicit style rules pin the computed panel and node colors, semantic outlines, and the blue evidence stroke in SVG opening diagrams. Evidence sequences pin their primary label to the blue evidence role on screen. The feedback loop pins the evidence ink and connector color and requires visible evidence text and a directional cue on screen and in print. Review a phone-size capture in color and grayscale when assessing whether that emphasis is easy to find. The pinned engine audits text contrast with axe. Its native style rules compare computed values, so contrast of borders, arrows, and SVG strokes still needs a separate check against the colors they touch.
+
 The wrapper isolates shared user configuration under `.tools/viewrule-global` so
 personal dashboard density rules do not change the site's CI contract. Put the
 site's accepted preferences in its versioned rules. Stop enforcement stays off;
