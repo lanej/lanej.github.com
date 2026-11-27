@@ -16,6 +16,19 @@
     "reason": "The diagram gallery gives its tokens, atoms, and patterns visible headings and explains the composition example."
   },
   {
+    "id": "design-gallery-node-role-labels",
+    "type": "context",
+    "selector": ".gallery-node-list .gallery-node-sample",
+    "required": [
+      ".gallery-node-role"
+    ],
+    "pages": [
+      "design-system"
+    ],
+    "severity": "error",
+    "reason": "Each node sample names its semantic role so visitors can compare the examples without relying on color."
+  },
+  {
     "id": "site-introduction-text",
     "type": "min-font-size",
     "selector": ".home-intro .intro",

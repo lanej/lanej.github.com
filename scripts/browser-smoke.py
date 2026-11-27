@@ -70,8 +70,16 @@ def main():
                 verify_header(page, width)
                 if route == '/design-system/':
                     nodes = page.locator('.gallery-node-list .flow-node-with-detail')
-                    assert nodes.count() > 0, 'Gallery has no detailed nodes'
+                    role_labels = page.locator('.gallery-node-role')
+                    assert role_labels.all_inner_texts() == ['Neutral', 'Caution', 'Evidence', 'Attention', 'Mismatch', 'Accent']
+                    assert nodes.count() == role_labels.count(), 'Every gallery role needs a detailed node sample'
                     assert nodes.evaluate_all("(items) => items.every(el => getComputedStyle(el).flexDirection === 'column')"), 'Gallery node labels and details must stack'
+                    if width <= 700:
+                        samples = page.locator('.gallery-node-list > li')
+                        bounds = [sample.bounding_box() for sample in samples.all()]
+                        assert all(bounds[index]['y'] == bounds[index + 1]['y']
+                                   and bounds[index]['x'] < bounds[index + 1]['x']
+                                   for index in range(0, len(bounds), 2)), 'Phone gallery should show pairs of node roles'
                 page.evaluate('document.activeElement?.blur()')
                 page.keyboard.press('Tab')
                 assert page.locator('.skip-link').evaluate('(a) => a === document.activeElement'), f'{route}: skip link not first focus target'
