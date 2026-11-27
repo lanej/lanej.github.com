@@ -20,13 +20,14 @@
     "type": "context",
     "selector": ".gallery-node-list .gallery-node-sample",
     "required": [
-      ".gallery-node-role"
+      ".gallery-node-role",
+      ".flow-node-role-marker"
     ],
     "pages": [
       "design-system"
     ],
     "severity": "error",
-    "reason": "Each node sample names its semantic role so visitors can compare the examples without relying on color."
+    "reason": "Each node sample has a role label and a visible marker so readers can distinguish examples without relying on color."
   },
   {
     "id": "site-introduction-text",

@@ -3,4 +3,17 @@
 {{- if not (isset $classes $role) -}}
   {{- errorf "Unknown diagram node role %q for %q" $role .label -}}
 {{- end -}}
-<span class="flow-node{{ with .detail }} flow-node-with-detail{{ end }}{{ with index $classes $role }} {{ . }}{{ end }}">{{ with .detail }}<strong>{{ $.label }}</strong><span>{{ . }}</span>{{ else }}{{ .label }}{{ end }}</span>
+<span class="flow-node{{ with .detail }} flow-node-with-detail{{ end }}{{ if .showRoleMarker }} flow-node-with-role-marker{{ end }}{{ with index $classes $role }} {{ . }}{{ end }}">
+  {{- if or .detail .showRoleMarker -}}
+    <strong>
+      {{- if .showRoleMarker -}}
+        {{- $markers := dict "neutral" "•" "accent" "→" "evidence" "≡" "caution" "?" "attention" "↑" "mismatch" "×" -}}
+        <span class="flow-node-role-marker" aria-hidden="true">{{ index $markers $role }}</span>
+      {{- end -}}
+      {{- .label -}}
+    </strong>
+    {{- with .detail }}<span>{{ . }}</span>{{ end -}}
+  {{- else -}}
+    {{- .label -}}
+  {{- end -}}
+</span>

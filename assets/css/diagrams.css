@@ -40,6 +40,21 @@
 .formalization-steps li+li:before{content:'↓';position:absolute;top:-27px;left:calc(50% - 7px);color:var(--diagram-flow);font-size:1.25rem}
 .flow-node-with-detail{flex-direction:column;gap:5px}
 .flow-node-with-detail>strong{font-size:.95rem;font-weight:550}.flow-node-with-detail>span{font-size:.8rem;color:var(--diagram-muted-text)}
+.flow-node-role-marker{display:none}
+@media screen{
+  .flow-node.flow-node-with-role-marker{
+    flex-direction:column;align-items:flex-start;gap:6px;padding-inline:10px;text-align:left
+  }
+  .flow-node-with-role-marker.flow-node-accent{--diagram-role-ink:var(--diagram-flow)}
+  .flow-node-with-role-marker>strong{
+    display:flex;align-items:center;gap:7px;color:var(--diagram-role-ink,var(--diagram-text))
+  }
+  .flow-node-role-marker{
+    display:grid;place-items:center;flex:none;width:1.375rem;height:1.375rem;border-radius:4px;
+    background:var(--diagram-role-ink,var(--diagram-outline));color:var(--diagram-canvas);
+    font:650 .9rem/1 var(--font-sans)
+  }
+}
 .formalization-steps .flow-node{min-height:84px;padding:14px}
 .essay-diagram .formalization-steps p{margin:10px 0 0;font-size:.8rem;line-height:1.5;color:var(--diagram-muted-text);text-align:center}
 @media(min-width:960px){.essay-diagram{width:min(1000px,calc(100vw - 96px));position:relative;left:50%;transform:translateX(-50%)}.loop-comparison{grid-template-columns:1fr 1.15fr}.diagram-panel{padding:26px}.article-body .formalization-steps{grid-template-columns:repeat(4,minmax(0,1fr));gap:28px}.formalization-steps li+li:before{content:'→';top:28px;left:-23px}}

@@ -74,6 +74,11 @@ def main():
                     assert role_labels.all_inner_texts() == ['Neutral', 'Caution', 'Evidence', 'Attention', 'Mismatch', 'Accent']
                     assert nodes.count() == role_labels.count(), 'Every gallery role needs a detailed node sample'
                     assert nodes.evaluate_all("(items) => items.every(el => getComputedStyle(el).flexDirection === 'column')"), 'Gallery node labels and details must stack'
+                    markers = nodes.locator('.flow-node-role-marker')
+                    assert len(set(markers.all_inner_texts())) == role_labels.count(), 'Gallery roles need distinct marks'
+                    assert nodes.evaluate_all("""items => items.slice(1).every(node =>
+                        getComputedStyle(node.querySelector('strong')).color === getComputedStyle(node).borderTopColor
+                    )"""), 'Highlighted gallery node titles must use the role outline color'
                     if width <= 700:
                         samples = page.locator('.gallery-node-list > li')
                         bounds = [sample.bounding_box() for sample in samples.all()]

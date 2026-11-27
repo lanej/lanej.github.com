@@ -54,7 +54,7 @@
           {{ range $nodes }}
             <li class="gallery-node-sample">
               <span class="gallery-node-role">{{ .roleName }}</span>
-              {{ partial "diagrams/atoms/node.html" . }}
+              {{ partial "diagrams/atoms/node.html" (merge . (dict "showRoleMarker" true)) }}
             </li>
           {{ end }}
         </ul>
