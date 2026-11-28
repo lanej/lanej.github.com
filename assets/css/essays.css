@@ -90,7 +90,7 @@
   [data-essay-diagram] .open-loop-note.diagram-caution,
   [data-essay-diagram] .loop-note .diagram-mismatch{color:var(--diagram-role-ink)}
   :is(.flow-node,.sc-node,.sc-cycle-node,.sc-step):is(.diagram-caution,.diagram-evidence,.diagram-mismatch,.diagram-attention),
-  .flow-node:is(.diagram-delivery,.diagram-decision,.diagram-repeat,.diagram-skill),
+  .flow-node:is(.diagram-input,.diagram-delivery,.diagram-decision,.diagram-repeat,.diagram-skill),
   .sc-hero-step:is(.diagram-caution,.diagram-evidence){border-color:var(--diagram-role-ink)}
   [data-essay-diagram] .formalization-steps .diagram-evidence > strong{color:var(--diagram-role-ink)}
   [data-essay-diagram] .feedback-return.diagram-evidence{color:var(--diagram-role-ink);border-color:currentColor}

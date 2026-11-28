@@ -17,6 +17,7 @@
   (dict "roleName" "Accent" "label" "Decide" "detail" "Choose the next step" "role" "accent")
 }}
 {{ $workflowNodes := slice
+  (dict "roleName" "Input" "label" "Read source" "detail" "Start from the data" "role" "input")
   (dict "roleName" "Delivery" "label" "Send report" "detail" "Reach the intended reader" "role" "delivery")
   (dict "roleName" "Decision" "label" "Choose" "detail" "Act on the result" "role" "decision")
   (dict "roleName" "Repeat" "label" "Try again" "detail" "Look for a recurring pattern" "role" "repeat")

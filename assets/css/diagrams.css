@@ -11,6 +11,7 @@
   --diagram-caution-ink:var(--amber);
   --diagram-attention-ink:var(--copper);
   --diagram-mismatch-ink:var(--rose);
+  --diagram-input-ink:var(--muted);
   --diagram-delivery-ink:var(--copper);
   --diagram-decision-ink:var(--accent);
   --diagram-repeat-ink:var(--copper);
@@ -21,6 +22,7 @@
   .diagram-caution{--diagram-role-ink:var(--diagram-caution-ink)}
   .diagram-attention{--diagram-role-ink:var(--diagram-attention-ink)}
   .diagram-mismatch{--diagram-role-ink:var(--diagram-mismatch-ink)}
+  .diagram-input{--diagram-role-ink:var(--diagram-input-ink)}
   .diagram-delivery{--diagram-role-ink:var(--diagram-delivery-ink)}
   .diagram-decision{--diagram-role-ink:var(--diagram-decision-ink)}
   .diagram-repeat{--diagram-role-ink:var(--diagram-repeat-ink)}
