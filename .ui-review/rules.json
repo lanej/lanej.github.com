@@ -77,6 +77,29 @@
     "reason": "Use sentence-case headings for Socrates figures. Let role colors and symbols distinguish the nodes."
   },
   {
+    "id": "essay-figure-title-hierarchy",
+    "type": "style",
+    "selector": ".diagram-restyled :is(.sc-figure-title,.diagram-figure-title)",
+    "property": "text-transform",
+    "allowed": [
+      "none"
+    ],
+    "pages": [
+      "writing/close-the-loop",
+      "writing/close-the-loop-enlarged",
+      "writing/harmony",
+      "writing/harmony-enlarged",
+      "writing/how-you-do-it-is-part-of-the-decision",
+      "writing/how-you-do-it-is-part-of-the-decision-enlarged",
+      "writing/lead-with-problems",
+      "writing/lead-with-problems-enlarged",
+      "writing/studio",
+      "writing/studio-enlarged"
+    ],
+    "severity": "error",
+    "reason": "Use sentence-case headings for essay figures. Let role colors and symbols distinguish the nodes."
+  },
+  {
     "id": "site-introduction-text",
     "type": "min-font-size",
     "selector": ".home-intro .intro",

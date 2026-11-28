@@ -219,7 +219,7 @@ The palette in `assets/css/site.css` supplies color values. The semantic tokens 
 - **Patterns** in `layouts/partials/diagrams/patterns/` compose atoms into a readable structure. The sequence takes a diagram ID, a page-unique caption ID, a panel label and description, a figure number and caption, and ordered steps. Each step supplies node fields and a note. On screen, use a sentence-case figure heading and muted subtitle. Within each card, lead with the role-colored title, then the description and a quieter note below a fine divider. Keep the figure caption at the same visual level as the notes.
 - **Essay shortcodes** supply wording, order, and semantic roles. A branching diagram can compose the same atoms with its own accessible structure.
 
-The Socrates figures share sentence-case headings and quiet captions. Preserve the structure that explains each relationship, including the approval loop, the numbered stack, parallel paths, and the handoff’s evidence return. Use the same node atoms when roles and symbols help distinguish the steps.
+Essay figures share sentence-case headings and quiet captions. Preserve the structure that explains each relationship, including loops, numbered stacks, and parallel paths. Use the same node atoms when roles and symbols help distinguish the steps.
 
 Add an atom when the same element recurs across diagrams. Add a pattern when several figures share the same structure and responsive behavior.
 

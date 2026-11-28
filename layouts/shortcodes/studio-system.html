@@ -1,65 +1,36 @@
-<figure class="essay-diagram studio-system" data-essay-diagram="studio-system" aria-labelledby="studio-system-caption">
+{{ $stages := slice
+  (dict "label" "Studio" "detail" "Conversation, specification, task graph, human decisions" "role" "decision" "stage" "Decide & approve" "companion" "Copydesk" "connection" "Editor connection" "companionDetail" "Neovim documents and selected feedback" "handoff" "Approved work")
+  (dict "label" "Producer" "detail" "Agent attempts, verification, review evidence, recovery" "role" "evidence" "stage" "Run & verify" "companion" "Stagehand" "connection" "Workspace connection" "companionDetail" "Isolated worktrees and safe cleanup" "handoff" "Accepted change")
+  (dict "label" "Publisher" "detail" "PRs, checks, reviews, guarded GitHub operations" "role" "delivery" "stage" "Publish & follow up" "companion" "GitHub" "connection" "External record" "companionDetail" "Code review and publication state")
+}}
+<figure class="essay-diagram studio-system diagram-restyled" data-essay-diagram="studio-system" aria-labelledby="studio-system-title" aria-describedby="studio-system-caption">
   <div class="studio-system-intro">
-    <p class="diagram-label">The working loop</p>
-    <p class="diagram-description">Three accountable stages. Two supporting tools. One return path.</p>
+    <h3 class="diagram-label diagram-figure-title" id="studio-system-title">The working loop</h3>
+    <p class="diagram-description diagram-figure-subtitle">Three accountable stages. Two supporting tools. One return path.</p>
   </div>
-  <ol class="studio-system-stages">
-    <li class="studio-system-stage">
-      <div class="studio-system-core">
-        <span class="studio-system-number">01</span>
-        <div>
-          <span class="studio-system-kicker">Decide &amp; approve</span>
-          <strong class="flow-node">Studio</strong>
-          <p>Conversation, specification, task graph, human decisions</p>
+  <ol class="studio-system-stages" role="list">
+    {{ range $index, $stage := $stages }}
+      <li class="studio-system-stage">
+        <div class="studio-system-core diagram-{{ $stage.role }}">
+          <span class="studio-system-number">{{ printf "%02d" (add $index 1) }}</span>
+          <div>
+            <span class="studio-system-kicker">{{ $stage.stage }}</span>
+            {{ partial "diagrams/atoms/node.html" (merge $stage (dict "showRoleMarker" true)) }}
+          </div>
         </div>
-      </div>
-      <div class="studio-system-companion">
-        <span class="studio-system-companion-line" aria-hidden="true"></span>
-        <div>
-          <span class="studio-system-kicker">Editor connection</span>
-          <strong class="flow-node">Copydesk</strong>
-          <p>Neovim documents and selected feedback</p>
+        <div class="studio-system-companion">
+          <span class="studio-system-companion-line" aria-hidden="true"></span>
+          <div>
+            <span class="studio-system-kicker">{{ $stage.connection }}</span>
+            <strong class="flow-node">{{ $stage.companion }}</strong>
+            <p>{{ $stage.companionDetail }}</p>
+          </div>
         </div>
-      </div>
-      <div class="studio-system-handoff"><span aria-hidden="true">↓</span> Approved work</div>
-    </li>
-    <li class="studio-system-stage">
-      <div class="studio-system-core">
-        <span class="studio-system-number">02</span>
-        <div>
-          <span class="studio-system-kicker">Run &amp; verify</span>
-          <strong class="flow-node">Producer</strong>
-          <p>Agent attempts, verification, review evidence, recovery</p>
-        </div>
-      </div>
-      <div class="studio-system-companion">
-        <span class="studio-system-companion-line" aria-hidden="true"></span>
-        <div>
-          <span class="studio-system-kicker">Workspace connection</span>
-          <strong class="flow-node">Stagehand</strong>
-          <p>Isolated worktrees and safe cleanup</p>
-        </div>
-      </div>
-      <div class="studio-system-handoff"><span aria-hidden="true">↓</span> Accepted change</div>
-    </li>
-    <li class="studio-system-stage">
-      <div class="studio-system-core">
-        <span class="studio-system-number">03</span>
-        <div>
-          <span class="studio-system-kicker">Publish &amp; follow up</span>
-          <strong class="flow-node">Publisher</strong>
-          <p>PRs, checks, reviews, guarded GitHub operations</p>
-        </div>
-      </div>
-      <div class="studio-system-companion">
-        <span class="studio-system-companion-line" aria-hidden="true"></span>
-        <div>
-          <span class="studio-system-kicker">External record</span>
-          <strong class="flow-node">GitHub</strong>
-          <p>Code review and publication state</p>
-        </div>
-      </div>
-    </li>
+        {{ with $stage.handoff }}
+          <div class="studio-system-handoff"><span aria-hidden="true">↓</span> {{ . }}</div>
+        {{ end }}
+      </li>
+    {{ end }}
   </ol>
   <div class="studio-system-return diagram-evidence">
     <span class="studio-system-return-arrow" aria-hidden="true">↶</span>
