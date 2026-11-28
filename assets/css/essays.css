@@ -52,6 +52,7 @@
 .sc-section-visuals{min-width:0;display:grid;gap:24px;align-self:center}
 .sc-section-visuals .essay-table{min-width:0;overflow-x:auto;color:var(--soft)}
 .sc-section-visuals table{display:table;width:100%;margin:0}
+.essay-table td:first-child strong a{overflow-wrap:break-word}
 .sc-article .sc-accent,.sc-article .sc-section-copy blockquote,.sc-article .sc-intro blockquote{border-left:4px solid var(--accent);background:var(--surface);padding:18px 22px;margin:22px 0;color:var(--text);font:1.05rem/1.7 var(--sans)}
 .sc-article blockquote p:last-child{margin-bottom:0}
 .sc-article .sc-figure{margin:0}

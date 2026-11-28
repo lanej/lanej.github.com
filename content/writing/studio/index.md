@@ -72,13 +72,13 @@ An independent readability pass is a direction I'm developing, not a claim that 
 
 ## The tools and their boundaries
 
-| Name | Responsibility | Current source |
-| --- | --- | --- |
-| **Studio** | Conversation, specification, approval, and working interface | [Studio](https://github.com/lanej/studio) |
-| **Producer** | Execution, verification, and attempt recovery | [Studio runtime](https://github.com/lanej/studio/blob/main/RUNTIME.md) |
-| **Stagehand** | Worktree allocation, protection, inventory, and cleanup | [Worktree Manager](https://github.com/lanej/worktree-manager) |
-| **Copydesk** | Neovim editing and feedback for host-owned documents | [Editor Interop](https://github.com/lanej/editor-interop) |
-| **Publisher** | GitHub PR publication, checks, reviews, and delivery | [Octo Manager](https://github.com/lanej/octo-manager) |
+| Name | Responsibility |
+| --- | --- |
+| **[Studio](https://github.com/lanej/studio)** | Conversation, specification, approval, and working interface |
+| **[Producer](https://github.com/lanej/studio/blob/main/RUNTIME.md)** | Execution, verification, and attempt recovery |
+| **[Stagehand](https://github.com/lanej/worktree-manager)** | Worktree allocation, protection, inventory, and cleanup |
+| **[Copydesk](https://github.com/lanej/editor-interop)** | Neovim editing and feedback for host-owned documents |
+| **[Publisher](https://github.com/lanej/octo-manager)** | GitHub PR publication, checks, reviews, and delivery |
 
 Producer is a responsibility inside Studio, not a separate released project. The other three names are decisions in progress: [Stagehand](https://github.com/lanej/worktree-manager/issues/7), [Copydesk](https://github.com/lanej/editor-interop/issues/4), and [Publisher](https://github.com/lanej/octo-manager/issues/62) still have repositories or commands under their former names. The diagram shows the intended division of labor; individual integrations are at different stages of completion.
 
