@@ -1,0 +1,20 @@
+{
+  "head_sha": "0fa2a807af0939e37972f56e5dde04cd0f8a3200",
+  "build_sha": "fd6b03c4a2026f235a3a991884a01d00371dc5c7",
+  "pages": [
+    {
+      "route": "/design-system/",
+      "images": {
+        "mobile": {
+          "viewport": "design-system-mobile.png",
+          "full": "design-system-mobile-full.png"
+        },
+        "desktop": {
+          "viewport": "design-system-desktop.png",
+          "full": "design-system-desktop-full.png"
+        }
+      },
+      "title": "Diagram design system"
+    }
+  ]
+}
