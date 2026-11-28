@@ -19,7 +19,7 @@ MEASURE = r'''() => {
     if (document.documentElement.scrollWidth>innerWidth+1) failures.push('Page overflow');
     const root = document.querySelector('.sc-article');
     if(!root) return {failures:['Missing Socrates article']};
-    for(const el of root.querySelectorAll('[data-node],.handoff-steps > li > .flow-node,.sc-layer-description,.sc-figure-title,.sc-caption,.sc-deck,h1,h2,.sc-section-copy')) {
+    for(const el of root.querySelectorAll('[data-node]:not(.sc-method-node),.sc-method-node > .flow-node,.handoff-steps > li > .flow-node,.sc-layer-description,.sc-figure-title,.sc-caption,.sc-deck,h1,h2,.sc-section-copy')) {
         if(!visible(el)) continue;
         const b=box(el);
         if(el.scrollWidth>el.clientWidth+2) failures.push('Horizontal overflow: '+el.textContent.trim().slice(0,80));
