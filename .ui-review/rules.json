@@ -62,6 +62,21 @@
     "reason": "The return path uses the same blue evidence cue as the verification step."
   },
   {
+    "id": "socrates-figure-title-hierarchy",
+    "type": "style",
+    "selector": ".socrates-restyled .sc-figure-title",
+    "property": "text-transform",
+    "allowed": [
+      "none"
+    ],
+    "pages": [
+      "writing/socrates",
+      "writing/socrates-enlarged"
+    ],
+    "severity": "error",
+    "reason": "Use sentence-case headings for Socrates figures. Let role colors and symbols distinguish the nodes."
+  },
+  {
     "id": "site-introduction-text",
     "type": "min-font-size",
     "selector": ".home-intro .intro",
