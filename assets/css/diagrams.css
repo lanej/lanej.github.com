@@ -99,8 +99,54 @@
     border-top:1px solid var(--diagram-divider);color:var(--sequence-note-ink);font-size:.78125rem;
     line-height:1.45;text-align:left;
   }
-  .sequence-diagram figcaption{color:var(--sequence-note-ink);font-size:.78125rem;line-height:1.5}
+  .essay-diagram.sequence-diagram[data-essay-diagram] > figcaption{color:var(--sequence-note-ink);font-size:.78125rem;line-height:1.5}
   .sequence-diagram figcaption > span{color:inherit;font-weight:550}
+}
+.essay-diagram.socrates-handoff{
+  --handoff-gap:30px;
+  --handoff-rail-width:23px;
+  --handoff-return-ink:#333;
+}
+.essay-diagram.socrates-handoff .handoff-steps{
+  grid-template-columns:minmax(0,1fr);gap:var(--handoff-gap);padding-inline-end:var(--handoff-rail-width);
+}
+.essay-diagram.socrates-handoff .handoff-steps .flow-node{
+  padding-block-end:15px;padding-inline-end:42px;
+}
+.socrates-handoff .handoff-step-number{
+  position:absolute;inset-block-start:13px;inset-inline-end:13px;
+  color:var(--diagram-muted-text);font:.72rem/1.5 var(--mono);
+}
+.handoff-return-rail{
+  position:absolute;inset-inline-start:100%;inset-block:0 calc(-1 * var(--handoff-gap));
+  width:var(--handoff-rail-width);border-inline-end:1px solid var(--handoff-return-ink);pointer-events:none;
+}
+.handoff-steps > li:first-child > .handoff-return-rail{
+  inset-block-start:50%;border-block-start:1px solid var(--handoff-return-ink);
+  border-start-end-radius:8px;
+}
+.handoff-steps > li:first-child > .handoff-return-rail::before{
+  content:'';position:absolute;inset-block-start:-4px;inset-inline-start:2px;width:7px;height:7px;
+  border-block-start:1px solid var(--handoff-return-ink);border-inline-start:1px solid var(--handoff-return-ink);
+  transform:rotate(-45deg);
+}
+.handoff-steps > li:last-child > .handoff-return-rail{
+  inset-block-end:50%;border-block-end:1px solid var(--handoff-return-ink);
+  border-end-end-radius:8px;
+}
+.essay-diagram .handoff-return-summary{
+  display:flex;align-items:baseline;gap:.65em;margin:16px 0 0;
+  padding:9px 12px;border:1px solid var(--handoff-return-ink);border-radius:6px;
+  color:var(--handoff-return-ink);font-size:.84rem;line-height:1.45;font-weight:550;
+}
+@media screen{
+  .essay-diagram.socrates-handoff{--handoff-return-ink:var(--diagram-evidence-ink)}
+  .essay-diagram .handoff-return-summary{
+    background:color-mix(in srgb,var(--handoff-return-ink) 9%,var(--diagram-canvas));
+  }
+}
+@media print{
+  .socrates-handoff .handoff-step-number{color:#333}
 }
 @media(min-width:960px){.essay-diagram{width:min(1000px,calc(100vw - 96px));position:relative;left:50%;transform:translateX(-50%)}.loop-comparison{grid-template-columns:1fr 1.15fr}.diagram-panel{padding:26px}.article-body .formalization-steps{grid-template-columns:repeat(4,minmax(0,1fr));gap:28px}.formalization-steps li+li:before{content:'→';top:28px;left:-23px}}
 @media(max-width:420px){.diagram-panel,.formalization-panel{padding:14px}.flow-row{grid-template-columns:minmax(0,.7fr) 14px minmax(0,.95fr) 14px minmax(0,1.45fr);gap:4px}.flow-node{padding:10px 4px;font-size:.82rem;min-height:48px}.flow-arrow{font-size:1.1rem}.feedback-label{font-size:.78rem;padding-inline:5px}.feedback-return{margin-right:19%;margin-left:10%}}

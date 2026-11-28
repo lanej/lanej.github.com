@@ -30,6 +30,38 @@
     "reason": "Each node sample has a role label and a visible marker so readers can distinguish examples without relying on color."
   },
   {
+    "id": "socrates-handoff-context",
+    "type": "context",
+    "selector": "#workflow-figure",
+    "required": [
+      ".handoff-steps",
+      ".handoff-return-summary",
+      "figcaption"
+    ],
+    "pages": [
+      "writing/socrates",
+      "writing/socrates-enlarged",
+      "writing/socrates-print"
+    ],
+    "severity": "error",
+    "reason": "The ordered handoff keeps the reason for returning to the specification available beside the flow."
+  },
+  {
+    "id": "socrates-handoff-return-ink",
+    "type": "style",
+    "selector": "#workflow-figure .handoff-return-summary",
+    "property": "color",
+    "allowed": [
+      "rgb(149, 181, 211)"
+    ],
+    "pages": [
+      "writing/socrates",
+      "writing/socrates-enlarged"
+    ],
+    "severity": "error",
+    "reason": "The return path uses the same blue evidence cue as the verification step."
+  },
+  {
     "id": "site-introduction-text",
     "type": "min-font-size",
     "selector": ".home-intro .intro",
