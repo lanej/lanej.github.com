@@ -350,12 +350,9 @@
 }
 
 
-/* Shared, full-width native interface captures for technical essays.
-   Preserve terminal text at near-native resolution; let narrow viewports pan. */
+/* Native interface captures span the chapter below its prose. */
 .sc-article .sc-section.sc-section-with-wide{max-width:1240px}
-.sc-article .sc-section-with-wide .sc-section-header,
-.sc-article .sc-section-with-wide .sc-section-text{max-width:var(--copy)}
-.sc-article .sc-section-wide{width:100%;max-width:1240px;margin-inline:auto;min-width:0;display:grid;gap:32px}
+.sc-article .sc-section-wide{grid-column:1/-1;width:100%;min-width:0;display:grid;gap:32px}
 .sc-article .sc-ui-capture{
   margin:0;min-width:0;border:1px solid var(--line);border-radius:6px;
   background:var(--surface);overflow:hidden;
@@ -373,13 +370,9 @@
 }
 .sc-ui-capture-no{color:var(--accent)}
 .sc-ui-capture-type{color:var(--muted);margin-left:auto}
-.sc-ui-capture-scroll{min-width:0;max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;scrollbar-color:var(--accent-muted) var(--surface)}
-.sc-ui-capture-scroll:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
-.sc-ui-capture-scroll a{display:block}
-.sc-article .sc-ui-capture-scroll img{
-  display:block;width:100%;max-width:none;height:auto;
-  border:0;object-fit:contain;
-}
+.sc-ui-capture-image,.sc-ui-capture-image picture{display:block}
+.sc-ui-capture-image:focus-visible{outline-offset:-3px}
+.sc-ui-capture-image img{width:100%}
 .sc-article .sc-ui-capture figcaption{
   display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;
   gap:4px 24px;padding:14px 20px;border-top:1px solid var(--line);
@@ -391,8 +384,8 @@
   text-decoration:underline;text-underline-offset:.2em;color:var(--accent);
   font:.84rem/1.4 var(--font-sans);
 }
-@media (max-width:1000px){
-  .sc-article .sc-ui-capture-scroll img{width:1120px;max-width:none}
+@media screen and (max-width:48rem){
+  .sc-article .sc-ui-capture{width:100%;max-width:32rem;justify-self:center}
 }
 @media (max-width:640px){
   .sc-article .sc-section-wide{gap:24px}
@@ -403,7 +396,6 @@
 @media print{
   .sc-article .sc-ui-capture{break-inside:avoid;background:white;border-color:#bbb}
   .sc-ui-capture-heading,.sc-article .sc-ui-capture figcaption{border-color:#bbb}
-  .sc-article .sc-ui-capture-scroll img{width:100%;max-width:100%}
   .sc-ui-capture-heading strong{color:black}
   .sc-article .sc-ui-capture figcaption{color:#333}
 }

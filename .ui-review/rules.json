@@ -404,6 +404,19 @@
     ]
   },
   {
+    "id": "essay-captures-after-prose",
+    "type": "vertical-order",
+    "selector": ".sc-section-with-wide",
+    "groups": [
+      { "selector": ".sc-section-text", "optional": false },
+      { "selector": ".sc-section-wide", "optional": false }
+    ],
+    "tolerance": 2,
+    "reason": "A wide screenshot follows its chapter prose and has the full row available.",
+    "severity": "error",
+    "optional": true
+  },
+  {
     "id": "essay-chapter-order",
     "type": "vertical-order",
     "selector": ".sc-section",
