@@ -185,6 +185,10 @@ Ordinary Markdown blockquotes use this treatment. Use them for a quotation or a 
 
 An optional `callout` front-matter field supports the opening treatment. Prefer a blockquote in the body when the passage belongs in the argument and full-text RSS.
 
+## Interface screenshots
+
+Place wide interface captures below the chapter prose so they can span both columns. For dense terminal screens, supply a `mobile` image to the `ui-capture` shortcode. Frame the action described by the caption so the reader can see it at phone width without panning. Link to the full desktop capture for surrounding context.
+
 ## Diagrams
 
 Diagrams exist to carry information that prose communicates less efficiently: loops, dependencies, sequences, comparisons, state changes, and layered structures.
