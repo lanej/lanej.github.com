@@ -1,8 +1,8 @@
 {{ $steps := slice
-  (dict "label" "Change" "detail" "A requirement, constraint, or assumption changes." "note" "Identify what is different.")
-  (dict "label" "Trace" "detail" "Which earlier conclusions depended on it?" "note" "Untouched does not mean unaffected.")
-  (dict "label" "Reconcile" "detail" "Preserve the promise—or explicitly revise it." "note" "Reopen decisions when needed.")
-  (dict "label" "Verify and record" "detail" "Check the relationship. Name the uncertainty." "note" "A recorded review is not a proof." "role" "evidence")
+  (dict "showRoleMarker" true "role" "input" "label" "Change" "detail" "A requirement, constraint, or assumption changes." "note" "Identify what is different.")
+  (dict "showRoleMarker" true "role" "caution" "label" "Trace" "detail" "Which earlier conclusions depended on it?" "note" "Untouched does not mean unaffected.")
+  (dict "showRoleMarker" true "role" "decision" "label" "Reconcile" "detail" "Preserve the promise—or explicitly revise it." "note" "Reopen decisions when needed.")
+  (dict "showRoleMarker" true "label" "Verify and record" "detail" "Check the relationship. Name the uncertainty." "note" "A recorded review is not a proof." "role" "evidence")
 }}
 {{ partial "diagrams/patterns/sequence.html" (dict
   "id" "harmony-review"

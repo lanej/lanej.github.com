@@ -19,7 +19,7 @@ MEASURE = r'''() => {
     if (document.documentElement.scrollWidth>innerWidth+1) failures.push('Page overflow');
     const root = document.querySelector('.sc-article');
     if(!root) return {failures:['Missing Socrates article']};
-    for(const el of root.querySelectorAll('[data-node],.sc-layer-description,.sc-step-detail,.sc-figure-title,.sc-caption,.sc-deck,h1,h2,.sc-section-copy')) {
+    for(const el of root.querySelectorAll('[data-node]:not(.sc-method-node),.sc-method-node > .flow-node,.handoff-steps > li > .flow-node,.sc-layer-description,.sc-figure-title,.sc-caption,.sc-deck,h1,h2,.sc-section-copy')) {
         if(!visible(el)) continue;
         const b=box(el);
         if(el.scrollWidth>el.clientWidth+2) failures.push('Horizontal overflow: '+el.textContent.trim().slice(0,80));
@@ -34,12 +34,12 @@ MEASURE = r'''() => {
             }
         }
     }
-    const panels=[...root.querySelectorAll('.sc-figure')];
+    const panels=[...root.querySelectorAll('figure[data-essay-diagram]')];
     if(panels.length!==5) failures.push('Expected five diagrams');
     const measures=panels.map(panel=>{
         const bounds=box(panel);
         if(bounds.x<0 || bounds.right>innerWidth+1) failures.push('Figure outside screen');
-        const nodes=[...panel.querySelectorAll('[data-node]')];
+        const nodes=[...panel.querySelectorAll('[data-node],.handoff-steps > li > .flow-node')];
         nodes.forEach((el,i)=>{
             if(!within(box(el),bounds)) failures.push('Node outside figure');
             nodes.slice(i+1).forEach(other=>{if(overlap(box(el),box(other))) failures.push('Overlapping diagram nodes')});
@@ -53,28 +53,12 @@ MEASURE = r'''() => {
         const a=[...paths[0].querySelectorAll('[data-node]')], b=[...paths[1].querySelectorAll('[data-node]')];
         if(Math.abs(box(a[0]).y-box(b[0]).y)>2 || Math.abs(box(a.at(-1)).bottom-box(b.at(-1)).bottom)>2) failures.push('Comparison start/end rails not aligned');
     }
-    const steps=[...root.querySelectorAll('.sc-step')];
-    const connectors=[...root.querySelectorAll('.sc-workflow-connector')];
-    const horizontal=Math.abs(box(steps[0]).y-box(steps.at(-1)).y)<2;
-    if(horizontal) {
-        const r=box(root.querySelector('.sc-return-path'));
-        const first=box(steps[0]), last=box(steps.at(-1));
-        if(Math.abs(r.x-(first.x+first.width/2))>3 || Math.abs(r.right-(last.x+last.width/2))>3) failures.push('Return path endpoints misaligned');
-        connectors.forEach((el,i)=>{const c=box(el),s=box(steps[i]);if(Math.abs(c.y+c.height/2-(s.y+s.height/2))>2) failures.push('Horizontal connector off center')});
-    } else {
-        connectors.forEach((el,i)=>{const c=box(el),s=box(steps[i]);if(Math.abs(c.x+c.width/2-(s.x+s.width/2))>2) failures.push('Vertical connector off center')});
-    }
-    if(!horizontal) {
-        const ret=root.querySelector('.sc-return-path'), label=ret.querySelector('.sc-return-label');
-        const marker=getComputedStyle(ret,'::before');
-        if(box(label).x-box(ret).x < parseFloat(marker.fontSize)*.9) failures.push('Return marker collides with label');
-    }
-    for(const c of root.querySelectorAll('.sc-cycle-connector,.sc-flow-connector,.sc-workflow-connector')) {
+    for(const c of root.querySelectorAll('.sc-cycle-connector,.sc-flow-connector')) {
         if(!visible(c)) continue;
         for(const n of c.closest('.sc-figure').querySelectorAll('[data-node]')) if(overlap(box(c),box(n))) failures.push('Connector crosses a node');
     }
     for(const img of root.querySelectorAll('img')) if(!img.complete || img.naturalWidth===0) failures.push('Undecoded art');
-    return {failures:[...new Set(failures)],width:innerWidth,rootFont:parseFloat(getComputedStyle(document.documentElement).fontSize),panels:measures,workflow:horizontal?'horizontal':'vertical'};
+    return {failures:[...new Set(failures)],width:innerWidth,rootFont:parseFloat(getComputedStyle(document.documentElement).fontSize),panels:measures,workflow:'vertical'};
 }'''
 
 
@@ -150,7 +134,7 @@ def main():
                             stem=f'{engine}-{width}-text{scale}'
                             page.screenshot(path=str(out/f'{stem}-opening.png'),scale='css')
                             capture_full_page(page,out/f'{stem}-full.png')
-                            for panel in page.locator('.sc-figure').all():
+                            for panel in page.locator('figure[data-essay-diagram]').all():
                                 panel.screenshot(path=str(out/f'{stem}-{panel.get_attribute("id")}.png'),scale='css')
                         assert not metrics['failures'], f'{engine} {width} {scale}%: {metrics["failures"]}'
                     context.close()

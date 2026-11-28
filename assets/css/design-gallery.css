@@ -17,14 +17,20 @@
 .gallery-token-copy code,.gallery-token-copy span{color:var(--diagram-muted-text);font-size:.86rem;overflow-wrap:anywhere}
 .gallery-atoms,.gallery-patterns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,390px);gap:20px;align-items:start}
 .gallery-atoms{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
-.gallery-panel,.gallery-pattern{min-width:0;border:1px solid var(--diagram-divider);border-radius:6px;padding:16px}
-.gallery-panel h3,.gallery-pattern h3{margin-bottom:14px}
-.gallery-node-list.sc-section-visuals{width:auto;max-width:none;margin:0;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:12px}
+.gallery-atom-group,.gallery-pattern{min-width:0}
+.gallery-pattern{border:1px solid var(--diagram-divider);border-radius:6px;padding:16px}
+.gallery-atom-group h3,.gallery-pattern h3{margin-bottom:14px}
+.gallery-node-list.sc-section-visuals{width:auto;max-width:none;margin:0;padding:0;list-style:none;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.gallery-atom-group+.gallery-atom-group{margin-top:24px}
+.gallery-workflow-node-list.sc-section-visuals{grid-template-columns:repeat(2,minmax(0,1fr))}
+.gallery-node-sample{display:grid;grid-template-rows:auto 1fr;gap:5px;min-width:0}
+.gallery-node-role{color:var(--diagram-muted-text);font-size:.82rem;font-weight:600;line-height:1.4}
 .gallery-arrow-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .gallery-arrow-list>div{display:grid;gap:5px;padding:10px;text-align:center;border:1px solid var(--diagram-outline);border-radius:6px;color:var(--diagram-muted-text)}
 .gallery-pattern .sc-section-visuals{width:100%;max-width:none;margin:0}
 .gallery-sequence-phone{width:min(100%,390px)}
 .gallery-pattern .formalization-steps p{margin-block:10px 0}
+@media(max-width:1000px){.gallery-node-list.sc-section-visuals{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:760px){.gallery-atoms{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:920px){
   .gallery-patterns{grid-template-columns:minmax(0,1fr)}

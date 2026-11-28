@@ -1,15 +1,36 @@
-<figure aria-labelledby="comparison-title" class="sc-figure sc-comparison-figure" data-essay-diagram="socrates-comparison" id="comparison-figure">
-<h3 class="sc-figure-title" id="comparison-title">How the acceptance criteria changed</h3>
-<div class="sc-comparison">
-<section aria-labelledby="without-label" class="sc-path sc-path-without"><h4 class="sc-path-label" id="without-label">Initial proposal</h4><div class="sc-path-track">
-<div class="sc-node flow-node" data-node>Build the biometric approval gate</div><div aria-hidden="true" class="sc-flow-connector"></div>
-<div class="sc-node flow-node" data-node>Describe agent self-approval as removed</div><div aria-hidden="true" class="sc-flow-connector sc-grow"></div>
-<div class="sc-node flow-node" data-node>Ship</div></div></section>
-<section aria-labelledby="with-label" class="sc-path sc-path-with"><h4 class="sc-path-label" id="with-label">After review</h4><div class="sc-path-track">
-<div class="sc-node flow-node" data-node>Build the biometric approval gate</div><div aria-hidden="true" class="sc-flow-connector"></div>
-<div class="sc-node flow-node" data-node>Define which workflow the gate controls</div><div aria-hidden="true" class="sc-flow-connector"></div>
-<div class="sc-node flow-node" data-node>Require human approval within that workflow</div><div aria-hidden="true" class="sc-flow-connector"></div>
-<div class="sc-node flow-node diagram-evidence" data-node>Test denial, timeout, and automated confirmation</div><div aria-hidden="true" class="sc-flow-connector"></div>
-<div class="sc-node flow-node" data-node>Accept the gate with its limits documented</div></div></section>
-</div><figcaption class="sc-caption">A working prompt is only part of the evidence. Acceptance depends on what the guarded operation does when approval is absent.</figcaption>
+{{- $shared := dict "label" "Build the biometric approval gate" -}}
+{{- $initial := slice
+  $shared
+  (dict "label" "Describe agent self-approval as removed" "role" "mismatch" "showRoleMarker" true)
+  (dict "label" "Ship")
+-}}
+{{- $reviewed := slice
+  $shared
+  (dict "label" "Define which workflow the gate controls")
+  (dict "label" "Require human approval within that workflow")
+  (dict "label" "Test denial, timeout, and automated confirmation" "role" "evidence" "showRoleMarker" true)
+  (dict "label" "Accept the gate with its limits documented" "role" "decision" "showRoleMarker" true)
+-}}
+{{- $paths := slice
+  (dict "id" "without" "title" "Initial proposal" "steps" $initial)
+  (dict "id" "with" "title" "After review" "steps" $reviewed)
+-}}
+<figure aria-labelledby="comparison-title" class="sc-figure sc-comparison-figure socrates-restyled" data-essay-diagram="socrates-comparison" id="comparison-figure">
+  <h3 class="sc-figure-title" id="comparison-title">How the acceptance criteria changed</h3>
+  <div class="sc-comparison">
+    {{ range $path := $paths }}
+      <section aria-labelledby="{{ .id }}-label" class="sc-path sc-path-{{ .id }}">
+        <h4 class="sc-path-label" id="{{ .id }}-label">{{ .title }}</h4>
+        <div class="sc-path-track">
+          {{ range $index, $step := .steps }}
+            {{ if $index }}
+              <div aria-hidden="true" class="sc-flow-connector{{ if and (eq $path.id "without") (eq $index 2) }} sc-grow{{ end }}"></div>
+            {{ end }}
+            <div class="sc-path-card" data-node>{{ partial "diagrams/atoms/node.html" $step }}</div>
+          {{ end }}
+        </div>
+      </section>
+    {{ end }}
+  </div>
+  <figcaption class="sc-caption">A working prompt is only part of the evidence. Acceptance depends on what the guarded operation does when approval is absent.</figcaption>
 </figure>

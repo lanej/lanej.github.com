@@ -1,12 +1,19 @@
-<figure class="sc-figure" data-essay-diagram="socrates-record" id="record-figure" aria-labelledby="record-title">
-<h3 class="sc-figure-title" id="record-title">What the handoff preserves</h3>
-<div class="sc-cycle-node" data-node><strong>Decision to preserve</strong><span class="sc-node-detail">Require human approval within the guarded workflow. Other access remains outside its control.</span></div>
-<div class="sc-flow-connector" aria-hidden="true"></div>
-<div class="sc-record-branches">
-<div class="sc-cycle-node" data-node><strong>Executor may choose</strong><span class="sc-node-detail">Prompt wording and internal code structure.</span></div>
-<div class="sc-cycle-node diagram-caution" data-node><strong>Executor must preserve</strong><span class="sc-node-detail">Denial or timeout stops the operation. Automated confirmation is not approval.</span></div>
-</div>
-<div class="sc-flow-connector" aria-hidden="true"></div>
-<div class="sc-cycle-node diagram-evidence" data-node><strong>Evidence for acceptance</strong><span class="sc-node-detail">Exercise missing approval and automated confirmation; inspect whether the costly operation ran.</span></div>
-<figcaption class="sc-caption">The decision record carries the why, the limits, and the proof obligation into the next session.</figcaption>
+{{- $decision := dict "label" "Decision to preserve" "detail" "Require human approval within the guarded workflow. Other access remains outside its control." "role" "decision" "showRoleMarker" true -}}
+{{- $branches := slice
+  (dict "label" "Executor may choose" "detail" "Prompt wording and internal code structure.")
+  (dict "label" "Executor must preserve" "detail" "Denial or timeout stops the operation. Automated confirmation is not approval." "role" "caution" "showRoleMarker" true)
+-}}
+{{- $evidence := dict "label" "Evidence for acceptance" "detail" "Exercise missing approval and automated confirmation; inspect whether the costly operation ran." "role" "evidence" "showRoleMarker" true -}}
+<figure class="sc-figure socrates-restyled" data-essay-diagram="socrates-record" id="record-figure" aria-labelledby="record-title">
+  <h3 class="sc-figure-title" id="record-title">What the handoff preserves</h3>
+  <div class="sc-record-card" data-node>{{ partial "diagrams/atoms/node.html" $decision }}</div>
+  <div class="sc-flow-connector" aria-hidden="true"></div>
+  <div class="sc-record-branches">
+    {{ range $branches }}
+      <div class="sc-record-card" data-node>{{ partial "diagrams/atoms/node.html" . }}</div>
+    {{ end }}
+  </div>
+  <div class="sc-flow-connector" aria-hidden="true"></div>
+  <div class="sc-record-card" data-node>{{ partial "diagrams/atoms/node.html" $evidence }}</div>
+  <figcaption class="sc-caption">The decision record carries the why, the limits, and the proof obligation into the next session.</figcaption>
 </figure>

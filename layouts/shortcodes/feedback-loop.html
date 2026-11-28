@@ -1,29 +1,38 @@
-<figure class="essay-diagram" data-essay-diagram="feedback-loop" aria-labelledby="feedback-loop-caption">
-<div class="loop-comparison">
-<section class="diagram-panel" aria-label="Open loop">
-<p class="diagram-label">Open loop</p><p class="diagram-description">Plausible, but unverified.</p>
-<div class="flow-row">
-  {{ partial "diagrams/atoms/node.html" (dict "label" "Intent") }}
-  {{ partial "diagrams/atoms/arrow.html" "right" }}
-  {{ partial "diagrams/atoms/node.html" (dict "label" "AI") }}
-  {{ partial "diagrams/atoms/arrow.html" "right" }}
-  {{ partial "diagrams/atoms/node.html" (dict "label" "Output" "role" "caution") }}
-</div>
-<p class="open-loop-note diagram-caution">No return path from reality.</p>
-</section>
-<section class="diagram-panel closed-loop" aria-label="Closed loop">
-<p class="diagram-label">Closed loop</p><p class="diagram-description">Action informed by evidence.</p>
-<p class="loop-intent">Intent <span aria-hidden="true">↓</span></p>
-<div class="flow-row">
-  {{ partial "diagrams/atoms/node.html" (dict "label" "AI" "role" "accent") }}
-  {{ partial "diagrams/atoms/arrow.html" "right" }}
-  {{ partial "diagrams/atoms/node.html" (dict "label" "Action") }}
-  {{ partial "diagrams/atoms/arrow.html" "right" }}
-  {{ partial "diagrams/atoms/node.html" (dict "label" "Environment") }}
-</div>
-<div class="feedback-return diagram-evidence"><span class="return-arrow" aria-hidden="true">↑</span><span class="feedback-label">Evidence <span aria-hidden="true">←</span> Verification</span><span class="return-arrow" aria-hidden="true">↓</span></div>
-<p class="loop-note">Observe the result. Adjust the next action.</p>
-</section>
-</div>
-<figcaption id="feedback-loop-caption"><span>Figure 1.</span> The difference is not a better prompt. It is a return path from reality.</figcaption>
+{{- $intent := dict "label" "Intent" "role" "input" "showRoleMarker" true -}}
+{{- $ai := dict "label" "AI" -}}
+{{- $open := slice $intent $ai (dict "label" "Output" "role" "caution" "showRoleMarker" true) -}}
+{{- $closed := slice $intent $ai (dict "label" "Action" "role" "accent" "showRoleMarker" true) (dict "label" "Environment") -}}
+{{- $paths := slice
+  (dict "id" "open" "title" "Open loop" "description" "Plausible, but unverified." "stages" $open)
+  (dict "id" "closed" "title" "Closed loop" "description" "Action informed by evidence." "stages" $closed "closed" true)
+-}}
+<figure class="essay-diagram diagram-restyled restyled-feedback" data-essay-diagram="feedback-loop" aria-labelledby="feedback-loop-title">
+  <h3 class="diagram-figure-title" id="feedback-loop-title">Open and closed feedback loops</h3>
+  <div class="loop-comparison">
+    {{ range $path := $paths }}
+      <section class="diagram-panel" aria-labelledby="feedback-{{ .id }}-title">
+        <h4 class="diagram-comparison-heading" id="feedback-{{ .id }}-title">{{ .title }}</h4>
+        <p class="diagram-comparison-detail">{{ .description }}</p>
+        <ol class="feedback-stages{{ if .closed }} feedback-stages-closed{{ end }}" role="list">
+          {{ range $index, $stage := .stages }}
+            <li>
+              {{ if $index }}{{ partial "diagrams/atoms/arrow.html" "down" }}{{ end }}
+              {{ partial "diagrams/atoms/node.html" $stage }}
+              {{ if and $path.closed $index }}<span class="feedback-evidence-rail" aria-hidden="true"></span>{{ end }}
+            </li>
+          {{ end }}
+        </ol>
+        {{ if .closed }}
+          <div class="feedback-return diagram-evidence">
+            <span class="return-arrow" aria-hidden="true">↺</span>
+            <span class="feedback-label">Evidence from verification returns to the AI.</span>
+          </div>
+          <p class="loop-note">Observe the result. Adjust the next action.</p>
+        {{ else }}
+          <p class="open-loop-note diagram-caution">No return path from reality.</p>
+        {{ end }}
+      </section>
+    {{ end }}
+  </div>
+  <figcaption id="feedback-loop-caption"><span>Figure 1.</span> The difference is not a better prompt. It is a return path from reality.</figcaption>
 </figure>

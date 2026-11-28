@@ -1,8 +1,8 @@
 {{ $steps := slice
-  (dict "label" "Question" "detail" "What blocks the decision?" "note" "Name the uncertainty and the outcome that matters." "role" "caution")
-  (dict "label" "Test" "detail" "What would resolve it?" "note" "Choose the smallest credible test, including necessary safeguards.")
-  (dict "label" "Evidence" "detail" "What actually happened?" "note" "Account for the result, limitations, and all the work involved." "role" "evidence")
-  (dict "label" "Commitment" "detail" "What does this justify?" "note" "Continue, change, or stop. Expansion is not automatic." "role" "accent")
+  (dict "showRoleMarker" true "label" "Question" "detail" "What blocks the decision?" "note" "Name the uncertainty and the outcome that matters." "role" "caution")
+  (dict "showRoleMarker" true "label" "Test" "detail" "What would resolve it?" "note" "Choose the smallest credible test, including necessary safeguards.")
+  (dict "showRoleMarker" true "label" "Evidence" "detail" "What actually happened?" "note" "Account for the result, limitations, and all the work involved." "role" "evidence")
+  (dict "showRoleMarker" true "label" "Commitment" "detail" "What does this justify?" "note" "Continue, change, or stop. Expansion is not automatic." "role" "accent")
 }}
 {{ partial "diagrams/patterns/sequence.html" (dict
   "id" "minimum-dose-decision"

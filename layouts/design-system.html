@@ -5,16 +5,23 @@
   (dict "name" "Flow" "token" "--diagram-flow" "use" "Ordinary links between steps")
   (dict "name" "Evidence" "token" "--diagram-evidence-ink" "use" "Checks and feedback")
   (dict "name" "Caution" "token" "--diagram-caution-ink" "use" "Uncertainty or a constraint")
-  (dict "name" "Attention" "token" "--diagram-attention-ink" "use" "A decision or escalation")
+  (dict "name" "Attention" "token" "--diagram-attention-ink" "use" "A step that needs attention or escalation")
   (dict "name" "Mismatch" "token" "--diagram-mismatch-ink" "use" "A broken guarantee")
 }}
 {{ $nodes := slice
-  (dict "label" "Test" "detail" "Run the smallest credible check")
-  (dict "label" "Question" "detail" "What remains uncertain?" "role" "caution")
-  (dict "label" "Evidence" "detail" "What actually happened?" "role" "evidence")
-  (dict "label" "Escalate" "detail" "Ask the person with authority" "role" "attention")
-  (dict "label" "Mismatch" "detail" "The result broke the promise" "role" "mismatch")
-  (dict "label" "Decision" "detail" "Choose the next step" "role" "accent")
+  (dict "roleName" "Neutral" "label" "Test" "detail" "Run a small check")
+  (dict "roleName" "Caution" "label" "Question" "detail" "Name the unknown" "role" "caution")
+  (dict "roleName" "Evidence" "label" "Result" "detail" "Record what happened" "role" "evidence")
+  (dict "roleName" "Attention" "label" "Escalate" "detail" "Ask the decision owner" "role" "attention")
+  (dict "roleName" "Mismatch" "label" "Conflict" "detail" "The result broke the promise" "role" "mismatch")
+  (dict "roleName" "Accent" "label" "Decide" "detail" "Choose the next step" "role" "accent")
+}}
+{{ $workflowNodes := slice
+  (dict "roleName" "Input" "label" "Read source" "detail" "Start from the data" "role" "input")
+  (dict "roleName" "Delivery" "label" "Send report" "detail" "Reach the intended reader" "role" "delivery")
+  (dict "roleName" "Decision" "label" "Choose" "detail" "Act on the result" "role" "decision")
+  (dict "roleName" "Repeat" "label" "Try again" "detail" "Look for a recurring pattern" "role" "repeat")
+  (dict "roleName" "Skill" "label" "Use checklist" "detail" "Follow a reusable procedure" "role" "skill")
 }}
 {{ $steps := slice
   (dict "label" "Question" "detail" "Will the report change a decision?" "note" "Name the uncertainty before building." "role" "caution")
@@ -48,13 +55,22 @@
   <section class="gallery-section" id="atoms" aria-labelledby="atoms-title">
     <header><h2 id="atoms-title">Atoms</h2><p>Use a node for a labeled step and an arrow when the nearby text already explains the direction.</p></header>
     <div class="gallery-atoms">
-      <div class="gallery-panel">
-        <h3>Node roles</h3>
-        <div class="gallery-node-list sc-section-visuals">
-          {{ range $nodes }}{{ partial "diagrams/atoms/node.html" . }}{{ end }}
-        </div>
+      <div>
+        {{ range slice (dict "title" "Node roles" "nodes" $nodes) (dict "title" "Workflow steps" "nodes" $workflowNodes "workflow" true) }}
+          <div class="gallery-atom-group">
+            <h3>{{ .title }}</h3>
+            <ul class="gallery-node-list sc-section-visuals{{ if .workflow }} gallery-workflow-node-list{{ end }}" role="list">
+              {{ range .nodes }}
+                <li class="gallery-node-sample">
+                  <span class="gallery-node-role">{{ .roleName }}</span>
+                  {{ partial "diagrams/atoms/node.html" (merge . (dict "showRoleMarker" true)) }}
+                </li>
+              {{ end }}
+            </ul>
+          </div>
+        {{ end }}
       </div>
-      <div class="gallery-panel">
+      <div class="gallery-atom-group">
         <h3>Direction</h3>
         <div class="gallery-arrow-list">
           <div>{{ partial "diagrams/atoms/arrow.html" "right" }}<span>Right</span></div>
