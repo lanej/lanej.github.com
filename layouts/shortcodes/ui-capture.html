@@ -6,6 +6,11 @@
 {{- $number := .Get "number" -}}
 {{- $asset := .Page.Resources.GetMatch $name -}}
 {{- if not $asset -}}{{ errorf "Missing UI capture %q in %s" $name .Page.File.Path }}{{- end -}}
+{{- $mobile := false -}}
+{{- with .Get "mobile" -}}
+  {{- $mobile = $.Page.Resources.GetMatch . -}}
+  {{- if not $mobile -}}{{ errorf "Missing mobile UI capture %q in %s" . $.Page.File.Path }}{{- end -}}
+{{- end -}}
 {{- if or (not $id) (not $alt) (not $caption) -}}{{ errorf "UI capture requires id, alt, and caption: %s" .Page.File.Path }}{{- end -}}
 <figure class="sc-ui-capture" data-essay-wide="ui-capture" aria-labelledby="capture-{{ $id }}-caption">
   <header class="sc-ui-capture-heading">
@@ -13,13 +18,16 @@
     <strong>{{ $title }}</strong>
     <span class="sc-ui-capture-type">Terminal capture</span>
   </header>
-  <div class="sc-ui-capture-scroll" role="region" tabindex="0" aria-label="{{ $title }} screenshot; scroll horizontally on narrow screens">
-    <a href="{{ $asset.RelPermalink }}" aria-label="View original screenshot: {{ $title }}">
+  <a class="sc-ui-capture-image" href="{{ $asset.RelPermalink }}">
+    <picture>
+      {{- with $mobile }}
+      <source media="screen and (max-width: 48rem)" srcset="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}">
+      {{- end }}
       <img src="{{ $asset.RelPermalink }}" alt="{{ $alt }}" width="{{ $asset.Width }}" height="{{ $asset.Height }}" loading="lazy" decoding="async">
-    </a>
-  </div>
+    </picture>
+  </a>
   <figcaption id="capture-{{ $id }}-caption">
     <span>{{ $caption }}</span>
-    <a href="{{ $asset.RelPermalink }}">Full-size image <span aria-hidden="true">↗</span></a>
+    <a href="{{ $asset.RelPermalink }}">Full desktop screenshot <span aria-hidden="true">↗</span></a>
   </figcaption>
 </figure>

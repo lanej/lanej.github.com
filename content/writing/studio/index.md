@@ -28,11 +28,11 @@ The distinction is about authority as much as implementation. A worktree manager
 
 The conversation stays visible, but it is no longer the only place to find the state of the work. Studio puts the specification's open properties beside the transcript, so an unanswered question or stale assessment does not get lost in a wall of messages.
 
-{{< ui-capture id="studio-specification" file="studio-specification.png" number="01 / Studio" title="Specification, in context" alt="Studio terminal with an active conversation on the left and a specification sidebar on the right listing partial verification, risk, harmony, and an implementation graph." caption="The specification sidebar keeps open properties and the task graph in view as the conversation changes. Native terminal capture from the Studio project." >}}
+{{< ui-capture id="studio-specification" file="studio-specification.png" mobile="studio-specification-mobile.webp" number="01 / Studio" title="Specification, in context" alt="Studio’s specification lists open scope and harmony questions, partial verification and risk assessments, and the dependency graph for the proposed work." caption="The specification sidebar keeps open properties and the task graph in view as the conversation changes. Native terminal capture from the Studio project." >}}
 
 Before work runs, the approval view puts task dependencies, delivery choices, and verification arguments in one inspection surface. That is where a person can notice that the plan is incomplete or that a child task is going to publish something it shouldn't.
 
-{{< ui-capture id="studio-approval" file="studio-plan.png" number="02 / Studio" title="Review before dispatch" alt="Studio approval screen with a task dependency diagram, two planned pull requests, and detailed acceptance criteria for the proposed work." caption="Approval exposes dependencies and delivery decisions before execution. This capture is a representative fixture, not a live customer or private project." >}}
+{{< ui-capture id="studio-approval" file="studio-plan.png" mobile="studio-plan-mobile.webp" number="02 / Studio" title="Review before dispatch" alt="Studio’s approval view shows an event-export task graph, local notes on hold, and two proposed pull requests sharing the event schema." caption="Approval exposes dependencies and delivery decisions before execution. This capture is a representative fixture, not a live customer or private project." >}}
 
 ## Follow one change
 
@@ -46,11 +46,11 @@ The worker can produce an implementation and passing tests. That is useful evide
 
 Publishing a PR is the start of another feedback cycle. The dashboard puts deliveries needing intervention ahead of routine progress. Selecting one reveals the next safe action, the available check and review evidence, and whether a merge has actually been confirmed.
 
-{{< ui-capture id="publisher-attention" file="publisher-attention.png" number="03 / Publisher" title="The Attention dashboard" alt="Publisher's OpenTUI dashboard, still labeled Octo Manager, with an Attention list at left and selected delivery detail, checks, owner state and merge evidence at right." caption="The selected delivery explains what needs attention and what evidence is already known. Current OpenTUI presentation with illustrative example records." >}}
+{{< ui-capture id="publisher-attention" file="publisher-attention.png" mobile="publisher-attention-mobile.webp" number="03 / Publisher" title="The Attention dashboard" alt="Publisher’s Attention view shows an unconfirmed merge and directs the operator to reconcile the saved operation in Activity." caption="The selected delivery explains what needs attention and what evidence is already known. Publisher’s OpenTUI dashboard is shown in Sage Midnight with illustrative records." >}}
 
 The activity view exposes a different distinction: *requesting* an operation is not the same as knowing its result. When GitHub's answer is uncertain, Publisher retains the saved request and its evidence. The next action is to reconcile that operation, not blindly run it again.
 
-{{< ui-capture id="publisher-activity" file="publisher-activity.png" number="04 / Publisher" title="An inspectable activity trail" alt="Publisher Activity dashboard showing a selected merge operation, saved request identifier, timeline, and a next action to reconcile an uncertain GitHub response." caption="A durable operation record and its evidence survive the agent session. Publisher is still labeled Octo Manager in the captured UI pending the rename." >}}
+{{< ui-capture id="publisher-activity" file="publisher-activity.png" mobile="publisher-activity-mobile.webp" number="04 / Publisher" title="An inspectable activity trail" alt="Publisher’s Activity view shows the saved merge request, the time of the last evidence, and the shortcut for reconciling GitHub’s uncertain response." caption="A durable operation record and its evidence survive the agent session. Publisher is still labeled Octo Manager in the captured UI pending the rename." >}}
 
 ## Neovim stays where editing happens
 
@@ -60,7 +60,7 @@ With the editor bridge, Studio keeps document authority while Neovim handles the
 
 That boundary is also useful beyond Studio. The editor integration doesn't need to know how the host schedules tasks, stores approvals, or runs its model.
 
-{{< ui-capture id="copydesk-neovim" file="copydesk-neovim.png" number="05 / Copydesk" title="Comment directly on a selection" alt="Neovim specification buffer with two selected lines and an adjacent comment prompt asking whether the selected wording is wanted, with Enter to send and Escape to cancel." caption="Selection feedback, including unsaved text, can be composed beside the relevant lines and sent back to Studio. Captured from the native editor integration." >}}
+{{< ui-capture id="copydesk-neovim" file="copydesk-neovim.png" mobile="copydesk-neovim-mobile.webp" number="05 / Copydesk" title="Comment directly on a selection" alt="Copydesk shows two selected lines in an unsaved Neovim specification and a comment ready to send with Enter or cancel with Escape." caption="Selection feedback, including unsaved text, can be composed beside the relevant lines and sent back to Studio. Captured from the native editor integration." >}}
 
 ## Passing is not the final pass
 
@@ -72,13 +72,13 @@ An independent readability pass is a direction I'm developing, not a claim that 
 
 ## The tools and their boundaries
 
-| Name | Responsibility | Current source |
-| --- | --- | --- |
-| **Studio** | Conversation, specification, approval, and working interface | [Studio](https://github.com/lanej/studio) |
-| **Producer** | Execution, verification, and attempt recovery | [Studio runtime](https://github.com/lanej/studio/blob/main/RUNTIME.md) |
-| **Stagehand** | Worktree allocation, protection, inventory, and cleanup | [Worktree Manager](https://github.com/lanej/worktree-manager) |
-| **Copydesk** | Neovim editing and feedback for host-owned documents | [Editor Interop](https://github.com/lanej/editor-interop) |
-| **Publisher** | GitHub PR publication, checks, reviews, and delivery | [Octo Manager](https://github.com/lanej/octo-manager) |
+| Name | Responsibility |
+| --- | --- |
+| **[Studio](https://github.com/lanej/studio)** | Conversation, specification, approval, and working interface |
+| **[Producer](https://github.com/lanej/studio/blob/main/RUNTIME.md)** | Execution, verification, and attempt recovery |
+| **[Stagehand](https://github.com/lanej/worktree-manager)** | Worktree allocation, protection, inventory, and cleanup |
+| **[Copydesk](https://github.com/lanej/editor-interop)** | Neovim editing and feedback for host-owned documents |
+| **[Publisher](https://github.com/lanej/octo-manager)** | GitHub PR publication, checks, reviews, and delivery |
 
 Producer is a responsibility inside Studio, not a separate released project. The other three names are decisions in progress: [Stagehand](https://github.com/lanej/worktree-manager/issues/7), [Copydesk](https://github.com/lanej/editor-interop/issues/4), and [Publisher](https://github.com/lanej/octo-manager/issues/62) still have repositories or commands under their former names. The diagram shows the intended division of labor; individual integrations are at different stages of completion.
 

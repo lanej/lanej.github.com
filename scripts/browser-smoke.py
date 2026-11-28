@@ -138,6 +138,16 @@ def main():
                         assert icon.evaluate('(svg) => svg.outerHTML') == essay_icons[route], f'{route}: essay icon differs from archive'
                     assert page.locator('.sc-hero-art').count() == 1, f'{route}: missing opening visual'
                     assert page.locator('.sc-hero-copy > .sc-accent').count() == 1, f'{route}: missing opening callout'
+                    if label == 'studio' and width in (390, 1440):
+                        images = page.locator('.sc-ui-capture img')
+                        assert images.count() == 5, 'Studio needs all five interface captures'
+                        for image in images.all():
+                            image.scroll_into_view_if_needed()
+                            image.evaluate('(img) => img.decode()')
+                            displayed, desktop = image.evaluate("""img => [
+                                img.currentSrc, img.closest('figure').querySelector('figcaption a').href
+                            ]""")
+                            assert (displayed == desktop) == (width == 1440), f'{width}px: wrong capture {displayed}'
                     if label == 'close-the-loop':
                         assert page.locator('.sc-section-copy table').count() == 0, 'Table remains in the prose column'
                         assert page.locator('.sc-section-visuals table').count() >= 1, 'Missing supporting table'
