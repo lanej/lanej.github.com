@@ -42,8 +42,10 @@
 .flow-node-with-detail>strong{font-size:.95rem;font-weight:550}.flow-node-with-detail>span{font-size:.8rem;color:var(--diagram-muted-text)}
 .flow-node-role-marker{display:none}
 @media screen{
-  .flow-node.flow-node-with-role-marker{
-    flex-direction:column;align-items:flex-start;gap:6px;padding-inline:10px;text-align:left
+  .flow-node.flow-node-with-role-marker{flex-direction:column;gap:6px;padding-inline:10px}
+  .flow-node-with-role-marker,
+  .formalization-steps:has(.flow-node-with-role-marker) .flow-node{
+    align-items:flex-start;text-align:left
   }
   .flow-node-with-role-marker.flow-node-accent{--diagram-role-ink:var(--diagram-flow)}
   .flow-node-with-role-marker>strong{
