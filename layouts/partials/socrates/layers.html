@@ -11,12 +11,12 @@
   <h3 class="sc-figure-title" id="layers-title">The seven layers, applied to the cost gate</h3>
   <ol class="sc-layers" role="list">
     {{ range $index, $layer := $layers }}
-      <li class="sc-layer-row flow-node{{ with $layer.role }} {{ . }}{{ end }}" style="--level:{{ $index }}" data-node>
+      <li class="sc-layer-row flow-node{{ with $layer.role }} {{ . }}{{ end }}" data-node>
         <span class="sc-layer-number" aria-hidden="true">{{ add $index 1 }}</span>
         <strong class="sc-layer-label">{{ $layer.label }}</strong>
         <span class="sc-layer-description">{{ $layer.detail }}</span>
       </li>
     {{ end }}
   </ol>
-  <figcaption class="sc-caption">Each layer changes what the next one must prove. A weakness higher in the stack should send us back down, not get papered over in the plan.</figcaption>
+  <figcaption class="sc-caption">Each layer changes what the next one must prove. When a later layer exposes a weakness, revisit the earlier layer before proceeding.</figcaption>
 </figure>

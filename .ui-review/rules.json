@@ -77,6 +77,22 @@
     "reason": "Use sentence-case headings for Socrates figures. Let role colors and symbols distinguish the nodes."
   },
   {
+    "id": "socrates-layer-reading-order",
+    "type": "style",
+    "selector": "#layers-figure .sc-layers",
+    "property": "flex-direction",
+    "allowed": [
+      "column"
+    ],
+    "pages": [
+      "writing/socrates",
+      "writing/socrates-enlarged",
+      "writing/socrates-print"
+    ],
+    "severity": "error",
+    "reason": "The numbered layers should read from Problem to Execution readiness at every width and in print."
+  },
+  {
     "id": "essay-figure-title-hierarchy",
     "type": "style",
     "selector": ".diagram-restyled :is(.sc-figure-title,.diagram-figure-title)",
