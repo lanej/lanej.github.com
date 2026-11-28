@@ -24,9 +24,9 @@
   (dict "roleName" "Skill" "label" "Use checklist" "detail" "Follow a reusable procedure" "role" "skill")
 }}
 {{ $steps := slice
-  (dict "label" "Question" "detail" "Will the report change a decision?" "note" "Name the uncertainty before building." "role" "caution")
-  (dict "label" "Test" "detail" "Deliver one report on time." "note" "Observe what the reader does with it.")
-  (dict "label" "Evidence" "detail" "The reader changed the plan." "note" "Record the outcome and its limits." "role" "evidence")
+  (dict "showRoleMarker" true "label" "Question" "detail" "Will the report change a decision?" "note" "Name the uncertainty before building." "role" "caution")
+  (dict "showRoleMarker" true "label" "Test" "detail" "Deliver one report on time." "note" "Observe what the reader does with it.")
+  (dict "showRoleMarker" true "label" "Evidence" "detail" "The reader changed the plan." "note" "Record the outcome and its limits." "role" "evidence")
 }}
 <article class="shell design-gallery">
   <header class="gallery-header">
@@ -81,13 +81,13 @@
   </section>
 
   <section class="gallery-section" id="patterns" aria-labelledby="patterns-title">
-    <header><h2 id="patterns-title">Sequence</h2><p>Use a sequence for one ordered path. Compare the same component at two container widths.</p></header>
+    <header><h2 id="patterns-title">Sequence</h2><p>Use a sequence for one ordered path.</p></header>
     <div class="gallery-patterns">
       {{ range slice (dict "id" "sequence-wide" "label" "Wide container") (dict "id" "sequence-phone" "label" "Phone container") }}
         <div class="gallery-pattern gallery-{{ .id }}">
           <h3>{{ .label }}</h3>
           <div class="sc-section-visuals article-body">
-            {{ partial "diagrams/patterns/sequence.html" (dict "id" .id "captionID" (printf "%s-caption" .id) "label" "From question to evidence" "description" "A small test makes the next decision easier." "number" 1 "caption" "The label and outline identify the evidence step. The order remains visible in grayscale." "steps" $steps) }}
+            {{ partial "diagrams/patterns/sequence.html" (dict "id" .id "captionID" (printf "%s-caption" .id) "label" "From question to evidence" "description" "A small test makes the next decision easier." "number" 1 "caption" "Labels and symbols distinguish the steps in grayscale." "steps" $steps) }}
           </div>
         </div>
       {{ end }}

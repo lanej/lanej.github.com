@@ -30,6 +30,19 @@
     "reason": "Each node sample has a role label and a visible marker so readers can distinguish examples without relying on color."
   },
   {
+    "id": "design-gallery-sequence-role-markers",
+    "type": "context",
+    "selector": ".gallery-sequence-phone .formalization-steps > li",
+    "required": [
+      ".flow-node-role-marker"
+    ],
+    "pages": [
+      "design-system"
+    ],
+    "severity": "error",
+    "reason": "The reference sequence shows the same role symbols used in the essay figures."
+  },
+  {
     "id": "socrates-handoff-context",
     "type": "context",
     "selector": "#workflow-figure",
