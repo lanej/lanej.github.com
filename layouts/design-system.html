@@ -5,7 +5,7 @@
   (dict "name" "Flow" "token" "--diagram-flow" "use" "Ordinary links between steps")
   (dict "name" "Evidence" "token" "--diagram-evidence-ink" "use" "Checks and feedback")
   (dict "name" "Caution" "token" "--diagram-caution-ink" "use" "Uncertainty or a constraint")
-  (dict "name" "Attention" "token" "--diagram-attention-ink" "use" "A decision or escalation")
+  (dict "name" "Attention" "token" "--diagram-attention-ink" "use" "A step that needs attention or escalation")
   (dict "name" "Mismatch" "token" "--diagram-mismatch-ink" "use" "A broken guarantee")
 }}
 {{ $nodes := slice
@@ -15,6 +15,12 @@
   (dict "roleName" "Attention" "label" "Escalate" "detail" "Ask the decision owner" "role" "attention")
   (dict "roleName" "Mismatch" "label" "Conflict" "detail" "The result broke the promise" "role" "mismatch")
   (dict "roleName" "Accent" "label" "Decide" "detail" "Choose the next step" "role" "accent")
+}}
+{{ $workflowNodes := slice
+  (dict "roleName" "Delivery" "label" "Send report" "detail" "Reach the intended reader" "role" "delivery")
+  (dict "roleName" "Decision" "label" "Choose" "detail" "Act on the result" "role" "decision")
+  (dict "roleName" "Repeat" "label" "Try again" "detail" "Look for a recurring pattern" "role" "repeat")
+  (dict "roleName" "Skill" "label" "Use checklist" "detail" "Follow a reusable procedure" "role" "skill")
 }}
 {{ $steps := slice
   (dict "label" "Question" "detail" "Will the report change a decision?" "note" "Name the uncertainty before building." "role" "caution")
@@ -48,16 +54,20 @@
   <section class="gallery-section" id="atoms" aria-labelledby="atoms-title">
     <header><h2 id="atoms-title">Atoms</h2><p>Use a node for a labeled step and an arrow when the nearby text already explains the direction.</p></header>
     <div class="gallery-atoms">
-      <div class="gallery-atom-group">
-        <h3>Node roles</h3>
-        <ul class="gallery-node-list sc-section-visuals" role="list">
-          {{ range $nodes }}
-            <li class="gallery-node-sample">
-              <span class="gallery-node-role">{{ .roleName }}</span>
-              {{ partial "diagrams/atoms/node.html" (merge . (dict "showRoleMarker" true)) }}
-            </li>
-          {{ end }}
-        </ul>
+      <div>
+        {{ range slice (dict "title" "Node roles" "nodes" $nodes) (dict "title" "Workflow steps" "nodes" $workflowNodes "workflow" true) }}
+          <div class="gallery-atom-group">
+            <h3>{{ .title }}</h3>
+            <ul class="gallery-node-list sc-section-visuals{{ if .workflow }} gallery-workflow-node-list{{ end }}" role="list">
+              {{ range .nodes }}
+                <li class="gallery-node-sample">
+                  <span class="gallery-node-role">{{ .roleName }}</span>
+                  {{ partial "diagrams/atoms/node.html" (merge . (dict "showRoleMarker" true)) }}
+                </li>
+              {{ end }}
+            </ul>
+          </div>
+        {{ end }}
       </div>
       <div class="gallery-atom-group">
         <h3>Direction</h3>

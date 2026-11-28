@@ -11,12 +11,20 @@
   --diagram-caution-ink:var(--amber);
   --diagram-attention-ink:var(--copper);
   --diagram-mismatch-ink:var(--rose);
+  --diagram-delivery-ink:var(--copper);
+  --diagram-decision-ink:var(--accent);
+  --diagram-repeat-ink:var(--copper);
+  --diagram-skill-ink:var(--blue);
 }
 @media screen{
   .diagram-evidence{--diagram-role-ink:var(--diagram-evidence-ink)}
   .diagram-caution{--diagram-role-ink:var(--diagram-caution-ink)}
   .diagram-attention{--diagram-role-ink:var(--diagram-attention-ink)}
   .diagram-mismatch{--diagram-role-ink:var(--diagram-mismatch-ink)}
+  .diagram-delivery{--diagram-role-ink:var(--diagram-delivery-ink)}
+  .diagram-decision{--diagram-role-ink:var(--diagram-decision-ink)}
+  .diagram-repeat{--diagram-role-ink:var(--diagram-repeat-ink)}
+  .diagram-skill{--diagram-role-ink:var(--diagram-skill-ink)}
 }
 .essay-diagram{margin:2.25em 0;color:var(--diagram-text);font-size:.93rem;line-height:1.45;break-inside:avoid}
 .loop-comparison{display:grid;grid-template-columns:1fr;gap:14px}

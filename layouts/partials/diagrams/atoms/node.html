@@ -1,4 +1,4 @@
-{{- $classes := dict "neutral" "" "accent" "flow-node-accent" "evidence" "diagram-evidence" "caution" "diagram-caution" "attention" "diagram-attention" "mismatch" "diagram-mismatch" -}}
+{{- $classes := dict "neutral" "" "accent" "flow-node-accent" "evidence" "diagram-evidence" "caution" "diagram-caution" "attention" "diagram-attention" "mismatch" "diagram-mismatch" "delivery" "diagram-delivery" "decision" "diagram-decision" "repeat" "diagram-repeat" "skill" "diagram-skill" -}}
 {{- $role := .role | default "neutral" -}}
 {{- if not (isset $classes $role) -}}
   {{- errorf "Unknown diagram node role %q for %q" $role .label -}}
@@ -7,7 +7,7 @@
   {{- if or .detail .showRoleMarker -}}
     <strong>
       {{- if .showRoleMarker -}}
-        {{- $markers := dict "neutral" "•" "accent" "→" "evidence" "≡" "caution" "?" "attention" "↑" "mismatch" "×" -}}
+        {{- $markers := dict "neutral" "•" "accent" "→" "evidence" "≡" "caution" "?" "attention" "↑" "mismatch" "×" "delivery" "↗" "decision" "◇" "repeat" "↻" "skill" "⚙︎" -}}
         <span class="flow-node-role-marker" aria-hidden="true">{{ index $markers $role }}</span>
       {{- end -}}
       {{- .label -}}

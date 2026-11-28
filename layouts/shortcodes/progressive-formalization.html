@@ -1,7 +1,7 @@
 {{ $steps := slice
   (dict "showRoleMarker" true "label" "Prompt" "detail" "Discover behavior" "note" "Flexible. Good for exploration." "role" "caution")
-  (dict "label" "Repeated correction" "detail" "Identify patterns" "note" "The same feedback, again and again.")
-  (dict "label" "Skill" "detail" "Encode procedure" "note" "Reusable, with judgment.")
+  (dict "showRoleMarker" true "role" "repeat" "label" "Repeated correction" "detail" "Identify patterns" "note" "The same feedback, again and again.")
+  (dict "showRoleMarker" true "role" "skill" "label" "Skill" "detail" "Encode procedure" "note" "Reusable, with judgment.")
   (dict "showRoleMarker" true "label" "Program / hook" "detail" "Enforce the check" "note" "Fast, consistent, mechanical." "role" "accent")
 }}
 {{ partial "diagrams/patterns/sequence.html" (dict

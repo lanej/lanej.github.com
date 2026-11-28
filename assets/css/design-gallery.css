@@ -21,6 +21,8 @@
 .gallery-pattern{border:1px solid var(--diagram-divider);border-radius:6px;padding:16px}
 .gallery-atom-group h3,.gallery-pattern h3{margin-bottom:14px}
 .gallery-node-list.sc-section-visuals{width:auto;max-width:none;margin:0;padding:0;list-style:none;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.gallery-atom-group+.gallery-atom-group{margin-top:24px}
+.gallery-workflow-node-list.sc-section-visuals{grid-template-columns:repeat(2,minmax(0,1fr))}
 .gallery-node-sample{display:grid;grid-template-rows:auto 1fr;gap:5px;min-width:0}
 .gallery-node-role{color:var(--diagram-muted-text);font-size:.82rem;font-weight:600;line-height:1.4}
 .gallery-arrow-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}

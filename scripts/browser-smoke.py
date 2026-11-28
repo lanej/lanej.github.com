@@ -71,7 +71,7 @@ def main():
                 if route == '/design-system/':
                     nodes = page.locator('.gallery-node-list .flow-node-with-detail')
                     role_labels = page.locator('.gallery-node-role')
-                    assert role_labels.all_inner_texts() == ['Neutral', 'Caution', 'Evidence', 'Attention', 'Mismatch', 'Accent']
+                    assert role_labels.all_inner_texts() == ['Neutral', 'Caution', 'Evidence', 'Attention', 'Mismatch', 'Accent', 'Delivery', 'Decision', 'Repeat', 'Skill']
                     assert nodes.count() == role_labels.count(), 'Every gallery role needs a detailed node sample'
                     assert nodes.evaluate_all("(items) => items.every(el => getComputedStyle(el).flexDirection === 'column')"), 'Gallery node labels and details must stack'
                     markers = nodes.locator('.flow-node-role-marker')
