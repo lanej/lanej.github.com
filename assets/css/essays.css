@@ -518,11 +518,9 @@
     .sc-layers-figure .sc-layer-description {grid-column:1 / -1}
   }
   @container diagram (min-width:30rem) {
-    .sc-layers-figure .sc-layers{flex-direction:column-reverse}
     .sc-layers-figure .sc-layer-row{
       grid-template-columns:1.375rem minmax(0,.82fr) minmax(0,1.18fr);
       align-items:center;
-      margin-inline:calc(var(--level) * 4px);
     }
     .sc-layers-figure .sc-layer-description{
       grid-column:3;
