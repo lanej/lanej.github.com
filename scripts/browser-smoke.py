@@ -82,6 +82,10 @@ def main():
                     assert nodes.evaluate_all("""items => items.slice(1).every(node =>
                         getComputedStyle(node.querySelector('strong')).color === getComputedStyle(node).borderTopColor
                     )"""), 'Highlighted gallery node titles must use the role outline color'
+                    for size in ('wide', 'phone'):
+                        sequence = page.locator(f'[data-essay-diagram="sequence-{size}"]')
+                        markers = sequence.locator('.flow-node-role-marker')
+                        assert markers.all_text_contents() == ['?', '•', '≡'], 'Sequence should show its role symbols'
                     if width <= 700:
                         for group in page.locator('.gallery-node-list').all():
                             bounds = [sample.bounding_box() for sample in group.locator(':scope > li').all()]
